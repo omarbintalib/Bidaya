@@ -1,3 +1,4 @@
+import { quranpediaRefs } from '../data/quranpedia';
 import { dateLine, digits, excerpt, hadithLinks } from '../data/select';
 import type { Person, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
@@ -12,7 +13,13 @@ import type { Locale } from '../i18n';
  * server-side model and keep the same rules — never call a model API with a key from the browser.
  */
 
-export interface Answer { text: string; event?: number; kind: 'event' | 'person' | 'verse' | 'refusal' | 'none' }
+export interface AnswerSource { label: string; url: string }
+export function sourceLinks(refs: AnswerSource[]): AnswerSource[] {
+  return refs.filter((ref, i) => {
+    try { return !!ref.label && ['https:', 'http:'].includes(new URL(ref.url).protocol) && refs.findIndex(r => r.url === ref.url) === i; } catch { return false; }
+  });
+}
+export interface Answer { sources?: AnswerSource[]; text: string; event?: number; kind: 'event' | 'person' | 'verse' | 'refusal' | 'none' }
 type Doc = { kind: 'event'; item: SirahEvent; fields: Field[] } | { kind: 'person'; item: Person; fields: Field[] } | { kind: 'verse'; item: Verse; fields: Field[] };
 type Field = { weight: number; tokens: Set<string> };
 
@@ -124,18 +131,18 @@ export function answer(data: Sirah, question: string, locale: Locale): Answer {
       : where && place ? (ar ? `كان ذلك في ${place}.` : `It took place at ${place}.`)
       : '';
     const facts = lead ? '' : ` (${[date, place].filter(Boolean).join(ar ? '، ' : ', ')})`;
-    return { kind: 'event', event: e.n, text: `${title}${facts}. ${lead} ${excerpt(body, 170)} ${SOURCE[locale].dorar(e.n)}`.replace(/\s+/g, ' ').trim() };
+    return { kind: 'event', event: e.n, sources: sourceLinks([{ label: 'Dorar', url: (!ar && e.urlEn) || e.url }]), text: `${title}${facts}. ${lead} ${excerpt(body, 170)} ${SOURCE[locale].dorar(e.n)}`.replace(/\s+/g, ' ').trim() };
   }
   if (doc.kind === 'person') {
-    const p = doc.item, first = p.events.find(n => data.byNumber.get(n)?.lat !== null);
+    const p = doc.item, first = p.events.find(n => data.byNumber.has(n) && data.byNumber.get(n)!.lat !== null && data.byNumber.get(n)!.lon !== null);
     const name = ar ? p.name.ar : `${p.name.en} (${p.name.ar})`;
-    return { kind: 'person', event: first, text: `${name}: ${excerpt(p.bio, 190)} ${SOURCE[locale].sahaba}` };
+    return { kind: 'person', event: first, sources: sourceLinks(p.facts.filter(f => f.url).map(f => ({ label: f.source, url: f.url! }))), text: `${name}: ${excerpt(p.bio, 190)} ${SOURCE[locale].sahaba}` };
   }
   const v = doc.item, ev = v.link?.event ?? undefined;
   const refs = hadithLinks(v).map(h => `${h.book === 'bukhari' ? (ar ? 'البخاري' : 'Bukhari') : (ar ? 'مسلم' : 'Muslim')} ${h.n}`).join(ar ? '، ' : ', ');
   const src = refs ? (ar ? `المصدر: صحيح ${refs}.` : `Source: Sahih ${refs}.`) : (ar ? 'المصدر: موسوعة التفسير – الدرر السنية.' : 'Source: Dorar Tafsir Encyclopedia.');
   const surah = ar ? `سورة ${v.surah} (${v.whole ? 'السورة كاملة' : v.ref})` : `Surah ${v.surah} (${v.whole ? 'whole surah' : v.ref})`;
-  return { kind: 'verse', event: ev ?? undefined, text: `${surah}: ${v.phrase[locale]} — ${v.title[locale]}. ${src}` };
+  return { kind: 'verse', event: ev ?? undefined, sources: sourceLinks([...hadithLinks(v).map(h => ({ label: `${h.book === 'bukhari' ? 'Bukhari' : 'Muslim'} ${h.n}`, url: h.url })), ...v.tafseer.map(url => ({ label: ar ? 'موسوعة التفسير' : 'Tafsir Encyclopedia', url })), ...quranpediaRefs(v.ref, v.whole, locale).map(r => ({ label: `Quranpedia ${r.label}`, url: r.url }))]), text: `${surah}: ${v.phrase[locale]} — ${v.title[locale]}. ${src}` };
 }
 
 /**

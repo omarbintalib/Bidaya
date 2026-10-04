@@ -148,9 +148,16 @@ it('preserves a pending question when motion and typography change, and measures
   await act(async () => finish('An answer that needs more room.'));
   await advance(1800);
   expect(phase()).toBe('answered');
-  expect(host.querySelector<HTMLElement>('.mo-root')?.style.getPropertyValue('--answer-height')).toBe('292px');
-  expect(host.querySelector<HTMLElement>('.mo-actor')?.style.getPropertyValue('--h')).toBe('292px');
+  expect(host.querySelector<HTMLElement>('.mo-root')?.style.getPropertyValue('--answer-height')).toBe('220px');
+  expect(host.querySelector<HTMLElement>('.mo-actor')?.style.getPropertyValue('--h')).toBe('220px');
   expect(onSubmit).toHaveBeenCalledTimes(1);
+  const expand = [...host.querySelectorAll('button')].find(button => button.textContent === 'Expand answer')!;
+  expect(expand).toBeTruthy();
+  await act(async () => expand.click());
+  expect(host.querySelector<HTMLElement>('.mo-actor')?.style.getPropertyValue('--h')).toBe('292px');
+  expect(expand.textContent).toBe('Collapse answer');
+  await act(async () => expand.click());
+  expect(host.querySelector<HTMLElement>('.mo-actor')?.style.getPropertyValue('--h')).toBe('220px');
 });
 
 it('keeps resize measurements from snapping the card during the globe-to-answer morph', async () => {
@@ -177,6 +184,21 @@ it('keeps resize measurements from snapping the card during the globe-to-answer 
   expect(actor.style.getPropertyValue('--h')).toBe(height);
   await advance(1500);
   expect(phase()).toBe('answered');
-  expect(actor.style.getPropertyValue('--h')).toBe('292px');
-  expect(mover.style.top).toBe('166px');
+  expect(actor.style.getPropertyValue('--h')).toBe('220px');
+  expect(mover.style.top).toBe('130px');
+});
+
+it('starts response-only requests with globe assembly and cancels without a late reveal', async () => {
+  let finish!: (text: string) => void;
+  const cancelled = vi.fn();
+  await act(async () => root.render(<MorphOrb docked locale="en" request={{ id: 2, text: 'Question' }} minThinkMs={0} onCancel={cancelled} onSubmit={() => new Promise<string>(resolve => { finish = resolve; })} />));
+  expect(phase()).toBe('assemble');
+  expect(host.querySelector<HTMLElement>('.mo-actor')?.style.getPropertyValue('--oPill')).toBe('0');
+  await advance(900);
+  expect(phase()).toBe('think');
+  await act(async () => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' })));
+  await act(async () => finish('Too late'));
+  await advance(2000);
+  expect(cancelled).toHaveBeenCalledTimes(1);
+  expect(phase()).not.toBe('answered');
 });

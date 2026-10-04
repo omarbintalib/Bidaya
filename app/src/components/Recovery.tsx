@@ -18,5 +18,5 @@ export function Recovery({ locale, onRetry }: { locale: Locale; onRetry?: () => 
 export class PageBoundary extends Component<{ locale: Locale; children: ReactNode }, { failed: boolean }> {
   state = { failed: false };
   static getDerivedStateFromError() { return { failed: true }; }
-  render() { return this.state.failed ? <main className="explorer"><Recovery locale={this.props.locale} onRetry={() => this.setState({ failed: false })} /></main> : this.props.children; }
+  render() { return this.state.failed ? <main id="main-content" tabIndex={-1} className="explorer"><Recovery locale={this.props.locale} onRetry={() => this.setState({ failed: false })} /></main> : this.props.children; }
 }

@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { answer, suggestFor } from '../assistant/answer';
+import { answer, suggestFor, sourceLinks } from '../assistant/answer';
 import { parseCsv } from './csv';
 import { loadSirah } from './load';
 import { findPeople, mentionIn } from './people';
@@ -86,10 +86,13 @@ describe('ask the map (slide 7 test set)', () => {
     const a = answer(data, 'من هو أبو بكر الصديق؟', 'ar');
     expect(a.kind).toBe('person');
     expect(a.text).toContain('أبو بكر');
+    expect(a.sources?.length).toBeGreaterThan(0);
+    expect(a.sources?.every(source => source.url.startsWith('https://'))).toBe(true);
   });
   it('answers a surah question', () => {
     const a = answer(data, 'متى نزلت سورة الأنفال؟', 'ar');
     expect(a.text).toContain('الأنفال');
+    expect(a.sources?.some(source => source.url.startsWith('https://quranpedia.net/'))).toBe(true);
   });
   it('answers in English from the same sources', () => {
     const a = answer(data, 'Why did the Prophet migrate to Madinah?', 'en');
@@ -164,4 +167,12 @@ describe('companion names in text', () => {
     expect(names('Aboo Bakr and Khadeejah', 'en')).toEqual(['SAH-001', 'SAH-005']);
     expect(names('‘Umar ibn al-Khattaab', 'en')).toEqual(['SAH-002']);
   });
+});
+it('attaches structured event sources without reading links from answer prose', () => {
+  const result = answer(data, 'When was the Battle of Badr?', 'en');
+  expect(result.kind).toBe('event');
+  const event = data.byNumber.get(result.event!)!;
+  expect(result.sources).toEqual([{ label: 'Dorar', url: event.urlEn || event.url }]);
+  expect(answer(data, 'is it halal?', 'en').sources).toBeUndefined();
+  expect(sourceLinks([{ label: 'missing', url: '' }, { label: 'unsafe', url: 'javascript:alert(1)' }])).toEqual([]);
 });

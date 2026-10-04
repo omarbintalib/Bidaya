@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { answer, suggestFor, warmUp } from '../assistant/answer';
+import { answer, suggestFor, warmUp, type Answer } from '../assistant/answer';
 import MorphOrb from '../components/MorphOrb';
 import { quizPools } from '../data/quiz';
 import { digits, hijri, PERIOD_ORDER, periodName, unplacedVerses } from '../data/select';
@@ -15,6 +15,8 @@ import { PeopleProvider, PersonDialog } from './People';
 import Timeline from './Timeline';
 import ChatHistory, { chatCopy } from './ChatHistoryPanel';
 import { useChatHistory } from './chatHistory';
+import { loadProgress, freshProgress, PROGRESS_KEY } from './progress';
+import AnswerActions from './AnswerActions';
 
 /**
  * The Journey as a scroll-driven story: a column of steps (chapter openings, events, a question at the
@@ -33,7 +35,6 @@ const QUIZ_ASK = /\bquiz\b|\btest me\b|another question|more questions|اختب�
 
 const STORY_MS = 5200;
 const CHAPTER_MS = 2800;
-const PROGRESS_KEY = 'bidaya.journey.v1';
 
 function useMedia(query: string) {
   const [match, setMatch] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.(query).matches);
@@ -48,16 +49,13 @@ function useMedia(query: string) {
 }
 
 /** Answers and visited places are kept in this browser only, so a reload keeps the viewer's progress. */
-function loadProgress(): { answers: Record<string, string>; seen: number[] } {
-  try { const v = JSON.parse(localStorage.getItem(PROGRESS_KEY) ?? ''); if (v && typeof v === 'object') return { answers: v.answers ?? {}, seen: v.seen ?? [] }; } catch { /* storage unavailable */ }
-  return { answers: {}, seen: [] };
-}
-
 export default function Story({ data, locale, reducedMotion }: { data: Sirah; locale: Locale; reducedMotion: boolean }) {
   const text = journeyCopy[locale];
   const events = data.events;
+  const [progress, setProgress] = useState(loadProgress);
+  const [resume, setResume] = useState(() => progress.lastEvent !== undefined && data.byNumber.has(progress.lastEvent));
   const wide = useMedia('(min-width: 1001px)');
-  const [intro, setIntro] = useState(() => { try { return sessionStorage.getItem('bidaya.intro.seen') !== '1'; } catch { return true; } });
+  const [intro, setIntro] = useState(() => { if (resume) return false; try { return sessionStorage.getItem('bidaya.intro.seen') !== '1'; } catch { return true; } });
   // Build the story (≈150 steps and the map) once the opening has played, so the opening stays smooth.
   const [built, setBuilt] = useState(!intro);
   useEffect(() => {
@@ -105,22 +103,26 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
   const chapter = PERIOD_ORDER.indexOf(current.period) + 1;
 
   // ── progress ──
-  const [progress, setProgress] = useState(loadProgress);
   const loaded = useRef(progress);
   useEffect(() => {
     if (progress === loaded.current) return; // nothing new to save
     try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress)); } catch { /* storage unavailable */ }
   }, [progress]);
   useEffect(() => {
-    if (step.kind !== 'event' || progress.seen.includes(current.n)) return;
-    setProgress(p => ({ ...p, seen: [...p.seen, current.n] }));
-  }, [step.kind, current.n, progress.seen]);
+    if (resume || intro || step.kind !== 'event' || (progress.lastEvent === current.n && progress.seen.includes(current.n))) return;
+    setProgress(p => ({ ...p, lastEvent: current.n, seen: p.seen.includes(current.n) ? p.seen : [...p.seen, current.n] }));
+  }, [step.kind, current.n, progress.seen, progress.lastEvent, resume, intro]);
 
   // ── the step crossing the middle of the screen drives the map ──
   const column = useRef<HTMLDivElement>(null);
   const lockUntil = useRef(0);
   const activeRef = useRef(active);
   activeRef.current = active;
+  useEffect(() => {
+    const hold = () => { lockUntil.current = performance.now() + 350; };
+    window.addEventListener('journey-language-restored', hold);
+    return () => window.removeEventListener('journey-language-restored', hold);
+  }, []);
   /** Where the newly active step sat before it opened, so the page can be held still while cards resize. */
   const anchor = useRef<{ step: number; top: number } | null>(null);
   const rush = useRef(0);
@@ -154,7 +156,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     let frame = 0;
     const pick = () => {
       frame = 0;
-      if (performance.now() < lockUntil.current) return;
+      if (resume || intro || document.documentElement.dataset.readingRestore === 'true' || performance.now() < lockUntil.current) return;
       const line = window.innerHeight * (wide ? 0.5 : 0.76);
       let best: HTMLElement | null = null, bestTop = 0, gap = Infinity;
       for (const el of root.querySelectorAll<HTMLElement>('[data-step]')) {
@@ -173,7 +175,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     return () => { cancelAnimationFrame(frame); window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); };
-  }, [steps, wide, built]);
+  }, [steps, wide, built, resume, intro]);
 
   const goToStep = useCallback((i: number, smooth = true) => {
     const target = Math.max(0, Math.min(steps.length - 1, i));
@@ -204,11 +206,11 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
         cancelAnimationFrame(rush.current);
         column.current?.classList.remove('is-rushing');
         lockUntil.current = performance.now() + 80;
-        window.removeEventListener('wheel', finish); window.removeEventListener('touchstart', finish); window.removeEventListener('keydown', finish);
+        window.removeEventListener('wheel', finish); window.removeEventListener('touchstart', finish); window.removeEventListener('keydown', finish); window.removeEventListener('journey-language-changing', finish);
         window.dispatchEvent(new Event('story-settled'));
       };
       // The reader can take over at any moment: a wheel, touch or key stops the dash where it is.
-      window.addEventListener('wheel', finish, { passive: true }); window.addEventListener('touchstart', finish, { passive: true }); window.addEventListener('keydown', finish);
+      window.addEventListener('wheel', finish, { passive: true }); window.addEventListener('touchstart', finish, { passive: true }); window.addEventListener('keydown', finish); window.addEventListener('journey-language-changing', finish);
       const tick = (now: number) => {
         const t = Math.min(1, (now - start) / D);
         window.scrollTo({ top: from + (to - from) * ease(t), behavior: 'instant' });
@@ -223,9 +225,9 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
   const stepEvent = useCallback((dir: 1 | -1) => {
     for (let i = activeRef.current + dir; i >= 0 && i < steps.length; i += dir) if (steps[i].kind === 'event') { goToStep(i); return; }
   }, [steps, goToStep]);
-  const goToEvent = useCallback((n: number) => {
+  const goToEvent = useCallback((n: number, smooth = true) => {
     const i = events.findIndex(e => e.n === n);
-    if (i >= 0) goToStep(stepOfEvent.get(i)!);
+    if (i >= 0) goToStep(stepOfEvent.get(i)!, smooth);
   }, [events, stepOfEvent, goToStep]);
 
   // ── story mode: advance one step at a time ──
@@ -310,8 +312,10 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
   const stay = useRef(false);
   // On wide screens a question goes straight into a card at the top of the story column (thinking, then the
   // answer), and the current event slides down beneath it — nothing covers the map or the story.
-  const [answerCard, setAnswerCard] = useState<{ q: string; a: string | null; key: number; locale: Locale; keepPlace: boolean } | null>(null);
-  const { chats, remember, clear: clearChats } = useChatHistory();
+  const [answerCard, setAnswerCard] = useState<{ q: string; a: string | null; key: number; locale: Locale; keepPlace: boolean; metadata?: Answer | null } | null>(null);
+  const [replyMeta, setReplyMeta] = useState<Answer | null>(null);
+  const mapEvents = useMemo(() => new Set(events.filter(e => e.lat !== null && e.lon !== null).map(e => e.n)), [events]);
+  const { chats, remember, clear: clearChats, remove: deleteChat } = useChatHistory();
   const [historyOpen, setHistoryOpen] = useState(false);
   const chatSequence = useRef(Math.max(Date.now(), ...chats.map(chat => chat.id)));
   const openHistory = useCallback(() => setHistoryOpen(true), []);
@@ -359,9 +363,10 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     if (step.kind !== 'event' || intro) return;
     return onIdle(() => setAskHint(suggestFor(data, current, locale, 1)[0] ?? null), 1500);
   }, [step.kind, current, data, locale, intro]);
-  const onAsk = useCallback((question: string) => {
-    const record = (reply: string) => {
-      remember({ id: ++chatSequence.current, question, answer: reply, locale });
+  const onAsk = useCallback((question: string, acceptMetadata?: (metadata: Answer | null) => void) => {
+    const record = (reply: string, metadata?: Answer) => {
+      if (acceptMetadata) acceptMetadata(metadata ?? null); else setReplyMeta(metadata ?? null);
+      remember({ id: ++chatSequence.current, question, answer: reply, locale, createdAt: Date.now(), sources: metadata?.sources, event: metadata?.event });
       return reply;
     };
     if (QUIZ_ASK.test(question)) {
@@ -381,9 +386,16 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
       if (there !== undefined && there !== from) setReturnTo(r => r ?? { step: from, label: stepLabel(from) });
       window.setTimeout(() => goToEvent(result.event!), 400);
     }
-    return record(result.text);
+    return record(result.text, result);
   }, [data, locale, goToEvent, pickQuick, text, events, stepOfEvent, stepLabel, remember]);
 
+  const showAnswerEvent = (n: number) => {
+    if (!mapEvents.has(n)) return;
+    const from = activeRef.current;
+    setReturnTo(r => r ?? { step: from, label: stepLabel(from) });
+    setHistoryOpen(false); setAskOpen(false); goToEvent(n);
+  };
+  const answerActions = <AnswerActions sources={replyMeta?.sources} event={replyMeta?.event !== undefined && mapEvents.has(replyMeta.event) ? replyMeta.event : undefined} locale={locale} onEvent={showAnswerEvent} />;
   const focusAskBar = () => document.querySelector<HTMLInputElement>('.ask-bar input')?.focus();
   const askAbout = useCallback((question?: string, keepPlace = false) => {
     setQuick(null);
@@ -399,11 +411,17 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     window.requestAnimationFrame(() => goToStep(0));
   };
 
+  const startOver = () => {
+    setProgress(freshProgress()); setQuizAt({}); setPlaying(false); setReturnTo(null); setResume(false); begin();
+  };
+  const resetNote = locale === 'ar' ? 'البدء من جديد يمسح نتائج الاختبارات والأحداث التي زرتها وموضع القراءة. تبقى محادثاتك محفوظة.' : 'Starting over clears quiz results, visited events, and your reading position. Your chats stay saved.';
+
   const answered = [...pools.values()].flat().filter(q => progress.answers[q.id]);
   const correct = answered.filter(q => progress.answers[q.id] === q.answer).length;
   const placesSeen = new Set(progress.seen.map(n => data.byNumber.get(n)?.place).filter(Boolean)).size;
 
   return <PeopleProvider value={peopleApi}>
+    {resume && <ResumeDialog locale={locale} note={resetNote} onContinue={() => { const n = progress.lastEvent!; setResume(false); setIntro(false); setBuilt(true); goToEvent(n, false); }} onRestart={startOver} />}
     {intro && <Intro locale={locale} reducedMotion={reducedMotion} onBegin={begin} onSkip={() => { try { sessionStorage.setItem('bidaya.intro.seen', '1'); } catch { /* storage unavailable */ } setBuilt(true); setIntro(false); }} />}
     <nav className="story-toolbar" aria-label={text.toolbar}>
       <ol className="tb-chapters" aria-label={text.chapters}>
@@ -425,11 +443,11 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
           <span className="tb-long">{text.ask}</span><span className="tb-short">{text.askShort}</span>
         </button>}
       </div>
-      <AskPanel open={askOpen} onClose={closeAsk} locale={locale} reducedMotion={reducedMotion} onAsk={onAsk} ask={ask} onSuggest={suggest} back={returnTo} onBack={goBack} onHistory={openHistory} />
+      <AskPanel open={askOpen} onClose={closeAsk} locale={locale} reducedMotion={reducedMotion} onAsk={onAsk} ask={ask} onSuggest={suggest} back={returnTo} onBack={goBack} onHistory={openHistory} answerActions={answerActions} />
       {answerCard && <AnswerCard key={answerCard.key} card={answerCard} locale={locale} back={returnTo} onBack={goBack}
-        reducedMotion={reducedMotion} onAnswer={question => {
+        reducedMotion={reducedMotion} answerActions={<AnswerActions sources={answerCard.metadata?.sources} event={answerCard.metadata?.event !== undefined && mapEvents.has(answerCard.metadata.event) ? answerCard.metadata.event : undefined} locale={locale} onEvent={showAnswerEvent} />} onAnswer={question => {
           stay.current = answerCard.keepPlace;
-          const reply = onAsk(question);
+          const reply = onAsk(question, metadata => setAnswerCard(card => card?.key === answerCard.key ? { ...card, metadata } : card));
           setAnswerCard(card => card?.key === answerCard.key ? { ...card, a: reply } : card);
           return reply;
         }}
@@ -448,8 +466,9 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
             <div><dt>{text.statQuiz}</dt><dd>{digits(correct, locale)} / {digits(answered.length, locale)}</dd></div>
             <div><dt>{text.statReached}</dt><dd>{digits(reached, locale)}</dd></div>
           </dl>
+          <p>{resetNote}</p>
           <div className="summary-actions">
-            <button type="button" className="btn-primary" onClick={() => goToStep(0)}>{text.restart}</button>
+            <button type="button" className="btn-primary" onClick={startOver}>{text.restart}</button>
             <button type="button" className="btn-quiet" onClick={() => (wide ? focusAskBar() : setAskOpen(true))}>{text.ask}</button>
           </div>
         </section>
@@ -500,7 +519,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
       onAnswer={answerQuick} onNext={() => setQuick(pickQuick(quick.q?.id))} onClose={() => setQuick(null)} />}
     {undatedOpen && <UndatedDialog verses={unplaced} locale={locale} onClose={() => setUndatedOpen(false)} />}
     {person && <PersonDialog key={person.id} person={person} data={data} locale={locale} onClose={() => setPerson(null)} onEvent={goToEvent} />}
-    {historyOpen && <ChatHistory locale={locale} chats={chats} onClear={clearChats} onClose={() => setHistoryOpen(false)} />}
+    {historyOpen && <ChatHistory locale={locale} chats={chats} onDelete={deleteChat} mapEvents={mapEvents} onEvent={showAnswerEvent} onClear={clearChats} onClose={() => setHistoryOpen(false)} />}
   </PeopleProvider>;
 }
 
@@ -541,15 +560,15 @@ const StepList = memo(function StepList({ steps, data, locale, store, goToStep, 
 });
 
 /** The "Ask the map" panel; memoised so moving through the story leaves the orb untouched. */
-const AskPanel = memo(function AskPanel({ open, onClose, locale, reducedMotion, onAsk, ask, onSuggest, back, onBack, onHistory }: {
+const AskPanel = memo(function AskPanel({ open, onClose, locale, reducedMotion, onAsk, ask, onSuggest, back, onBack, onHistory, answerActions }: {
   open: boolean; onClose: () => void; locale: Locale; reducedMotion: boolean; onAsk: (q: string) => string; ask: { text: string; key: number } | null; onSuggest: (q: string) => void;
   back: { label: string } | null; onBack: () => void;
-  onHistory: () => void;
+  onHistory: () => void; answerActions: React.ReactNode;
 }) {
   const text = journeyCopy[locale];
   return <section id="ask-panel" className={`ask-panel${open ? ' is-open' : ''}`} aria-label={text.ask} inert={!open}>
     <div className="ask-head"><h2>{text.ask}</h2><button type="button" className="qr-close" onClick={onClose} aria-label={text.close}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" /></svg></button></div>
-    <MorphOrb locale={locale} reducedMotion={reducedMotion} onSubmit={onAsk} minThinkMs={900} ask={ask} onHistory={onHistory} historyLabel={chatCopy[locale].title} />
+    <MorphOrb locale={locale} reducedMotion={reducedMotion} onSubmit={onAsk} minThinkMs={900} ask={ask} onHistory={onHistory} historyLabel={chatCopy[locale].title} answerActions={answerActions} />
     {back && <BackButton label={back.label} locale={locale} onClick={() => { onBack(); onClose(); }} />}
     <p className="ai-note">{text.askNote}</p>
     <ul className="ai-suggest" aria-label={text.tryAsking}>
@@ -593,7 +612,7 @@ function BackButton({ label, locale, onClick }: { label: string; locale: Locale;
   </button>;
 }
 
-function AnswerCard({ card, locale, reducedMotion, onAnswer, onClose, onAgain, back, onBack }: { card: { q: string; a: string | null; key: number; locale: Locale }; locale: Locale; reducedMotion: boolean; onAnswer: (question: string) => string; onClose: () => void; onAgain: () => void; back: { label: string } | null; onBack: () => void }) {
+function AnswerCard({ card, locale, reducedMotion, onAnswer, onClose, onAgain, back, onBack, answerActions }: { answerActions: React.ReactNode; card: { q: string; a: string | null; key: number; locale: Locale }; locale: Locale; reducedMotion: boolean; onAnswer: (question: string) => string; onClose: () => void; onAgain: () => void; back: { label: string } | null; onBack: () => void }) {
   const text = journeyCopy[locale];
   const respond = useRef(onAnswer);
   const [revealed, setRevealed] = useState(false);
@@ -601,7 +620,7 @@ function AnswerCard({ card, locale, reducedMotion, onAnswer, onClose, onAgain, b
     <p className="answer-kicker"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor" /></svg>{text.yourQuestion}</p>
     <h3 lang={card.locale} dir="auto">{card.q}</h3>
     <MorphOrb docked request={{ id: card.key, text: card.q }} locale={locale} answerLocale={card.locale}
-      reducedMotion={reducedMotion} onSubmit={respond.current} minThinkMs={900} onAnswered={() => setRevealed(true)} onCancel={onClose} />
+      reducedMotion={reducedMotion} onSubmit={respond.current} minThinkMs={900} onAnswered={() => setRevealed(true)} onCancel={onClose} answerActions={answerActions} />
     {revealed && <>
         <div className="answer-actions">
           {back && <BackButton label={back.label} locale={locale} onClick={onBack} />}
@@ -617,7 +636,7 @@ function AskBar({ locale, hint, onAsk, onHistory }: { locale: Locale; hint: stri
   const text = journeyCopy[locale];
   const [q, setQ] = useState('');
   return <form className="ask-bar" data-map-overlay role="search" aria-label={text.ask} onSubmit={e => { e.preventDefault(); const typed = q.trim(); onAsk(typed || hint || undefined, !typed); setQ(''); }}>
-    <button type="button" className="ask-bar-history" onClick={onHistory} aria-label={chatCopy[locale].title} aria-haspopup="dialog"><svg className="ask-bar-spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor" /></svg></button>
+    <button type="button" className="ask-bar-history" data-tooltip={chatCopy[locale].title} onClick={onHistory} aria-label={chatCopy[locale].title} aria-haspopup="dialog"><svg className="ask-bar-spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor" /></svg></button>
     <input value={q} onChange={e => setQ(e.target.value)} placeholder={hint ? text.askTry(hint) : text.askPlaceholder} aria-label={text.ask} enterKeyHint="send" />
     <button type="submit" aria-label={text.askSend}><svg viewBox="0 0 20 20" aria-hidden="true"><path d={locale === 'ar' ? 'M16 10H4m5-5-5 5 5 5' : 'M4 10h12m-5-5 5 5-5 5'} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
   </form>;
@@ -699,5 +718,15 @@ function UndatedDialog({ verses, locale, onClose }: { verses: Verse[]; locale: L
       <button type="button" className="qr-close" onClick={onClose} aria-label={text.close}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" /></svg></button>
     </header>
     <div className="pd-body"><ul className="verses is-compact">{verses.map(v => <VerseItem key={v.id} v={v} locale={locale} compact />)}</ul></div>
+  </dialog>;
+}
+
+function ResumeDialog({ locale, note, onContinue, onRestart }: { locale: Locale; note: string; onContinue: () => void; onRestart: () => void }) {
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => { ref.current?.showModal(); return () => ref.current?.close(); }, []);
+  return <dialog ref={ref} className="chat-history resume-dialog" aria-labelledby="resume-title" dir={locale === 'ar' ? 'rtl' : 'ltr'} onCancel={event => { event.preventDefault(); onContinue(); }}>
+    <h2 id="resume-title">{locale === 'ar' ? 'تابع من حيث توقفت' : 'Continue where you left off'}</h2>
+    <div className="resume-actions"><button className="btn-primary" autoFocus onClick={onContinue}>{locale === 'ar' ? 'متابعة القراءة' : 'Continue reading'}</button><button className="btn-quiet" onClick={onRestart}>{locale === 'ar' ? 'البدء من جديد' : 'Start over'}</button></div>
+    <p>{note}</p>
   </dialog>;
 }

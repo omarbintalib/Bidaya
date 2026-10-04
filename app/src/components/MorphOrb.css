@@ -66,6 +66,7 @@
 html[data-reduced-motion='true'] .mo-root *, html[data-reduced-motion='true'] .mo-root *::before, html[data-reduced-motion='true'] .mo-root *::after { animation: none !important; transition: none !important; }
 html[data-reduced-motion='true'] .mo-out { display: none; }
 
+
 /* Response-only mode adapted from islamathon's Journey AI stage. */
 .mo-root[data-docked='true'] { height: 280px !important; min-height: 0 !important; }
 .mo-root[data-docked='true'] .mo-input { display: none; }
@@ -102,3 +103,10 @@ html[data-reduced-motion='true'] .mo-out { display: none; }
 .mo-input { padding-inline-start: 18px; }
 .mo-root[data-phase='reset'] { min-height: 264px; }
 html[data-reduced-motion='true'] .mo-out { display: none; }
+.mo-root[data-docked='true'][data-phase='idle'] :is(.mo-surface,.mo-ball,.mo-underglow,.mo-halo-green) { visibility: hidden; }
+.mo-root[data-phase='answered'] { height: calc(var(--answer-height) + 100px) !important; min-height: 0 !important; }
+.mo-root[data-docked='true'][data-phase='answered'] { height: calc(var(--answer-height) + 48px) !important; }
+.mo-root .mo-answer { max-height: var(--answer-height); overflow: auto; overscroll-behavior: contain; }
+.mo-root[data-docked='true'] .mo-answer { max-height: var(--answer-height); }
+.mo-reading-actions { position: relative; padding: 0 16px 12px; text-align: start; }
+.mo-history[data-tooltip]::after { bottom: calc(100% + 12px); }

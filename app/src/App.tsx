@@ -70,6 +70,10 @@ function Workspace() {
 
   return <>
     <div className={`workspace ${navigation.busy ? 'page-transitioning' : 'page-ready'}`} dir={locale === 'ar' ? 'rtl' : 'ltr'} inert={menuOpen || accessOpen || navigation.busy}>
+      <a className="skip-content" href="#main-content" onClick={event => {
+        event.preventDefault(); const main = document.querySelector<HTMLElement>('.workspace main');
+        if (main) { main.tabIndex = -1; main.focus({ preventScroll: true }); main.scrollIntoView({ block: 'start', behavior: 'instant' }); }
+      }}>{locale === 'ar' ? 'تجاوز إلى المحتوى' : 'Skip to content'}</a>
       <header className="site-header">
         <a className="brand-home" href="/" aria-label={locale === 'ar' ? 'العودة إلى الصفحة الرئيسية' : 'Go to the home page'} aria-current={navigation.page === 'home' ? 'page' : undefined} onClick={event => {
           if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;

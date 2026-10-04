@@ -8,7 +8,7 @@ import { recoveryCopy } from '../components/Recovery';
 
 export default function TitlePage({ page, locale, onBegin }: { page: Extract<PageId, 'home'>; locale: Locale; onBegin: () => void }) {
   const route = routeFor(page), text = route[locale];
-  return <main className="landing-page" data-chapter={route.number}>
+  return <main id="main-content" tabIndex={-1} className="landing-page" data-chapter={route.number}>
     <LandingProgress />
     <section className="title-page landing-hero">
       <BrandLogo className="title-watermark" aria-hidden="true" />

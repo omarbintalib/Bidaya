@@ -22,6 +22,7 @@ export interface MorphOrbProps {
   onHistory?: () => void;
   historyLabel?: string;
   onCancel?: () => void;
+  answerActions?: React.ReactNode;
 }
 
 /* ─────────────────────────── geometry ─────────────────────────── */
@@ -580,12 +581,13 @@ function createRuntime(env: Env): Runtime {
     const probe = answer.cloneNode(true) as HTMLElement;
     probe.removeAttribute('tabindex'); probe.setAttribute('aria-hidden', 'true');
     probe.classList.add('mo-measure');
-    Object.assign(probe.style, { width: `${geo.cw}px`, height: 'auto', inset: 'auto', position: 'absolute', visibility: 'hidden', pointerEvents: 'none' });
+    Object.assign(probe.style, { width: `${geo.cw}px`, height: 'auto', inset: 'auto', position: 'absolute', visibility: 'hidden', pointerEvents: 'none', maxHeight: 'none', overflow: 'visible' });
     const text = probe.querySelector('.mo-a-body');
     if (text) text.textContent = body;
     root.append(probe);
     geo.ch = Math.max(CARD_H, Math.ceil(probe.getBoundingClientRect().height));
-    if (root.dataset.docked === "true") geo.ch = Math.min(220, geo.ch);
+    root.dataset.answerOverflow = String(geo.ch > 220);
+    geo.ch = Math.min(root.dataset.expanded === 'true' ? Math.max(220, Math.min(480, window.innerHeight * .6)) : 220, geo.ch);
     probe.remove();
     root.style.setProperty('--answer-height', `${geo.ch}px`);
   };
@@ -667,7 +669,13 @@ function createRuntime(env: Env): Runtime {
       env.ui.setPhase("launch");
       env.ui.live(env.getCopy().labels[0]);
       hist.length = 0;
-      if (!env.isReduced()) {
+      if (root.dataset.docked === 'true') {
+        for (const ch of ['oInput', 'oPill', 'oGlow', 'oAur', 'oRing', 'oBall', 'trail']) setNow(ch, 0);
+        setNow('u', 1); setNow('w', ORB_D); setNow('h', ORB_D); setNow('r', ORB_R);
+        setNow('anchorY', 100); setNow('orb.k', 0); setNow('orb.alpha', 0);
+        env.ui.setPhase('assemble');
+        await go(env.isReduced() ? R_IN : ASSEMBLE.filter(track => track.ch !== 'oBall' && track.ch !== 'oRing'));
+      } else if (!env.isReduced()) {
         await go(launchTracks(geo));
         setNow("r", ORB_D / 2);
         env.ui.setPhase("assemble");
@@ -851,6 +859,8 @@ const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : use
 export default function MorphOrb(props: MorphOrbProps) {
   const COPY = copy[props.locale ?? "ar"].ai;
   const [phase, setPhaseState] = useState<Phase>("idle");
+  const [expanded, setExpanded] = useState(false);
+  const [canExpand, setCanExpand] = useState(false);
   const [value, setValue] = useState("");
   const [lbl, setLbl] = useState<{ cur: string; prev: string | null; n: number }>({ cur: COPY.labels[0], prev: null, n: 0 });
   const [answer, setAnswer] = useState("");
@@ -1077,8 +1087,17 @@ export default function MorphOrb(props: MorphOrbProps) {
 
   };
 
-  return (
-    <div className="mo-root" data-phase={phase} data-docked={props.docked ? "true" : undefined} ref={rootRef}>
+  useLayoutEffect(() => {
+    if (phase !== 'answered') { setExpanded(false); return; }
+    rtRef.current?.home();
+    const check = () => setCanExpand(rootRef.current?.dataset.answerOverflow === 'true');
+    check();
+    const ro = new ResizeObserver(check); if (rootRef.current) ro.observe(rootRef.current);
+    return () => ro.disconnect();
+  }, [phase, answer, expanded]);
+
+  return (<>
+    <div className="mo-root" data-expanded={String(expanded)} data-phase={phase} data-docked={props.docked ? "true" : undefined} ref={rootRef}>
       <div className="mo-bg" aria-hidden="true" />
       <div className="mo-halo" aria-hidden="true" />
 
@@ -1099,7 +1118,7 @@ export default function MorphOrb(props: MorphOrbProps) {
           <div className="mo-ring" aria-hidden="true" />
 
           <form className="mo-input" ref={formRef} onSubmit={onFormSubmit} autoComplete="off" hidden={props.docked}>
-            <button type="button" className="mo-history" onClick={props.onHistory} aria-haspopup="dialog" aria-label={props.historyLabel ?? (props.locale === 'en' ? 'Previous chats' : 'المحادثات السابقة')} disabled={!props.onHistory}>
+            <button type="button" className="mo-history" data-tooltip={props.historyLabel ?? (props.locale === 'en' ? 'Previous chats' : 'المحادثات السابقة')} onClick={props.onHistory} aria-haspopup="dialog" aria-label={props.historyLabel ?? (props.locale === 'en' ? 'Previous chats' : 'المحادثات السابقة')} disabled={!props.onHistory}>
             <svg className="mo-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M10 3.5l1.7 4.8 4.8 1.7-4.8 1.7L10 16.5l-1.7-4.8L3.5 10l4.8-1.7L10 3.5z" />
               <path d="M18 14.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8z" />
@@ -1181,5 +1200,9 @@ export default function MorphOrb(props: MorphOrbProps) {
         </div>
       )}
     </div>
-  );
+    {phase === 'answered' && <div className="mo-reading-actions">
+      {canExpand && <button type="button" className="btn-quiet" aria-expanded={expanded} onClick={() => { setExpanded(v => !v); answerRef.current?.scrollTo?.({ top: 0 }); }}>{props.locale === 'en' ? (expanded ? 'Collapse answer' : 'Expand answer') : (expanded ? 'طي الإجابة' : 'توسيع الإجابة')}</button>}
+      {props.answerActions}
+    </div>}
+  </>);
 }

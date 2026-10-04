@@ -272,3 +272,29 @@ it.each([[1440,900], [390,844], [3200,300], [300,3200]])('expands solid logo geo
     expect(sy).toBeGreaterThan(220); expect(sy).toBeLessThan(468);
   }
 });
+
+it('offers resume by stable event ID and resets progress while keeping chats', async () => {
+  Object.defineProperty(HTMLDialogElement.prototype, 'showModal', { configurable: true, value: function(this: HTMLDialogElement) { this.open = true; } });
+  Object.defineProperty(HTMLDialogElement.prototype, 'close', { configurable: true, value: function(this: HTMLDialogElement) { this.open = false; } });
+  localStorage.setItem('bidaya.locale', 'en');
+  localStorage.setItem('bidaya.journey.v1', JSON.stringify({ answers: { old: 'makkah' }, seen: [12, 59], lastEvent: 59 }));
+  const chats = [{ id: 1, question: 'Where?', answer: 'Makkah', locale: 'en' }];
+  localStorage.setItem('bidaya.chats.v1', JSON.stringify(chats));
+  await mount('/journey'); await advance(2100);
+  expect(host.querySelector('.resume-dialog')?.textContent).toContain('quiz results');
+  await click('.resume-dialog .btn-primary'); await advance(20);
+  expect(host.querySelector('.step-event.is-on h2')?.textContent).toBe('Event 59');
+  expect(JSON.parse(localStorage.getItem('bidaya.journey.v1')!).answers).toEqual({ old: 'makkah' });
+  await act(async () => root.unmount()); root = createRoot(host);
+  await mount('/journey'); await advance(2100);
+  await click('.resume-dialog .btn-quiet'); await advance(20);
+  expect(JSON.parse(localStorage.getItem('bidaya.journey.v1')!)).toEqual({ answers: {}, seen: [] });
+  expect(JSON.parse(localStorage.getItem('bidaya.chats.v1')!)).toEqual(chats);
+});
+it('keeps old quiz results when the saved reading event is missing', async () => {
+  const saved = { answers: { old: 'makkah' }, seen: [12], lastEvent: 999999 };
+  localStorage.setItem('bidaya.journey.v1', JSON.stringify(saved));
+  await mount('/journey'); await advance(2100);
+  expect(host.querySelector('.resume-dialog')).toBeNull();
+  expect(JSON.parse(localStorage.getItem('bidaya.journey.v1')!).answers).toEqual(saved.answers);
+});

@@ -12,7 +12,7 @@ export default function JourneyPage({ locale }: { locale: Locale }) {
   const jtext = journeyCopy[locale];
   const state = useSirah();
   const { reducedMotion } = useAccessibility();
-  return <main className="explorer journey-page">
+  return <main id="main-content" tabIndex={-1} className="explorer journey-page">
     <section className="intro">
       <h1 tabIndex={-1} data-page-heading>{routeFor('journey')[locale].title}</h1>
       <p className="intro-subtitle">{locale === 'ar' ? 'اتبع فصول السيرة، واكتشف الأحداث على الخريطة.' : 'Follow the chapters of the Prophet’s life and discover events on the map.'}</p>

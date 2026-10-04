@@ -47,6 +47,7 @@ const base = process.argv[2] || 'http://127.0.0.1:5184';
       await page.screenshot({ path: `qa/ai-history-${width}-${locale}.png` });
       await page.keyboard.press('Escape');
       await page.reload(); await page.waitForSelector('.logo-transition', { state: 'detached' });
+      if (await page.locator('.resume-dialog[open]').count()) await page.locator('.resume-dialog .btn-primary').click();
       if (!wide) await page.locator('.tb-ask').click();
       await icon.click();
       assert.equal(await page.locator('.chat-history-list li').count(), 1);
