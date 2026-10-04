@@ -29,7 +29,12 @@
 .answer-kicker svg { width: 13px; height: 13px; }
 .answer-card h3 { margin: 4px 0 8px; padding-inline-end: 34px; font-size: calc(18px * var(--text-scale)); line-height: 1.5; }
 .answer-text { margin: 0; font-size: var(--text-small); line-height: var(--reading-line-height); }
-.answer-actions { margin-top: 10px; display: flex; gap: 8px; }
+.answer-actions { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+.back-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 38px; max-width: 100%; padding: 6px 14px; border: 1px solid var(--ink); background: var(--ink); color: var(--button-ink); font-size: var(--text-small); cursor: pointer; }
+.back-btn svg { width: 16px; height: 16px; flex: none; }
+.back-btn span { white-space: nowrap; flex: none; }
+.back-btn b { font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ask-panel .back-btn { margin: 4px auto 0; display: flex; }
 .answer-thinking { display: flex; align-items: center; gap: 5px; margin: 2px 0 4px; color: var(--muted); font-size: var(--text-small); }
 .answer-thinking i { width: 6px; height: 6px; border-radius: 50%; background: var(--brass); animation: thinking-dot 1.2s ease-in-out infinite; }
 .answer-thinking i:nth-child(2) { animation-delay: .15s; }

@@ -310,6 +310,15 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
   // answer), and the current event slides down beneath it — nothing covers the map or the story.
   const [answerCard, setAnswerCard] = useState<{ q: string; a: string | null; key: number } | null>(null);
   const thinking = useRef(0);
+  const [returnTo, setReturnTo] = useState<{ step: number; label: string } | null>(null);
+  const stepLabel = useCallback((i: number) => {
+    const s = steps[i];
+    if (s.kind === 'event') return events[s.index].title[locale] || events[s.index].title.ar;
+    if (s.kind === 'chapter') return periodName[locale][s.period];
+    if (s.kind === 'quiz') return text.quizKicker(s.chapter);
+    return text.summaryKicker;
+  }, [steps, events, locale, text]);
+  const goBack = useCallback(() => { if (returnTo) goToStep(returnTo.step); setReturnTo(null); }, [returnTo, goToStep]);
   useEffect(() => () => window.clearTimeout(thinking.current), []);
   useLayoutEffect(() => {
     // Push the open event card below the answer card (a visual shift only, so scroll tracking is unaffected).
@@ -358,9 +367,14 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
     const result = answer(data, question, locale);
     const keep = stay.current;
     stay.current = false;
-    if (result.event !== undefined && !keep) window.setTimeout(() => goToEvent(result.event!), 400);
+    if (result.event !== undefined && !keep) {
+      // Remember where the reader was, so they can come back after the answer has taken them elsewhere.
+      const from = activeRef.current, there = stepOfEvent.get(events.findIndex(e => e.n === result.event));
+      if (there !== undefined && there !== from) setReturnTo(r => r ?? { step: from, label: stepLabel(from) });
+      window.setTimeout(() => goToEvent(result.event!), 400);
+    }
     return result.text;
-  }, [data, locale, goToEvent, pickQuick, text]);
+  }, [data, locale, goToEvent, pickQuick, text, events, stepOfEvent, stepLabel]);
 
   const focusAskBar = () => document.querySelector<HTMLInputElement>('.ask-bar input')?.focus();
   const askAbout = useCallback((question?: string, keepPlace = false) => {
@@ -418,8 +432,9 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
           <span className="tb-long">{locale === 'ar' ? 'English' : 'العربية'}</span><span className="tb-short">{locale === 'ar' ? 'EN' : 'ع'}</span>
         </button>}
       </div>
-      <AskPanel open={askOpen} onClose={closeAsk} locale={locale} reducedMotion={reducedMotion} onAsk={onAsk} ask={ask} onSuggest={suggest} />
-      {answerCard && <AnswerCard key={answerCard.key} card={answerCard} locale={locale} onClose={() => setAnswerCard(null)} onAgain={() => { setAnswerCard(null); focusAskBar(); }} />}
+      <AskPanel open={askOpen} onClose={closeAsk} locale={locale} reducedMotion={reducedMotion} onAsk={onAsk} ask={ask} onSuggest={suggest} back={returnTo} onBack={goBack} />
+      {answerCard && <AnswerCard key={answerCard.key} card={answerCard} locale={locale} back={returnTo} onBack={goBack}
+        onClose={() => { setAnswerCard(null); setReturnTo(null); }} onAgain={() => { setAnswerCard(null); focusAskBar(); }} />}
     </nav>
     {built && <div className="scrolly">
       <div className="scrolly-steps" ref={column}>
@@ -526,13 +541,15 @@ const StepList = memo(function StepList({ steps, data, locale, store, goToStep, 
 });
 
 /** The "Ask the map" panel; memoised so moving through the story leaves the orb untouched. */
-const AskPanel = memo(function AskPanel({ open, onClose, locale, reducedMotion, onAsk, ask, onSuggest }: {
+const AskPanel = memo(function AskPanel({ open, onClose, locale, reducedMotion, onAsk, ask, onSuggest, back, onBack }: {
   open: boolean; onClose: () => void; locale: Locale; reducedMotion: boolean; onAsk: (q: string) => string; ask: { text: string; key: number } | null; onSuggest: (q: string) => void;
+  back: { label: string } | null; onBack: () => void;
 }) {
   const text = journeyCopy[locale];
   return <section id="ask-panel" className={`ask-panel${open ? ' is-open' : ''}`} aria-label={text.ask} inert={!open}>
     <div className="ask-head"><h2>{text.ask}</h2><button type="button" className="qr-close" onClick={onClose} aria-label={text.close}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" /></svg></button></div>
     <MorphOrb locale={locale} reducedMotion={reducedMotion} onSubmit={onAsk} minThinkMs={900} ask={ask} />
+    {back && <BackButton label={back.label} locale={locale} onClick={() => { onBack(); onClose(); }} />}
     <p className="ai-note">{text.askNote}</p>
     <ul className="ai-suggest" aria-label={text.tryAsking}>
       {text.suggestions.map(q => <li key={q}><button type="button" onClick={() => onSuggest(q)}>{q}</button></li>)}
@@ -566,7 +583,16 @@ const EventStep = memo(function EventStep({ index, i, store, data, locale, goToS
 });
 
 /** An answer folded out of the Ask panel: the question, the sourced answer, and a way to ask again. */
-function AnswerCard({ card, locale, onClose, onAgain }: { card: { q: string; a: string | null }; locale: Locale; onClose: () => void; onAgain: () => void }) {
+/** Takes the reader back to where they were before an answer moved the story. */
+function BackButton({ label, locale, onClick }: { label: string; locale: Locale; onClick: () => void }) {
+  const text = journeyCopy[locale];
+  return <button type="button" className="back-btn" onClick={onClick}>
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d={locale === 'ar' ? 'M8 5 4 9l4 4M4 9h7a5 5 0 0 1 0 10H9' : 'M12 5l4 4-4 4M16 9H9a5 5 0 0 0 0 10h2'} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+    <span>{text.backTo}</span><b>«{label}»</b>
+  </button>;
+}
+
+function AnswerCard({ card, locale, onClose, onAgain, back, onBack }: { card: { q: string; a: string | null }; locale: Locale; onClose: () => void; onAgain: () => void; back: { label: string } | null; onBack: () => void }) {
   const text = journeyCopy[locale];
   return <section className="answer-card" aria-label={text.ask} role="status">
     <p className="answer-kicker"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor" /></svg>{text.yourQuestion}</p>
@@ -576,6 +602,7 @@ function AnswerCard({ card, locale, onClose, onAgain }: { card: { q: string; a: 
       : <>
         <p className="answer-text">{card.a}</p>
         <div className="answer-actions">
+          {back && <BackButton label={back.label} locale={locale} onClick={onBack} />}
           <button type="button" className="btn-quiet" onClick={onAgain}>{text.askAgain}</button>
         </div>
       </>}
