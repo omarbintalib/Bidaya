@@ -137,3 +137,29 @@ export function answer(data: Sirah, question: string, locale: Locale): Answer {
   const surah = ar ? `سورة ${v.surah} (${v.whole ? 'السورة كاملة' : v.ref})` : `Surah ${v.surah} (${v.whole ? 'whole surah' : v.ref})`;
   return { kind: 'verse', event: ev ?? undefined, text: `${surah}: ${v.phrase[locale]} — ${v.title[locale]}. ${src}` };
 }
+
+/**
+ * Questions to offer under an event card. Each is put to `answer()` first and kept only when the reply is about
+ * this event (a person in it, or a verse the sources link to it), so a suggestion never leads to "no answer".
+ */
+export function suggestFor(data: Sirah, e: SirahEvent, locale: Locale, max = 3): string[] {
+  const ar = locale === 'ar';
+  const clean = (t: string) => t.replace(/\s*\.\s*$/, '').trim();
+  const title = clean(e.title[locale] || e.title.ar);
+  const out: string[] = [];
+  const keep = (q: string, ok: (a: Answer) => boolean) => { if (out.length < max && !out.includes(q) && ok(answer(data, q, locale))) out.push(q); };
+  for (const v of data.verses.filter(v => v.link?.event === e.n && v.link.type === 'direct')) {
+    const topics = [clean(v.title[locale] || v.title.ar), title];
+    const surah = v.surah.includes('/') ? '' : v.surah; // one surah only, by name (Arabic) — English asks without it
+    const asks = ar ? topics.map(t => surah ? `ماذا نزل في سورة ${surah} عن «${t}»؟` : `ماذا نزل من القرآن عن «${t}»؟`)
+      : topics.map(t => `What was revealed about “${t}”?`);
+    for (const q of asks) { keep(q, a => a.kind === 'verse' && a.event === e.n); if (out.length) break; }
+    if (out.length) break;
+  }
+  for (const p of data.people.filter(p => p.events.includes(e.n))) {
+    const name = p.name[locale] || p.name.ar;
+    const she = /عنها|^أم |بنت /.test(p.name.ar);
+    keep(ar ? `من ${she ? 'هي' : 'هو'} ${name}؟` : `Who was ${name}?`, a => a.kind === 'person' && a.text.startsWith(ar ? `${p.name.ar}:` : `${p.name.en} (`));
+  }
+  return out;
+}

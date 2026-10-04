@@ -242,3 +242,5 @@ No project-wide software license has been selected. Third-party assets retain th
 Saudi Regular and Bold are provided unchanged from the Ministry of Culture source; embedded copyright and trademark notices are transcribed in [public/fonts/NOTICES.md](public/fonts/NOTICES.md). Fontsource dependencies carry their own license files. Review the applicable asset terms before redistribution or production use.
 
 The map's texture (water lines along the coast, paper grain) is decorative only and carries no data.
+
+Each event card has an "Ask about this event" box: suggested questions about the people in the event and the verses the sources link to it (`suggestFor` in `src/assistant/answer.ts`). A question is only offered after the answer engine has answered it from the sources, and asking from a card keeps the reader on that event.

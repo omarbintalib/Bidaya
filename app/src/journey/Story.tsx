@@ -217,6 +217,13 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
   const [ask, setAsk] = useState<{ text: string; key: number } | null>(null);
   const closeAsk = useCallback(() => setAskOpen(false), []);
   const suggest = useCallback((q: string) => setAsk({ text: q, key: Date.now() }), []);
+  // Questions asked from an event card stay on that event: the answer is shown, the story does not move.
+  const stay = useRef(false);
+  const askAbout = useCallback((question?: string) => {
+    setQuick(null);
+    setAskOpen(true);
+    if (question) { stay.current = true; suggest(question); }
+  }, [suggest]);
   const onAsk = useCallback((question: string) => {
     if (QUIZ_ASK.test(question)) {
       // "Quiz me": a question on the map from where the reader is, or say plainly that none is left here.
@@ -227,7 +234,9 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
       return next.q ? text.quizFromAsk : next.empty === 'later' ? text.quizLater : text.quizNoneLeft;
     }
     const result = answer(data, question, locale);
-    if (result.event !== undefined) window.setTimeout(() => goToEvent(result.event!), 400);
+    const keep = stay.current;
+    stay.current = false;
+    if (result.event !== undefined && !keep) window.setTimeout(() => goToEvent(result.event!), 400);
     return result.text;
   }, [data, locale, goToEvent, pickQuick, text]);
 
@@ -275,7 +284,7 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
     </nav>
     {built && <div className="scrolly">
       <div className="scrolly-steps" ref={column}>
-        <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} />
+        <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} onAskAbout={askAbout} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} />
         <section data-step={steps.length - 1} className={`step step-summary${step.kind === 'summary' ? ' is-on' : ''}`}>
           <span>{text.summaryKicker}</span>
           <h2>{text.summaryTitle}</h2>
@@ -338,15 +347,15 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
 }
 
 /** All steps but the summary; memoised so it re-renders only when the steps, the language or an answer change. */
-const StepList = memo(function StepList({ steps, data, locale, store, goToStep, goToEvent, onWalk, answers, onAnswer, questionOf, nextQuestion, onMore }: {
+const StepList = memo(function StepList({ steps, data, locale, store, goToStep, goToEvent, onWalk, onAskAbout, answers, onAnswer, questionOf, nextQuestion, onMore }: {
   steps: Step[]; data: Sirah; locale: Locale; store: ActiveStore; goToStep: (i: number) => void; goToEvent: (n: number) => void;
-  onWalk: (route: Route) => void; answers: Record<string, string>; onAnswer: (q: QuizQuestion, key: string) => void;
+  onWalk: (route: Route) => void; onAskAbout: (question?: string) => void; answers: Record<string, string>; onAnswer: (q: QuizQuestion, key: string) => void;
   questionOf: (period: Period, answers: Record<string, string>) => { q: QuizQuestion; at: number; total: number };
   nextQuestion: (period: Period) => number; onMore: (period: Period) => void;
 }) {
   return <>{steps.map((s, i) => {
     if (s.kind === 'chapter') return <ChapterStep key={`c${s.chapter}`} s={s} i={i} store={store} events={data.events} locale={locale} />;
-    if (s.kind === 'event') return <EventStep key={data.events[s.index].n} index={s.index} i={i} store={store} data={data} locale={locale} goToStep={goToStep} goToEvent={goToEvent} onWalk={onWalk} />;
+    if (s.kind === 'event') return <EventStep key={data.events[s.index].n} index={s.index} i={i} store={store} data={data} locale={locale} goToStep={goToStep} goToEvent={goToEvent} onWalk={onWalk} onAskAbout={onAskAbout} />;
     if (s.kind === 'quiz') {
       const { q, at, total } = questionOf(s.period, answers);
       return <QuizCard key={`q${s.chapter}`} step={i} store={store} q={q} at={at} total={total} hasMore={nextQuestion(s.period) >= 0} chapter={s.chapter} data={data} locale={locale} chosen={answers[q.id] ?? null} onAnswer={onAnswer} onMore={onMore} goToStep={goToStep} />;
@@ -381,8 +390,9 @@ const ChapterStep = memo(function ChapterStep({ s, i, store, events, locale }: {
   </section>;
 });
 
-const EventStep = memo(function EventStep({ index, i, store, data, locale, goToStep, goToEvent, onWalk }: {
+const EventStep = memo(function EventStep({ index, i, store, data, locale, goToStep, goToEvent, onWalk, onAskAbout }: {
   index: number; i: number; store: ActiveStore; data: Sirah; locale: Locale; goToStep: (i: number) => void; goToEvent: (n: number) => void; onWalk: (route: Route) => void;
+  onAskAbout: (question?: string) => void;
 }) {
   const on = useActive(store, a => a === i);
   const e = data.events[index];
@@ -390,7 +400,7 @@ const EventStep = memo(function EventStep({ index, i, store, data, locale, goToS
   return <section data-step={i} className={`step step-event${on ? ' is-on' : ''}`} onClick={() => !on && goToStep(i)}>
     {on ? <EventCard data={data} event={e} locale={locale} chapter={PERIOD_ORDER.indexOf(e.period) + 1}
       yearEvents={data.events.filter(x => x.year === e.year && x.period === e.period)} onPick={goToEvent}
-      onWalk={route ? () => onWalk(route) : undefined} walkName={route?.name[locale]} />
+      onWalk={route ? () => onWalk(route) : undefined} walkName={route?.name[locale]} onAsk={onAskAbout} />
       : <div className="step-peek"><p className="step-date">{hijri(e.year, locale)} · {e.placeName[locale]}</p><h3>{e.title[locale] || e.title.ar}</h3></div>}
   </section>;
 });

@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { answer } from '../assistant/answer';
+import { answer, suggestFor } from '../assistant/answer';
 import { parseCsv } from './csv';
 import { loadSirah } from './load';
 import { findPeople } from './people';
@@ -102,6 +102,16 @@ describe('ask the map (slide 7 test set)', () => {
   });
   it('apologises when the sources have nothing', () => {
     expect(answer(data, 'ما لون السيارة؟', 'ar').kind).toBe('none');
+  });
+});
+
+describe('ask about this event', () => {
+  it('only suggests questions the sources answer, about that event', () => {
+    for (const locale of ['ar', 'en'] as const) for (const e of data.events) for (const q of suggestFor(data, e, locale)) {
+      const a = answer(data, q, locale);
+      expect(['person', 'verse']).toContain(a.kind);
+      if (a.kind === 'verse') expect(a.event).toBe(e.n);
+    }
   });
 });
 
