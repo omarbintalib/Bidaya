@@ -20,7 +20,7 @@
 .tb-ask { background: var(--ink); color: var(--button-ink); border-color: var(--ink); }
 .tb-ask svg { color: #e2b45c; }
 .tb-ask.is-open { background: var(--surface); color: var(--ink); }
-.ask-panel { position: absolute; top: calc(100% + 8px); inset-inline-end: clamp(24px, 4.8vw, 88px); z-index: 31; width: min(600px, calc(100vw - 32px)); max-height: calc(var(--viewport-height, 100svh) - var(--toolbar-h) - 32px); overflow: auto;
+.ask-panel { position: absolute; top: calc(100% + 8px); inset-inline-start: clamp(24px, 4.8vw, 88px); z-index: 31; width: min(var(--story-w, 440px), calc(100vw - 32px)); max-height: calc(var(--viewport-height, 100svh) - var(--toolbar-h) - 32px); overflow: auto;
   padding: 14px 16px 16px; background: var(--paper); border: 1px solid var(--brass); box-shadow: 0 20px 60px #331b0d33; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .2s, transform .2s, visibility .2s; }
 .ask-panel.is-open { opacity: 1; visibility: visible; transform: none; }
 .ask-head { display: flex; align-items: center; justify-content: space-between; }

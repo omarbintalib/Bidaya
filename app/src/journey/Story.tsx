@@ -122,6 +122,14 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
   /** Where the newly active step sat before it opened, so the page can be held still while cards resize. */
   const anchor = useRef<{ step: number; top: number } | null>(null);
   const rush = useRef(0);
+  // The Ask panel opens over the story column, never over the map: it takes the column's width from here.
+  useLayoutEffect(() => {
+    const col = column.current, page = col?.closest<HTMLElement>('.journey-page');
+    if (!col || !page) return;
+    const ro = new ResizeObserver(() => page.style.setProperty('--story-w', `${Math.round(col.getBoundingClientRect().width)}px`));
+    ro.observe(col);
+    return () => ro.disconnect();
+  }, [built]);
   useEffect(() => {
     const root = column.current;
     if (!root) return;
