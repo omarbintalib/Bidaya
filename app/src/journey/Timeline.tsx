@@ -14,12 +14,14 @@ interface Props {
   playing: boolean;
   reducedMotion: boolean;
   onIndex: (i: number) => void;
+  /** Previous / next arrows; when given, they step through the story rather than by event index. */
+  onStep?: (dir: 1 | -1) => void;
   onTogglePlay: () => void;
   /** Extra control shown at the end of the bar. */
   extra?: React.ReactNode;
 }
 
-export default function Timeline({ events, index, store, locale, playing, reducedMotion, onIndex, onTogglePlay, extra }: Props) {
+export default function Timeline({ events, index, store, locale, playing, reducedMotion, onIndex, onStep, onTogglePlay, extra }: Props) {
   const text = journeyCopy[locale];
   const track = useRef<HTMLDivElement>(null);
   const current = events[index];
@@ -64,12 +66,12 @@ export default function Timeline({ events, index, store, locale, playing, reduce
   return <section className="timeline" aria-label={text.timeline}>
     <div className="tl-bar">
       <div className="tl-buttons">
-        <button type="button" className="tl-btn" onClick={() => onIndex(Math.max(0, index - 1))} disabled={index === 0} aria-label={text.prev}><Chevron back /></button>
+        <button type="button" className="tl-btn" onClick={() => (onStep ? onStep(-1) : onIndex(Math.max(0, index - 1)))} disabled={index === 0} aria-label={text.prev}><Chevron back /></button>
         <button type="button" className="tl-btn tl-play" onClick={onTogglePlay} aria-pressed={playing} aria-label={playing ? text.pause : text.play}>
           {playing ? <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4h3v12H6zM11 4h3v12h-3z" fill="currentColor" /></svg> : <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4l10 6-10 6z" fill="currentColor" /></svg>}
           <span>{playing ? text.pause : text.story}</span>
         </button>
-        <button type="button" className="tl-btn" onClick={() => onIndex(Math.min(events.length - 1, index + 1))} disabled={index === events.length - 1} aria-label={text.next}><Chevron /></button>
+        <button type="button" className="tl-btn" onClick={() => (onStep ? onStep(1) : onIndex(Math.min(events.length - 1, index + 1)))} disabled={index === events.length - 1} aria-label={text.next}><Chevron /></button>
       </div>
       <p className="tl-now" aria-live="polite">
         <span className="tl-count">{text.count(index + 1, events.length)}</span>

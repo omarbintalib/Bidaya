@@ -243,4 +243,4 @@ Saudi Regular and Bold are provided unchanged from the Ministry of Culture sourc
 
 The map's texture (a water line along the coast, paper grain) is decorative only and carries no data.
 
-The map carries an Ask bar: type a question, or press Enter to ask the one it suggests for the current event (`suggestFor` in `src/assistant/answer.ts`; a question is only suggested after the answer engine has answered it from the sources). The suggested question keeps the reader on that event; a typed one moves the story to the event it is about.
+The map carries an Ask bar (on wide screens it is the only way in; phones keep the toolbar button): type a question, or press Enter to ask the one it suggests for the current event. The answer appears in a card at the top of the story column, with the current event moved just below it (`suggestFor` in `src/assistant/answer.ts`; a question is only suggested after the answer engine has answered it from the sources). The suggested question keeps the reader on that event; a typed one moves the story to the event it is about.
