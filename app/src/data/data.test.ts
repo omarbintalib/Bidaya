@@ -115,26 +115,29 @@ describe('ask about this event', () => {
   });
 });
 
-describe('English columns filled by the team', () => {
-  it('uses an _EN cell once it is filled, and leaves it empty otherwise', async () => {
-    expect(data.verses.every(v => v.surahEn === null && v.reasonEn === null)).toBe(true);
-    // Simulate a reviewer filling two cells, then load again.
-    const fill = (csv: string, col: string, row: string, value: string) => {
-      const [head, ...lines] = csv.split('\n'), cols = parseCsv(csv)[0] ? Object.keys(parseCsv(csv)[0]) : [];
-      const at = cols.indexOf(col);
-      return [head, ...lines.map(l => (l.startsWith(row + ',') ? l.split(',').map((c, i) => (i === at ? value : c)).join(',') : l))].join('\n');
-    };
-    const surahs = fill(byName.get('1_related_surahs.csv')!, 'السورة_EN', 'ASB-001', 'Al-Alaq');
+describe('English from the sources and the team', () => {
+  it('has every surah name from Quran.com and sunnah.com English for each hadith-based verse', () => {
+    expect(data.verses.every(v => v.surahEn)).toBe(true);
+    const withHadith = data.verses.filter(v => v.bukhari.length || v.muslim.length);
+    expect(data.verses.filter(v => v.hadithEn).length).toBeGreaterThanOrEqual(90);
+    for (const v of data.verses.filter(v => v.hadithEn)) expect(v.hadithEn!.url).toMatch(/^https:\/\/sunnah\.com\//);
+    expect(withHadith.length).toBeGreaterThan(0);
+  });
+  it('uses a team-filled _EN cell, shared by every row with the same Arabic', async () => {
+    const rows = parseCsv(byName.get('1_related_surahs.csv')!);
+    const first = rows.find(r => r['المعرف'] === 'ASB-001')!;
+    first['الراوي_EN'] = 'Aisha';
+    const cols = Object.keys(rows[0]);
+    const csv = [cols, ...rows.map(r => cols.map(c => r[c]))].map(line => line.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
     vi.stubGlobal('fetch', async (url: string) => {
       const name = decodeURIComponent(url.split('/').pop()!);
-      return new Response(name === '1_related_surahs.csv' ? surahs : byName.get(name) ?? '');
+      return new Response(name === '1_related_surahs.csv' ? csv : byName.get(name) ?? '');
     });
     const filled = await loadSirah();
-    expect(filled.verses.find(v => v.id === 'ASB-001')?.surahEn).toBe('Al-Alaq');
-    // Filled once, used for every row of the same surah; other surahs stay empty.
-    const alaq = filled.verses.filter(v => v.surah === 'العلق');
-    expect(alaq.every(v => v.surahEn === 'Al-Alaq')).toBe(true);
-    expect(filled.verses.filter(v => v.surah !== 'العلق').every(v => v.surahEn === null)).toBe(true);
+    const same = filled.verses.filter(v => v.narrator === first['الراوي']);
+    expect(same.length).toBeGreaterThan(0);
+    expect(same.every(v => v.narratorEn === 'Aisha')).toBe(true);
+    expect(filled.verses.filter(v => v.narrator !== first['الراوي']).every(v => v.narratorEn === null)).toBe(true);
   });
 });
 

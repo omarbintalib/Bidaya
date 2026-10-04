@@ -47,6 +47,8 @@ export interface Verse {
   surahEn: string | null;
   reasonEn: string | null;
   narratorEn: string | null;
+  /** The verse's main hadith in English, as sunnah.com gives it (its own narrator line, text and reference). */
+  hadithEn: { ref: string; url: string; chain: string; text: string } | null;
   ref: string;
   ayat: string;
   mushaf: string[];

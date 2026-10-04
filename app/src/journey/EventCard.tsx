@@ -108,7 +108,15 @@ export function VerseItem({ v, locale, compact = false }: { v: Verse; locale: Lo
     {!compact && <>
       <button type="button" className="verse-toggle" aria-expanded={open} onClick={() => setOpen(o => !o)}>{text.reason}</button>
       {open && <div className="verse-detail">
-        {reason && (reasonEn ? <p><PeopleText text={reason} lang="en" /></p> : <Ar as="p"><PeopleText text={reason} lang="ar" /></Ar>)}
+        {reasonEn ? <p><PeopleText text={reason!} lang="en" /></p>
+          : locale === 'en' && v.hadithEn
+            // The English version shows the hadith itself, in sunnah.com's published English, with its own narrator line.
+            ? <blockquote className="verse-hadith">
+                <p className="verse-hadith-chain">{v.hadithEn.chain}:</p>
+                <p className="verse-hadith-text"><PeopleText text={v.hadithEn.text} lang="en" /></p>
+                <a href={v.hadithEn.url} target="_blank" rel="noreferrer">{v.hadithEn.ref} · sunnah.com ↗</a>
+              </blockquote>
+            : reason && <Ar as="p"><PeopleText text={reason} lang="ar" /></Ar>}
         {(v.evidence[locale] || v.evidence.ar) && <p className="verse-evidence" lang={v.evidence[locale] ? locale : 'ar'}>{v.evidence[locale] || v.evidence.ar}</p>}
         <p className="verse-refs">
           {hadithLinks(v).map(h => <a key={h.book + h.n} href={h.url} target="_blank" rel="noreferrer">{text[h.book]} {h.n}</a>)}

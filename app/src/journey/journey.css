@@ -171,3 +171,9 @@ html[data-compact-viewport='true'] .journey-page .story-timeline { display: none
 .ecard-text p + p { margin-top: 12px; color: var(--ink); }
 .tl-undated { margin-inline-start: auto; font-size: calc(14px * var(--text-scale)); color: var(--muted); }
 @keyframes card-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* A verse's hadith in sunnah.com's English (English interface). */
+.verse-hadith { margin: 0 0 10px; padding: 10px 14px; border-inline-start: 2px solid var(--brass); background: color-mix(in srgb, var(--brass) 6%, transparent); }
+.verse-hadith-chain { margin: 0 0 4px; font-style: italic; color: var(--muted); font-size: var(--text-small); }
+.verse-hadith-text { margin: 0 0 6px; font-size: var(--text-small); line-height: 1.7; display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden; }
+.verse-hadith a { font-size: calc(13px * var(--text-scale)); color: var(--muted); text-decoration-color: var(--brass); text-underline-offset: .2em; }
