@@ -76,7 +76,7 @@ export interface Person {
   facts: PersonFact[];
 }
 
-export interface PersonFact { text: string; quote: string; source: string; url: string | null }
+export interface PersonFact { text: string; quote: string; source: string; url: string | null; ref: string }
 
 export interface Route { id: string; kind: 'sirah' | 'trade'; name: Text; events: number[]; note: Text; coords: [number, number][] }
 

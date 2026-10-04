@@ -142,7 +142,7 @@ export async function loadSirah(): Promise<Sirah> {
     const id = r['معرف_المصدر_في_المشروع'];
     // Dorar facts cite their event ("حدث 14"); Sahihayn facts cite the hadith ("صحيح مسلم 1748").
     const source = /^حدث\s/.test(id) ? `الدرر السنية · ${id}` : r['المرجع'];
-    p.facts.push({ text: r['الحقيقة'], quote: r['الشاهد_من_المصدر'], source, url: r['الرابط'] || null });
+    p.facts.push({ text: r['الحقيقة'], quote: r['الشاهد_من_المصدر'], source, url: r['الرابط'] || null, ref: id });
   }
 
   const routes: Route[] = [];

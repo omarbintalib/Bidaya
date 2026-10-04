@@ -180,7 +180,7 @@ Nothing in these columns is machine-translated. Where an original source publish
 | `1_related_surahs.csv` | `الراوي_EN` | `الراوي` | 55 narrator names (shared) |
 | `1_related_surahs.csv` | `مرجع_الحديث_EN`, `رابط_الحديث_EN`, `سند_الحديث_EN`, `نص_الحديث_EN` | `روابط_التحقق` | **Filled** for the 90 hadith-based rows from sunnah.com's published English: the reference, page, narrator line and text of the row's first hadith link, word for word. The English interface shows this hadith under "How it connects". (`سند_الحديث_EN` is the hadith's own narrator line, which often names the next narrator in the chain rather than the Companion in `الراوي`, so it does not fill `الراوي_EN`.) |
 | `3_links_surahs_sirah.csv` | `نص_الربط_في_الواجهة_EN` | `نص_الربط_في_الواجهة` | 8 timing labels (shared), e.g. «وقعت في هذه المرحلة، ولا يُعرف تاريخها بدقة» |
-| `6_sahaba.csv` | `نبذة_موثقة_EN` | `نبذة_موثقة` | 98 synopses |
+| `6_sahaba.csv` | `نبذة_موثقة_EN` | `نبذة_موثقة` | Empty. Until it is filled, the English card builds the synopsis from the original sources' own English, mirroring the Arabic: the same facts (`7_sahaba_references.csv`) in the same order, each as the sentence that names the person in Dorar's English text of its event, or in its Bukhari/Muslim hadith's English. A fact whose source has no English keeps its Arabic sentence. Nothing is translated. Covers 179 of the 187 facts; 92 of 98 people fully in English. Dorar's English spellings of five names were added to `Aliases_EN` so their sentences are found |
 | `6_sahaba.csv` | `وقت_الإسلام_EN` | `وقت_الإسلام` | 35 entries |
 | `6_sahaba.csv` | `الوفاة_أو_الاستشهاد_EN` | `الوفاة_أو_الاستشهاد` | 25 entries |
 
