@@ -63,7 +63,11 @@ export interface Person {
   islam: string | null;
   death: string | null; events: number[]; verses: string[];
   aliases: Text[];
+  /** Sourced facts (7_sahaba_references.csv): each with the source's own words and where they come from. */
+  facts: PersonFact[];
 }
+
+export interface PersonFact { text: string; quote: string; source: string; url: string | null }
 
 export interface Route { id: string; kind: 'sirah' | 'trade'; name: Text; events: number[]; note: Text; coords: [number, number][] }
 

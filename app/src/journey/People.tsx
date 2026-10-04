@@ -71,7 +71,14 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
         {person.death && <div><dt>{text.death}</dt><dd lang="ar">{person.death}</dd></div>}
       </dl>}
       {locale === 'en' && <p className="pd-note">{text.bioInArabic}</p>}
-      <p className="pd-bio" lang="ar" dir="rtl">{person.bio}</p>
+      {/* Each sourced fact, with the source's own words beneath it; the one-line summary is these facts joined. */}
+      {person.facts.length > 0
+        ? <ul className="pd-facts-list" lang="ar" dir="rtl">{person.facts.map((f, i) => <li key={i}>
+            <p>{f.text}</p>
+            <q className="pd-quote">{f.quote}</q>
+            {f.url ? <a href={f.url} target="_blank" rel="noreferrer">{f.source}</a> : <span className="pd-fact-src">{f.source}</span>}
+          </li>)}</ul>
+        : <p className="pd-bio" lang="ar" dir="rtl">{person.bio}</p>}
       {events.length > 0 && <section className="pd-events">
         <h3>{text.personEvents}</h3>
         <ul>{events.map(e => {

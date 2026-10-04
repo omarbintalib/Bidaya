@@ -19,6 +19,7 @@ const FILES = {
   trade: 'map_routes.csv',
   stops: 'route_stops.csv',
   quiz: 'quiz.csv',
+  facts: '7_sahaba_references.csv',
 } as const;
 
 const PERIODS: Record<string, Period> = { 'قبل البعثة': 'prologue', 'العهد المكي': 'makkah', 'الهجرة': 'hijrah', 'العهد المدني': 'madinah' };
@@ -119,7 +120,17 @@ export async function loadSirah(): Promise<Sirah> {
     aliases: aliasList(r['أسماء_أخرى'], r.Aliases_EN),
     events: list(r['أحداث_الدرر_المرتبطة']).map(Number).filter(Number.isFinite),
     verses: list(r['أسباب_النزول_المرتبطة']),
+    facts: [],
   }));
+  const personById = new Map(people.map(p => [p.id, p]));
+  for (const r of parseCsv(raw.facts)) {
+    const p = personById.get(r['معرف_الصحابي']);
+    if (!p) { warn(`7_sahaba_references.csv: "${r['معرف_الحقيقة']}" names an unknown person "${r['معرف_الصحابي']}"`); continue; }
+    const id = r['معرف_المصدر_في_المشروع'];
+    // Dorar facts cite their event ("حدث 14"); Sahihayn facts cite the hadith ("صحيح مسلم 1748").
+    const source = /^حدث\s/.test(id) ? `الدرر السنية · ${id}` : r['المرجع'];
+    p.facts.push({ text: r['الحقيقة'], quote: r['الشاهد_من_المصدر'], source, url: r['الرابط'] || null });
+  }
 
   const routes: Route[] = [];
   const geo = JSON.parse(raw.routes) as { features: { properties: Record<string, string>; geometry: { coordinates: [number, number][] } }[] };

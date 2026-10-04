@@ -115,6 +115,15 @@ describe('ask about this event', () => {
   });
 });
 
+describe('sourced facts about people', () => {
+  it('loads every fact in 7_sahaba_references.csv onto its person, with a quote and a source', () => {
+    const facts = data.people.flatMap(p => p.facts);
+    expect(facts.length).toBe(210);
+    expect(data.people.every(p => p.facts.length > 0)).toBe(true);
+    for (const f of facts) { expect(f.quote.length).toBeGreaterThan(5); expect(f.source.length).toBeGreaterThan(3); }
+  });
+});
+
 describe('what the sources say about a person', () => {
   it('quotes the event text word for word', () => {
     let n = 0;

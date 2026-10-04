@@ -240,10 +240,10 @@
   .quiz-options button.is-wrong { animation: answer-shake .38s ease both; }
   .quiz-result, .quick-result { animation: rise-in .35s .08s ease both; }
   .tb-chapter.is-done b::after { animation: answer-pop .45s cubic-bezier(.3, 1.6, .5, 1) both; }
-  .pd-events li { animation: rise-in .3s ease both; }
-  .pd-events li:nth-child(2) { animation-delay: .05s; }
-  .pd-events li:nth-child(3) { animation-delay: .1s; }
-  .pd-events li:nth-child(n+4) { animation-delay: .15s; }
+  .pd-events li, .pd-facts-list li { animation: rise-in .3s ease both; }
+  .pd-events li:nth-child(2), .pd-facts-list li:nth-child(2) { animation-delay: .05s; }
+  .pd-events li:nth-child(3), .pd-facts-list li:nth-child(3) { animation-delay: .1s; }
+  .pd-events li:nth-child(n+4), .pd-facts-list li:nth-child(n+4) { animation-delay: .15s; }
   .step-chapter.is-on > * { animation: rise-in .5s ease both; }
   .step-chapter.is-on > :nth-child(2) { animation-delay: .07s; }
   .step-chapter.is-on > :nth-child(3) { animation-delay: .14s; }
