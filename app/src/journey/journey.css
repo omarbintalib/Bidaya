@@ -177,3 +177,7 @@ html[data-compact-viewport='true'] .journey-page .story-timeline { display: none
 .verse-hadith-chain { margin: 0 0 4px; font-style: italic; color: var(--muted); font-size: var(--text-small); }
 .verse-hadith-text { margin: 0 0 6px; font-size: var(--text-small); line-height: 1.7; display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden; }
 .verse-hadith a { font-size: calc(13px * var(--text-scale)); color: var(--muted); text-decoration-color: var(--brass); text-underline-offset: .2em; }
+
+.verse-ar { margin: 0 0 8px; }
+.verse-ar summary { cursor: pointer; color: var(--muted); font-size: calc(13px * var(--text-scale)); width: fit-content; }
+.verse-ar p { margin: 8px 0 0; }

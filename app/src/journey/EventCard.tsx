@@ -123,7 +123,10 @@ export function VerseItem({ v, locale, compact = false }: { v: Verse; locale: Lo
                   <p className="verse-hadith-text"><PeopleText text={v.tafseerEn.meaning} lang="en" /></p>
                   <a href={v.tafseerEn.url} target="_blank" rel="noreferrer">Dorar · {v.tafseerEn.label} ↗</a>
                 </blockquote>
-              : reason && <Ar as="p"><PeopleText text={reason} lang="ar" /></Ar>}
+              : reason && (locale === 'en'
+                // No English from the source yet: the Arabic is kept, folded and marked, rather than shown as the explanation.
+                ? <details className="verse-ar"><summary>{text.arabicPending}</summary><Ar as="p"><PeopleText text={reason} lang="ar" /></Ar></details>
+                : <Ar as="p"><PeopleText text={reason} lang="ar" /></Ar>)}
         {(v.evidence[locale] || v.evidence.ar) && <p className="verse-evidence" lang={v.evidence[locale] ? locale : 'ar'}>{v.evidence[locale] || v.evidence.ar}</p>}
         <p className="verse-refs">
           {hadithLinks(v).map(h => <a key={h.book + h.n} href={h.url} target="_blank" rel="noreferrer">{text[h.book]} {h.n}</a>)}
