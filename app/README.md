@@ -244,3 +244,7 @@ Saudi Regular and Bold are provided unchanged from the Ministry of Culture sourc
 The map's texture (a water line along the coast, paper grain) is decorative only and carries no data.
 
 The map carries an Ask bar (on wide screens it is the only way in; phones keep the toolbar button): type a question, or press Enter to ask the one it suggests for the current event. The answer appears in a card at the top of the story column, with the current event moved just below it (`suggestFor` in `src/assistant/answer.ts`; a question is only suggested after the answer engine has answered it from the sources). The suggested question keeps the reader on that event; a typed one moves the story to the event it is about.
+
+## Deploying to Vercel
+
+`vercel.json` at the repository root tells Vercel to install and build the app from `app/` (the data files at the root are copied into `app/dist/data/` during the build) and to serve `app/dist`. Its rewrite sends every page path (such as `/journey`) to `index.html`, so opening or refreshing a page never gives a 404; real files (`/assets/…`, `/data/…`) are served as they are. If the Vercel project's Root Directory is set to `app` instead, `app/vercel.json` does the same.
