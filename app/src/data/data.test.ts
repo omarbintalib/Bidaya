@@ -2,7 +2,7 @@ import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { answer, suggestFor } from '../assistant/answer';
 import { parseCsv } from './csv';
 import { loadSirah } from './load';
-import { findPeople } from './people';
+import { findPeople, mentionIn } from './people';
 import { quranpediaRefs } from './quranpedia';
 import { quizPools } from './quiz';
 import { versesFor } from './select';
@@ -112,6 +112,20 @@ describe('ask about this event', () => {
       expect(['person', 'verse']).toContain(a.kind);
       if (a.kind === 'verse') expect(a.event).toBe(e.n);
     }
+  });
+});
+
+describe('what the sources say about a person', () => {
+  it('quotes the event text word for word', () => {
+    let n = 0;
+    for (const p of data.people) for (const ev of p.events) for (const lang of ['ar', 'en'] as const) {
+      const e = data.byNumber.get(ev);
+      const m = e && mentionIn(data, p, e, lang);
+      if (!m) continue;
+      n++;
+      expect((m.lang === 'ar' ? e.text.ar : e.text.en).includes(m.text.replace(/^… /, '').replace(/ …$/, ''))).toBe(true);
+    }
+    expect(n).toBeGreaterThan(200);
   });
 });
 

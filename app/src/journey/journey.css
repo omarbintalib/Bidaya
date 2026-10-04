@@ -138,9 +138,13 @@ html[data-compact-viewport='true'] .journey-page .story-timeline { display: none
 .pd-events { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
 .pd-events h3 { margin: 0 0 10px; font-size: calc(15px * var(--text-scale)); color: var(--muted); }
 .pd-events ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-.pd-events button { width: 100%; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 10px 12px; border: 1px solid var(--border); background: var(--surface); text-align: start; font-size: var(--text-small); }
+.pd-events button { width: 100%; display: flex; flex-direction: column; align-items: stretch; gap: 6px; padding: 10px 12px; border: 1px solid var(--border); background: var(--surface); text-align: start; font-size: var(--text-small); }
 .pd-events button:hover { border-color: var(--brass); }
 .pd-events small { color: var(--muted); white-space: nowrap; }
+.pd-ev-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-weight: 600; }
+.pd-quote { display: block; padding-inline-start: 10px; border-inline-start: 2px solid color-mix(in srgb, var(--brass) 55%, transparent); color: var(--ink); opacity: .85; font-size: var(--text-small); line-height: 1.8; quotes: '«' '»'; }
+[lang='en'].pd-quote { quotes: '“' '”'; line-height: 1.6; }
+.pd-quote-note { margin: 8px 0 0; color: var(--muted); font-size: calc(13px * var(--text-scale)); }
 .pd-source { margin: 18px 0 0; color: var(--muted); font-size: calc(13.5px * var(--text-scale)); }
 [dir='ltr'] .pd-ar { text-align: left; }
 .pd-facts { margin: 0 0 16px; display: grid; gap: 8px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); }

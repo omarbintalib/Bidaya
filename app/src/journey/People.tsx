@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useRef, type ReactNode } from 'react';
-import { findPeople } from '../data/people';
+import { findPeople, mentionIn } from '../data/people';
 import { hijri } from '../data/select';
 import type { Person, Sirah } from '../data/types';
 import type { Locale } from '../i18n';
@@ -65,17 +65,25 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
       </button>
     </header>
     <div className="pd-body">
-      <dl className="pd-facts">
-        <div><dt>{text.islamWhen}</dt><dd lang="ar">{person.islam ?? text.notStated}</dd></div>
-        <div><dt>{text.death}</dt><dd lang="ar">{person.death ?? text.notStated}</dd></div>
-      </dl>
+      {/* Only what the sources state is shown; a fact they do not give is simply left out. */}
+      {(person.islam || person.death) && <dl className="pd-facts">
+        {person.islam && <div><dt>{text.islamWhen}</dt><dd lang="ar">{person.islam}</dd></div>}
+        {person.death && <div><dt>{text.death}</dt><dd lang="ar">{person.death}</dd></div>}
+      </dl>}
       {locale === 'en' && <p className="pd-note">{text.bioInArabic}</p>}
       <p className="pd-bio" lang="ar" dir="rtl">{person.bio}</p>
       {events.length > 0 && <section className="pd-events">
         <h3>{text.personEvents}</h3>
-        <ul>{events.map(e => <li key={e.n}><button type="button" onClick={() => { onEvent(e.n); onClose(); }}>
-          <span>{e.title[locale] || e.title.ar}</span><small>{hijri(e.year, locale)}</small>
-        </button></li>)}</ul>
+        <ul>{events.map(e => {
+          const said = mentionIn(data, person, e, locale);
+          return <li key={e.n}>
+            <button type="button" onClick={() => { onEvent(e.n); onClose(); }}>
+              <span className="pd-ev-head"><span>{e.title[locale] || e.title.ar}</span><small>{hijri(e.year, locale)}</small></span>
+              {said && <q className="pd-quote" lang={said.lang} dir={said.lang === 'ar' ? 'rtl' : 'ltr'}>{said.text}</q>}
+            </button>
+          </li>;
+        })}</ul>
+        <p className="pd-quote-note">{text.quoteNote}</p>
       </section>}
       <p className="pd-source">{text.personSource}</p>
     </div>

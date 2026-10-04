@@ -1,4 +1,4 @@
-import type { Person, Sirah } from './types';
+import type { Person, Sirah, SirahEvent } from './types';
 
 /**
  * Finds the Companions from 6_sahaba.csv where they are named in a passage, so the names can be linked.
@@ -116,4 +116,33 @@ export function findPeople(data: Sirah, text: string, lang: 'ar' | 'en'): NameSp
     }
   }
   return spans.sort((a, b) => a.start - b.start);
+}
+
+export interface Mention { event: SirahEvent; text: string; lang: 'ar' | 'en' }
+
+/**
+ * Where an event's Dorar text names this person: the sentence around the first mention, word for word (clipped
+ * with … when long). Used to give each person's card the sources' own words, with nothing written in between.
+ */
+export function mentionIn(data: Sirah, person: Person, e: SirahEvent, lang: 'ar' | 'en', max = 280): Mention | null {
+  const l = lang === 'en' && e.text.en ? 'en' : 'ar';
+  const text = l === 'en' ? e.text.en : e.text.ar;
+  const hit = findPeople(data, text, l).find(s => s.person.id === person.id);
+  if (!hit) return null;
+  const stops = /[.!?؟\n]/;
+  let start = hit.start;
+  while (start > 0 && !stops.test(text[start - 1])) start--;
+  let end = hit.end;
+  while (end < text.length && !stops.test(text[end])) end++;
+  if (end < text.length && text[end] !== '\n') end++;
+  let a = start, b = end;
+  if (b - a > max) {
+    a = Math.max(start, hit.start - Math.round(max * 0.4));
+    b = Math.min(end, a + max);
+    if (a > start) a = text.indexOf(' ', a) + 1 || a;
+    if (b < end) b = text.lastIndexOf(' ', b) > a ? text.lastIndexOf(' ', b) : b;
+  }
+  const body = text.slice(a, b).trim();
+  if (body.length < 12) return null;
+  return { event: e, text: `${a > start ? '… ' : ''}${body}${b < end ? ' …' : ''}`, lang: l };
 }
