@@ -299,7 +299,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
         {/* Water lines: thin rings following the coast, as on engraved maps. Each ring is a wide coast-coloured
             stroke with a slightly narrower sea-coloured stroke on top; the land drawn after covers the inner half. */}
         <g className="hmap-water" aria-hidden="true">
-          {[[16, 0.16], [10, 0.24], [5, 0.34]].map(([d, o]) => <g key={d} style={{ opacity: o }}>
+          {[[6, 0.4]].map(([d, o]) => <g key={d} style={{ opacity: o }}>
             <path className="hmap-water-ring" d={LAND} strokeWidth={2 * d * unit} />
             <path className="hmap-water-gap" d={LAND} strokeWidth={(2 * d - 1.4) * unit} />
           </g>)}

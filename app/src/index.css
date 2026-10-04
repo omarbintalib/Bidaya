@@ -155,8 +155,8 @@ a { color: inherit; }
 
 /* Route menu: the line connects the waypoints rather than framing panels. */
 html { scrollbar-gutter: stable; }
-.waypoint-backdrop { position: fixed; inset: 0; z-index: 50; background: #331b0d4d; padding: 24px; display: grid; place-items: center; overflow: auto; }
-.waypoint-menu { position: relative; width: min(100%, 1040px); padding: 62px 52px 34px; background: var(--paper); border: 1px solid #a07c4155; box-shadow: 0 24px 100px #331b0d15; text-align: center; }
+.waypoint-backdrop { position: fixed; inset: 0; z-index: 50; background: #331b0d4d; will-change: opacity; padding: 24px; display: grid; place-items: center; overflow: auto; }
+.waypoint-menu { position: relative; width: min(100%, 1040px); padding: 62px 52px 34px; background: var(--paper); border: 1px solid #a07c4155; box-shadow: 0 16px 48px #331b0d14; text-align: center; will-change: transform, opacity; }
 .waypoint-menu::before, .waypoint-menu::after { content: ''; position: absolute; width: 12px; height: 12px; border-color: var(--brass); opacity: .6; }
 .waypoint-menu::before { top: 14px; left: 14px; border-top: 1px solid; border-left: 1px solid; }
 .waypoint-menu::after { bottom: 14px; right: 14px; border-bottom: 1px solid; border-right: 1px solid; }
@@ -205,7 +205,7 @@ html { scrollbar-gutter: stable; }
   .page-ready .title-composition, .page-ready .intro { animation: page-arrive .45s both; }
   @keyframes trace-route { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
   @keyframes menu-backdrop { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes menu-arrive { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes menu-arrive { from { opacity: 0; transform: translateY(10px) scale(.99); } to { opacity: 1; transform: none; } }
   @keyframes page-arrive { from { opacity: .85; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react';
-import { suggestFor } from '../assistant/answer';
+import { useState } from 'react';
 import { quranpediaRefs, type QuranRef } from '../data/quranpedia';
 import { dateLine, excerpt, hadithLinks, hijri, periodName, peopleFor, versesFor } from '../data/select';
 import type { Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
-import { onIdle } from '../idle';
 import { journeyCopy } from './copy';
 import QuranReader from './QuranReader';
 import { PeopleText, usePeople } from './People';
@@ -18,9 +16,9 @@ function lead(body: string) {
 /** Arabic-only source text keeps its own language and direction inside the English interface. */
 const Ar = ({ children, as: Tag = 'span' }: { children: React.ReactNode; as?: 'span' | 'p' }) => <Tag lang="ar" dir="rtl">{children}</Tag>;
 
-interface CardProps { data: Sirah; event: SirahEvent; locale: Locale; chapter: number; yearEvents: SirahEvent[]; onPick: (n: number) => void; onWalk?: () => void; walkName?: string; onAsk?: (question?: string) => void }
+interface CardProps { data: Sirah; event: SirahEvent; locale: Locale; chapter: number; yearEvents: SirahEvent[]; onPick: (n: number) => void; onWalk?: () => void; walkName?: string }
 
-export default function EventCard({ data, event, locale, chapter, yearEvents, onPick, onWalk, walkName, onAsk }: CardProps) {
+export default function EventCard({ data, event, locale, chapter, yearEvents, onPick, onWalk, walkName }: CardProps) {
   const text = journeyCopy[locale];
   const [open, setOpen] = useState(false);
   const peopleApi = usePeople();
@@ -31,14 +29,6 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
   const title = event.title[locale] || event.title.ar;
   const opening = lead(body), rest = body.slice(opening.replace(/…$/, '').length).trim();
   const at = yearEvents.findIndex(e => e.n === event.n);
-  // Suggestions are worked out when the browser is idle, after the card has opened, so opening stays smooth.
-  const [asks, setAsks] = useState<string[]>([]);
-  useEffect(() => {
-    setAsks([]);
-    if (!onAsk) return;
-    const run = () => setAsks(suggestFor(data, event, locale));
-    return onIdle(run, 1000);
-  }, [data, event, locale, onAsk]);
 
   return <article className="ecard" key={event.n} aria-labelledby={`ev-${event.n}`}>
     {yearEvents.length > 1 && <nav className="ecard-year" aria-label={text.yearNav}>
@@ -66,14 +56,6 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
       {text.walk(walkName)}
     </button>}
     <p className="ecard-source">{text.source}: <a href={locale === 'en' && event.urlEn ? event.urlEn : event.url} target="_blank" rel="noreferrer">{text.dorar} · {locale === 'ar' ? 'حدث' : 'event'} {event.n}</a></p>
-
-    {onAsk && <section className="ecard-ask" aria-label={text.askAbout}>
-      <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor" /></svg>{text.askAbout}</h3>
-      <ul>
-        {asks.map(q => <li key={q}><button type="button" onClick={() => onAsk(q)}>{q}</button></li>)}
-        <li><button type="button" className="ecard-ask-own" onClick={() => onAsk()}>{text.askOwn}</button></li>
-      </ul>
-    </section>}
 
     {people.length > 0 && <section className="ecard-section">
       <h3>{text.people}</h3>

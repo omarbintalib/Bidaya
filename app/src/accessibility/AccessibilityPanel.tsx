@@ -19,9 +19,11 @@ export function AccessibilityLauncher({ locale, open, buttonRef, onClick }: { lo
       const box = button.getBoundingClientRect();
       const baseTop = bottom - 16 - box.height;
       let top = baseTop;
+      // Cheap check first: controls inside a closed (inert) panel never block, so their styles are not read.
       const blockers = Array.from(document.querySelectorAll<HTMLElement>('.mo-actor, .mo-reset, .mo-cancel')).filter(node => {
+        if (node.closest('[inert]')) return false;
         const style = getComputedStyle(node);
-        return style.visibility !== 'hidden' && Number(style.opacity) > .1 && !node.closest('[inert]');
+        return style.visibility !== 'hidden' && Number(style.opacity) > .1;
       }).map(node => node.getBoundingClientRect()).filter(rect => rect.right > box.left - 12 && rect.left < box.right + 12);
       for (let i = 0; i < blockers.length; i++) {
         const collision = blockers.find(rect => top + box.height > rect.top - 12 && top < rect.bottom + 12);

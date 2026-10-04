@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { answer, warmUp } from '../assistant/answer';
+import { answer, suggestFor, warmUp } from '../assistant/answer';
 import MorphOrb from '../components/MorphOrb';
 import { quizPools } from '../data/quiz';
 import { digits, hijri, PERIOD_ORDER, periodName, unplacedVerses } from '../data/select';
@@ -57,12 +57,12 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
   const wide = useMedia('(min-width: 1001px)');
   const [intro, setIntro] = useState(() => { try { return sessionStorage.getItem('bidaya.intro.seen') !== '1'; } catch { return true; } });
   // Build the story (≈150 steps and the map) once the opening has played, so the opening stays smooth.
-  useEffect(() => {
-    // Build the Ask index while nothing else is happening.
-    const run = () => warmUp(data);
-    return onIdle(run, 4000);
-  }, [data]);
   const [built, setBuilt] = useState(!intro);
+  useEffect(() => {
+    // Build the Ask index while nothing else is happening — never during the opening scene.
+    if (intro) return;
+    return onIdle(() => warmUp(data), 4000);
+  }, [data, intro]);
   useEffect(() => {
     if (built) return;
     const id = window.setTimeout(() => setBuilt(true), reducedMotion ? 300 : 3400);
@@ -247,13 +247,21 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
   const [ask, setAsk] = useState<{ text: string; key: number } | null>(null);
   const closeAsk = useCallback(() => setAskOpen(false), []);
   const suggest = useCallback((q: string) => setAsk({ text: q, key: Date.now() }), []);
-  // Questions asked from an event card stay on that event: the answer is shown, the story does not move.
+  // The ask bar's suggested question is about the current event, so its answer keeps the reader in place;
+  // a typed question moves the story to the event it is about, like any other.
   const stay = useRef(false);
-  const askAbout = useCallback((question?: string) => {
+  const askAbout = useCallback((question?: string, keepPlace = false) => {
     setQuick(null);
     setAskOpen(true);
-    if (question) { stay.current = true; suggest(question); }
+    if (question) { stay.current = keepPlace; suggest(question); }
   }, [suggest]);
+  // One suggested question for where the reader is, worked out at idle time and shown in the ask bar.
+  const [askHint, setAskHint] = useState<string | null>(null);
+  useEffect(() => {
+    setAskHint(null);
+    if (step.kind !== 'event' || intro) return;
+    return onIdle(() => setAskHint(suggestFor(data, current, locale, 1)[0] ?? null), 1500);
+  }, [step.kind, current, data, locale, intro]);
   const onAsk = useCallback((question: string) => {
     if (QUIZ_ASK.test(question)) {
       // "Quiz me": a question on the map from where the reader is, or say plainly that none is left here.
@@ -315,7 +323,7 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
     {built && <div className="scrolly">
       <div className="scrolly-steps" ref={column}>
         <HoldStill store={stepStore} anchor={anchor} column={column} />
-        <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} onAskAbout={askAbout} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} />
+        <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} />
         <section data-step={steps.length - 1} className={`step step-summary${step.kind === 'summary' ? ' is-on' : ''}`}>
           <span>{text.summaryKicker}</span>
           <h2>{text.summaryTitle}</h2>
@@ -344,6 +352,8 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
             {step.kind === 'summary' ? <b>{text.summaryKicker}</b> : <><b>{periodName[locale][current.period]}</b><span>{hijri(current.year, locale)}</span></>}
             {reached > 0 && <span className="story-reach"><i />{text.reachedCount(reached)}</span>}
           </div>
+
+          {wide && !quick && !walk && !askOpen && <AskBar locale={locale} hint={askHint} onAsk={askAbout} />}
 
           {quick && wide && <QuickQuiz quick={quick} data={data} locale={locale} chosen={quick.q ? progress.answers[quick.q.id] ?? null : null}
             onAnswer={answerQuick} onNext={() => setQuick(pickQuick(quick.q?.id))} onClose={() => setQuick(null)} />}
@@ -396,15 +406,15 @@ function HoldStill({ store, anchor, column }: { store: ActiveStore; anchor: Reac
 }
 
 /** All steps but the summary; memoised so it re-renders only when the steps, the language or an answer change. */
-const StepList = memo(function StepList({ steps, data, locale, store, goToStep, goToEvent, onWalk, onAskAbout, answers, onAnswer, questionOf, nextQuestion, onMore }: {
+const StepList = memo(function StepList({ steps, data, locale, store, goToStep, goToEvent, onWalk, answers, onAnswer, questionOf, nextQuestion, onMore }: {
   steps: Step[]; data: Sirah; locale: Locale; store: ActiveStore; goToStep: (i: number) => void; goToEvent: (n: number) => void;
-  onWalk: (route: Route) => void; onAskAbout: (question?: string) => void; answers: Record<string, string>; onAnswer: (q: QuizQuestion, key: string) => void;
+  onWalk: (route: Route) => void; answers: Record<string, string>; onAnswer: (q: QuizQuestion, key: string) => void;
   questionOf: (period: Period, answers: Record<string, string>) => { q: QuizQuestion; at: number; total: number };
   nextQuestion: (period: Period) => number; onMore: (period: Period) => void;
 }) {
   return <>{steps.map((s, i) => {
     if (s.kind === 'chapter') return <ChapterStep key={`c${s.chapter}`} s={s} i={i} store={store} events={data.events} locale={locale} />;
-    if (s.kind === 'event') return <EventStep key={data.events[s.index].n} index={s.index} i={i} store={store} data={data} locale={locale} goToStep={goToStep} goToEvent={goToEvent} onWalk={onWalk} onAskAbout={onAskAbout} />;
+    if (s.kind === 'event') return <EventStep key={data.events[s.index].n} index={s.index} i={i} store={store} data={data} locale={locale} goToStep={goToStep} goToEvent={goToEvent} onWalk={onWalk} />;
     if (s.kind === 'quiz') {
       const { q, at, total } = questionOf(s.period, answers);
       return <QuizCard key={`q${s.chapter}`} step={i} store={store} q={q} at={at} total={total} hasMore={nextQuestion(s.period) >= 0} chapter={s.chapter} data={data} locale={locale} chosen={answers[q.id] ?? null} onAnswer={onAnswer} onMore={onMore} goToStep={goToStep} />;
@@ -439,9 +449,8 @@ const ChapterStep = memo(function ChapterStep({ s, i, store, events, locale }: {
   </section>;
 });
 
-const EventStep = memo(function EventStep({ index, i, store, data, locale, goToStep, goToEvent, onWalk, onAskAbout }: {
+const EventStep = memo(function EventStep({ index, i, store, data, locale, goToStep, goToEvent, onWalk }: {
   index: number; i: number; store: ActiveStore; data: Sirah; locale: Locale; goToStep: (i: number) => void; goToEvent: (n: number) => void; onWalk: (route: Route) => void;
-  onAskAbout: (question?: string) => void;
 }) {
   const on = useActive(store, a => a === i);
   const e = data.events[index];
@@ -449,10 +458,21 @@ const EventStep = memo(function EventStep({ index, i, store, data, locale, goToS
   return <section data-step={i} className={`step step-event${on ? ' is-on' : ''}`} onClick={() => !on && goToStep(i)}>
     {on ? <EventCard data={data} event={e} locale={locale} chapter={PERIOD_ORDER.indexOf(e.period) + 1}
       yearEvents={data.events.filter(x => x.year === e.year && x.period === e.period)} onPick={goToEvent}
-      onWalk={route ? () => onWalk(route) : undefined} walkName={route?.name[locale]} onAsk={onAskAbout} />
+      onWalk={route ? () => onWalk(route) : undefined} walkName={route?.name[locale]} />
       : <div className="step-peek"><p className="step-date">{hijri(e.year, locale)} · {e.placeName[locale]}</p><h3>{e.title[locale] || e.title.ar}</h3></div>}
   </section>;
 });
+
+/** Always on the map: type a question, or press Enter to ask the suggested one. */
+function AskBar({ locale, hint, onAsk }: { locale: Locale; hint: string | null; onAsk: (question?: string, keepPlace?: boolean) => void }) {
+  const text = journeyCopy[locale];
+  const [q, setQ] = useState('');
+  return <form className="ask-bar" data-map-overlay role="search" aria-label={text.ask} onSubmit={e => { e.preventDefault(); const typed = q.trim(); onAsk(typed || hint || undefined, !typed); setQ(''); }}>
+    <svg className="ask-bar-spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor" /></svg>
+    <input value={q} onChange={e => setQ(e.target.value)} placeholder={hint ? text.askTry(hint) : text.askPlaceholder} aria-label={text.ask} enterKeyHint="send" />
+    <button type="submit" aria-label={text.askSend}><svg viewBox="0 0 20 20" aria-hidden="true"><path d={locale === 'ar' ? 'M16 10H4m5-5-5 5 5 5' : 'M4 10h12m-5-5 5 5-5 5'} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
+  </form>;
+}
 
 /** A question on the map, asked for at any point in the story. */
 function QuickQuiz({ quick, data, locale, chosen, onAnswer, onNext, onClose }: {

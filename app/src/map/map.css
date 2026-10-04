@@ -109,7 +109,7 @@ html[data-contrast='dark'] .glow-0 { stop-color: #f0c674; stop-opacity: .55; }
 @keyframes quiz-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
 .hmap-frame.is-in-page { touch-action: pan-y; }
 
-/* Texture: water lines, paper grain and a soft edge. All static and blend-free. */
+/* Texture: a water line along the coast, paper grain and a soft edge. All static and blend-free. */
 :root { --grain-opacity: .55; --vignette: #331b0d14; }
 html[data-contrast='light'] { --grain-opacity: .35; }
 html[data-contrast='dark'] { --grain-opacity: .25; --vignette: #00000059; }
