@@ -31,7 +31,7 @@ The README of the data package (IslamthonDataandstuff) explains every column.
 
 ## How the story works
 
-- **The story toolbar** stays at the top: back to the start, jump to a chapter (✓ once its question is answered), Ask the map, and the language.
+- **The story toolbar** stays at the top: jump to a chapter (✓ once its question is answered), take a quiz, and Ask the map. The first chapter returns to the beginning; the site header contains the single language switch.
 - **Scrolling drives the map.** The step crossing the middle of the screen (the lower part on phones) becomes the current one. Over the map the wheel scrolls the story; zoom with the + / − buttons, a pinch, or Ctrl/⌘ + wheel.
 - **Story mode** advances one step every few seconds and pauses at each chapter question until it is answered.
 - **Progress** (answers and events read) is kept in this browser only (`localStorage`, key `bidaya.journey.v1`); the opening is shown once per browser session.
@@ -130,7 +130,7 @@ Open the computer's local network address and the printed port on that device.
 
 | URL | Page | Current implementation |
 | --- | --- | --- |
-| `/` | The Beginning | Landing title and shared navigation |
+| `/` | The Beginning | Original hero, visual introduction, three-step tour, feature previews, source explanation, and direct Journey links |
 | `/journey` | Islam Journey | The story: opening, chapters, event cards, spread of Islam, chapter questions, route walks, timeline, story mode, and Ask the map |
 
 The language selection stays in memory during navigation and resets on a full reload. Leaving Journey and returning starts a fresh AI demo.
@@ -215,7 +215,7 @@ npm test
 npm run build
 ```
 
-The current suite includes 29 tests across four files, covering AI lifecycle and cleanup, navigation/history behavior, transition geometry, waypoint endpoints, reduced motion, preference persistence, storage failures, dialog focus, and preference changes during AI processing.
+The current suite includes 58 tests across six files, covering the data, AI lifecycle and cleanup, navigation/history behavior, landing entry links and scroll-link focus, language-sweep interruption and fallback, transition geometry, waypoint endpoints, reduced motion, preference persistence, storage failures, dialog focus, and preference changes during AI processing.
 
 Saved browser reviews in `qa/` cover desktop and mobile layouts, both languages, navigation, transitions, enlarged text, contrast themes, and compact viewports. These screenshots document prior reviews; they are not an automated browser test suite. A physical mobile keyboard and browser page zoom have not been verified.
 

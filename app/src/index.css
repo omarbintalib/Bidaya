@@ -368,9 +368,26 @@ html[lang='en'] [lang='ar'] { font-family: 'Saudi', 'IBM Plex Sans Arabic', sans
 html[lang='en'][data-reading-font='plex'] [lang='ar'] { font-family: 'IBM Plex Sans Arabic', sans-serif; }
 html[lang='en'] { --text-small: calc(16px * var(--text-scale)); --text-control: calc(17px * var(--text-scale)); --text-body: calc(18px * var(--text-scale)); }
 
-/* Language switch: a short cross-fade with a slight lift (see toggleLocale in App.tsx). */
-::view-transition-old(root) { animation: lang-out .22s ease both; }
-::view-transition-new(root) { animation: lang-in .32s .06s ease both; }
-@keyframes lang-out { to { opacity: 0; } }
-@keyframes lang-in { from { opacity: 0; transform: translateY(6px); } }
-html[data-reduced-motion='true']::view-transition-old(root), html[data-reduced-motion='true']::view-transition-new(root) { animation: none; }
+/* Explicit navigation label and a clear button shape, including on narrow screens. */
+.site-header .destination-trigger { gap: 9px; padding: 9px 16px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--ink); font-size: var(--text-control); transition: background .2s, border-color .2s; }
+.site-header .destination-trigger:hover { background: var(--paper); border-color: var(--brass); }
+.site-header .destination-trigger svg { color: currentColor; transform: none; width: 22px; height: 22px; flex: none; }
+@media (max-width: 700px) {
+  .site-header { display: grid; grid-template-columns: minmax(0,1fr) auto auto; gap: 12px; height: auto; flex-basis: auto; padding-block: 16px; }
+  .site-header .brand-home { grid-column: 1; grid-row: 1; justify-self: start; }
+  .site-header .brand-logo { width: clamp(54px, 15vw, 88px); max-width: 100%; }
+  .site-header .language-switch { grid-column: 3; grid-row: 1; justify-self: end; }
+  .site-header .destination-trigger { position: static; transform: none; grid-column: 2; grid-row: 1; justify-content: center; padding: 8px 10px; min-height: 44px; }
+}
+
+/* Reveal the mirrored layout in its reading direction. The old page stays still beneath it. */
+html[data-language-sweep]::view-transition { pointer-events: none; }
+html[data-language-sweep]::view-transition-group(root) { animation: none; }
+html[data-language-sweep]::view-transition-image-pair(root) { isolation: isolate; }
+html[data-language-sweep]::view-transition-old(root), html[data-language-sweep]::view-transition-new(root) { mix-blend-mode: normal; height: 100%; object-fit: none; object-position: top left; }
+html[data-language-sweep]::view-transition-old(root) { animation: none; z-index: 1; }
+html[data-language-sweep]::view-transition-new(root) { z-index: 2; animation: language-sweep-ltr .78s cubic-bezier(.65,0,.2,1) both; }
+html[data-language-sweep='ar']::view-transition-new(root) { animation-name: language-sweep-rtl; }
+@keyframes language-sweep-ltr { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
+@keyframes language-sweep-rtl { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0); } }
+html[data-reduced-motion='true']::view-transition-old(root), html[data-reduced-motion='true']::view-transition-new(root) { animation: none !important; }

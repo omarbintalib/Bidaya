@@ -1,17 +1,17 @@
 /* ── Scroll-driven story: steps on one side, the map pinned on the other ── */
-.journey-page { --toolbar-h: 60px; }
+.journey-page { --toolbar-h: calc(52px * var(--text-scale) + 12px); }
 
 /* Story toolbar: pinned at the top while the story scrolls */
 .story-toolbar { position: sticky; top: 0; z-index: 30; height: var(--toolbar-h); display: flex; align-items: center; gap: 12px; margin-inline: calc(-1 * clamp(24px, 4.8vw, 88px)); padding-inline: clamp(24px, 4.8vw, 88px);
-  background: var(--paper); border-bottom: 1px solid var(--border); }
-.tb-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 6px 14px; border: 1px solid var(--border); background: var(--surface); color: var(--ink); font-size: var(--text-small); white-space: nowrap; }
+  background: var(--paper); border-block: 1px solid var(--border); }
+.tb-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 44px; min-height: 44px; padding: 6px 14px; border: 1px solid var(--border); border-radius: 5px; background: var(--surface); color: var(--ink); font-size: var(--text-control); white-space: nowrap; }
 .tb-btn svg { width: 16px; height: 16px; flex: none; }
 .tb-btn:hover { border-color: var(--brass); }
 .tb-chapters { list-style: none; margin: 0; padding: 0; display: flex; gap: 4px; min-width: 0; overflow-x: auto; scrollbar-width: none; flex: 1; }
-.tb-chapter { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 6px 12px; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--muted); font-size: var(--text-small); white-space: nowrap; }
+.tb-chapter { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 14px; border: 1px solid transparent; border-radius: 5px; background: none; color: var(--muted); font-size: var(--text-control); white-space: nowrap; }
 .tb-chapter b { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--border); font-size: calc(13px * var(--text-scale)); color: var(--ink); }
 .tb-chapter:hover { color: var(--ink); }
-.tb-chapter.is-now { color: var(--ink); border-bottom-color: var(--brass); }
+.tb-chapter.is-now { color: var(--ink); border-color: var(--border); background: var(--surface); }
 .tb-chapter.is-now b { background: var(--brass); border-color: var(--brass); color: var(--button-ink); }
 .tb-chapter.is-done b { position: relative; }
 .tb-chapter.is-done b::after { content: '✓'; position: absolute; top: -6px; inset-inline-end: -7px; width: 14px; height: 14px; border-radius: 50%; display: grid; place-items: center; background: #e2b45c; color: #21130b; font-size: 9px; font-weight: 700; }
@@ -139,7 +139,7 @@
 .walk-nav { margin-top: 12px; display: flex; gap: 8px; justify-content: space-between; }
 .walk-close { position: absolute; top: 6px; inset-inline-end: 6px; width: 40px; height: 40px; border: 0; background: none; display: grid; place-items: center; }
 .walk-close svg { width: 16px; height: 16px; }
-.ask-bar { position: absolute; z-index: 3; left: 0; right: 0; margin-inline: auto; bottom: calc(var(--timeline-h, 130px) + 12px); width: min(520px, calc(100% - 140px)); display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 16px; background: var(--paper); border: 1px solid var(--brass); border-radius: 999px; box-shadow: 0 10px 30px #331b0d1f; cursor: auto; }
+.ask-bar { position: absolute; z-index: 3; left: 0; right: 0; margin-inline: auto; bottom: calc(var(--timeline-h, 130px) + 22px); width: min(520px, calc(100% - 140px)); display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 16px; background: var(--paper); border: 1px solid var(--brass); border-radius: 999px; box-shadow: 0 10px 30px #331b0d1f; cursor: auto; }
 [dir='rtl'] .ask-bar { padding: 6px 16px 6px 6px; }
 .ask-bar-spark { width: 18px; height: 18px; flex: none; color: var(--brass); }
 .ask-bar input { flex: 1; min-width: 0; height: 40px; border: 0; background: none; color: var(--ink); font: inherit; font-size: var(--text-small); outline: none; }
@@ -195,12 +195,11 @@
 /* Narrow screens: map pinned on top, steps scroll beneath */
 @media (max-width: 1000px) {
   .scrolly { grid-template-columns: minmax(0, 1fr); gap: 0; }
-  .journey-page { --toolbar-h: 52px; }
   .story-toolbar { gap: 6px; }
-  .tb-btn { padding: 6px 10px; min-height: 38px; }
-  .tb-start span, .tb-chapter span, .tb-long { display: none; }
+  .tb-btn { padding: 6px 10px; }
+  .tb-long { display: none; }
   .tb-short { display: inline; }
-  .tb-chapter { padding: 6px 6px; }
+  .tb-chapter { padding: 6px 10px; }
   .ask-panel { position: fixed; top: auto; inset-inline: 10px; bottom: 10px; width: auto; max-height: 80svh; }
   .scrolly-map { order: -1; position: sticky; top: var(--toolbar-h); z-index: 5; height: 46svh; min-height: 300px; margin-inline: calc(-1 * clamp(24px, 4.8vw, 88px)); }
   .scrolly-steps { padding-block: 4vh 30vh; }

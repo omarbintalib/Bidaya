@@ -63,6 +63,51 @@ it('uses distinct real routes and accepts trailing slashes', () => {
 });
 
 describe('navigation lifecycle', () => {
+  it('opens Journey from either landing entry link and keeps the locale through history navigation', async () => {
+    reduced = true;
+    await mount(); await advance(300); await click('.language-switch');
+    const links = host.querySelectorAll<HTMLAnchorElement>('.landing-begin');
+    expect(links).toHaveLength(2);
+    links.forEach(link => expect(link.getAttribute('href')).toBe('/journey'));
+    await click('.landing-overview .landing-begin'); await advance(300);
+    expect(location.pathname).toBe('/journey');
+    expect(heading()?.textContent).toBe('Islam Journey');
+    await pop('/'); await advance(300);
+    expect(host.querySelector('#discover-title')?.textContent).toContain('The Sirah');
+    await click('.landing-closing .landing-begin'); await advance(300);
+    expect(location.pathname).toBe('/journey');
+    await pop('/'); await advance(300);
+    await pop('/journey'); await advance(300);
+    expect(heading()?.textContent).toBe('Islam Journey');
+  });
+
+  it('keeps modified landing link clicks native, and the existing hero button opens destinations', async () => {
+    reduced = true;
+    await mount(); await advance(300);
+    let preventedByApp = true;
+    const stopJsdomNavigation = (event: Event) => { preventedByApp = event.defaultPrevented; event.preventDefault(); };
+    host.addEventListener('click', stopJsdomNavigation);
+    await act(async () => host.querySelector('.landing-begin')!.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, ctrlKey: true })));
+    host.removeEventListener('click', stopJsdomNavigation);
+    expect(preventedByApp).toBe(false);
+    expect(location.pathname).toBe('/');
+    expect(phase()).toBeUndefined();
+    await click('.explore-link');
+    expect(host.querySelector('.waypoint-menu')).not.toBeNull();
+  });
+
+  it('moves scroll-link focus to the introduction and respects reduced motion', async () => {
+    reduced = true;
+    const scrollIntoView = vi.fn();
+    Object.defineProperty(Element.prototype, 'scrollIntoView', { configurable: true, value: scrollIntoView });
+    try {
+      await mount(); await advance(300); await click('.landing-scroll');
+      expect(document.activeElement).toBe(host.querySelector('#discover'));
+      expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'instant', block: 'start' });
+      expect(location.pathname).toBe('/');
+    } finally { delete (Element.prototype as Partial<Element>).scrollIntoView; }
+  });
+
   it('uses the header logo to return home through the same cover and reveal sequence', async () => {
     await mount('/journey'); await advance(2100); await click('.language-switch');
     expect(host.querySelector('.brand-home')?.getAttribute('href')).toBe('/');
@@ -126,7 +171,7 @@ describe('navigation lifecycle', () => {
   it('traps keyboard focus, dismisses with Escape or backdrop, and restores focus', async () => {
     await mount(); await advance(2100); await openMenu();
     const first = host.querySelector('.menu-close') as HTMLElement;
-    const last = host.querySelector('.waypoint-menu .accessibility-launcher') as HTMLElement;
+    const last = host.querySelector('.waypoint-menu a[href="/journey"]') as HTMLElement;
     await act(async () => { last.focus(); last.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true })); });
     expect(document.activeElement).toBe(first);
     await act(async () => first.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true })));

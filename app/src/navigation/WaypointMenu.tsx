@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react';
 import { useAccessibility } from '../accessibility/AccessibilityProvider';
 import { connectWaypoints } from './waypointGeometry';
 import type { Locale } from '../i18n';
@@ -8,8 +8,8 @@ export function WaypointSymbol() {
   return <svg viewBox="0 0 48 20" fill="none" aria-hidden="true"><path d="M6 14C17 14 18 6 28 6h14" stroke="currentColor" /><circle cx="6" cy="14" r="3" fill="var(--paper)" stroke="currentColor" /><circle cx="28" cy="6" r="2" fill="currentColor" /><circle cx="42" cy="6" r="3" fill="var(--paper)" stroke="currentColor" /></svg>;
 }
 
-type Props = { locale: Locale; page: PageId; busy: boolean; launcher: ReactNode; trigger: RefObject<HTMLButtonElement | null>; onClose: () => void; onNavigate: (page: PageId) => void };
-export default function WaypointMenu({ locale, page, busy, trigger, launcher, onClose, onNavigate }: Props) {
+type Props = { locale: Locale; page: PageId; busy: boolean; trigger: RefObject<HTMLButtonElement | null>; onClose: () => void; onNavigate: (page: PageId) => void };
+export default function WaypointMenu({ locale, page, busy, trigger, onClose, onNavigate }: Props) {
   const dialog = useRef<HTMLDivElement>(null);
   const routeRef = useRef<HTMLElement>(null);
   const [geometry, setGeometry] = useState({ width: 1, height: 1, paths: [] as string[] });
@@ -79,7 +79,6 @@ export default function WaypointMenu({ locale, page, busy, trigger, launcher, on
           <span className="waypoint-label"><strong>{route[locale].title}</strong><span>{route[locale].subtitle}</span></span>
         </a>)}
       </nav>
-      {launcher}
       <div className="menu-footnote"><WaypointSymbol /><span>{text.footnote}</span></div>
     </div>
   </div>;

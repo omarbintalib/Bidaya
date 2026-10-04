@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { flushSync } from 'react-dom';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import BrandLogo from './components/BrandLogo';
 import JourneyPage from './pages/JourneyPage';
 import TitlePage from './pages/TitlePage';
-import WaypointMenu, { WaypointSymbol } from './navigation/WaypointMenu';
+import WaypointMenu from './navigation/WaypointMenu';
 import LogoTransition from './navigation/LogoTransition';
 import { navigationCopy, routeFor } from './navigation/routes';
 import { useNavigation } from './navigation/useNavigation';
+import { useLanguageSwitch } from './navigation/useLanguageSwitch';
 import { copy, type Locale } from './i18n';
 import { AccessibilityProvider, useAccessibility } from './accessibility/AccessibilityProvider';
 import AccessibilityPanel, { AccessibilityLauncher } from './accessibility/AccessibilityPanel';
@@ -28,18 +28,12 @@ function Workspace() {
   const trigger = useRef<HTMLButtonElement>(null);
   const closeMenu = useCallback(() => setMenuOpen(false), []);
   const navigation = useNavigation(closeMenu);
-  // Switching language cross-fades the page (where the browser supports view transitions), so the flip of
-  // text and direction reads as one smooth change rather than a jump.
-  const toggleLocale = useCallback(() => {
-    const next = (l: Locale): Locale => (l === 'ar' ? 'en' : 'ar');
-    if (reducedMotion || typeof document.startViewTransition !== 'function') { setLocale(next); return; }
-    document.startViewTransition(() => flushSync(() => setLocale(next)));
-  }, [reducedMotion]);
+  const toggleLocale = useLanguageSwitch(locale, setLocale, reducedMotion, navigation.busy);
   const text = copy[locale], route = routeFor(navigation.page);
   useEffect(() => { if (navigation.busy) setAccessOpen(false); }, [navigation.busy]);
   const launcher = <AccessibilityLauncher locale={locale} open={accessOpen} buttonRef={accessTrigger} onClick={() => { setMenuOpen(false); setAccessOpen(value => !value); }} />;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
     document.title = `${route[locale].title} · ${text.title}`;
@@ -77,17 +71,18 @@ function Workspace() {
           event.preventDefault(); navigation.request('home');
         }}><BrandLogo className="brand-logo" aria-hidden="true" /></a>
         <button ref={trigger} className="destination-trigger" aria-label={`${navigationCopy[locale].open} — ${route[locale].title}`} aria-haspopup="dialog" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}>
-          <span className="trigger-chapter">{navigationCopy[locale].chapter}</span><b>{route.number}</b><WaypointSymbol />
+          <svg className="destination-menu-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
+          <span>{locale === 'ar' ? 'القائمة' : 'Menu'}</span>
         </button>
         <button className="language-switch" onClick={toggleLocale} aria-label={text.language}>
           <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7" stroke="currentColor" /><ellipse cx="10" cy="10" rx="3" ry="7" stroke="currentColor" /><path d="M3 10h14" stroke="currentColor" /></svg>
           <span lang={locale === 'ar' ? 'en' : 'ar'}>{locale === 'ar' ? 'English' : 'العربية'}</span>
         </button>
       </header>
-      {navigation.page === 'journey' ? <JourneyPage key="journey" locale={locale} onToggleLocale={toggleLocale} /> : <TitlePage key={navigation.page} page={navigation.page} locale={locale} onExplore={() => setMenuOpen(true)} />}
+      {navigation.page === 'journey' ? <JourneyPage key="journey" locale={locale} /> : <TitlePage key={navigation.page} page={navigation.page} locale={locale} onExplore={() => setMenuOpen(true)} onBegin={() => navigation.request('journey')} />}
       <footer className="site-footer"><span>{text.footer}</span><GeometricMark /><span className="footer-edition">{route.number} / 2026</span></footer>
     </div>
-    {menuOpen && <WaypointMenu locale={locale} page={navigation.page} trigger={trigger} busy={navigation.busy} launcher={launcher} onClose={closeMenu} onNavigate={navigation.request} />}
+    {menuOpen && <WaypointMenu locale={locale} page={navigation.page} trigger={trigger} busy={navigation.busy} onClose={closeMenu} onNavigate={navigation.request} />}
     {!navigation.busy && !menuOpen && !accessOpen && launcher}
     {accessOpen && !navigation.busy && <AccessibilityPanel locale={locale} busy={navigation.busy} trigger={accessTrigger} launcher={launcher} onClose={() => setAccessOpen(false)} />}
     {navigation.busy && <LogoTransition reducedMotion={reducedMotion} run={navigation.run} initial={navigation.run === 0} locale={locale} onCovered={navigation.commit} onFinish={navigation.finish} />}

@@ -51,7 +51,7 @@ function loadProgress(): { answers: Record<string, string>; seen: number[] } {
   return { answers: {}, seen: [] };
 }
 
-export default function Story({ data, locale, reducedMotion, onToggleLocale }: { data: Sirah; locale: Locale; reducedMotion: boolean; onToggleLocale?: () => void }) {
+export default function Story({ data, locale, reducedMotion }: { data: Sirah; locale: Locale; reducedMotion: boolean }) {
   const text = journeyCopy[locale];
   const events = data.events;
   const wide = useMedia('(min-width: 1001px)');
@@ -405,10 +405,6 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
   return <PeopleProvider value={peopleApi}>
     {intro && <Intro locale={locale} reducedMotion={reducedMotion} onBegin={begin} onSkip={() => { try { sessionStorage.setItem('bidaya.intro.seen', '1'); } catch { /* storage unavailable */ } setBuilt(true); setIntro(false); }} />}
     <nav className="story-toolbar" aria-label={text.toolbar}>
-      <button type="button" className="tb-btn tb-start" onClick={() => { setPlaying(false); goToStep(0); }}>
-        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 4v12M15 4 7 10l8 6z" fill="currentColor" /></svg>
-        <span>{text.fromStart}</span>
-      </button>
       <ol className="tb-chapters" aria-label={text.chapters}>
         {steps.flatMap((s, i) => s.kind === 'chapter' ? [<li key={s.period}>
           <button type="button" className={`tb-chapter${chapter === s.chapter && step.kind !== 'summary' ? ' is-now' : ''}${(pools.get(s.period) ?? []).some(q => progress.answers[q.id]) ? ' is-done' : ''}`} aria-current={chapter === s.chapter && step.kind !== 'summary' ? 'step' : undefined}
@@ -426,10 +422,6 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
         {!wide && <button type="button" className={`tb-btn tb-ask${askOpen ? ' is-open' : ''}`} aria-expanded={askOpen} aria-controls="ask-panel" onClick={() => setAskOpen(o => !o)}>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor" /></svg>
           <span className="tb-long">{text.ask}</span><span className="tb-short">{text.askShort}</span>
-        </button>}
-        {onToggleLocale && <button type="button" className="tb-btn tb-lang" onClick={onToggleLocale} lang={locale === 'ar' ? 'en' : 'ar'} aria-label={locale === 'ar' ? 'Switch to English' : 'التبديل إلى العربية'}>
-          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7" stroke="currentColor" /><ellipse cx="10" cy="10" rx="3" ry="7" stroke="currentColor" /><path d="M3 10h14" stroke="currentColor" /></svg>
-          <span className="tb-long">{locale === 'ar' ? 'English' : 'العربية'}</span><span className="tb-short">{locale === 'ar' ? 'EN' : 'ع'}</span>
         </button>}
       </div>
       <AskPanel open={askOpen} onClose={closeAsk} locale={locale} reducedMotion={reducedMotion} onAsk={onAsk} ask={ask} onSuggest={suggest} back={returnTo} onBack={goBack} />

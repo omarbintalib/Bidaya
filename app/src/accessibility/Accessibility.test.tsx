@@ -54,6 +54,8 @@ it('persists all reading settings, reloads them, and resets them without storing
 
 it('keeps only one dialog open, traps focus, restores the launcher and mirrors with language', async () => {
   await mount(); await click('.destination-trigger'); await advance(20);
+  expect(host.querySelector('.accessibility-launcher')).toBeNull();
+  await click('.menu-close'); await advance(20);
   await open(); expect(host.querySelectorAll('[role="dialog"]')).toHaveLength(1);
   expect(host.querySelector('.waypoint-menu')).toBeNull();
   const first = host.querySelector('.accessibility-close') as HTMLElement;
@@ -65,7 +67,7 @@ it('keeps only one dialog open, traps focus, restores the launcher and mirrors w
   await act(async () => last.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })));
   expect(document.activeElement).toBe(host.querySelector('.accessibility-launcher'));
   await click('.language-switch'); expect(host.querySelector('.accessibility-launcher')?.getAttribute('dir')).toBe('ltr');
-  await open(); expect(host.querySelector('h2')?.textContent).toBe('Accessibility');
+  await open(); expect(host.querySelector('.accessibility-panel h2')?.textContent).toBe('Accessibility');
   await click('.accessibility-backdrop'); expect(host.querySelector('[role="dialog"]')).toBeNull();
 });
 

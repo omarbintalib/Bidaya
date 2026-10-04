@@ -1,6 +1,8 @@
 /* Journey page: event card, verses, people, timeline, dialogs. The story layout is in story.css. */
-.explorer.journey-page { display: flex; flex-direction: column; gap: 26px; min-height: 0; padding-bottom: 32px; }
-.journey-page .intro { padding-top: 32px; }
+.explorer.journey-page { display: flex; flex-direction: column; gap: 18px; min-height: 0; padding-bottom: 32px; }
+.journey-page .intro { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 32px; padding-block: 24px 6px; }
+.journey-page .intro h1 { font-size: calc(clamp(28px, 2.6vw, 36px) * var(--text-scale)); }
+.journey-page .intro-subtitle { max-width: 48ch; margin: 0; font-size: var(--text-body); line-height: var(--reading-line-height); }
 .data-status { margin: 40px 0; padding: 18px 22px; border: 1px dashed var(--border); color: var(--muted); font-size: var(--text-body); text-align: center; }
 .data-status.is-error { border-color: var(--brass); color: var(--ink); }
 
