@@ -24,6 +24,8 @@ interface Props {
   now?: number;
   /** Width in px covered by an overlay on the inline-start side; the map centres events in the rest. */
   inset?: number;
+  /** Height (px) of controls laid over the bottom of the map; the focus keeps places above them. */
+  insetBottom?: number;
   /** Content drawn over the map (e.g. the story card). */
   children?: ReactNode;
   /** Hide the legend under the map. */
@@ -50,7 +52,7 @@ interface Pin { key: string; x: number; y: number; events: SirahEvent[]; emphasi
 
 const RANK: Record<Emphasis, number> = { hidden: 0, past: 1, active: 2, selected: 3 };
 
-export default function HistoricMap({ data, locale, emphasis, selected, activeRoutes = [], onSelect, reducedMotion, focusKey, caption, now, inset = 0, children, legend = true, quiz = null, walk = null, overview = false, caravans = false, scrollPage = false }: Props) {
+export default function HistoricMap({ data, locale, emphasis, selected, activeRoutes = [], onSelect, reducedMotion, focusKey, caption, now, inset = 0, insetBottom = 0, children, legend = true, quiz = null, walk = null, overview = false, caravans = false, scrollPage = false }: Props) {
   const text = mapCopy[locale];
   const frame = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -115,11 +117,12 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
       const pts = quiz.options.map(k => data.places.get(k)).filter(p => p !== undefined);
       if (pts.length) {
         const lons = pts.map(p => p.lon), lats = pts.map(p => p.lat);
-        // With a panel over the inline-start side, fit the choices into the part of the map left uncovered.
-        const W = frame.current?.clientWidth || size.w, cover = Math.min(inset, W * 0.6);
-        const v = fit(Math.min(...lons), Math.max(...lons), Math.min(...lats), Math.max(...lats), (W - cover) / W * size.w / size.h, 0.3);
-        const w = v.w * W / (W - cover);
-        animateTo(clampView({ ...v, w, x: locale === 'ar' ? v.x : v.x - (w - v.w) }));
+        // Fit the choices into the part of the map left uncovered by a side panel and the bottom controls.
+        const W = frame.current?.clientWidth || size.w, H = frame.current?.clientHeight || size.h;
+        const cover = Math.min(inset, W * 0.6), coverB = Math.min(insetBottom, H * 0.5);
+        const v = fit(Math.min(...lons), Math.max(...lons), Math.min(...lats), Math.max(...lats), (W - cover) / (H - coverB), 0.3);
+        const s = v.w / (W - cover);
+        animateTo(clampView({ x: locale === 'ar' ? v.x : v.x - cover * s, y: v.y, w: W * s, h: H * s }));
         return;
       }
     }
@@ -131,19 +134,22 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
     const target = walk ?? quizCenter ?? (e && e.lat !== null && e.lon !== null ? { lon: e.lon, lat: e.lat } : null);
     if (!target) return;
     const v = viewRef.current, [x, y] = project(target.lon, target.lat), el = frame.current;
-    const W = el?.clientWidth || 800, u = v.w / W, rtl = locale === 'ar';
+    const W = el?.clientWidth || 800, H = el?.clientHeight || 600, u = v.w / W, rtl = locale === 'ar';
     const cover = Math.min(inset, W * 0.6) * u;           // map units hidden under the overlay
+    const coverB = Math.min(insetBottom, H * 0.5);        // px hidden under the bottom controls
     const left = rtl ? v.x : v.x + cover, right = rtl ? v.x + v.w - cover : v.x + v.w;
-    const mx = (right - left) * 0.15, my = v.h * 0.15;
-    const inside = x > left + mx && x < right - mx && y > v.y + my && y < v.y + v.h - my;
+    const bottom = v.y + v.h - coverB * u;
+    const mx = (right - left) * 0.15, my = (bottom - v.y) * 0.15;
+    const inside = x > left + mx && x < right - mx && y > v.y + my && y < bottom - my;
     // Fly closer when the whole peninsula is in view, so the story moves place to place.
     const w = walk ? 230 : quizCenter ? 330 : v.w > 480 ? 400 : v.w;
     if (!inside || w !== v.w) {
       const next = centerOn(v, target.lon, target.lat, w), tu = next.w / W;
-      animateTo(clampView({ ...next, x: next.x + (rtl ? 1 : -1) * Math.min(inset, W * 0.6) / 2 * tu }));
+      // Centre the place in the visible part: beside a side panel, above the bottom controls.
+      animateTo(clampView({ ...next, x: next.x + (rtl ? 1 : -1) * Math.min(inset, W * 0.6) / 2 * tu, y: next.y + coverB / 2 * tu }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focusKey, selected, data, animateTo, inset, locale, overview, walk?.key, quiz?.options.join()]);
+  }, [focusKey, selected, data, animateTo, inset, insetBottom, locale, overview, walk?.key, quiz?.options.join()]);
 
   // A place that lights up while you watch sends out one pulse.
   const [pulses, setPulses] = useState<string[]>([]);

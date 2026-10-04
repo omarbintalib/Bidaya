@@ -122,6 +122,20 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
   /** Where the newly active step sat before it opened, so the page can be held still while cards resize. */
   const anchor = useRef<{ step: number; top: number } | null>(null);
   const rush = useRef(0);
+  // The map keeps the place in focus above the bottom controls (timeline and Ask bar), whatever their height.
+  const timelineBox = useRef<HTMLDivElement>(null);
+  const [timelineH, setTimelineH] = useState(0);
+  useLayoutEffect(() => {
+    const el = timelineBox.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => {
+      const h = Math.round(el.getBoundingClientRect().height);
+      setTimelineH(h);
+      el.closest<HTMLElement>('.scrolly-map')?.style.setProperty('--timeline-h', `${h}px`); // the Ask bar floats just above it
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [built]);
   // The Ask panel opens over the story column, never over the map: it takes the column's width from here.
   useLayoutEffect(() => {
     const col = column.current, page = col?.closest<HTMLElement>('.journey-page');
@@ -429,7 +443,7 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
 
       <div className="scrolly-map">
         <HistoricMap data={data} locale={locale} emphasis={emphasis} selected={step.kind === 'event' ? current.n : null} activeRoutes={activeRoutes}
-          onSelect={goToEvent} reducedMotion={reducedMotion} inset={quick && wide ? 430 : 0} focusKey={`${active}-${walk?.stop ?? ''}`} now={now} legend={false}
+          onSelect={goToEvent} reducedMotion={reducedMotion} inset={quick && wide ? 430 : 0} insetBottom={timelineH + (wide ? 76 : 0)} focusKey={`${active}-${walk?.stop ?? ''}`} now={now} legend={false}
           overview={step.kind === 'summary' || step.kind === 'chapter' && step.chapter === 1}
           caravans={current.period === 'prologue' || current.period === 'makkah'} scrollPage
           walk={walk && walkStop ? { routeId: walk.route.id, lat: walkStop.lat, lon: walkStop.lon, key: `${walk.route.id}-${walk.stop}` } : null}
@@ -440,7 +454,8 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
             {reached > 0 && <span className="story-reach"><i />{text.reachedCount(reached)}</span>}
           </div>
 
-          {wide && !quick && !walk && !askOpen && <AskBar locale={locale} hint={askHint} onAsk={askAbout} />}
+
+          {wide && !quick && !walk && <AskBar locale={locale} hint={askHint} onAsk={askAbout} />}
 
           {quick && wide && <QuickQuiz quick={quick} data={data} locale={locale} chosen={quick.q ? progress.answers[quick.q.id] ?? null : null}
             onAnswer={answerQuick} onNext={() => setQuick(pickQuick(quick.q?.id))} onClose={() => setQuick(null)} />}
@@ -459,7 +474,7 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
             <button type="button" className="walk-close" onClick={() => setWalk(null)} aria-label={text.close}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" /></svg></button>
           </div>}
 
-          <div className="story-timeline" data-map-overlay>
+          <div className="story-timeline" data-map-overlay ref={timelineBox}>
             <Timeline events={events} index={index} store={eventStore} locale={locale} playing={playing} reducedMotion={reducedMotion}
               onIndex={onTimelineIndex} onStep={stepEvent} onTogglePlay={() => setPlaying(p => !p)}
               extra={<button type="button" className="tl-btn tl-undated" aria-haspopup="dialog" onClick={() => setUndatedOpen(true)}>{text.undated(unplaced.length)}</button>} />

@@ -133,7 +133,7 @@
 .walk-nav { margin-top: 12px; display: flex; gap: 8px; justify-content: space-between; }
 .walk-close { position: absolute; top: 6px; inset-inline-end: 6px; width: 40px; height: 40px; border: 0; background: none; display: grid; place-items: center; }
 .walk-close svg { width: 16px; height: 16px; }
-.ask-bar { position: absolute; z-index: 3; left: 0; right: 0; margin-inline: auto; bottom: 140px; width: min(520px, calc(100% - 140px)); display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 16px; background: var(--paper); border: 1px solid var(--brass); border-radius: 999px; box-shadow: 0 10px 30px #331b0d1f; cursor: auto; }
+.ask-bar { position: absolute; z-index: 3; left: 0; right: 0; margin-inline: auto; bottom: calc(var(--timeline-h, 130px) + 22px); width: min(520px, calc(100% - 140px)); display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 16px; background: var(--paper); border: 1px solid var(--brass); border-radius: 999px; box-shadow: 0 10px 30px #331b0d1f; cursor: auto; }
 [dir='rtl'] .ask-bar { padding: 6px 16px 6px 6px; }
 .ask-bar-spark { width: 18px; height: 18px; flex: none; color: var(--brass); }
 .ask-bar input { flex: 1; min-width: 0; height: 40px; border: 0; background: none; color: var(--ink); font: inherit; font-size: var(--text-small); outline: none; }
