@@ -124,7 +124,10 @@ describe('English from the sources and the team', () => {
     expect(withHadith.length).toBeGreaterThan(0);
   });
   it('uses a team-filled _EN cell, shared by every row with the same Arabic', async () => {
+    expect(data.verses.filter(v => v.narrator).every(v => v.narratorEn)).toBe(true);
+    // Clear the column, fill one cell, and check every row with the same Arabic takes it.
     const rows = parseCsv(byName.get('1_related_surahs.csv')!);
+    for (const r of rows) r['الراوي_EN'] = '';
     const first = rows.find(r => r['المعرف'] === 'ASB-001')!;
     first['الراوي_EN'] = 'Aisha';
     const cols = Object.keys(rows[0]);

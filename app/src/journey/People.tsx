@@ -40,6 +40,11 @@ const KIND_EN: Record<string, string> = {
   'ملك الحبشة': 'King of Abyssinia', 'ملك الروم': 'Byzantine emperor', 'ملك الفرس': 'Persian emperor', 'ملك الإسكندرية': 'Ruler of Alexandria',
 };
 
+/** Source references in the interface language: «حدث 14» → "event 14", «صحيح مسلم 1748» → "Sahih Muslim 1748". */
+const sourceLabel = (s: string, locale: Locale) => locale === 'ar' ? s : s
+  .replace(/^الدرر السنية · /, 'Dorar · ').replace(/حدث\s*(\d+)/g, 'event $1')
+  .replace(/صحيح البخاري/g, 'Sahih al-Bukhari').replace(/صحيح مسلم/g, 'Sahih Muslim').replace(/[،؛]/g, ',');
+
 /** ﷺ is an Arabic-script character: in English text a left-to-right mark after it keeps the words and numbers
  *  that follow in English order ("the Prophet ﷺ — 13 BH", not "13 — ﷺ BH"). */
 const ltr = (s: string) => s.replace(/ﷺ(?!\u200E)/g, 'ﷺ\u200E');
@@ -87,14 +92,14 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
         </>
         : <>{locale === 'en' && <p className="pd-note">{text.bioInArabic}</p>}<p className="pd-bio" lang="ar" dir="rtl">{person.bio}</p></>}
       {/* Where the summary comes from: one short line of sources, and the sources' own words on request. */}
-      {sources.length > 0 && <p className="pd-sources" lang="ar" dir="rtl">
+      {sources.length > 0 && <p className="pd-sources" lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
         <span>{text.sourcesLabel}</span>
-        {dorar.length > 0 && <span>الدرر السنية: {dorar.map((f, i) => <span key={f.source}>{i > 0 && '، '}<a href={f.url!} target="_blank" rel="noreferrer">{f.source.replace(/^الدرر السنية · /, '')}</a></span>)}</span>}
-        {others.map((f, i) => <span key={f.source}>{(dorar.length > 0 || i > 0) && ' · '}{f.url ? <a href={f.url} target="_blank" rel="noreferrer">{f.source}</a> : f.source}</span>)}
+        {dorar.length > 0 && <span>{locale === 'ar' ? 'الدرر السنية: ' : 'Dorar: '}{dorar.map((f, i) => <span key={f.source}>{i > 0 && (locale === 'ar' ? '، ' : ', ')}<a href={f.url!} target="_blank" rel="noreferrer">{sourceLabel(f.source.replace(/^الدرر السنية · /, ''), locale)}</a></span>)}</span>}
+        {others.map((f, i) => <span key={f.source}>{(dorar.length > 0 || i > 0) && ' · '}{f.url ? <a href={f.url} target="_blank" rel="noreferrer">{sourceLabel(f.source, locale)}</a> : sourceLabel(f.source, locale)}</span>)}
       </p>}
       {person.facts.length > 0 && <details className="pd-quotes">
         <summary>{text.sourceTexts(person.facts.length)}</summary>
-        <ul lang="ar" dir="rtl">{person.facts.map((f, i) => <li key={i}><q className="pd-quote">{f.quote}</q><small>{f.source}</small></li>)}</ul>
+        <ul lang="ar" dir="rtl">{person.facts.map((f, i) => <li key={i}><q className="pd-quote">{f.quote}</q><small lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>{sourceLabel(f.source, locale)}</small></li>)}</ul>
       </details>}
       {events.length > 0 && <section className="pd-events">
         <h3>{text.personEvents}</h3>
