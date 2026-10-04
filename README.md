@@ -1,4 +1,4 @@
-# Bidaya (بداية) – Data Package
+# Bidaya (بداية) – Data Package 
 
 Data for the interactive Seerah map: Seerah events, the surahs and verses related to each event or stage, places, and Companions, plus the links between them.
 
