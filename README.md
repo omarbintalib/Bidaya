@@ -180,9 +180,9 @@ Nothing in these columns is machine-translated. Where an original source publish
 | `1_related_surahs.csv` | `الراوي_EN` | `الراوي` | 55 narrator names (shared) |
 | `1_related_surahs.csv` | `مرجع_الحديث_EN`, `رابط_الحديث_EN`, `سند_الحديث_EN`, `نص_الحديث_EN` | `روابط_التحقق` | **Filled** for the 90 hadith-based rows from sunnah.com's published English: the reference, page, narrator line and text of the row's first hadith link, word for word. The English interface shows this hadith under "How it connects". (`سند_الحديث_EN` is the hadith's own narrator line, which often names the next narrator in the chain rather than the Companion in `الراوي`, so it does not fill `الراوي_EN`.) |
 | `3_links_surahs_sirah.csv` | `نص_الربط_في_الواجهة_EN` | `نص_الربط_في_الواجهة` | 8 timing labels (shared), e.g. «وقعت في هذه المرحلة، ولا يُعرف تاريخها بدقة» |
-| `6_sahaba.csv` | `نبذة_موثقة_EN` | `نبذة_موثقة` | 98 synopses, to be written by the team. Until then the English card shows the Arabic synopsis (marked as Arabic), and under each event the person appears in, the sentence naming them from Dorar's own English text of that event. Dorar's English spellings of five names were added to `Aliases_EN` so those sentences are found |
-| `6_sahaba.csv` | `وقت_الإسلام_EN` | `وقت_الإسلام` | 35 entries |
-| `6_sahaba.csv` | `الوفاة_أو_الاستشهاد_EN` | `الوفاة_أو_الاستشهاد` | 25 entries |
+| `6_sahaba.csv` | `نبذة_موثقة_EN` | `نبذة_موثقة` | **Translated** for all 98 people (AI-assisted, to be reviewed by Hassan). The English card shows it with the Arabic summary one tap away as its reference. Dorar's English spellings of five names are also in `Aliases_EN` so the people are found in Dorar's English texts |
+| `6_sahaba.csv` | `وقت_الإسلام_EN` | `وقت_الإسلام` | **Translated**, 35 entries (to be reviewed) |
+| `6_sahaba.csv` | `الوفاة_أو_الاستشهاد_EN` | `الوفاة_أو_الاستشهاد` | **Translated**, 25 entries (to be reviewed) |
 
 Quotes from the sources (Dorar's Arabic text, hadith wording) stay in Arabic in both interfaces.
 

@@ -40,6 +40,10 @@ const KIND_EN: Record<string, string> = {
   'ملك الحبشة': 'King of Abyssinia', 'ملك الروم': 'Byzantine emperor', 'ملك الفرس': 'Persian emperor', 'ملك الإسكندرية': 'Ruler of Alexandria',
 };
 
+/** ﷺ is an Arabic-script character: in English text a left-to-right mark after it keeps the words and numbers
+ *  that follow in English order ("the Prophet ﷺ — 13 BH", not "13 — ﷺ BH"). */
+const ltr = (s: string) => s.replace(/ﷺ(?!\u200E)/g, 'ﷺ\u200E');
+
 /** Source sentences can start or end mid-quote; drop the stray marks so the paragraph reads cleanly. */
 const tidy = (s: string) => s.replace(/^(…\s*|[”“"'’‘]\s*)+/, '').replace(/(\s*…)+$/, '…').trim();
 
@@ -73,10 +77,14 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
     <div className="pd-body">
       {/* Only what the sources state is shown; a fact they do not give is simply left out. */}
       {(person.islam || person.death) && <dl className="pd-facts">
-        {person.islam && <div><dt>{text.islamWhen}</dt>{locale === 'en' && person.islamEn ? <dd>{person.islamEn}</dd> : <dd lang="ar">{person.islam}</dd>}</div>}
-        {person.death && <div><dt>{text.death}</dt>{locale === 'en' && person.deathEn ? <dd>{person.deathEn}</dd> : <dd lang="ar">{person.death}</dd>}</div>}
+        {person.islam && <div><dt>{text.islamWhen}</dt>{locale === 'en' && person.islamEn ? <dd dir="ltr">{ltr(person.islamEn)}</dd> : <dd lang="ar">{person.islam}</dd>}</div>}
+        {person.death && <div><dt>{text.death}</dt>{locale === 'en' && person.deathEn ? <dd dir="ltr">{ltr(person.deathEn)}</dd> : <dd lang="ar">{person.death}</dd>}</div>}
       </dl>}
-      {locale === 'en' && person.bioEn ? <p className="pd-bio">{person.bioEn}</p>
+      {locale === 'en' && person.bioEn ? <>
+          {/* A translation; the cited Arabic summary stays one tap away as its reference. */}
+          <p className="pd-bio">{ltr(person.bioEn)}</p>
+          <details className="pd-original"><summary>{text.originalArabic}</summary><p className="pd-bio" lang="ar" dir="rtl">{person.bio}</p></details>
+        </>
         : <>{locale === 'en' && <p className="pd-note">{text.bioInArabic}</p>}<p className="pd-bio" lang="ar" dir="rtl">{person.bio}</p></>}
       {/* Where the summary comes from: one short line of sources, and the sources' own words on request. */}
       {sources.length > 0 && <p className="pd-sources" lang="ar" dir="rtl">
@@ -91,8 +99,8 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
       {events.length > 0 && <section className="pd-events">
         <h3>{text.personEvents}</h3>
         <ul>{events.map(e => {
-          // Under each event's title, the sentence of that event's text naming this person (Dorar's English in English).
-          const said = mentionIn(data, person, e, locale);
+          // Under each event's title, the sentence of Dorar's Arabic text naming this person (Arabic interface only).
+          const said = locale === 'ar' ? mentionIn(data, person, e, 'ar') : null;
           return <li key={e.n}>
             <button type="button" onClick={() => { onEvent(e.n); onClose(); }}>
               <span className="pd-ev-head"><span>{e.title[locale] || e.title.ar}</span><small>{hijri(e.year, locale)}</small></span>
@@ -100,7 +108,7 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
             </button>
           </li>;
         })}</ul>
-        <p className="pd-quote-note">{text.quoteNote}</p>
+        {locale === 'ar' && <p className="pd-quote-note">{text.quoteNote}</p>}
       </section>}
       <p className="pd-source">{text.personSource}</p>
     </div>
