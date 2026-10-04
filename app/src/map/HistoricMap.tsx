@@ -91,12 +91,19 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
       const t = Math.min(1, (now - start) / D), k = ease(t);
       const v = { x: from.x + (target.x - from.x) * k, y: from.y + (target.y - from.y) * k, w: from.w + (target.w - from.w) * k, h: from.h + (target.h - from.h) * k };
       viewRef.current = v;
-      svgRef.current?.setAttribute('viewBox', `${v.x} ${v.y} ${v.w} ${v.h}`);
+      const svg = svgRef.current;
+      if (svg) {
+        svg.setAttribute('viewBox', `${v.x} ${v.y} ${v.w} ${v.h}`);
+        // Names and pins were drawn for the zoom of the last render; rescale them every frame so they keep
+        // their size on screen during the glide instead of snapping when it ends.
+        const el = frame.current, u = Math.min(v.w / (el?.clientWidth || size.w), v.h / (el?.clientHeight || size.h));
+        svg.style.setProperty('--k', (u / unitRef.current).toFixed(4));
+      }
       if (t < 1) anim.current = requestAnimationFrame(tick);
       else setView(target);
     };
     anim.current = requestAnimationFrame(tick);
-  }, [reducedMotion]);
+  }, [reducedMotion, size]);
   useEffect(() => () => cancelAnimationFrame(anim.current), []);
 
   // Follow the selected event when the caller asks.
@@ -155,6 +162,8 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
 
   // SVG units per screen pixel (the SVG uses "slice", so the larger scale wins).
   const unit = Math.min(view.w / size.w, view.h / size.h);
+  const unitRef = useRef(unit);
+  useLayoutEffect(() => { unitRef.current = unit; svgRef.current?.style.setProperty('--k', '1'); }, [unit]);
 
   const pins = useMemo(() => {
     const groups = new Map<string, Pin>();

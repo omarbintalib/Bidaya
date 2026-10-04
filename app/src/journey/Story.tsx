@@ -121,6 +121,7 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
   activeRef.current = active;
   /** Where the newly active step sat before it opened, so the page can be held still while cards resize. */
   const anchor = useRef<{ step: number; top: number } | null>(null);
+  const rush = useRef(0);
   useEffect(() => {
     const root = column.current;
     if (!root) return;
@@ -156,13 +157,40 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
     // Glide to nearby steps; jump straight to far ones, so the story doesn't race through every step in between.
     const far = !el || Math.abs(el.getBoundingClientRect().top - window.innerHeight / 2) > window.innerHeight * 1.5;
     const glide = smooth && !reducedMotion && !far;
-    lockUntil.current = performance.now() + (glide ? 1500 : 200);
+    const dash = smooth && !reducedMotion && far;
+    cancelAnimationFrame(rush.current);
+    column.current?.classList.remove('is-rushing');
+    lockUntil.current = performance.now() + (glide ? 1500 : dash ? 2000 : 200);
     if (glide) window.addEventListener('scrollend', () => { lockUntil.current = performance.now() + 50; }, { once: true });
     anchor.current = null;
     setActive(target);
     // Scroll once the cards have opened and closed, so the jump is measured against the final layout. Every jump
     // puts the step's top at the same place (its scroll-margin), however tall its card.
-    window.requestAnimationFrame(() => el?.scrollIntoView?.({ block: 'start', behavior: glide ? 'smooth' : 'instant' }));
+    window.requestAnimationFrame(() => {
+      if (!el) return;
+      if (!dash) { el.scrollIntoView?.({ block: 'start', behavior: glide ? 'smooth' : 'instant' }); return; }
+      // Far jumps (chapters, the timeline): a quick dash down the page, so the reader sees the story pass by.
+      const from = window.scrollY, margin = parseFloat(getComputedStyle(el).scrollMarginTop) || 0;
+      const to = Math.max(0, el.getBoundingClientRect().top + from - margin);
+      const D = Math.min(900, 420 + Math.abs(to - from) / 60), start = performance.now();
+      const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+      lockUntil.current = start + D + 300;
+      column.current?.classList.add('is-rushing');
+      const finish = () => {
+        cancelAnimationFrame(rush.current);
+        column.current?.classList.remove('is-rushing');
+        lockUntil.current = performance.now() + 80;
+        window.removeEventListener('wheel', finish); window.removeEventListener('touchstart', finish); window.removeEventListener('keydown', finish);
+      };
+      // The reader can take over at any moment: a wheel, touch or key stops the dash where it is.
+      window.addEventListener('wheel', finish, { passive: true }); window.addEventListener('touchstart', finish, { passive: true }); window.addEventListener('keydown', finish);
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / D);
+        window.scrollTo({ top: from + (to - from) * ease(t), behavior: 'instant' });
+        if (t < 1) rush.current = requestAnimationFrame(tick); else finish();
+      };
+      rush.current = requestAnimationFrame(tick);
+    });
   }, [steps.length, reducedMotion, wide]);
   const onTimelineIndex = useCallback((i: number) => goToStep(stepOfEvent.get(i)!), [goToStep, stepOfEvent]);
   const goToEvent = useCallback((n: number) => {

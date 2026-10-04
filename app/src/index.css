@@ -370,3 +370,10 @@ html[lang='en'] { --reading-font: 'Honorific', 'IBM Plex Sans', 'IBM Plex Sans A
 html[lang='en'] [lang='ar'] { font-family: 'Saudi', 'IBM Plex Sans Arabic', sans-serif; }
 html[lang='en'][data-reading-font='plex'] [lang='ar'] { font-family: 'IBM Plex Sans Arabic', sans-serif; }
 html[lang='en'] { --text-small: calc(16px * var(--text-scale)); --text-control: calc(17px * var(--text-scale)); --text-body: calc(18px * var(--text-scale)); }
+
+/* Language switch: a short cross-fade with a slight lift (see toggleLocale in App.tsx). */
+::view-transition-old(root) { animation: lang-out .22s ease both; }
+::view-transition-new(root) { animation: lang-in .32s .06s ease both; }
+@keyframes lang-out { to { opacity: 0; } }
+@keyframes lang-in { from { opacity: 0; transform: translateY(6px); } }
+@media (prefers-reduced-motion: reduce) { ::view-transition-old(root), ::view-transition-new(root) { animation: none; } }

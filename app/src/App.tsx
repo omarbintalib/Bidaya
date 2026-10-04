@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import BrandLogo from './components/BrandLogo';
 import JourneyPage from './pages/JourneyPage';
 import TitlePage from './pages/TitlePage';
@@ -27,6 +28,13 @@ function Workspace() {
   const trigger = useRef<HTMLButtonElement>(null);
   const closeMenu = useCallback(() => setMenuOpen(false), []);
   const navigation = useNavigation(closeMenu);
+  // Switching language cross-fades the page (where the browser supports view transitions), so the flip of
+  // text and direction reads as one smooth change rather than a jump.
+  const toggleLocale = useCallback(() => {
+    const next = (l: Locale): Locale => (l === 'ar' ? 'en' : 'ar');
+    if (reducedMotion || typeof document.startViewTransition !== 'function') { setLocale(next); return; }
+    document.startViewTransition(() => flushSync(() => setLocale(next)));
+  }, [reducedMotion]);
   const text = copy[locale], route = routeFor(navigation.page);
   useEffect(() => { if (navigation.busy) setAccessOpen(false); }, [navigation.busy]);
   const launcher = <AccessibilityLauncher locale={locale} open={accessOpen} buttonRef={accessTrigger} onClick={() => { setMenuOpen(false); setAccessOpen(value => !value); }} />;
@@ -71,12 +79,12 @@ function Workspace() {
         <button ref={trigger} className="destination-trigger" aria-label={`${navigationCopy[locale].open} — ${route[locale].title}`} aria-haspopup="dialog" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}>
           <span className="trigger-chapter">{navigationCopy[locale].chapter}</span><b>{route.number}</b><WaypointSymbol />
         </button>
-        <button className="language-switch" onClick={() => setLocale(locale === 'ar' ? 'en' : 'ar')} aria-label={text.language}>
+        <button className="language-switch" onClick={toggleLocale} aria-label={text.language}>
           <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7" stroke="currentColor" /><ellipse cx="10" cy="10" rx="3" ry="7" stroke="currentColor" /><path d="M3 10h14" stroke="currentColor" /></svg>
           <span lang={locale === 'ar' ? 'en' : 'ar'}>{locale === 'ar' ? 'English' : 'العربية'}</span>
         </button>
       </header>
-      {navigation.page === 'journey' ? <JourneyPage key="journey" locale={locale} onToggleLocale={() => setLocale(locale === 'ar' ? 'en' : 'ar')} /> : <TitlePage key={navigation.page} page={navigation.page} locale={locale} onExplore={() => setMenuOpen(true)} />}
+      {navigation.page === 'journey' ? <JourneyPage key="journey" locale={locale} onToggleLocale={toggleLocale} /> : <TitlePage key={navigation.page} page={navigation.page} locale={locale} onExplore={() => setMenuOpen(true)} />}
       <footer className="site-footer"><span>{text.footer}</span><GeometricMark /><span className="footer-edition">{route.number} / 2026</span></footer>
     </div>
     {menuOpen && <WaypointMenu locale={locale} page={navigation.page} trigger={trigger} busy={navigation.busy} launcher={launcher} onClose={closeMenu} onNavigate={navigation.request} />}

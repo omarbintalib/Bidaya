@@ -230,3 +230,7 @@
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes answer-pop { 0% { transform: scale(.94); } 60% { transform: scale(1.04); } 100% { transform: none; } }
 @keyframes answer-shake { 0%, 100% { transform: none; } 25% { transform: translateX(-5px); } 50% { transform: translateX(4px); } 75% { transform: translateX(-2px); } }
+
+/* While dashing to a far step the passing steps dim, so the movement reads as travel, not as content. */
+.scrolly-steps { transition: opacity .25s ease; }
+.scrolly-steps.is-rushing { opacity: .35; }

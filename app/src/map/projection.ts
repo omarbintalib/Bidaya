@@ -13,14 +13,17 @@ export function fit(west: number, east: number, south: number, north: number, as
   return clampView({ x: (x0 + x1) / 2 - w / 2, y: (y0 + y1) / 2 - h / 2, w, h });
 }
 
-export const MIN_W = 60;
+/** The closest zoom: about 4° of longitude across, so a view always shows places around the one in focus. */
+export const MIN_W = 150;
 export function clampView(v: View): View {
   const aspect = v.w / v.h;
   let w = Math.min(Math.max(v.w, MIN_W), WIDTH), h = w / aspect;
   if (h > HEIGHT) { h = HEIGHT; w = h * aspect; }
+  // A size limit keeps the view's centre, so zooming against it never drifts away from what was in view.
+  const cx = v.x + v.w / 2, cy = v.y + v.h / 2;
   // Stay inside the drawn area so the edge of the land data never shows.
-  const x = w >= WIDTH ? (WIDTH - w) / 2 : Math.min(Math.max(v.x, 0), WIDTH - w);
-  const y = h >= HEIGHT ? (HEIGHT - h) / 2 : Math.min(Math.max(v.y, 0), HEIGHT - h);
+  const x = w >= WIDTH ? (WIDTH - w) / 2 : Math.min(Math.max(cx - w / 2, 0), WIDTH - w);
+  const y = h >= HEIGHT ? (HEIGHT - h) / 2 : Math.min(Math.max(cy - h / 2, 0), HEIGHT - h);
   return { x, y, w, h };
 }
 
