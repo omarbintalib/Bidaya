@@ -1,11 +1,12 @@
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { answer } from '../assistant/answer';
+import { answer, warmUp } from '../assistant/answer';
 import MorphOrb from '../components/MorphOrb';
 import { quizPools } from '../data/quiz';
 import { digits, hijri, PERIOD_ORDER, periodName, unplacedVerses } from '../data/select';
 import type { Person, Period, QuizQuestion, Route, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 import HistoricMap, { type Emphasis } from '../map/HistoricMap';
+import { onIdle } from '../idle';
 import { journeyCopy } from './copy';
 import EventCard, { VerseItem } from './EventCard';
 import Intro from './Intro';
@@ -56,6 +57,11 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
   const wide = useMedia('(min-width: 1001px)');
   const [intro, setIntro] = useState(() => { try { return sessionStorage.getItem('bidaya.intro.seen') !== '1'; } catch { return true; } });
   // Build the story (≈150 steps and the map) once the opening has played, so the opening stays smooth.
+  useEffect(() => {
+    // Build the Ask index while nothing else is happening.
+    const run = () => warmUp(data);
+    return onIdle(run, 4000);
+  }, [data]);
   const [built, setBuilt] = useState(!intro);
   useEffect(() => {
     if (built) return;
@@ -111,16 +117,37 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
   // ── the step crossing the middle of the screen drives the map ──
   const column = useRef<HTMLDivElement>(null);
   const lockUntil = useRef(0);
+  const activeRef = useRef(active);
+  activeRef.current = active;
+  /** Where the newly active step sat before it opened, so the page can be held still while cards resize. */
+  const anchor = useRef<{ step: number; top: number } | null>(null);
   useEffect(() => {
     const root = column.current;
-    if (!root || typeof IntersectionObserver === 'undefined') return;
-    const io = new IntersectionObserver(entries => {
+    if (!root) return;
+    // Each frame the page scrolls, the step under the reading line becomes active. Measuring positions (rather
+    // than waiting for a thin band to be crossed) means no step is passed over, however fast the scroll.
+    let frame = 0;
+    const pick = () => {
+      frame = 0;
       if (performance.now() < lockUntil.current) return;
-      const hit = entries.filter(e => e.isIntersecting).map(e => Number((e.target as HTMLElement).dataset.step));
-      if (hit.length) setActive(hit[hit.length - 1]);
-    }, { rootMargin: wide ? '-48% 0px -48% 0px' : '-74% 0px -22% 0px' });
-    root.querySelectorAll('[data-step]').forEach(el => io.observe(el));
-    return () => io.disconnect();
+      const line = window.innerHeight * (wide ? 0.5 : 0.76);
+      let best: HTMLElement | null = null, bestTop = 0, gap = Infinity;
+      for (const el of root.querySelectorAll<HTMLElement>('[data-step]')) {
+        const r = el.getBoundingClientRect();
+        if (r.top <= line && r.bottom >= line) { best = el; bestTop = r.top; break; }
+        const d = Math.min(Math.abs(r.top - line), Math.abs(r.bottom - line));
+        if (d < gap) { gap = d; best = el; bestTop = r.top; }
+        if (r.top > line) break;
+      }
+      const n = best ? Number(best.dataset.step) : -1;
+      if (n < 0 || n === activeRef.current) return;
+      anchor.current = { step: n, top: bestTop };
+      setActive(n);
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(pick); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => { cancelAnimationFrame(frame); window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); };
   }, [steps, wide, built]);
 
   const goToStep = useCallback((i: number, smooth = true) => {
@@ -131,8 +158,11 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
     const glide = smooth && !reducedMotion && !far;
     lockUntil.current = performance.now() + (glide ? 1500 : 200);
     if (glide) window.addEventListener('scrollend', () => { lockUntil.current = performance.now() + 50; }, { once: true });
+    anchor.current = null;
     setActive(target);
-    el?.scrollIntoView?.({ block: wide ? 'center' : 'start', behavior: glide ? 'smooth' : 'instant' });
+    // Scroll once the cards have opened and closed, so the jump is measured against the final layout. Every jump
+    // puts the step's top at the same place (its scroll-margin), however tall its card.
+    window.requestAnimationFrame(() => el?.scrollIntoView?.({ block: 'start', behavior: glide ? 'smooth' : 'instant' }));
   }, [steps.length, reducedMotion, wide]);
   const onTimelineIndex = useCallback((i: number) => goToStep(stepOfEvent.get(i)!), [goToStep, stepOfEvent]);
   const goToEvent = useCallback((n: number) => {
@@ -284,6 +314,7 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
     </nav>
     {built && <div className="scrolly">
       <div className="scrolly-steps" ref={column}>
+        <HoldStill store={stepStore} anchor={anchor} column={column} />
         <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} onAskAbout={askAbout} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} />
         <section data-step={steps.length - 1} className={`step step-summary${step.kind === 'summary' ? ' is-on' : ''}`}>
           <span>{text.summaryKicker}</span>
@@ -344,6 +375,24 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
     {undatedOpen && <UndatedDialog verses={unplaced} locale={locale} onClose={() => setUndatedOpen(false)} />}
     {person && <PersonDialog key={person.id} person={person} data={data} locale={locale} onClose={() => setPerson(null)} onEvent={goToEvent} />}
   </PeopleProvider>;
+}
+
+/**
+ * When scrolling opens one card and closes the one above it, the page would shift by the difference and the
+ * reading line would land a step or two further on. This runs after those cards re-render and scrolls by the
+ * shift, so the step the reader reached stays exactly where it was.
+ */
+function HoldStill({ store, anchor, column }: { store: ActiveStore; anchor: React.RefObject<{ step: number; top: number } | null>; column: React.RefObject<HTMLDivElement | null> }) {
+  const active = useActive(store, a => a);
+  useLayoutEffect(() => {
+    const held = anchor.current;
+    anchor.current = null;
+    if (!held || held.step !== active) return;
+    const el = column.current?.querySelector<HTMLElement>(`[data-step="${active}"]`);
+    const shift = el ? el.getBoundingClientRect().top - held.top : 0;
+    if (Math.abs(shift) > 1) window.scrollBy({ top: shift, behavior: 'instant' });
+  }, [active, anchor, column]);
+  return null;
 }
 
 /** All steps but the summary; memoised so it re-renders only when the steps, the language or an answer change. */

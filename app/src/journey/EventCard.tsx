@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { suggestFor } from '../assistant/answer';
 import { quranpediaRefs, type QuranRef } from '../data/quranpedia';
 import { dateLine, excerpt, hadithLinks, hijri, periodName, peopleFor, versesFor } from '../data/select';
 import type { Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
+import { onIdle } from '../idle';
 import { journeyCopy } from './copy';
 import QuranReader from './QuranReader';
 import { PeopleText, usePeople } from './People';
@@ -30,7 +31,14 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
   const title = event.title[locale] || event.title.ar;
   const opening = lead(body), rest = body.slice(opening.replace(/…$/, '').length).trim();
   const at = yearEvents.findIndex(e => e.n === event.n);
-  const asks = useMemo(() => (onAsk ? suggestFor(data, event, locale) : []), [data, event, locale, onAsk]);
+  // Suggestions are worked out when the browser is idle, after the card has opened, so opening stays smooth.
+  const [asks, setAsks] = useState<string[]>([]);
+  useEffect(() => {
+    setAsks([]);
+    if (!onAsk) return;
+    const run = () => setAsks(suggestFor(data, event, locale));
+    return onIdle(run, 1000);
+  }, [data, event, locale, onAsk]);
 
   return <article className="ecard" key={event.n} aria-labelledby={`ev-${event.n}`}>
     {yearEvents.length > 1 && <nav className="ecard-year" aria-label={text.yearNav}>

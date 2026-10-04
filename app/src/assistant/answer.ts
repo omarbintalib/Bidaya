@@ -142,6 +142,9 @@ export function answer(data: Sirah, question: string, locale: Locale): Answer {
  * Questions to offer under an event card. Each is put to `answer()` first and kept only when the reply is about
  * this event (a person in it, or a verse the sources link to it), so a suggestion never leads to "no answer".
  */
+/** Builds the search index ahead of time (it is cached per data set), so the first question is instant. */
+export function warmUp(data: Sirah) { indexFor(data); }
+
 export function suggestFor(data: Sirah, e: SirahEvent, locale: Locale, max = 3): string[] {
   const ar = locale === 'ar';
   const clean = (t: string) => t.replace(/\s*\.\s*$/, '').trim();

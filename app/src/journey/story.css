@@ -29,13 +29,13 @@
 .ask-panel .ai-suggest { margin-top: 8px; }
 
 .scrolly { display: grid; grid-template-columns: minmax(340px, 440px) minmax(0, 1fr); gap: 28px; align-items: start; }
-.scrolly-steps { display: flex; flex-direction: column; padding-block: 18vh 40vh; }
+.scrolly-steps { display: flex; flex-direction: column; padding-block: 18vh 40vh; overflow-anchor: none; } /* the story holds its own place (HoldStill) */
 .scrolly-map { position: sticky; top: calc(var(--toolbar-h) + 12px); height: calc(var(--viewport-height, 100svh) - var(--toolbar-h) - 24px); min-height: 480px; }
 .scrolly-map .hmap { height: 100%; }
 .scrolly-map .hmap-frame { height: 100%; flex: 1; min-height: 0; border-radius: 2px; box-shadow: 0 18px 60px #331b0d14; }
 
 /* Steps */
-.step { padding-block: 9vh; scroll-margin-block: calc(var(--toolbar-h) + 20vh); }
+.step { padding-block: 9vh; scroll-margin-top: calc(var(--toolbar-h) + 2vh); }
 .step-event { cursor: pointer; }
 .step-event.is-on { cursor: auto; }
 .step-peek { padding: 14px 18px; border-inline-start: 2px solid var(--border); opacity: .62; transition: opacity .3s, border-color .3s; }
