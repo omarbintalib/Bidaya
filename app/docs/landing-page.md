@@ -1,6 +1,6 @@
 # Landing page
 
-The home route keeps the original hero and destination menu. Five sections below it explain the Sirah experience, show how the story and map connect, introduce deeper exploration, explain the sources, and link to `/journey` through the shared route transition.
+The home route keeps the original hero and destination menu. The hero's Start Journey link opens `/journey` directly through the shared route transition. Five sections below it explain the Sirah experience, show how the story and map connect, introduce deeper exploration, explain the sources, and provide additional Journey links.
 
 ## Content and appearance
 
@@ -9,12 +9,14 @@ The home route keeps the original hero and destination menu. Five sections below
 - `src/landing/landing.css` uses the existing paper, ink, brass, fonts, contrast, and reading-size tokens. Mobile stacks the alternating rows in reading order.
 - UI UX Pro Max informed the section hierarchy, normal scrolling, image optimization, focus behavior, and responsive spacing. Its generic palette and font suggestions were not adopted: the existing identity and Arabic typography take precedence.
 - Section entrances stagger text and imagery once through an IntersectionObserver. The hero draws a decorative route in its own space below the destination button; its traveller and scroll cue finish within five seconds. A thin progress line tracks the page. Content remains visible without motion APIs; reduced motion cancels entrances and disables decorative movement. Image frames reserve space before loading.
-- The source example has a clear event heading and a real link to Dorar event 42. Its small book GIF flips pages while visible, switching to a still image offscreen or with reduced motion. Regenerate both icon files with `python scripts/build-book-icon.py` (Pillow required).
-- Language changes use a 780ms View Transition wipe: left to right for English and right to left for Arabic. The layout, document language, and reading direction update together behind the snapshot. Visible preview images decode before the new snapshot; a mid-page change keeps the current section in place. Rapid toggles skip obsolete transitions. Reduced motion changes the language immediately; unsupported browsers get a short opacity transition. Navigation cancels an active sweep.
+- The source example has a clear event heading and a real link to Dorar event 42. Its small book GIF runs for up to three flips (7.8 seconds) after first becoming visible, then stays still for the rest of the landing-page visit. It also switches to a still image offscreen or with reduced motion. Regenerate both icon files with `python scripts/build-book-icon.py` (Pillow required).
+- Language changes use a 780ms View Transition wipe: left to right for English and right to left for Arabic. The layout, document language, and reading direction update together behind the snapshot. Asset readiness waits at most 800ms before continuing; a mid-page change keeps the current section in place. Rapid toggles skip obsolete transitions. Reduced motion changes the language immediately; unsupported browsers get a short opacity transition. Navigation cancels an active sweep. Language selection persists in local storage, with Arabic as the first-visit default.
 
 ## Real interface previews
 
 `public/images/landing/` contains compressed WebP captures of the actual Journey page in both languages. The overview uses a separate mobile capture; all previews load lazily. They are illustrative images, not embedded app controls. Surrounding text and alternatives convey their purpose without relying on text inside the images.
+
+If a preview cannot load, its description and a prompt to explore Journey replace the broken image. Run `node scripts/check-recovery.cjs http://127.0.0.1:5184` against a local server to check the 404 page, stored language, hero link, failed data requests followed by a successful retry, and image fallbacks at desktop and mobile sizes.
 
 Refresh captures when the Journey UI or the relevant data changes. With Chrome installed and `playwright` and `sharp` available to Node (for example through `NODE_PATH` in the Codex bundled runtime):
 

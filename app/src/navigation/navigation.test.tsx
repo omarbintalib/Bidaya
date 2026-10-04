@@ -81,7 +81,7 @@ describe('navigation lifecycle', () => {
     expect(heading()?.textContent).toBe('Islam Journey');
   });
 
-  it('keeps modified landing link clicks native, and the existing hero button opens destinations', async () => {
+  it('keeps modified landing link clicks native, and the hero link opens Journey directly', async () => {
     reduced = true;
     await mount(); await advance(300);
     let preventedByApp = true;
@@ -93,7 +93,36 @@ describe('navigation lifecycle', () => {
     expect(location.pathname).toBe('/');
     expect(phase()).toBeUndefined();
     await click('.explore-link');
-    expect(host.querySelector('.waypoint-menu')).not.toBeNull();
+    await advance(300);
+    expect(location.pathname).toBe('/journey');
+    expect(host.querySelector('.waypoint-menu')).toBeNull();
+  });
+
+  it('shows 404 for unknown paths and returns home through navigation', async () => {
+    reduced = true;
+    await mount('/mistyped'); await advance(300);
+    expect(pageFromPath('/mistyped')).toBe('not-found');
+    expect(location.pathname).toBe('/mistyped');
+    expect(heading()?.textContent).toBe('الصفحة غير موجودة');
+    await click('.recovery-actions a[href="/"]'); await advance(300);
+    expect(location.pathname).toBe('/');
+    await pop('/another-missing-page'); await advance(300);
+    expect(host.querySelector('.recovery-page')).not.toBeNull();
+    await pop('/journey'); await advance(300);
+    expect(host.querySelector('.journey-page')).not.toBeNull();
+  });
+
+  it('remembers language after remount and defaults to Arabic for invalid preferences', async () => {
+    reduced = true;
+    await mount(); await advance(300); await click('.language-switch');
+    expect(localStorage.getItem('bidaya.locale')).toBe('en');
+    await act(async () => root.unmount()); root = createRoot(host);
+    await mount(); await advance(300);
+    expect(document.documentElement.lang).toBe('en');
+    await act(async () => root.unmount()); root = createRoot(host);
+    localStorage.setItem('bidaya.locale', 'invalid');
+    await mount(); await advance(300);
+    expect(document.documentElement.lang).toBe('ar');
   });
 
   it('moves scroll-link focus to the introduction and respects reduced motion', async () => {

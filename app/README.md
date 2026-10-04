@@ -133,7 +133,9 @@ Open the computer's local network address and the printed port on that device.
 | `/` | The Beginning | Original hero, visual introduction, three-step tour, feature previews, source explanation, and direct Journey links |
 | `/journey` | Islam Journey | The story: opening, chapters, event cards, spread of Islam, chapter questions, route walks, timeline, story mode, and Ask the map |
 
-The language selection stays in memory during navigation and resets on a full reload. Leaving Journey and returning starts a fresh AI demo.
+Arabic is the first-visit default. The selected language is remembered across reloads in this browser; when storage is unavailable it still works for the current visit. Leaving Journey and returning starts a fresh AI demo.
+
+Unknown URLs show a bilingual 404 page with Home and Start Journey links. Journey requests time out after 12 seconds and offer Try again, Reload page, and Home if content is unavailable. Unexpected page-render failures use the same recovery screen, and failed landing previews show descriptive text.
 
 ## Project structure
 
@@ -215,7 +217,7 @@ npm test
 npm run build
 ```
 
-The current suite includes 58 tests across six files, covering the data, AI lifecycle and cleanup, navigation/history behavior, landing entry links and scroll-link focus, language-sweep interruption and fallback, transition geometry, waypoint endpoints, reduced motion, preference persistence, storage failures, dialog focus, and preference changes during AI processing.
+The current suite includes 65 tests across seven files, covering the data, AI lifecycle and cleanup, navigation/history behavior, 404 recovery, Journey retries, page-render recovery, landing entry links and image fallbacks, language persistence and bounded transitions, the finite book animation, transition geometry, waypoint endpoints, reduced motion, preference persistence, storage failures, dialog focus, and preference changes during AI processing.
 
 Saved browser reviews in `qa/` cover desktop and mobile layouts, both languages, navigation, transitions, enlarged text, contrast themes, and compact viewports. These screenshots document prior reviews; they are not an automated browser test suite. A physical mobile keyboard and browser page zoom have not been verified.
 

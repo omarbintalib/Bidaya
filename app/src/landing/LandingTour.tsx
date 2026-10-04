@@ -1,4 +1,5 @@
-import { useEffect, useRef, type MouseEvent } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
+import { recoveryCopy } from '../components/Recovery';
 import { useAccessibility } from '../accessibility/AccessibilityProvider';
 import BrandLogo from '../components/BrandLogo';
 import type { Locale } from '../i18n';
@@ -24,7 +25,10 @@ export function ScrollLink({ locale }: { locale: Locale }) {
 }
 
 function Preview({ name, locale, alt, className = '', width = 800, height = 600 }: { name: string; locale: Locale; alt: string; className?: string; width?: number; height?: number }) {
-  return <img className={`landing-preview ${className}`} src={`/images/landing/${name}-${locale}.webp`} alt={alt} width={width} height={height} loading="lazy" decoding="async" />;
+  const [failedSource, setFailedSource] = useState('');
+  const source = `/images/landing/${name}-${locale}.webp`;
+  return failedSource === source ? <div className="landing-preview-fallback"><p>{alt}</p><p>{recoveryCopy[locale].preview}</p></div>
+    : <img className={`landing-preview ${className}`} src={source} alt={alt} width={width} height={height} loading="lazy" decoding="async" onError={() => setFailedSource(source)} />;
 }
 
 export default function LandingTour({ locale, onBegin }: { locale: Locale; onBegin: () => void }) {

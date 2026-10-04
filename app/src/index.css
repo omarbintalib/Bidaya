@@ -145,7 +145,7 @@ a { color: inherit; }
 .title-composition h1 { font-size: calc(clamp(64px, 8vw, 120px) * var(--text-scale)); line-height: 1.15; letter-spacing: -.025em; }
 [dir='ltr'] .title-composition h1 { font-size: calc(clamp(55px, 7.5vw, 105px) * var(--text-scale)); letter-spacing: -.045em; line-height: 1.1; }
 .title-subtitle { font-size: calc(clamp(16px, 1.7vw, 22px) * var(--text-scale)); color: var(--muted); margin: 25px 0 0; }
-.explore-link { border: 0; border-bottom: 1px solid var(--border); background: none; display: inline-flex; align-items: center; gap: 30px; font-size: var(--text-small); padding: 12px 0; margin-top: 46px; }
+.explore-link { border: 0; border-bottom: 1px solid var(--border); background: none; display: inline-flex; align-items: center; gap: 30px; font-size: var(--text-small); padding: 12px 0; margin-top: 46px; color: var(--ink); text-decoration: none; }
 .explore-link svg { width: 48px; height: 20px; color: var(--brass); transition: transform .3s; }
 .explore-link:hover svg { transform: translateX(-6px); }
 .title-axis { position: absolute; inset-inline-start: 0; top: 14%; bottom: 14%; display: flex; flex-direction: column; gap: 22px; align-items: center; opacity: .5; }
@@ -391,3 +391,11 @@ html[data-language-sweep='ar']::view-transition-new(root) { animation-name: lang
 @keyframes language-sweep-ltr { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0); } }
 @keyframes language-sweep-rtl { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0); } }
 html[data-reduced-motion='true']::view-transition-old(root), html[data-reduced-motion='true']::view-transition-new(root) { animation: none !important; }
+
+/* Friendly recovery screens share the reading and contrast preferences. */
+.recovery-page { min-height: 60svh; display: grid; place-items: center; }
+.recovery-panel { width: min(100%, 760px); margin: 32px auto; padding: clamp(24px, 4vw, 48px); border: 1px solid var(--border); background: var(--surface); color: var(--ink); }
+.recovery-panel p { font-size: var(--text-body); line-height: var(--reading-line-height); }
+.recovery-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 24px; }
+.recovery-actions a { color: var(--ink); min-height: 44px; display: inline-flex; align-items: center; text-underline-offset: .2em; }
+.landing-preview-fallback { display: grid; align-content: center; min-height: 180px; height: 100%; padding: 24px; background: var(--surface); }

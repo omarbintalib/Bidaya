@@ -8,16 +8,19 @@ export function useLanguageSwitch(locale: Locale, setLocale: Dispatch<SetStateAc
   const generation = useRef(0);
   const active = useRef<ViewTransition | null>(null);
   const fallback = useRef<Animation | null>(null);
+  const releaseWait = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     if (!reducedMotion && !navigating) return;
     active.current?.skipTransition();
+    releaseWait.current?.();
     fallback.current?.cancel();
     delete document.documentElement.dataset.languageSweep;
   }, [reducedMotion, navigating]);
 
   useEffect(() => () => {
     generation.current++;
+    releaseWait.current?.();
     active.current?.skipTransition();
     fallback.current?.cancel();
     delete document.documentElement.dataset.languageSweep;
@@ -27,6 +30,7 @@ export function useLanguageSwitch(locale: Locale, setLocale: Dispatch<SetStateAc
     const run = ++generation.current;
     const next = desired.current === 'ar' ? 'en' : 'ar';
     desired.current = next;
+    releaseWait.current?.();
     active.current?.skipTransition();
     fallback.current?.cancel();
     active.current = null;
@@ -64,7 +68,18 @@ export function useLanguageSwitch(locale: Locale, setLocale: Dispatch<SetStateAc
             const r = img.getBoundingClientRect();
             return r.bottom > 0 && r.top < window.innerHeight;
           });
-          await Promise.all([document.fonts?.ready, ...visible.map(img => img.decode?.().catch(() => {}))]);
+          // Slow or unavailable assets must never hold the language transition indefinitely.
+          await new Promise<void>(resolve => {
+            let timer = 0;
+            const finish = () => {
+              window.clearTimeout(timer);
+              if (releaseWait.current === finish) releaseWait.current = null;
+              resolve();
+            };
+            releaseWait.current = finish;
+            timer = window.setTimeout(finish, 800);
+            void Promise.allSettled([document.fonts?.ready, ...visible.map(img => img.decode?.())]).then(finish);
+          });
           if (run === generation.current) restoreReadingPosition();
         });
         active.current = transition;

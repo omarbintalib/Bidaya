@@ -96,3 +96,22 @@ it('prevents a delayed update from running after unmount', async () => {
   expect(host.textContent).toBe('');
   expect(document.documentElement.dataset.languageSweep).toBeUndefined();
 });
+
+it('finishes the snapshot update when image decoding stalls and releases its timer', async () => {
+  vi.useFakeTimers();
+  const img = document.createElement('img'); img.className = 'landing-preview';
+  img.decode = () => new Promise<void>(() => {});
+  img.getBoundingClientRect = () => ({ top: 1, bottom: 100 }) as DOMRect;
+  document.body.append(img);
+  try {
+    await act(async () => root.render(<Harness />)); await click();
+    let completed = false;
+    const update = updates[0]().then(() => { completed = true; });
+    await act(async () => { await vi.advanceTimersByTimeAsync(799); });
+    expect(completed).toBe(false);
+    await act(async () => { await vi.advanceTimersByTimeAsync(1); await update; });
+    expect(completed).toBe(true);
+    expect(host.textContent).toBe('en');
+    expect(vi.getTimerCount()).toBe(0);
+  } finally { img.remove(); vi.useRealTimers(); }
+});

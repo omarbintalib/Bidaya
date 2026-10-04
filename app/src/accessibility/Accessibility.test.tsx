@@ -38,7 +38,8 @@ it('persists all reading settings, reloads them, and resets them without storing
   for (const [index, value] of ['150','spacious','spacious','dark','plex','reduced'].entries()) await select(index, value);
   for (const input of host.querySelectorAll('input[type="checkbox"]')) await act(async () => (input as HTMLInputElement).click());
   expect(JSON.parse(localStorage.getItem(STORAGE_KEY)!)).toEqual({ ...defaults, textSize: 150, lineSpacing: 'spacious', characterSpacing: 'spacious', contrast: 'dark', font: 'plex', motion: 'reduced', highlightLinks: true, strongFocus: true });
-  expect(localStorage.length).toBe(1);
+  expect(localStorage.length).toBe(2);
+  expect(localStorage.getItem('bidaya.locale')).toBe('ar');
   expect(document.documentElement.dataset.readingFont).toBe('plex');
   expect(document.documentElement.dataset.reducedMotion).toBe('true');
   await act(async () => root.unmount()); root = createRoot(host);

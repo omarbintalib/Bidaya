@@ -2,6 +2,8 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import BrandLogo from './components/BrandLogo';
 import JourneyPage from './pages/JourneyPage';
 import TitlePage from './pages/TitlePage';
+import NotFoundPage from './pages/NotFoundPage';
+import { PageBoundary } from './components/Recovery';
 import WaypointMenu from './navigation/WaypointMenu';
 import LogoTransition from './navigation/LogoTransition';
 import { navigationCopy, routeFor } from './navigation/routes';
@@ -21,7 +23,10 @@ export default function App() {
 
 function Workspace() {
   const { reducedMotion } = useAccessibility();
-  const [locale, setLocale] = useState<Locale>('ar');
+  const [locale, setLocale] = useState<Locale>(() => {
+    try { return localStorage.getItem('bidaya.locale') === 'en' ? 'en' : 'ar'; } catch { return 'ar'; }
+  });
+  useEffect(() => { try { localStorage.setItem('bidaya.locale', locale); } catch { /* Preferences remain usable without storage. */ } }, [locale]);
   const [menuOpen, setMenuOpen] = useState(false);
   const [accessOpen, setAccessOpen] = useState(false);
   const accessTrigger = useRef<HTMLButtonElement>(null);
@@ -79,7 +84,10 @@ function Workspace() {
           <span lang={locale === 'ar' ? 'en' : 'ar'}>{locale === 'ar' ? 'English' : 'العربية'}</span>
         </button>
       </header>
-      {navigation.page === 'journey' ? <JourneyPage key="journey" locale={locale} /> : <TitlePage key={navigation.page} page={navigation.page} locale={locale} onExplore={() => setMenuOpen(true)} onBegin={() => navigation.request('journey')} />}
+      <PageBoundary key={navigation.page} locale={locale}>
+        {navigation.page === 'not-found' ? <NotFoundPage locale={locale} onHome={() => navigation.request('home')} onBegin={() => navigation.request('journey')} />
+          : navigation.page === 'journey' ? <JourneyPage locale={locale} /> : <TitlePage page="home" locale={locale} onBegin={() => navigation.request('journey')} />}
+      </PageBoundary>
       <footer className="site-footer"><span>{text.footer}</span><GeometricMark /><span className="footer-edition">{route.number} / 2026</span></footer>
     </div>
     {menuOpen && <WaypointMenu locale={locale} page={navigation.page} trigger={trigger} busy={navigation.busy} onClose={closeMenu} onNavigate={navigation.request} />}

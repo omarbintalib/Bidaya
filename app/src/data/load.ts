@@ -33,9 +33,14 @@ const num = (v: string | undefined) => { const s = (v ?? '').trim(); if (!s) ret
 const list = (v: string | undefined) => (v ?? '').split(/[،,|]/).map(s => s.trim()).filter(s => s && s !== '—');
 
 async function fetchText(name: string) {
-  const res = await fetch(DATA_DIR + encodeURIComponent(name), { cache: 'no-cache' });
-  if (!res.ok) throw new Error(`${name}: HTTP ${res.status}`);
-  return res.text();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 12000);
+  let res: Response;
+  try {
+    res = await fetch(DATA_DIR + encodeURIComponent(name), { cache: 'no-cache', signal: controller.signal });
+    if (!res.ok) throw new Error(`${name}: HTTP ${res.status}`);
+    return await res.text();
+  } finally { clearTimeout(timeout); }
 }
 
 export async function loadSirah(): Promise<Sirah> {
