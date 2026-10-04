@@ -2,6 +2,7 @@ import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { answer } from '../assistant/answer';
 import { parseCsv } from './csv';
 import { loadSirah } from './load';
+import { findPeople } from './people';
 import { quranpediaRefs } from './quranpedia';
 import { versesFor } from './select';
 import type { Sirah } from './types';
@@ -91,5 +92,21 @@ describe('quranpedia links', () => {
   it('opens short whole surahs in full', () => {
     expect(quranpediaRefs('108:1-3', true, 'ar')[0].url).toBe('https://quranpedia.net/embed?surah=108&ayah=1-3');
     expect(quranpediaRefs('9:1-129', true, 'ar')[0].url).toBe('https://quranpedia.net/embed?surah=9&ayah=1');
+  });
+});
+
+describe('companion names in text', () => {
+  const names = (text: string, lang: 'ar' | 'en') => findPeople(data, text, lang).map(s => s.person.id);
+  it('finds Arabic names across diacritics and أبو / أبي', () => {
+    expect(names('هاجر رسولُ الله ومعه أبي بكرٍ الصِّدِّيقِ، وكانت خَديجةُ قد تُوفيت', 'ar')).toEqual(['SAH-001', 'SAH-005']);
+    expect(names('وقال عُمَرُ بنُ الخطَّابِ', 'ar')).toEqual(['SAH-002']);
+  });
+  it('does not link common words or shared first names', () => {
+    expect(names('فنزل الوحي على النبي، وبلغ من العُمُر أربعين', 'ar')).toEqual([]);
+    expect(names('Muhammad said the same to some of them', 'en')).toEqual([]);
+  });
+  it("matches Dorar's English spellings", () => {
+    expect(names('Aboo Bakr and Khadeejah', 'en')).toEqual(['SAH-001', 'SAH-005']);
+    expect(names('‘Umar ibn al-Khattaab', 'en')).toEqual(['SAH-002']);
   });
 });

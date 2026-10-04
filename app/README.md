@@ -35,6 +35,10 @@ The map is a period map, drawn as SVG: coastlines only (Natural Earth 1:50m, pub
 
 Each verse reference on an event card is a button that opens the verses from Quranpedia (`quranpedia.net/embed`) in a reader window, with a link to open them on Quranpedia directly. English opens Quranpedia's translations view. Ranges of up to 20 ayat open whole; longer ones open at their first ayah (`src/data/quranpedia.ts`).
 
+## Companions
+
+Names of the Companions in `6_sahaba.csv` are linked where they appear in the event texts and verse explanations (first mention per passage), and in the event card's Companion list. A link opens the Companion's cited summary and the events they appear in; choosing an event jumps to it. Matching (`src/data/people.ts`) works across Arabic diacritics and أبو/أبي/أبا, and across Dorar's English spellings. First names that are also common words or shared with other people (علي، عمر، عمرو…) link only as part of a full name. A new row in `6_sahaba.csv` is picked up automatically.
+
 ## Ask the map
 
 `src/assistant/answer.ts` answers from the sources only: Dorar event texts, the Companions' synopses and the verse records. Each answer names its source and moves the map to the event. Questions asking for a ruling are referred to an official fatwa body, and questions with no matching source get an apology (deck slides 5–7). It runs in the browser, with no API key. To add an LLM later, send the passages from `retrieve()` to a server-side model and keep these rules.

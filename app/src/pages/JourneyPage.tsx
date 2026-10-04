@@ -3,12 +3,13 @@ import { useAccessibility } from '../accessibility/AccessibilityProvider';
 import { answer } from '../assistant/answer';
 import MorphOrb from '../components/MorphOrb';
 import { unplacedVerses } from '../data/select';
-import type { Sirah, SirahEvent } from '../data/types';
+import type { Person, Sirah, SirahEvent } from '../data/types';
 import { useSirah } from '../data/useSirah';
 import { copy, type Locale } from '../i18n';
 import EventCard, { VerseItem } from '../journey/EventCard';
 import Timeline from '../journey/Timeline';
 import { journeyCopy } from '../journey/copy';
+import { PeopleProvider, PersonDialog } from '../journey/People';
 import HistoricMap, { type Emphasis } from '../map/HistoricMap';
 import { routeFor } from '../navigation/routes';
 import '../journey/journey.css';
@@ -60,6 +61,8 @@ function Journey({ data, locale }: { data: Sirah; locale: Locale }) {
   const activeRoutes = useMemo(() => data.routes.filter(r => r.events.includes(current.n)).map(r => r.id), [data, current]);
   const unplaced = useMemo(() => unplacedVerses(data), [data]);
 
+  const [person, setPerson] = useState<Person | null>(null);
+  const peopleApi = useMemo(() => ({ data, open: setPerson }), [data]);
   const [ask, setAsk] = useState<{ text: string; key: number } | null>(null);
   const onAsk = useCallback((question: string) => {
     const result = answer(data, question, locale);
@@ -67,7 +70,7 @@ function Journey({ data, locale }: { data: Sirah; locale: Locale }) {
     return result.text;
   }, [data, locale, selectEvent]);
 
-  return <>
+  return <PeopleProvider value={peopleApi}>
     <div className="journey-grid">
       <HistoricMap data={data} locale={locale} emphasis={emphasis} selected={current.n} activeRoutes={activeRoutes} onSelect={selectEvent} reducedMotion={reducedMotion} focusKey={index} />
       <aside className="journey-panel" aria-live="polite">
@@ -90,5 +93,6 @@ function Journey({ data, locale }: { data: Sirah; locale: Locale }) {
         </ul>
       </div>
     </section>
-  </>;
+    {person && <PersonDialog key={person.id} person={person} data={data} locale={locale} onClose={() => setPerson(null)} onEvent={selectEvent} />}
+  </PeopleProvider>;
 }

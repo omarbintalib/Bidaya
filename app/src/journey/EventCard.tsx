@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { quranpediaRefs, type QuranRef } from '../data/quranpedia';
 import { dateLine, excerpt, hadithLinks, periodName, peopleFor, versesFor } from '../data/select';
-import type { Person, Sirah, SirahEvent, Verse } from '../data/types';
+import type { Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
 import QuranReader from './QuranReader';
+import { PeopleText, usePeople } from './People';
 
 /** Arabic-only source text keeps its own language and direction inside the English interface. */
 /** Characters of the event text shown before "Read the full text" — about three lines. */
@@ -15,13 +16,12 @@ const Ar = ({ children, as: Tag = 'span' }: { children: React.ReactNode; as?: 's
 export default function EventCard({ data, event, locale }: { data: Sirah; event: SirahEvent; locale: Locale }) {
   const text = journeyCopy[locale];
   const [open, setOpen] = useState(false);
-  const [person, setPerson] = useState<string | null>(null);
+  const peopleApi = usePeople();
   const verses = versesFor(data, event);
   const people = peopleFor(data, event);
   const body = (locale === 'en' && event.text.en) || event.text.ar;
   const bodyLang = body === event.text.ar ? 'ar' : 'en';
   const title = event.title[locale] || event.title.ar;
-  const chosen = people.find(p => p.id === person) ?? null;
 
   return <article className="ecard" key={event.n} aria-labelledby={`ev-${event.n}`}>
     <p className="ecard-period"><span />{periodName[locale][event.period]}</p>
@@ -34,7 +34,7 @@ export default function EventCard({ data, event, locale }: { data: Sirah; event:
 
     {locale === 'en' && !event.text.en && <p className="ecard-flag">{text.noEnglish}</p>}
     <div className="ecard-text" lang={bodyLang} dir={bodyLang === 'ar' ? 'rtl' : 'ltr'}>
-      <p>{open ? body : excerpt(body, EXCERPT)}</p>
+      <p><PeopleText text={open ? body : excerpt(body, EXCERPT)} lang={bodyLang} /></p>
     </div>
     {body.length > EXCERPT && <button type="button" className="ecard-more" aria-expanded={open} onClick={() => setOpen(v => !v)}>{open ? text.readLess : text.readMore}</button>}
     <p className="ecard-source">{text.source}: <a href={locale === 'en' && event.urlEn ? event.urlEn : event.url} target="_blank" rel="noreferrer">{text.dorar} · {locale === 'ar' ? 'حدث' : 'event'} {event.n}</a></p>
@@ -49,9 +49,8 @@ export default function EventCard({ data, event, locale }: { data: Sirah; event:
     {people.length > 0 && <section className="ecard-section">
       <h3>{text.people}</h3>
       <ul className="ecard-people">
-        {people.map(p => <li key={p.id}><button type="button" aria-expanded={person === p.id} onClick={() => setPerson(person === p.id ? null : p.id)}>{p.name[locale]}</button></li>)}
+        {people.map(p => <li key={p.id}><button type="button" aria-haspopup="dialog" onClick={() => peopleApi?.open(p)}>{p.name[locale]}</button></li>)}
       </ul>
-      {chosen && <PersonBio person={chosen} locale={locale} />}
     </section>}
   </article>;
 }
@@ -79,13 +78,13 @@ export function VerseItem({ v, locale, compact = false }: { v: Verse; locale: Lo
       </a>)}
     </p>
     {reading && <QuranReader title={surahName} quranRef={reading} locale={locale} onClose={() => setReading(null)} />}
-    <p className="verse-title">{v.title[locale]}</p>
+    <p className="verse-title"><PeopleText text={v.title[locale]} lang={v.title[locale] === v.title.ar ? 'ar' : 'en'} /></p>
     <p className="verse-phrase">{v.phrase[locale]}</p>
     {label && v.link?.type !== 'direct' && <p className="verse-label"><Ar>{label}</Ar></p>}
     {!compact && <>
       <button type="button" className="verse-toggle" aria-expanded={open} onClick={() => setOpen(o => !o)}>{text.reason}</button>
       {open && <div className="verse-detail">
-        {v.reason && <Ar as="p">{v.reason}</Ar>}
+        {v.reason && <Ar as="p"><PeopleText text={v.reason} lang="ar" /></Ar>}
         {(v.evidence[locale] || v.evidence.ar) && <p className="verse-evidence" lang={v.evidence[locale] ? locale : 'ar'}>{v.evidence[locale] || v.evidence.ar}</p>}
         <p className="verse-refs">
           {hadithLinks(v).map(h => <a key={h.book + h.n} href={h.url} target="_blank" rel="noreferrer">{text[h.book]} {h.n}</a>)}
@@ -95,13 +94,4 @@ export function VerseItem({ v, locale, compact = false }: { v: Verse; locale: Lo
       </div>}
     </>}
   </li>;
-}
-
-function PersonBio({ person, locale }: { person: Person; locale: Locale }) {
-  const text = journeyCopy[locale];
-  return <div className="person-bio">
-    <p className="person-name"><Ar>{person.name.ar}</Ar>{locale === 'en' && <span> · {person.name.en}</span>}</p>
-    <Ar as="p">{person.bio}</Ar>
-    {person.death && <p className="person-death">{text.death}: <Ar>{person.death}</Ar></p>}
-  </div>;
 }

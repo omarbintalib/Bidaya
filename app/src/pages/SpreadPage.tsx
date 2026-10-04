@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAccessibility } from '../accessibility/AccessibilityProvider';
 import { dateLine, digits, excerpt, hijri } from '../data/select';
-import type { Sirah, SirahEvent } from '../data/types';
+import type { Person, Sirah, SirahEvent } from '../data/types';
 import { useSirah } from '../data/useSirah';
 import { copy, type Locale } from '../i18n';
 import { journeyCopy } from '../journey/copy';
+import { PeopleProvider, PeopleText, PersonDialog } from '../journey/People';
 import HistoricMap, { type Emphasis } from '../map/HistoricMap';
 import { routeFor } from '../navigation/routes';
 import '../journey/journey.css';
@@ -43,6 +44,10 @@ function Spread({ data, locale }: { data: Sirah; locale: Locale }) {
   const [yi, setYi] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [picked, setPicked] = useState<number | null>(null);
+  const [person, setPerson] = useState<Person | null>(null);
+  const peopleApi = useMemo(() => ({ data, open: setPerson }), [data]);
+  // Jumping to a person's event moves the slider to that event's year.
+  const showEvent = (n: number) => { const e = data.byNumber.get(n); const i = e ? years.indexOf(e.year!) : -1; if (i >= 0) { setPlaying(false); setYi(i); window.setTimeout(() => setPicked(n), 0); } };
   const year = years[yi];
 
   useEffect(() => {
@@ -64,7 +69,7 @@ function Spread({ data, locale }: { data: Sirah; locale: Locale }) {
   }, [year, picked]);
   const chosen = picked === null ? null : data.byNumber.get(picked) ?? null;
 
-  return <>
+  return <PeopleProvider value={peopleApi}>
     <div className="journey-grid">
       <HistoricMap data={data} locale={locale} emphasis={emphasis} selected={picked} onSelect={setPicked} reducedMotion={reducedMotion} focusKey={picked ?? undefined}
         caption={`${text.year}: ${hijri(year, locale)}`} />
@@ -82,7 +87,7 @@ function Spread({ data, locale }: { data: Sirah; locale: Locale }) {
             </button>
             {chosen?.n === e.n && <div className="spread-detail">
               <p className="spread-date">{dateLine(e, locale)}</p>
-              <p lang={locale === 'en' && e.text.en ? 'en' : 'ar'}>{excerpt((locale === 'en' && e.text.en) || e.text.ar, 260)}</p>
+              <p lang={locale === 'en' && e.text.en ? 'en' : 'ar'}><PeopleText text={excerpt((locale === 'en' && e.text.en) || e.text.ar, 260)} lang={locale === 'en' && e.text.en ? 'en' : 'ar'} /></p>
               <a href={e.url} target="_blank" rel="noreferrer">{journeyCopy[locale].dorar} · {e.n}</a>
             </div>}
           </li>)}
@@ -100,5 +105,6 @@ function Spread({ data, locale }: { data: Sirah; locale: Locale }) {
         <div className="spread-ticks" aria-hidden="true">{years.map((y, i) => <span key={y} className={i === yi ? 'is-on' : ''} style={{ insetInlineStart: `${(i / (years.length - 1)) * 100}%` }}>{y === 0 || i % 2 === 0 || i === years.length - 1 ? hijri(y, locale) : ''}</span>)}</div>
       </div>
     </section>
-  </>;
+    {person && <PersonDialog key={person.id} person={person} data={data} locale={locale} onClose={() => setPerson(null)} onEvent={showEvent} />}
+  </PeopleProvider>;
 }
