@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { act } from 'react';
+import { act, StrictMode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import MorphOrb from './MorphOrb';
@@ -43,6 +43,26 @@ async function advance(ms: number) {
   await act(async () => { await vi.advanceTimersByTimeAsync(ms); });
 }
 const phase = () => host.querySelector('.mo-root')!.getAttribute('data-phase');
+
+it('runs the response-only animation once in Strict Mode without showing another input', async () => {
+  const onSubmit = vi.fn(() => 'A sourced answer');
+  await act(async () => root.render(<StrictMode><MorphOrb docked request={{ id: 1, text: 'Question' }} locale="en" onSubmit={onSubmit} minThinkMs={0} speed={2} /></StrictMode>));
+  expect(host.querySelector('form')?.hidden).toBe(true);
+  await advance(6000);
+  expect(phase()).toBe('answered');
+  expect(onSubmit).toHaveBeenCalledOnce();
+  expect(host.querySelector('.mo-a-body')?.textContent).toContain('A sourced answer');
+});
+
+it('opens history from the icon without submitting the typed question', async () => {
+  const history = vi.fn(), onSubmit = vi.fn();
+  await act(async () => root.render(<MorphOrb locale="en" onHistory={history} onSubmit={onSubmit} />));
+  await input('Keep this draft');
+  await act(async () => (host.querySelector('.mo-history') as HTMLButtonElement).click());
+  expect(history).toHaveBeenCalledOnce();
+  expect(onSubmit).not.toHaveBeenCalled();
+  expect(host.querySelector('input')?.value).toBe('Keep this draft');
+});
 
 describe('MorphOrb interaction lifecycle', () => {
   it('rejects blank questions and completes two questions with focus restored between them', async () => {

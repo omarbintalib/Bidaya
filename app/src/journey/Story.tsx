@@ -13,6 +13,8 @@ import Intro from './Intro';
 import { createActiveStore, useActive, type ActiveStore } from './activeStore';
 import { PeopleProvider, PersonDialog } from './People';
 import Timeline from './Timeline';
+import ChatHistory, { chatCopy } from './ChatHistoryPanel';
+import { useChatHistory } from './chatHistory';
 
 /**
  * The Journey as a scroll-driven story: a column of steps (chapter openings, events, a question at the
@@ -308,8 +310,11 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
   const stay = useRef(false);
   // On wide screens a question goes straight into a card at the top of the story column (thinking, then the
   // answer), and the current event slides down beneath it — nothing covers the map or the story.
-  const [answerCard, setAnswerCard] = useState<{ q: string; a: string | null; key: number } | null>(null);
-  const thinking = useRef(0);
+  const [answerCard, setAnswerCard] = useState<{ q: string; a: string | null; key: number; locale: Locale; keepPlace: boolean } | null>(null);
+  const { chats, remember, clear: clearChats } = useChatHistory();
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const chatSequence = useRef(Math.max(Date.now(), ...chats.map(chat => chat.id)));
+  const openHistory = useCallback(() => setHistoryOpen(true), []);
   const [returnTo, setReturnTo] = useState<{ step: number; label: string } | null>(null);
   const stepLabel = useCallback((i: number) => {
     const s = steps[i];
@@ -319,7 +324,6 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     return text.summaryKicker;
   }, [steps, events, locale, text]);
   const goBack = useCallback(() => { if (returnTo) goToStep(returnTo.step); setReturnTo(null); }, [returnTo, goToStep]);
-  useEffect(() => () => window.clearTimeout(thinking.current), []);
   useLayoutEffect(() => {
     // Push the open event card below the answer card (a visual shift only, so scroll tracking is unaffected).
     const page = column.current?.closest<HTMLElement>('.journey-page');
@@ -356,13 +360,17 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     return onIdle(() => setAskHint(suggestFor(data, current, locale, 1)[0] ?? null), 1500);
   }, [step.kind, current, data, locale, intro]);
   const onAsk = useCallback((question: string) => {
+    const record = (reply: string) => {
+      remember({ id: ++chatSequence.current, question, answer: reply, locale });
+      return reply;
+    };
     if (QUIZ_ASK.test(question)) {
       // "Quiz me": a question on the map from where the reader is, or say plainly that none is left here.
       const next = pickQuick();
       setWalk(null);
       setQuick(next);
       if (next.q) window.setTimeout(() => setAskOpen(false), 1600);
-      return next.q ? text.quizFromAsk : next.empty === 'later' ? text.quizLater : text.quizNoneLeft;
+      return record(next.q ? text.quizFromAsk : next.empty === 'later' ? text.quizLater : text.quizNoneLeft);
     }
     const result = answer(data, question, locale);
     const keep = stay.current;
@@ -373,23 +381,16 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
       if (there !== undefined && there !== from) setReturnTo(r => r ?? { step: from, label: stepLabel(from) });
       window.setTimeout(() => goToEvent(result.event!), 400);
     }
-    return result.text;
-  }, [data, locale, goToEvent, pickQuick, text, events, stepOfEvent, stepLabel]);
+    return record(result.text);
+  }, [data, locale, goToEvent, pickQuick, text, events, stepOfEvent, stepLabel, remember]);
 
   const focusAskBar = () => document.querySelector<HTMLInputElement>('.ask-bar input')?.focus();
   const askAbout = useCallback((question?: string, keepPlace = false) => {
     setQuick(null);
     if (!wide) { setAskOpen(true); if (question) { stay.current = keepPlace; suggest(question); } return; }
     if (!question) return;
-    const key = Date.now();
-    window.clearTimeout(thinking.current);
-    setAnswerCard({ q: question, a: null, key });
-    thinking.current = window.setTimeout(() => {
-      stay.current = keepPlace;
-      const reply = onAsk(question);
-      setAnswerCard(c => (c && c.key === key ? { ...c, a: reply } : c));
-    }, reducedMotion ? 0 : 750);
-  }, [wide, suggest, onAsk, reducedMotion]);
+    setAnswerCard({ q: question, a: null, key: ++chatSequence.current, locale, keepPlace });
+  }, [wide, suggest, locale]);
 
   const begin = () => {
     try { sessionStorage.setItem('bidaya.intro.seen', '1'); } catch { /* storage unavailable */ }
@@ -424,8 +425,14 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
           <span className="tb-long">{text.ask}</span><span className="tb-short">{text.askShort}</span>
         </button>}
       </div>
-      <AskPanel open={askOpen} onClose={closeAsk} locale={locale} reducedMotion={reducedMotion} onAsk={onAsk} ask={ask} onSuggest={suggest} back={returnTo} onBack={goBack} />
+      <AskPanel open={askOpen} onClose={closeAsk} locale={locale} reducedMotion={reducedMotion} onAsk={onAsk} ask={ask} onSuggest={suggest} back={returnTo} onBack={goBack} onHistory={openHistory} />
       {answerCard && <AnswerCard key={answerCard.key} card={answerCard} locale={locale} back={returnTo} onBack={goBack}
+        reducedMotion={reducedMotion} onAnswer={question => {
+          stay.current = answerCard.keepPlace;
+          const reply = onAsk(question);
+          setAnswerCard(card => card?.key === answerCard.key ? { ...card, a: reply } : card);
+          return reply;
+        }}
         onClose={() => { setAnswerCard(null); setReturnTo(null); }} onAgain={() => { setAnswerCard(null); focusAskBar(); }} />}
     </nav>
     {built && <div className="scrolly">
@@ -462,7 +469,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
           </div>
 
 
-          {wide && !quick && !walk && <AskBar locale={locale} hint={askHint} onAsk={askAbout} />}
+          {wide && !quick && !walk && <AskBar locale={locale} hint={askHint} onAsk={askAbout} onHistory={openHistory} />}
 
           {quick && wide && <QuickQuiz quick={quick} data={data} locale={locale} chosen={quick.q ? progress.answers[quick.q.id] ?? null : null}
             onAnswer={answerQuick} onNext={() => setQuick(pickQuick(quick.q?.id))} onClose={() => setQuick(null)} />}
@@ -493,6 +500,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
       onAnswer={answerQuick} onNext={() => setQuick(pickQuick(quick.q?.id))} onClose={() => setQuick(null)} />}
     {undatedOpen && <UndatedDialog verses={unplaced} locale={locale} onClose={() => setUndatedOpen(false)} />}
     {person && <PersonDialog key={person.id} person={person} data={data} locale={locale} onClose={() => setPerson(null)} onEvent={goToEvent} />}
+    {historyOpen && <ChatHistory locale={locale} chats={chats} onClear={clearChats} onClose={() => setHistoryOpen(false)} />}
   </PeopleProvider>;
 }
 
@@ -533,14 +541,15 @@ const StepList = memo(function StepList({ steps, data, locale, store, goToStep, 
 });
 
 /** The "Ask the map" panel; memoised so moving through the story leaves the orb untouched. */
-const AskPanel = memo(function AskPanel({ open, onClose, locale, reducedMotion, onAsk, ask, onSuggest, back, onBack }: {
+const AskPanel = memo(function AskPanel({ open, onClose, locale, reducedMotion, onAsk, ask, onSuggest, back, onBack, onHistory }: {
   open: boolean; onClose: () => void; locale: Locale; reducedMotion: boolean; onAsk: (q: string) => string; ask: { text: string; key: number } | null; onSuggest: (q: string) => void;
   back: { label: string } | null; onBack: () => void;
+  onHistory: () => void;
 }) {
   const text = journeyCopy[locale];
   return <section id="ask-panel" className={`ask-panel${open ? ' is-open' : ''}`} aria-label={text.ask} inert={!open}>
     <div className="ask-head"><h2>{text.ask}</h2><button type="button" className="qr-close" onClick={onClose} aria-label={text.close}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" /></svg></button></div>
-    <MorphOrb locale={locale} reducedMotion={reducedMotion} onSubmit={onAsk} minThinkMs={900} ask={ask} />
+    <MorphOrb locale={locale} reducedMotion={reducedMotion} onSubmit={onAsk} minThinkMs={900} ask={ask} onHistory={onHistory} historyLabel={chatCopy[locale].title} />
     {back && <BackButton label={back.label} locale={locale} onClick={() => { onBack(); onClose(); }} />}
     <p className="ai-note">{text.askNote}</p>
     <ul className="ai-suggest" aria-label={text.tryAsking}>
@@ -584,15 +593,16 @@ function BackButton({ label, locale, onClick }: { label: string; locale: Locale;
   </button>;
 }
 
-function AnswerCard({ card, locale, onClose, onAgain, back, onBack }: { card: { q: string; a: string | null }; locale: Locale; onClose: () => void; onAgain: () => void; back: { label: string } | null; onBack: () => void }) {
+function AnswerCard({ card, locale, reducedMotion, onAnswer, onClose, onAgain, back, onBack }: { card: { q: string; a: string | null; key: number; locale: Locale }; locale: Locale; reducedMotion: boolean; onAnswer: (question: string) => string; onClose: () => void; onAgain: () => void; back: { label: string } | null; onBack: () => void }) {
   const text = journeyCopy[locale];
-  return <section className="answer-card" aria-label={text.ask} role="status">
+  const respond = useRef(onAnswer);
+  const [revealed, setRevealed] = useState(false);
+  return <section className="answer-card" aria-label={text.ask}>
     <p className="answer-kicker"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor" /></svg>{text.yourQuestion}</p>
-    <h3>{card.q}</h3>
-    {card.a === null
-      ? <p className="answer-thinking" aria-live="polite"><i /><i /><i /><span>{text.searching}</span></p>
-      : <>
-        <p className="answer-text">{card.a}</p>
+    <h3 lang={card.locale} dir="auto">{card.q}</h3>
+    <MorphOrb docked request={{ id: card.key, text: card.q }} locale={locale} answerLocale={card.locale}
+      reducedMotion={reducedMotion} onSubmit={respond.current} minThinkMs={900} onAnswered={() => setRevealed(true)} onCancel={onClose} />
+    {revealed && <>
         <div className="answer-actions">
           {back && <BackButton label={back.label} locale={locale} onClick={onBack} />}
           <button type="button" className="btn-quiet" onClick={onAgain}>{text.askAgain}</button>
@@ -603,11 +613,11 @@ function AnswerCard({ card, locale, onClose, onAgain, back, onBack }: { card: { 
 }
 
 /** Always on the map: type a question, or press Enter to ask the suggested one. */
-function AskBar({ locale, hint, onAsk }: { locale: Locale; hint: string | null; onAsk: (question?: string, keepPlace?: boolean) => void }) {
+function AskBar({ locale, hint, onAsk, onHistory }: { locale: Locale; hint: string | null; onAsk: (question?: string, keepPlace?: boolean) => void; onHistory: () => void }) {
   const text = journeyCopy[locale];
   const [q, setQ] = useState('');
   return <form className="ask-bar" data-map-overlay role="search" aria-label={text.ask} onSubmit={e => { e.preventDefault(); const typed = q.trim(); onAsk(typed || hint || undefined, !typed); setQ(''); }}>
-    <svg className="ask-bar-spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor" /></svg>
+    <button type="button" className="ask-bar-history" onClick={onHistory} aria-label={chatCopy[locale].title} aria-haspopup="dialog"><svg className="ask-bar-spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor" /></svg></button>
     <input value={q} onChange={e => setQ(e.target.value)} placeholder={hint ? text.askTry(hint) : text.askPlaceholder} aria-label={text.ask} enterKeyHint="send" />
     <button type="submit" aria-label={text.askSend}><svg viewBox="0 0 20 20" aria-hidden="true"><path d={locale === 'ar' ? 'M16 10H4m5-5-5 5 5 5' : 'M4 10h12m-5-5 5 5-5 5'} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
   </form>;

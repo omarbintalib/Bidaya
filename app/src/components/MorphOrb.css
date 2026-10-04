@@ -65,6 +65,15 @@
 @keyframes input-shake { 0%, 100% { translate: 0; } 25% { translate: -4px; } 75% { translate: 4px; } }
 html[data-reduced-motion='true'] .mo-root *, html[data-reduced-motion='true'] .mo-root *::before, html[data-reduced-motion='true'] .mo-root *::after { animation: none !important; transition: none !important; }
 html[data-reduced-motion='true'] .mo-out { display: none; }
+
+/* Response-only mode adapted from islamathon's Journey AI stage. */
+.mo-root[data-docked='true'] { height: 280px !important; min-height: 0 !important; }
+.mo-root[data-docked='true'] .mo-input { display: none; }
+.mo-root[data-docked='true'] .mo-answer { overflow: auto; max-height: 220px; overscroll-behavior: contain; }
+.mo-root[data-docked='true'] :is(.mo-reset, .mo-cancel) { display: none; }
+.mo-history { flex: none; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--brass); }
+.mo-history .mo-spark { width: 32px; height: 32px; color: currentColor; }
+.mo-history:hover { background: color-mix(in srgb, var(--brass) 10%, transparent); }
 @media (max-width: 420px) {
   .mo-input { gap: 10px; }
   .mo-field { font-size: var(--text-body); }

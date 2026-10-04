@@ -64,6 +64,7 @@ Names of the Companions in `6_sahaba.csv` are linked where they appear in the ev
 - **Keyboard support:** menu and dialog focus management, Escape dismissal, and keyboard-operable preference controls.
 - **Reduced motion:** respects the operating system preference and the in-app setting.
 - **AI interaction demo:** animated question, processing, answer, cancel, and reset states.
+- **AI responses and history:** the map pill keeps its size while the response uses the globe-to-card animation from the original Islamathon UI. The enlarged AI icon opens the last 50 question/answer pairs, saved in this browser under `bidaya.chats.v1`, with a clear-history action. When storage is unavailable, history works for the current visit. Long responses scroll inside their card; reduced motion is supported.
 - **Local fonts:** typography assets are bundled with the application; no font CDN is required at runtime.
 
 ## Technology
@@ -217,7 +218,9 @@ npm test
 npm run build
 ```
 
-The current suite includes 65 tests across seven files, covering the data, AI lifecycle and cleanup, navigation/history behavior, 404 recovery, Journey retries, page-render recovery, landing entry links and image fallbacks, language persistence and bounded transitions, the finite book animation, transition geometry, waypoint endpoints, reduced motion, preference persistence, storage failures, dialog focus, and preference changes during AI processing.
+The current suite includes 69 tests across eight files, covering the data, AI lifecycle and cleanup, response-only animation under Strict Mode, chat history persistence and storage failures, navigation/history behavior, 404 recovery, Journey retries, page-render recovery, landing entry links and image fallbacks, language persistence and bounded transitions, the finite book animation, transition geometry, waypoint endpoints, reduced motion, preference persistence, dialog focus, and preference changes during AI processing.
+
+With a local server running, `node scripts/check-ai-response.cjs http://127.0.0.1:5184` checks the real response animation, unchanged composer height, icon size, history persistence, clearing, keyboard dismissal, and Arabic/English desktop/mobile layouts. It requires Playwright and Chrome, as do the landing browser scripts.
 
 Saved browser reviews in `qa/` cover desktop and mobile layouts, both languages, navigation, transitions, enlarged text, contrast themes, and compact viewports. These screenshots document prior reviews; they are not an automated browser test suite. A physical mobile keyboard and browser page zoom have not been verified.
 

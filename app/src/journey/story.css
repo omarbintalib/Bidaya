@@ -23,7 +23,7 @@
 .ask-panel { position: absolute; top: calc(100% + 8px); inset-inline-start: clamp(24px, 4.8vw, 88px); z-index: 31; width: min(var(--story-w, 440px), calc(100vw - 32px)); max-height: calc(var(--viewport-height, 100svh) - var(--toolbar-h) - 32px); overflow: auto;
   padding: 14px 16px 16px; background: var(--paper); border: 1px solid var(--brass); box-shadow: 0 20px 60px #331b0d33; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .2s, transform .2s, visibility .2s; }
 .ask-panel.is-open { opacity: 1; visibility: visible; transform: none; }
-.answer-card { position: absolute; top: calc(100% + 8px); inset-inline-start: clamp(24px, 4.8vw, 88px); z-index: 31; width: min(var(--story-w, 440px), calc(100vw - 32px)); max-height: 42vh; overflow: auto;
+.answer-card { position: absolute; top: calc(100% + 8px); inset-inline-start: clamp(24px, 4.8vw, 88px); z-index: 31; width: min(var(--story-w, 440px), calc(100vw - 32px)); max-height: min(560px, calc(var(--viewport-height, 100svh) - var(--toolbar-h) - 24px)); overflow: auto;
   padding: 14px 18px 14px; background: var(--paper); border: 1px solid var(--brass); border-inline-start-width: 3px; box-shadow: 0 14px 40px #331b0d24; transform-origin: top; }
 .answer-kicker { display: flex; align-items: center; gap: 6px; margin: 0; color: var(--brass); font-size: calc(13px * var(--text-scale)); }
 .answer-kicker svg { width: 13px; height: 13px; }
@@ -35,11 +35,6 @@
 .back-btn span { white-space: nowrap; flex: none; }
 .back-btn b { font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ask-panel .back-btn { margin: 4px auto 0; display: flex; }
-.answer-thinking { display: flex; align-items: center; gap: 5px; margin: 2px 0 4px; color: var(--muted); font-size: var(--text-small); }
-.answer-thinking i { width: 6px; height: 6px; border-radius: 50%; background: var(--brass); animation: thinking-dot 1.2s ease-in-out infinite; }
-.answer-thinking i:nth-child(2) { animation-delay: .15s; }
-.answer-thinking i:nth-child(3) { animation-delay: .3s; }
-.answer-thinking span { margin-inline-start: 6px; }
 .answer-text { animation: fade-in .35s ease both; }
 .answer-actions .btn-quiet { min-height: 38px; padding: 6px 14px; }
 /* The open event card slides down beneath the answer card. */
@@ -147,6 +142,20 @@
 .ask-bar:focus-within { box-shadow: 0 0 0 3px color-mix(in srgb, var(--brass) 30%, transparent), 0 10px 30px #331b0d1f; }
 .ask-bar button { flex: none; width: 40px; height: 40px; border: 0; border-radius: 50%; background: var(--ink); color: var(--button-ink); display: grid; place-items: center; cursor: pointer; }
 .ask-bar button svg { width: 18px; height: 18px; }
+.ask-bar .ask-bar-history { background: transparent; color: var(--brass); }
+.ask-bar .ask-bar-history svg { width: 32px; height: 32px; }
+.ask-bar .ask-bar-history:hover { background: color-mix(in srgb, var(--brass) 10%, transparent); }
+
+.chat-history { width: min(640px, calc(100vw - 32px)); max-height: min(720px, calc(var(--viewport-height, 100svh) - 32px)); padding: clamp(20px, 3vw, 32px); border: 1px solid var(--brass); background: var(--paper); color: var(--ink); overflow: auto; overscroll-behavior: contain; }
+.chat-history::backdrop { background: #21130b80; }
+.chat-history header { display: flex; align-items: start; justify-content: space-between; gap: 20px; }
+.chat-history h2 { margin: 0; font-size: calc(26px * var(--text-scale)); }
+.chat-history header p { margin: 8px 0 20px; color: var(--muted); font-size: var(--text-small); }
+.chat-history-list { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 16px; }
+.chat-history-list li { padding: 20px; border: 1px solid var(--border); background: var(--surface); }
+.chat-history-list h3 { margin: 0 0 12px; color: var(--brass); font-size: var(--text-body); overflow-wrap: anywhere; }
+.chat-history-list p, .chat-history-empty { margin: 0; font-size: var(--text-body); line-height: var(--reading-line-height); white-space: pre-wrap; overflow-wrap: anywhere; }
+.chat-history-empty { padding-block: 24px; }
 .quick-quiz { max-height: calc(100% - 180px); overflow-y: auto; overscroll-behavior: contain; }
 .quick-quiz h3 { padding-inline-end: 28px; font-size: calc(19px * var(--text-scale)); line-height: 1.5; }
 .quick-quiz .quiz-hint { margin-bottom: 10px; }

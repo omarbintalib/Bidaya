@@ -15,6 +15,13 @@ export interface MorphOrbProps {
   ask?: { text: string; key: number } | null;
   /** Called once an answer has finished appearing. */
   onAnswered?: () => void;
+  /** Reuse the source app's response-only mode without replacing the map composer. */
+  docked?: boolean;
+  request?: { id: number; text: string };
+  answerLocale?: Locale;
+  onHistory?: () => void;
+  historyLabel?: string;
+  onCancel?: () => void;
 }
 
 /* ─────────────────────────── geometry ─────────────────────────── */
@@ -578,6 +585,7 @@ function createRuntime(env: Env): Runtime {
     if (text) text.textContent = body;
     root.append(probe);
     geo.ch = Math.max(CARD_H, Math.ceil(probe.getBoundingClientRect().height));
+    if (root.dataset.docked === "true") geo.ch = Math.min(220, geo.ch);
     probe.remove();
     root.style.setProperty('--answer-height', `${geo.ch}px`);
   };
@@ -902,16 +910,18 @@ export default function MorphOrb(props: MorphOrbProps) {
         clearInput: () => setValue(""),
         live: (s) => { if (liveRef.current) liveRef.current.textContent = s; },
         lock: (on) => { form.toggleAttribute("inert", on); },
-        idleReady: () => { if (!root.closest("[inert]")) inputRef.current?.focus({ preventScroll: true }); },
-        focusAnswer: () => { if (!root.closest("[inert]")) answerRef.current?.focus({ preventScroll: true }); },
+        idleReady: () => { if (!propsRef.current.docked && !root.closest("[inert]")) inputRef.current?.focus({ preventScroll: true }); },
+        focusAnswer: () => { if (!root.closest("[inert]") && ![...document.querySelectorAll('dialog[open]')].some(dialog => !dialog.contains(root))) answerRef.current?.focus({ preventScroll: true }); },
       },
     });
     rtRef.current = rt;
 
     const onKey = (e: KeyboardEvent) => {
+      if (root.closest('[inert]') || [...document.querySelectorAll('dialog[open]')].some(dialog => !dialog.contains(root))) return;
       if (e.key === "Escape" && phaseRef.current !== "idle" && phaseRef.current !== "reset") {
         e.preventDefault();
         rt.escape();
+        propsRef.current.onCancel?.();
       }
     };
     const onResize = () => rt.home();
@@ -943,6 +953,7 @@ export default function MorphOrb(props: MorphOrbProps) {
       window.clearTimeout(timers.current.flash);
       rt.destroy();
       rtRef.current = null;
+      lastRequest.current = undefined;
     };
   }, []);
 
@@ -962,6 +973,15 @@ export default function MorphOrb(props: MorphOrbProps) {
     onSubmit: propsRef.current.onSubmit ?? defaultSubmit,
     minThink: propsRef.current.minThinkMs ?? 4600,
   });
+  const lastRequest = useRef<number | undefined>(undefined);
+  useEffect(() => {
+    const request = props.request, rt = rtRef.current;
+    if (!request || !rt || lastRequest.current === request.id) return;
+    lastRequest.current = request.id;
+    rt.hard();
+    lastTextRef.current = request.text;
+    rt.start(request.text, makeCfg());
+  }, [props.request]);
 
   const shake = () => {
     const a = actorRef.current;
@@ -1058,7 +1078,7 @@ export default function MorphOrb(props: MorphOrbProps) {
   };
 
   return (
-    <div className="mo-root" data-phase={phase} ref={rootRef}>
+    <div className="mo-root" data-phase={phase} data-docked={props.docked ? "true" : undefined} ref={rootRef}>
       <div className="mo-bg" aria-hidden="true" />
       <div className="mo-halo" aria-hidden="true" />
 
@@ -1078,11 +1098,13 @@ export default function MorphOrb(props: MorphOrbProps) {
           <div className="mo-card" aria-hidden="true" />
           <div className="mo-ring" aria-hidden="true" />
 
-          <form className="mo-input" ref={formRef} onSubmit={onFormSubmit} autoComplete="off">
+          <form className="mo-input" ref={formRef} onSubmit={onFormSubmit} autoComplete="off" hidden={props.docked}>
+            <button type="button" className="mo-history" onClick={props.onHistory} aria-haspopup="dialog" aria-label={props.historyLabel ?? (props.locale === 'en' ? 'Previous chats' : 'المحادثات السابقة')} disabled={!props.onHistory}>
             <svg className="mo-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M10 3.5l1.7 4.8 4.8 1.7-4.8 1.7L10 16.5l-1.7-4.8L3.5 10l4.8-1.7L10 3.5z" />
               <path d="M18 14.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8z" />
             </svg>
+            </button>
             <input
               ref={inputRef}
               className="mo-field"
@@ -1112,7 +1134,7 @@ export default function MorphOrb(props: MorphOrbProps) {
               <i className="mo-a-dot" aria-hidden="true" />
               <span>{COPY.answerTitle}</span>
             </div>
-            <p className="mo-a-body" ref={bodyRef}>
+            <p className="mo-a-body" ref={bodyRef} lang={props.answerLocale ?? props.locale} dir="auto">
               {words.map((w, i) => (
                 <React.Fragment key={i}>
                   <span className="mo-w">{w}</span>{" "}
