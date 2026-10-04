@@ -52,6 +52,9 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
   }, []);
   const events = person.events.map(n => data.byNumber.get(n)).filter(e => e !== undefined).sort((a, b) => a.order - b.order);
   const title = person.name[locale];
+  const sources = person.facts.filter((f, i, all) => all.findIndex(g => g.source === f.source) === i);
+  // Dorar events are grouped into one item ("الدرر السنية: حدث 14، حدث 42"); other references follow it.
+  const dorar = sources.filter(f => f.url && f.source.startsWith('الدرر السنية · ')), others = sources.filter(f => !dorar.includes(f));
 
   return <dialog ref={dialog} className="person-dialog" aria-labelledby="person-title" onClose={onClose} onClick={e => { if (e.target === dialog.current) onClose(); }}>
     <header className="pd-head">
@@ -71,14 +74,17 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
         {person.death && <div><dt>{text.death}</dt><dd lang="ar">{person.death}</dd></div>}
       </dl>}
       {locale === 'en' && <p className="pd-note">{text.bioInArabic}</p>}
-      {/* Each sourced fact, with the source's own words beneath it; the one-line summary is these facts joined. */}
-      {person.facts.length > 0
-        ? <ul className="pd-facts-list" lang="ar" dir="rtl">{person.facts.map((f, i) => <li key={i}>
-            <p>{f.text}</p>
-            <q className="pd-quote">{f.quote}</q>
-            {f.url ? <a href={f.url} target="_blank" rel="noreferrer">{f.source}</a> : <span className="pd-fact-src">{f.source}</span>}
-          </li>)}</ul>
-        : <p className="pd-bio" lang="ar" dir="rtl">{person.bio}</p>}
+      <p className="pd-bio" lang="ar" dir="rtl">{person.bio}</p>
+      {/* Where the summary comes from: one short line of sources, and the sources' own words on request. */}
+      {sources.length > 0 && <p className="pd-sources" lang="ar" dir="rtl">
+        <span>{text.sourcesLabel}</span>
+        {dorar.length > 0 && <span>الدرر السنية: {dorar.map((f, i) => <span key={f.source}>{i > 0 && '، '}<a href={f.url!} target="_blank" rel="noreferrer">{f.source.replace(/^الدرر السنية · /, '')}</a></span>)}</span>}
+        {others.map((f, i) => <span key={f.source}>{(dorar.length > 0 || i > 0) && ' · '}{f.url ? <a href={f.url} target="_blank" rel="noreferrer">{f.source}</a> : f.source}</span>)}
+      </p>}
+      {person.facts.length > 0 && <details className="pd-quotes">
+        <summary>{text.sourceTexts(person.facts.length)}</summary>
+        <ul lang="ar" dir="rtl">{person.facts.map((f, i) => <li key={i}><q className="pd-quote">{f.quote}</q><small>{f.source}</small></li>)}</ul>
+      </details>}
       {events.length > 0 && <section className="pd-events">
         <h3>{text.personEvents}</h3>
         <ul>{events.map(e => {

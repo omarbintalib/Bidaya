@@ -249,4 +249,4 @@ The map carries an Ask bar (on wide screens it is the only way in; phones keep t
 
 `vercel.json` at the repository root tells Vercel to install and build the app from `app/` (the data files at the root are copied into `app/dist/data/` during the build) and to serve `app/dist`. Its rewrite sends every page path (such as `/journey`) to `index.html`, so opening or refreshing a page never gives a 404; real files (`/assets/…`, `/data/…`) are served as they are. If the Vercel project's Root Directory is set to `app` instead, `app/vercel.json` does the same.
 
-A person's card lists their sourced facts from `7_sahaba_references.csv` (the fact, the source's own words, and the Dorar event or Sahihayn hadith it comes from), then the events they appear in, each with the sentence of Dorar's text that names them.
+A person's card shows their cited summary, one line of its sources (Dorar events and Sahihayn hadith, from `7_sahaba_references.csv`), the sources' own words in a section that opens on request, then the events they appear in, each with the sentence of Dorar's text that names them.

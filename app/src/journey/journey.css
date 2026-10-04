@@ -127,12 +127,13 @@ html[data-compact-viewport='true'] .journey-page .story-timeline { display: none
 .pd-body { padding: 18px 26px 24px; }
 .pd-note { margin: 0 0 8px; color: var(--muted); font-size: calc(14px * var(--text-scale)); }
 .pd-bio { margin: 0; font-size: var(--text-body); line-height: calc(var(--reading-line-height) + .3); }
-.pd-facts-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
-.pd-facts-list li { padding-inline-start: 14px; border-inline-start: 2px solid var(--brass); }
-.pd-facts-list p { margin: 0 0 6px; font-size: var(--text-body); font-weight: 600; line-height: calc(var(--reading-line-height) + .2); }
-.pd-facts-list .pd-quote { border: 0; padding: 0; margin-bottom: 6px; }
-.pd-facts-list a, .pd-fact-src { font-size: calc(13px * var(--text-scale)); color: var(--muted); }
-.pd-facts-list a { text-decoration-color: var(--brass); text-underline-offset: .2em; }
+.pd-sources { margin: 8px 0 0; color: var(--muted); font-size: calc(13px * var(--text-scale)); line-height: 1.8; }
+.pd-sources a { color: var(--muted); text-decoration-color: var(--brass); text-underline-offset: .2em; }
+.pd-quotes { margin-top: 10px; }
+.pd-quotes summary { cursor: pointer; color: var(--brass); font-size: calc(14px * var(--text-scale)); width: fit-content; }
+.pd-quotes ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 10px; }
+.pd-quotes li { display: grid; gap: 2px; }
+.pd-quotes small { color: var(--muted); font-size: calc(12px * var(--text-scale)); }
 .pd-death { margin: 12px 0 0; color: var(--muted); font-size: var(--text-small); }
 .pd-events { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
 .pd-events h3 { margin: 0 0 10px; font-size: calc(15px * var(--text-scale)); color: var(--muted); }
@@ -141,6 +142,7 @@ html[data-compact-viewport='true'] .journey-page .story-timeline { display: none
 .pd-events button:hover { border-color: var(--brass); }
 .pd-events small { color: var(--muted); white-space: nowrap; }
 .pd-ev-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-weight: 600; }
+.pd-events .pd-quote { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .pd-quote { display: block; padding-inline-start: 10px; border-inline-start: 2px solid color-mix(in srgb, var(--brass) 55%, transparent); color: var(--ink); opacity: .85; font-size: var(--text-small); line-height: 1.8; quotes: '«' '»'; }
 [lang='en'].pd-quote { quotes: '“' '”'; line-height: 1.6; }
 .pd-quote-note { margin: 8px 0 0; color: var(--muted); font-size: calc(13px * var(--text-scale)); }
