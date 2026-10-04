@@ -25,9 +25,9 @@ export default function WaypointMenu({ locale, page, busy, trigger, launcher, on
         const box = dot.getBoundingClientRect();
         return { x: box.left - bounds.left + box.width / 2, y: box.top - bounds.top + box.height / 2, radius: box.width / 2 };
       });
-      if (!bounds.width || dots.length !== 3) return;
+      if (!bounds.width || dots.length < 2) return;
       const vertical = window.matchMedia('(max-width: 700px)').matches;
-      const paths = dots.slice(0, 2).map((dot, i) => connectWaypoints(dot, dots[i + 1], vertical, (i % 2 ? -1 : 1) * (locale === 'ar' ? -1 : 1)).path);
+      const paths = dots.slice(0, -1).map((dot, i) => connectWaypoints(dot, dots[i + 1], vertical, (i % 2 ? -1 : 1) * (locale === 'ar' ? -1 : 1)).path);
       setGeometry(old => old.width === bounds.width && old.height === bounds.height && old.paths.join() === paths.join() ? old : { width: bounds.width, height: bounds.height, paths });
     };
     const schedule = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(measure); };
@@ -68,7 +68,7 @@ export default function WaypointMenu({ locale, page, busy, trigger, launcher, on
       <button className="menu-close" aria-label={text.close} onClick={onClose}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" /></svg></button>
       <p className="menu-eyebrow">{locale === 'ar' ? 'المكان · الزمان · الحكاية' : 'PLACE · TIME · STORY'}</p>
       <h2 id="destination-title">{text.choose}</h2>
-      <nav ref={routeRef} className="waypoint-route" aria-label={text.choose}>
+      <nav ref={routeRef} className="waypoint-route" aria-label={text.choose} style={{ ['--stops' as string]: routes.length }}>
         <svg className="route-line" viewBox={`0 0 ${geometry.width} ${geometry.height}`} width={geometry.width} height={geometry.height} fill="none" aria-hidden="true">{geometry.paths.map((path, i) => <path key={i} pathLength="1" d={path} />)}</svg>
         {routes.map(route => <a key={route.id} className="waypoint" href={route.path} aria-current={page === route.id ? 'page' : undefined} onClick={event => {
           if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
@@ -80,7 +80,7 @@ export default function WaypointMenu({ locale, page, busy, trigger, launcher, on
         </a>)}
       </nav>
       {launcher}
-      <div className="menu-footnote"><WaypointSymbol /><span>{locale === 'ar' ? 'ثلاث وجهات، وحكاية واحدة' : 'Three destinations. One story.'}</span></div>
+      <div className="menu-footnote"><WaypointSymbol /><span>{text.footnote}</span></div>
     </div>
   </div>;
 }

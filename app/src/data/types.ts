@@ -24,7 +24,8 @@ export interface SirahEvent {
   urlEn: string | null;
 }
 
-export interface Place { key: string; name: Text; lat: number; lon: number; kind: string; confirmed: boolean }
+/** `reached`: Dorar event number from which Islam had reached this place (sourced in the CSV), if any. */
+export interface Place { key: string; name: Text; lat: number; lon: number; kind: string; confirmed: boolean; events: number; reached: number | null }
 
 export interface VerseLink {
   type: LinkType;
@@ -56,11 +57,17 @@ export interface Verse {
   link: VerseLink | null;
 }
 
-export interface Person { id: string; name: Text; female: boolean; bio: string; death: string | null; events: number[]; verses: string[] }
+export interface Person {
+  id: string; name: Text; kind: string; category: string; bio: string;
+  /** When they became Muslim (or that they did not), as the sources state; null when not stated. */
+  islam: string | null;
+  death: string | null; events: number[]; verses: string[];
+  aliases: Text[];
+}
 
 export interface Route { id: string; kind: 'sirah' | 'trade'; name: Text; events: number[]; note: Text; coords: [number, number][] }
 
-export interface MapLabel { id: string; kind: 'region' | 'power' | 'sea'; name: Text; lat: number; lon: number; size: 'l' | 'm' | 's'; rotate: number; note: string }
+export interface MapLabel { id: string; kind: 'region' | 'power' | 'sea'; name: Text; lat: number; lon: number; size: 'l' | 'm' | 's'; rotate: number; note: string; reached: number | null; reachNote: string }
 
 export interface Sirah {
   events: SirahEvent[];

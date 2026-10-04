@@ -12,9 +12,11 @@ interface Props {
   reducedMotion: boolean;
   onIndex: (i: number) => void;
   onTogglePlay: () => void;
+  /** Extra control shown at the end of the bar. */
+  extra?: React.ReactNode;
 }
 
-export default function Timeline({ events, index, locale, playing, reducedMotion, onIndex, onTogglePlay }: Props) {
+export default function Timeline({ events, index, locale, playing, reducedMotion, onIndex, onTogglePlay, extra }: Props) {
   const text = journeyCopy[locale];
   const track = useRef<HTMLDivElement>(null);
   const current = events[index];
@@ -64,6 +66,7 @@ export default function Timeline({ events, index, locale, playing, reducedMotion
         <span className="tl-count">{text.count(index + 1, events.length)}</span>
         <b>{current?.title[locale] || current?.title.ar}</b>
       </p>
+      {extra}
     </div>
 
     <div className="tl-scroll" ref={track} role="listbox" aria-label={text.timeline} aria-activedescendant={`tl-${index}`} onKeyDown={onKey}>

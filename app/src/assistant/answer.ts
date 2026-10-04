@@ -50,7 +50,7 @@ function indexFor(data: Sirah) {
   if (index) return index;
   const docs: Doc[] = [
     ...data.events.map(e => ({ kind: 'event' as const, item: e, fields: [field(4, e.title.ar, e.title.en), field(2, e.placeName.ar, e.placeName.en), field(1, e.text.ar, e.text.en)] })),
-    ...data.people.map(p => ({ kind: 'person' as const, item: p, fields: [field(5, p.name.ar, p.name.en), field(0.6, p.bio)] })),
+    ...data.people.map(p => ({ kind: 'person' as const, item: p, fields: [field(5, p.name.ar, p.name.en, ...p.aliases.flatMap(a => [a.ar, a.en])), field(0.6, p.bio)] })),
     ...data.verses.filter(v => v.link?.type !== 'placeholder' || v.reason).map(v => ({ kind: 'verse' as const, item: v, fields: [field(4, `سوره ${v.surah}`, v.surah), field(2.5, v.title.ar, v.title.en), field(0.8, v.reason, v.evidence.en)] })),
   ];
   const df = new Map<string, number>();

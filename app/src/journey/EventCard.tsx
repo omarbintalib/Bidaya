@@ -1,19 +1,24 @@
 import { useState } from 'react';
 import { quranpediaRefs, type QuranRef } from '../data/quranpedia';
-import { dateLine, excerpt, hadithLinks, periodName, peopleFor, versesFor } from '../data/select';
+import { dateLine, excerpt, hadithLinks, hijri, periodName, peopleFor, versesFor } from '../data/select';
 import type { Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
 import QuranReader from './QuranReader';
 import { PeopleText, usePeople } from './People';
 
-/** Arabic-only source text keeps its own language and direction inside the English interface. */
-/** Characters of the event text shown before "Read the full text" — about three lines. */
-const EXCERPT = 200;
+/** The opening of an event's text: its first sentence when that is a readable length, else about two lines. */
+function lead(body: string) {
+  const m = body.slice(40, 260).search(/[.!؟](\s|$)/);
+  return m >= 0 ? body.slice(0, 40 + m + 1).trim() : excerpt(body, 180);
+}
 
+/** Arabic-only source text keeps its own language and direction inside the English interface. */
 const Ar = ({ children, as: Tag = 'span' }: { children: React.ReactNode; as?: 'span' | 'p' }) => <Tag lang="ar" dir="rtl">{children}</Tag>;
 
-export default function EventCard({ data, event, locale }: { data: Sirah; event: SirahEvent; locale: Locale }) {
+interface CardProps { data: Sirah; event: SirahEvent; locale: Locale; chapter: number; yearEvents: SirahEvent[]; onPick: (n: number) => void }
+
+export default function EventCard({ data, event, locale, chapter, yearEvents, onPick }: CardProps) {
   const text = journeyCopy[locale];
   const [open, setOpen] = useState(false);
   const peopleApi = usePeople();
@@ -22,22 +27,38 @@ export default function EventCard({ data, event, locale }: { data: Sirah; event:
   const body = (locale === 'en' && event.text.en) || event.text.ar;
   const bodyLang = body === event.text.ar ? 'ar' : 'en';
   const title = event.title[locale] || event.title.ar;
+  const opening = lead(body), rest = body.slice(opening.replace(/…$/, '').length).trim();
+  const at = yearEvents.findIndex(e => e.n === event.n);
 
   return <article className="ecard" key={event.n} aria-labelledby={`ev-${event.n}`}>
-    <p className="ecard-period"><span />{periodName[locale][event.period]}</p>
+    {yearEvents.length > 1 && <nav className="ecard-year" aria-label={text.yearNav}>
+      <span className="ecard-year-label">{text.inYear(hijri(event.year, locale), at + 1, yearEvents.length)}</span>
+      <ol>{yearEvents.map(e => <li key={e.n}><button type="button" className={e.n === event.n ? 'is-on' : ''} aria-current={e.n === event.n ? 'step' : undefined} title={e.title[locale] || e.title.ar} aria-label={e.title[locale] || e.title.ar} onClick={() => onPick(e.n)} /></li>)}</ol>
+    </nav>}
+    <p className="ecard-period"><span />{text.chapter(chapter)} · {periodName[locale][event.period]}</p>
     <h2 id={`ev-${event.n}`} className="ecard-title" lang={title === event.title.ar ? 'ar' : undefined}>{title}</h2>
-    <dl className="ecard-facts">
-      <div><dt>{text.when}</dt><dd>{dateLine(event, locale) || '—'}</dd></div>
-      <div><dt>{text.place}</dt><dd>{event.placeName[locale] || '—'}{event.precision !== 'exact' && <span className={`prec prec-${event.precision}`}>{text.precision[event.precision]}</span>}</dd></div>
-    </dl>
+    <p className="ecard-meta">
+      <span>{dateLine(event, locale) || '—'}</span>
+      <span aria-hidden="true">·</span>
+      <span>{event.placeName[locale] || '—'}</span>
+      {event.precision !== 'exact' && <span className={`prec prec-${event.precision}`}>{text.precision[event.precision]}</span>}
+    </p>
     {event.inferred && <p className="ecard-flag">{text.inferred}</p>}
 
     {locale === 'en' && !event.text.en && <p className="ecard-flag">{text.noEnglish}</p>}
     <div className="ecard-text" lang={bodyLang} dir={bodyLang === 'ar' ? 'rtl' : 'ltr'}>
-      <p><PeopleText text={open ? body : excerpt(body, EXCERPT)} lang={bodyLang} /></p>
+      <p className="ecard-lead"><PeopleText text={opening} lang={bodyLang} /></p>
+      {open && rest && <p><PeopleText text={rest} lang={bodyLang} /></p>}
     </div>
-    {body.length > EXCERPT && <button type="button" className="ecard-more" aria-expanded={open} onClick={() => setOpen(v => !v)}>{open ? text.readLess : text.readMore}</button>}
+    {rest && <button type="button" className="ecard-more" aria-expanded={open} onClick={() => setOpen(v => !v)}>{open ? text.readLess : text.readMore}</button>}
     <p className="ecard-source">{text.source}: <a href={locale === 'en' && event.urlEn ? event.urlEn : event.url} target="_blank" rel="noreferrer">{text.dorar} · {locale === 'ar' ? 'حدث' : 'event'} {event.n}</a></p>
+
+    {people.length > 0 && <section className="ecard-section">
+      <h3>{text.people}</h3>
+      <ul className="ecard-people">
+        {people.map(p => <li key={p.id}><button type="button" aria-haspopup="dialog" onClick={() => peopleApi?.open(p)}>{p.name[locale]}</button></li>)}
+      </ul>
+    </section>}
 
     {verses.direct.length > 0 && <VerseList title={text.verses} verses={verses.direct} locale={locale} />}
     {verses.context.length > 0 && <VerseList title={text.contextVerses} verses={verses.context} locale={locale} />}
@@ -46,12 +67,6 @@ export default function EventCard({ data, event, locale }: { data: Sirah; event:
       <ul className="verses is-compact">{verses.stage.map(v => <VerseItem key={v.id} v={v} locale={locale} compact />)}</ul>
     </details>}
 
-    {people.length > 0 && <section className="ecard-section">
-      <h3>{text.people}</h3>
-      <ul className="ecard-people">
-        {people.map(p => <li key={p.id}><button type="button" aria-haspopup="dialog" onClick={() => peopleApi?.open(p)}>{p.name[locale]}</button></li>)}
-      </ul>
-    </section>}
   </article>;
 }
 

@@ -59,16 +59,16 @@ const phase = () => host.querySelector('.logo-transition')?.getAttribute('data-p
 const heading = () => host.querySelector('h1');
 
 it('uses distinct real routes and accepts trailing slashes', () => {
-  expect(['/','/spread','/journey','/journey/'].map(pageFromPath)).toEqual(['home','spread','journey','journey']);
+  expect(['/','/spread','/journey','/journey/'].map(pageFromPath)).toEqual(['home','journey','journey','journey']);
 });
 
 describe('navigation lifecycle', () => {
   it('uses the header logo to return home through the same cover and reveal sequence', async () => {
-    await mount('/spread'); await advance(2100); await click('.language-switch');
+    await mount('/journey'); await advance(2100); await click('.language-switch');
     expect(host.querySelector('.brand-home')?.getAttribute('href')).toBe('/');
     expect(host.querySelector('.brand-home')?.getAttribute('aria-label')).toBe('Go to the home page');
     await click('.brand-home'); expect(phase()).toBe('cover');
-    expect(location.pathname).toBe('/spread');
+    expect(location.pathname).toBe('/journey');
     await advance(650); expect(location.pathname).toBe('/'); expect(phase()).toBe('loading');
     await advance(600); expect(phase()).toBe('reveal');
     await advance(850); await advance(20);
@@ -88,7 +88,7 @@ describe('navigation lifecycle', () => {
     await advance(1450); await advance(20); expect(phase()).toBeUndefined();
     expect(document.activeElement).toBe(heading());
     await click('.language-switch');
-    for (const [path, name] of [['/spread', 'Spread of Islam'], ['/journey', 'Islam Journey'], ['/', 'The beginning']]) {
+    for (const [path, name] of [['/journey', 'Islam Journey'], ['/', 'The beginning']]) {
       await navigate(path);
       expect(location.pathname).not.toBe(path);
       expect(phase()).toBe('cover');
@@ -105,13 +105,16 @@ describe('navigation lifecycle', () => {
     expect(vi.getTimerCount()).toBeLessThanOrEqual(1);
   });
 
-  it('supports direct entry at both inner URLs', async () => {
+  it('supports direct entry at Journey and redirects the old Spread address there', async () => {
     await mount('/journey'); await advance(2100);
     expect(heading()?.textContent).toBe('رحلة الإسلام');
     expect(host.querySelector('.mo-root')).not.toBeNull();
-    await pop('/spread'); await advance(2100);
-    expect(heading()?.textContent).toBe('انتشار الإسلام');
+    await pop('/'); await advance(2100);
+    expect(heading()?.textContent).toBe('البداية');
     expect(host.querySelector('.mo-root')).toBeNull();
+    await act(async () => root.unmount()); root = createRoot(host);
+    await mount('/spread'); await advance(2100);
+    expect(location.pathname).toBe('/journey'); expect(heading()?.textContent).toBe('رحلة الإسلام');
   });
 
   it('selecting the current route only dismisses the menu and restores the trigger', async () => {
@@ -136,14 +139,14 @@ describe('navigation lifecycle', () => {
 
   it('resolves the latest history destination during cover, loading, and reveal', async () => {
     await mount(); await advance(2100);
-    await navigate('/spread'); await pop('/journey'); await advance(650);
-    expect(heading()?.textContent).toBe('رحلة الإسلام');
-    await pop('/'); await advance(600);
+    await navigate('/journey'); await pop('/'); await advance(650);
     expect(heading()?.textContent).toBe('البداية');
-    await pop('/spread'); await pop('/journey'); await advance(850);
+    await pop('/journey'); await advance(600);
+    expect(heading()?.textContent).toBe('رحلة الإسلام');
+    await pop('/journey'); await pop('/'); await advance(850);
     expect(phase()).toBe('cover'); // latest history request queues a fresh cover
     await advance(2100);
-    expect(location.pathname).toBe('/journey'); expect(heading()?.textContent).toBe('رحلة الإسلام');
+    expect(location.pathname).toBe('/'); expect(heading()?.textContent).toBe('البداية');
     expect(phase()).toBeUndefined();
   });
 
@@ -156,7 +159,7 @@ describe('navigation lifecycle', () => {
     });
     await act(async () => host.querySelector('form')!.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })));
     await advance(3000); expect(host.querySelector('.mo-root')?.getAttribute('data-phase')).toBe('think');
-    await navigate('/spread'); await advance(2100); await advance(10000);
+    await navigate('/'); await advance(2100); await advance(10000);
     expect(host.querySelector('.mo-answer')).toBeNull();
     await navigate('/journey'); await advance(2100);
     expect(host.querySelector('.mo-root')?.getAttribute('data-phase')).toBe('idle');
@@ -164,7 +167,7 @@ describe('navigation lifecycle', () => {
   });
 
   it('uses a short crossfade in reduced motion without stroke animations', async () => {
-    reduced = true; await mount('/spread'); expect(phase()).toBe('crossfade');
+    reduced = true; await mount('/'); expect(phase()).toBe('crossfade');
     await advance(300); expect(phase()).toBeUndefined(); expect(animate).not.toHaveBeenCalled();
     await navigate('/journey'); await advance(300);
     expect(heading()?.textContent).toBe('رحلة الإسلام'); expect(phase()).toBeUndefined();
@@ -180,7 +183,7 @@ describe('navigation lifecycle', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     await mount(); await advance(650); await advance(20);
     expect(phase()).toBeUndefined(); expect(warn).toHaveBeenCalled();
-    await navigate('/spread'); await advance(650);
+    await navigate('/journey'); await advance(650);
     await act(async () => root.unmount()); root = createRoot(host);
     expect(vi.getTimerCount()).toBeLessThanOrEqual(1); expect(vi.getTimerCount()).toBe(0);
   });

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import { LAND } from '../data/land';
 import type { Sirah, SirahEvent } from '../data/types';
 import type { Locale } from '../i18n';
@@ -20,13 +20,23 @@ interface Props {
   /** Changing this key re-centres on the selected event. */
   focusKey?: string | number;
   caption?: string;
+  /** Current point in the story (ترتيب_العرض): places and regions Islam had reached by then glow. */
+  now?: number;
+  /** Width in px covered by an overlay on the inline-start side; the map centres events in the rest. */
+  inset?: number;
+  /** Content drawn over the map (e.g. the story card). */
+  children?: ReactNode;
+  /** Hide the legend under the map. */
+  legend?: boolean;
 }
+
+interface PlaceLabel { key: string; x: number; y: number; name: string; priority: number; strong: boolean }
 
 interface Pin { key: string; x: number; y: number; events: SirahEvent[]; emphasis: Emphasis; precision: SirahEvent['precision']; name: string }
 
 const RANK: Record<Emphasis, number> = { hidden: 0, past: 1, active: 2, selected: 3 };
 
-export default function HistoricMap({ data, locale, emphasis, selected, activeRoutes = [], onSelect, reducedMotion, focusKey, caption }: Props) {
+export default function HistoricMap({ data, locale, emphasis, selected, activeRoutes = [], onSelect, reducedMotion, focusKey, caption, now, inset = 0, children, legend = true }: Props) {
   const text = mapCopy[locale];
   const frame = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ w: 800, h: 600 });
@@ -73,11 +83,19 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
     if (focusKey === undefined || selected === null) return;
     const e = data.byNumber.get(selected);
     if (!e || e.lat === null || e.lon === null) return;
-    const v = viewRef.current, [x, y] = project(e.lon, e.lat);
-    const margin = 0.18;
-    const inside = x > v.x + v.w * margin && x < v.x + v.w * (1 - margin) && y > v.y + v.h * margin && y < v.y + v.h * (1 - margin);
-    if (!inside) animateTo(centerOn(v, e.lon, e.lat));
-  }, [focusKey, selected, data, animateTo]);
+    const v = viewRef.current, [x, y] = project(e.lon, e.lat), el = frame.current;
+    const W = el?.clientWidth || 800, u = v.w / W, rtl = locale === 'ar';
+    const cover = Math.min(inset, W * 0.6) * u;           // map units hidden under the overlay
+    const left = rtl ? v.x : v.x + cover, right = rtl ? v.x + v.w - cover : v.x + v.w;
+    const mx = (right - left) * 0.15, my = v.h * 0.15;
+    const inside = x > left + mx && x < right - mx && y > v.y + my && y < v.y + v.h - my;
+    // Fly closer when the whole peninsula is in view, so the story moves place to place.
+    const w = v.w > 480 ? 400 : v.w;
+    if (!inside || w !== v.w) {
+      const target = centerOn(v, e.lon, e.lat, w), tu = target.w / W;
+      animateTo(clampView({ ...target, x: target.x + (rtl ? 1 : -1) * Math.min(inset, W * 0.6) / 2 * tu }));
+    }
+  }, [focusKey, selected, data, animateTo, inset, locale]);
 
   // SVG units per screen pixel (the SVG uses "slice", so the larger scale wins).
   const unit = Math.min(view.w / size.w, view.h / size.h);
@@ -100,6 +118,43 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
     return [...groups.values()].sort((a, b) => RANK[a.emphasis] - RANK[b.emphasis]);
   }, [data, emphasis, locale]);
 
+  // Spread of Islam: places and regions whose sourced "Islam reached" event is at or before `now`.
+  const reachedBy = (n: number | null) => n !== null && now !== undefined && (data.byNumber.get(n)?.order ?? Infinity) <= now;
+  const glowRegions = data.labels.filter(l => l.reached !== null);
+  const glowPlaces = useMemo(() => [...data.places.values()].filter(p => p.reached !== null), [data]);
+
+  // Place names that stay readable at every zoom: the selected place first, then this stage's places,
+  // then places that glow, then the busiest; a name is skipped where it would overlap one already placed.
+  const labels = useMemo(() => {
+    const cand = new Map<string, PlaceLabel>();
+    const add = (key: string, lon: number, lat: number, name: string, priority: number, strong: boolean) => {
+      const old = cand.get(key);
+      if (old && old.priority >= priority) return;
+      const [x, y] = project(lon, lat);
+      cand.set(key, { key, x, y, name, priority, strong });
+    };
+    for (const p of data.places.values()) if (p.events > 0) add(p.key, p.lon, p.lat, p.name[locale], Math.min(p.events, 20) + (reachedBy(p.reached) ? 25 : 0), false);
+    for (const pin of pins) {
+      const pl = pin.events[0];
+      if (pin.emphasis === 'past') continue;
+      add(pin.key, pl.lon!, pl.lat!, data.places.get(pin.key)?.name[locale] ?? pin.name, pin.emphasis === 'selected' ? 1000 : 100, true);
+    }
+    return [...cand.values()].sort((a, b) => b.priority - a.priority);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, pins, locale, now]);
+  const placed = useMemo(() => {
+    const boxes: { x0: number; y0: number; x1: number; y1: number }[] = [], out: (PlaceLabel & { size: number })[] = [];
+    for (const l of labels) {
+      const size = (l.priority >= 1000 ? 15 : l.strong ? 13 : 12) * unit, w = l.name.length * size * 0.52 + 6 * unit, h = size * 1.35;
+      const box = { x0: l.x - w / 2, y0: l.y - h - 7 * unit, x1: l.x + w / 2, y1: l.y - 4 * unit };
+      if (box.x1 < view.x || box.x0 > view.x + view.w || box.y1 < view.y || box.y0 > view.y + view.h) continue;
+      if (boxes.some(b => box.x0 < b.x1 && box.x1 > b.x0 && box.y0 < b.y1 && box.y1 > b.y0)) continue;
+      boxes.push(box); out.push({ ...l, size });
+      if (out.length > 28) break;
+    }
+    return out;
+  }, [labels, unit, view]);
+
   // Drag to pan, wheel / pinch to zoom.
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const gesture = useRef<{ view: View; dist: number; cx: number; cy: number; moved: boolean } | null>(null);
@@ -114,7 +169,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
     gesture.current = { view: viewRef.current, dist, cx, cy, moved: gesture.current?.moved ?? false };
   };
   const onPointerDown = (ev: ReactPointerEvent) => {
-    if ((ev.target as Element).closest('button, a')) return;
+    if ((ev.target as Element).closest('button, a, [data-map-overlay]')) return;
     cancelAnimationFrame(anim.current);
     pointers.current.set(ev.pointerId, toLocal(ev.clientX, ev.clientY));
     (ev.currentTarget as Element).setPointerCapture(ev.pointerId);
@@ -142,6 +197,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
     const el = frame.current;
     if (!el) return;
     const onWheel = (ev: WheelEvent) => {
+      if ((ev.target as Element).closest?.('[data-map-overlay]')) return; // let overlays scroll
       ev.preventDefault();
       cancelAnimationFrame(anim.current);
       const v = viewRef.current, { x: px, y: py } = toLocal(ev.clientX, ev.clientY);
@@ -169,18 +225,22 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
   const sel = selected === null ? null : data.byNumber.get(selected) ?? null;
   const routeD = (coords: [number, number][]) => coords.map(([lon, lat], i) => { const [x, y] = project(lon, lat); return `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`; }).join('');
   const labelSize = { l: 15, m: 12.5, s: 11 };
-  const zoomedOut = view.w > 420;
 
   return <section className="hmap" aria-label={text.label}>
     <div className="hmap-frame" ref={frame} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}>
       <svg className="hmap-svg" viewBox={`${view.x} ${view.y} ${view.w} ${view.h}`} preserveAspectRatio="xMidYMid slice" role="img" aria-label={text.label}>
         <defs>
+          <radialGradient id="hmap-glow"><stop offset="0" className="glow-0" /><stop offset=".55" className="glow-1" /><stop offset="1" className="glow-2" /></radialGradient>
           <pattern id="hmap-hatch" width={6 * unit} height={6 * unit} patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
             <line x1="0" y1="0" x2="0" y2={6 * unit} className="hmap-hatch-line" strokeWidth={unit} />
           </pattern>
         </defs>
         <rect className="hmap-sea" x={-WIDTH} y={-HEIGHT} width={WIDTH * 3} height={HEIGHT * 3} />
         <path className="hmap-land" d={LAND} strokeWidth={1.1 * unit} />
+        <g className="hmap-glows" aria-hidden="true">
+          {glowRegions.map(l => { const [x, y] = project(l.lon, l.lat); return <circle key={l.id} className={`hmap-glow-region${reachedBy(l.reached) ? ' is-lit' : ''}`} cx={x} cy={y} r={95} fill="url(#hmap-glow)" />; })}
+          {glowPlaces.map(p => { const [x, y] = project(p.lon, p.lat); return <circle key={p.key} className={`hmap-glow-place${reachedBy(p.reached) ? ' is-lit' : ''}`} cx={x} cy={y} r={Math.max(26, 34 * unit)} fill="url(#hmap-glow)" />; })}
+        </g>
         {/* Graticule every 5° — orientation only. */}
         <g className="hmap-grid" strokeWidth={0.6 * unit}>
           {[35, 40, 45, 50].map(lon => { const [x] = project(lon, 0); return <line key={lon} x1={x} x2={x} y1={0} y2={HEIGHT} />; })}
@@ -199,22 +259,26 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
           const on = activeRoutes.includes(r.id);
           const seen = r.events.some(n => { const e = data.byNumber.get(n); return e && emphasis(e) !== 'hidden'; });
           if (!on && !seen) return null;
-          return <path key={r.id} className={`hmap-route${on ? ' is-on' : ''}`} d={routeD(r.coords)} strokeWidth={(on ? 2.4 : 1.1) * unit} strokeDasharray={`${6 * unit} ${4 * unit}`}><title>{`${r.name[locale]} — ${r.note[locale]}`}</title></path>;
+          if (on) return <path key={`${r.id}-${focusKey}`} className="hmap-route is-on is-drawing" d={routeD(r.coords)} strokeWidth={2.6 * unit} pathLength={1}><title>{`${r.name[locale]} — ${r.note[locale]}`}</title></path>;
+          return <path key={r.id} className="hmap-route" d={routeD(r.coords)} strokeWidth={1.1 * unit} strokeDasharray={`${6 * unit} ${4 * unit}`}><title>{`${r.name[locale]} — ${r.note[locale]}`}</title></path>;
         })}
 
         {pins.map(pin => {
           const r = (pin.emphasis === 'selected' ? 7 : pin.emphasis === 'active' ? 5 : 3.2) * unit;
-          const many = pin.events.length > 1 && pin.emphasis !== 'past';
           return <g key={pin.key} className={`hmap-pin is-${pin.emphasis} prec-${pin.precision}`} transform={`translate(${pin.x} ${pin.y})`}>
-            {pin.precision === 'region' && pin.emphasis !== 'past' && <circle className="hmap-region" r={0.8 * 40} />}
+            {pin.precision === 'region' && pin.emphasis === 'selected' && <circle className="hmap-region" r={0.8 * 40} strokeWidth={unit} strokeDasharray={`${3 * unit} ${3 * unit}`} />}
             {pin.precision === 'approx' && pin.emphasis !== 'past' && <circle className="hmap-approx" r={r + 5 * unit} strokeWidth={unit} strokeDasharray={`${2 * unit} ${2 * unit}`} />}
             <circle className="hmap-dot" r={r} strokeWidth={1.4 * unit} />
             {pin.emphasis === 'selected' && <circle className="hmap-halo" r={r + 7 * unit} strokeWidth={unit} />}
-            {(pin.emphasis === 'selected' || (pin.emphasis === 'active' && !zoomedOut)) && <text className="hmap-place" y={-(r + 6 * unit)} fontSize={(pin.emphasis === 'selected' ? 13 : 11) * unit}>{pin.name}{many ? ` · ${pin.events.length}` : ''}</text>}
             <circle className="hmap-hit" r={Math.max(r, 14 * unit)} onClick={() => select(pin)} />
           </g>;
         })}
+
+        <g className="hmap-names" aria-hidden="true">
+          {placed.map(l => <text key={l.key} className={`hmap-name${l.priority >= 1000 ? ' is-selected' : l.strong ? ' is-strong' : ''}`} x={l.x} y={l.y - 7 * unit} fontSize={l.size}>{l.name}</text>)}
+        </g>
       </svg>
+      {children}
 
       <div className="hmap-controls">
         <button type="button" onClick={() => zoomBy(0.7)} aria-label={text.zoomIn}>+</button>
@@ -226,13 +290,14 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
       {sel && sel.lat === null && <p className="hmap-nopin">{text.noPin}</p>}
     </div>
 
-    <ul className="hmap-legend" aria-label={text.legend}>
+    {legend && <ul className="hmap-legend" aria-label={text.legend}>
       <li><i className="lg-dot is-selected" />{text.selected}</li>
       <li><i className="lg-dot" />{text.stage}</li>
       <li><i className="lg-dot is-past" />{text.past}</li>
       <li><i className="lg-approx" />{text.approx}</li>
       <li><i className="lg-route" />{text.route}</li>
+      {now !== undefined && <li><i className="lg-glow" />{text.reached}</li>}
       <li><button type="button" className="lg-toggle" aria-pressed={showTrade} onClick={() => setShowTrade(v => !v)}><i className="lg-trade" />{text.trade}</button></li>
-    </ul>
+    </ul>}
   </section>;
 }

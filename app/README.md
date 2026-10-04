@@ -2,7 +2,7 @@
 
 An Arabic-first, bilingual web experience for exploring the Sirah in place and time. Built with React and TypeScript, it combines the Islamathon design (animated navigation, reading preferences) with the Bidaya data package.
 
-**Status:** working prototype (v11). The Journey page has a period map of Arabia, the full timeline of 142 Dorar events, event cards with their verses and Companions, story mode, and "Ask the map". The Spread page shows the events reaching across Arabia year by year. All content is read at runtime from the CSV files at the repository root.
+**Status:** working prototype (v11). The Journey page tells the Sirah as a story on a period map of Arabia: chapters, a card for each of the 142 Dorar events with its verses and people, story mode, places that glow as Islam reaches them, and "Ask the map". All content is read at runtime from the CSV files at the repository root. (The former Spread page is part of Journey now; `/spread` redirects there.)
 
 ## Editing the data
 
@@ -121,8 +121,7 @@ Open the computer's local network address and the printed port on that device.
 | URL | Page | Current implementation |
 | --- | --- | --- |
 | `/` | The Beginning | Landing title and shared navigation |
-| `/spread` | Spread of Islam | Year slider and map of events reaching across Arabia |
-| `/journey` | Islam Journey | Period map, timeline, event cards, story mode, and Ask the map |
+| `/journey` | Islam Journey | The story: period map, chapters, event cards, spread of Islam, timeline, story mode, and Ask the map |
 
 The language selection stays in memory during navigation and resets on a full reload. Leaving Journey and returning starts a fresh AI demo.
 

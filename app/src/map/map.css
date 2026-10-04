@@ -30,9 +30,8 @@ html[data-contrast='dark'] .hmap-label-sea { fill: #8fa19b; }
 .hmap-pin.is-selected .hmap-dot { fill: var(--brass); stroke: var(--land); }
 .hmap-halo { fill: none; stroke: var(--brass); opacity: .7; }
 .hmap-approx { fill: none; stroke: var(--map-ink); opacity: .55; }
-.hmap-region { fill: var(--brass); opacity: .1; }
-.hmap-pin.is-selected .hmap-region { opacity: .18; }
-.hmap-place { text-anchor: middle; fill: var(--map-ink); font-family: var(--reading-font); font-weight: 500; paint-order: stroke; stroke: var(--land); stroke-width: .3em; stroke-linejoin: round; pointer-events: none; }
+.hmap-region { fill: var(--brass); fill-opacity: .08; stroke: var(--brass); stroke-opacity: .5; }
+
 .hmap-hit { fill: transparent; }
 .hmap-pin:hover .hmap-dot { fill: var(--brass); }
 @media (prefers-reduced-motion: no-preference) {
@@ -60,3 +59,30 @@ html[data-contrast='dark'] .hmap-label-sea { fill: #8fa19b; }
 .lg-trade { width: 22px; border-top: 2px dotted var(--brass); display: inline-block; opacity: .7; }
 .lg-toggle { display: flex; align-items: center; gap: 7px; border: 0; background: none; padding: 0; font: inherit; color: inherit; }
 .lg-toggle[aria-pressed='false'] { opacity: .45; text-decoration: line-through; }
+
+/* Spread of Islam: a warm glow that fades in once the sources say Islam had reached a place or region. */
+.glow-0 { stop-color: #e2b45c; stop-opacity: .75; }
+.glow-1 { stop-color: #e2b45c; stop-opacity: .28; }
+.glow-2 { stop-color: #e2b45c; stop-opacity: 0; }
+html[data-contrast='dark'] .glow-0 { stop-color: #f0c674; stop-opacity: .55; }
+.hmap-glow-region, .hmap-glow-place { opacity: 0; transition: opacity 1.4s ease; pointer-events: none; mix-blend-mode: multiply; }
+html[data-contrast='dark'] .hmap-glow-region, html[data-contrast='dark'] .hmap-glow-place { mix-blend-mode: screen; }
+.hmap-glow-region.is-lit { opacity: .55; }
+.hmap-glow-place.is-lit { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-reduced-motion='true']) .hmap-glow-place.is-lit { animation: hmap-breathe 4.5s ease-in-out infinite; }
+}
+@keyframes hmap-breathe { 0%, 100% { opacity: .85; } 50% { opacity: 1; } }
+
+/* Place names: always readable, halo'd against the land. */
+.hmap-name { text-anchor: middle; fill: var(--muted); font-family: var(--reading-font); font-weight: 500; paint-order: stroke; stroke: var(--land); stroke-width: .32em; stroke-linejoin: round; pointer-events: none; }
+.hmap-name.is-strong { fill: var(--map-ink); font-weight: 600; }
+.hmap-name.is-selected { fill: var(--map-ink); font-weight: 700; }
+
+/* The current route draws itself. */
+.hmap-route.is-drawing { stroke-dasharray: 1; stroke-dashoffset: 0; opacity: .9; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-reduced-motion='true']) .hmap-route.is-drawing { animation: hmap-draw 2.2s ease-in-out both; }
+}
+@keyframes hmap-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+.lg-glow { width: 16px; height: 16px; border-radius: 50%; display: inline-block; background: radial-gradient(circle, #e2b45cdd, #e2b45c00 70%); }

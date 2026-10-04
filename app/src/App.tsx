@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import BrandLogo from './components/BrandLogo';
 import JourneyPage from './pages/JourneyPage';
-import SpreadPage from './pages/SpreadPage';
 import TitlePage from './pages/TitlePage';
 import WaypointMenu, { WaypointSymbol } from './navigation/WaypointMenu';
 import LogoTransition from './navigation/LogoTransition';
@@ -77,7 +76,7 @@ function Workspace() {
           <span lang={locale === 'ar' ? 'en' : 'ar'}>{locale === 'ar' ? 'English' : 'العربية'}</span>
         </button>
       </header>
-      {navigation.page === 'journey' ? <JourneyPage key="journey" locale={locale} /> : navigation.page === 'spread' ? <SpreadPage key="spread" locale={locale} /> : <TitlePage key={navigation.page} page={navigation.page} locale={locale} onExplore={() => setMenuOpen(true)} />}
+      {navigation.page === 'journey' ? <JourneyPage key="journey" locale={locale} /> : <TitlePage key={navigation.page} page={navigation.page} locale={locale} onExplore={() => setMenuOpen(true)} />}
       <footer className="site-footer"><span>{text.footer}</span><GeometricMark /><span className="footer-edition">{route.number} / 2026</span></footer>
     </div>
     {menuOpen && <WaypointMenu locale={locale} page={navigation.page} trigger={trigger} busy={navigation.busy} launcher={launcher} onClose={closeMenu} onNavigate={navigation.request} />}

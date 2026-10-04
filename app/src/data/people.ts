@@ -44,12 +44,16 @@ function arPattern(alias: string) {
   return `(?<=(?:^|[^${AR_LETTER}\\u064B-\\u065F\\u0670])(?:[وفبل]${DIAC})?)${words.join('\\s+')}(?![${AR_LETTER}])`;
 }
 
+const coreAr = (p: Person) => p.name.ar.replace(HONORIFIC, ' ').replace(/\(.*?\)/g, ' ').replace(/\s+/g, ' ').trim();
+
 function arAliases(p: Person, firstNames: Map<string, number>) {
-  const core = p.name.ar.replace(HONORIFIC, ' ').trim();
+  const core = coreAr(p);
   const w = core.split(/\s+/);
-  const out = new Set([core]);
+  // The other names in 6_sahaba.csv (أسماء_أخرى) are taken as written.
+  const out = new Set([core, ...p.aliases.map(a => a.ar).filter(Boolean)]);
   const ibn = w.findIndex(x => x === 'بن' || x === 'بنت');
-  if (ibn > 0 && ibn + 1 < w.length) out.add(w.slice(0, ibn + (['أبي', 'عبد', 'أبو'].includes(w[ibn + 1]) ? 3 : 2)).join(' '));
+  const short = ibn > 0 && ibn + 1 < w.length ? w.slice(0, ibn + (['أبي', 'عبد', 'أبو'].includes(w[ibn + 1]) ? 3 : 2)) : [];
+  if (short.length && !['بن', 'ابن', 'بنت'].includes(short[short.length - 1])) out.add(short.join(' '));
   if ((w[0] === 'أبو' || w[0] === 'أم') && w.length > 1) out.add(w.slice(0, 2).join(' '));
   if (w[0] !== 'أبو' && w[0] !== 'أم' && firstNames.get(w[0]) === 1 && !AR_SINGLE_BLOCK.has(w[0]) && w[0].length >= 3) out.add(w[0]);
   out.delete('');
@@ -63,7 +67,7 @@ const enWords = (s: string) => [...s.matchAll(/[A-Za-z‘’'ʿʾ`]+/g)].map(m =
 
 function enAliases(p: Person, firstNames: Map<string, number>) {
   const w = enWords(p.name.en.replace(/\(.*?\)|,.*$/g, '')).map(x => x.key);
-  const out: string[][] = [w];
+  const out: string[][] = [w, ...p.aliases.map(a => enWords(a.en).map(x => x.key)).filter(k => k.length)];
   const ibn = w.findIndex(k => k === 'ibn' || k === 'bint');
   if (ibn > 0 && ibn + 1 < w.length) out.push(w.slice(0, ibn + (w[ibn + 1] === 'abu' || w[ibn + 1] === 'abd' ? 3 : 2)));
   if ((w[0] === 'abu' || w[0] === 'um') && w.length > 1) out.push(w.slice(0, 2));
@@ -78,7 +82,7 @@ function matcherFor(data: Sirah): Matcher {
   let m = matchers.get(data);
   if (m) return m;
   const count = (keys: string[]) => keys.reduce((map, k) => map.set(k, (map.get(k) ?? 0) + 1), new Map<string, number>());
-  const arFirst = count(data.people.map(p => p.name.ar.replace(HONORIFIC, ' ').trim().split(/\s+/)[0]));
+  const arFirst = count(data.people.map(p => coreAr(p).split(/\s+/)[0]));
   const enFirst = count(data.people.map(p => enWords(p.name.en)[0]?.key ?? ''));
   const ar = data.people.flatMap(person => arAliases(person, arFirst).map(a => ({ re: new RegExp(arPattern(a), 'gu'), person, len: a.length })))
     .sort((a, b) => b.len - a.len);

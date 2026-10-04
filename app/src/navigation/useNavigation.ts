@@ -1,12 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { pageFromPath, routeFor, type PageId } from './routes';
+import { MOVED, pageFromPath, routeFor, type PageId } from './routes';
 
 type Request = { page: PageId; source: 'push' | 'pop' | 'initial' };
 
 // The URL and page are committed under an opaque cover. History requests can
 // replace the target while covered, or queue a new pass during the reveal.
 export function useNavigation(onCovered: () => void) {
-  const [page, setPage] = useState<PageId>(() => pageFromPath(window.location.pathname));
+  const [page, setPage] = useState<PageId>(() => {
+    // Old links (e.g. /spread) keep working and show their new address.
+    const moved = MOVED[window.location.pathname.replace(/\/$/, '')];
+    if (moved) window.history.replaceState(window.history.state, '', moved);
+    return pageFromPath(window.location.pathname);
+  });
   const [busy, setBusy] = useState(true);
   const [run, setRun] = useState(0);
   const current = useRef(page);

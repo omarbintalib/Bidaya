@@ -44,7 +44,7 @@ export async function loadSirah(): Promise<Sirah> {
   for (const r of parseCsv(raw.places)) {
     const lat = num(r.lat), lon = num(r.lon);
     if (lat === null || lon === null) { warn(`4_places.csv: "${r['رمز_المكان']}" has no coordinates`); continue; }
-    places.set(r['رمز_المكان'], { key: r['رمز_المكان'], name: { ar: r['الاسم'], en: r.Name_EN || r['الاسم'] }, lat, lon, kind: r['النوع'], confirmed: r['دقة_الإحداثيات'] === 'مؤكد' });
+    places.set(r['رمز_المكان'], { key: r['رمز_المكان'], name: { ar: r['الاسم'], en: r.Name_EN || r['الاسم'] }, lat, lon, kind: r['النوع'], confirmed: r['دقة_الإحداثيات'] === 'مؤكد', events: num(r['عدد_الأحداث']) ?? 0, reached: num(r['حدث_بلوغ_الإسلام']) });
   }
 
   const texts = new Map(parseCsv(raw.texts).map(r => [num(r.dorar_event_number), r]));
@@ -101,12 +101,20 @@ export async function loadSirah(): Promise<Sirah> {
     link: links.get(r['المعرف']) ?? null,
   }));
 
+  const stated = (v: string | undefined) => v && !/غير مذكور/.test(v) ? v : null;
+  const aliasList = (ar = '', en = '') => {
+    const a = ar.split('؛').map(s => s.trim()).filter(Boolean), e = en.split(';').map(s => s.trim()).filter(Boolean);
+    return Array.from({ length: Math.max(a.length, e.length) }, (_, i) => ({ ar: a[i] ?? '', en: e[i] ?? '' }));
+  };
   const people: Person[] = parseCsv(raw.people).map(r => ({
     id: r['معرف_الصحابي'],
     name: { ar: r['الاسم'], en: r.Name_EN || r['الاسم'] },
-    female: r['النوع'] === 'صحابية',
+    kind: r['النوع'],
+    category: r['الفئة'] || 'الصحابة',
     bio: r['نبذة_موثقة'],
-    death: r['الوفاة_أو_الاستشهاد'] && !r['الوفاة_أو_الاستشهاد'].includes('غير مذكورة') ? r['الوفاة_أو_الاستشهاد'] : null,
+    islam: stated(r['وقت_الإسلام']),
+    death: stated(r['الوفاة_أو_الاستشهاد']),
+    aliases: aliasList(r['أسماء_أخرى'], r.Aliases_EN),
     events: list(r['أحداث_الدرر_المرتبطة']).map(Number).filter(Number.isFinite),
     verses: list(r['أسباب_النزول_المرتبطة']),
   }));
@@ -134,7 +142,7 @@ export async function loadSirah(): Promise<Sirah> {
   for (const r of parseCsv(raw.labels)) {
     const lat = num(r.lat), lon = num(r.lon), kind = LABEL_KINDS[r['النوع']];
     if (lat === null || lon === null || !kind) { warn(`map_labels.csv: "${r['المعرف']}" needs lat, lon and النوع (إقليم / قوة / بحر)`); continue; }
-    labels.push({ id: r['المعرف'], kind, name: { ar: r['الاسم'], en: r.Name_EN || r['الاسم'] }, lat, lon, size: SIZES[r['الحجم']] ?? 'm', rotate: num(r['الدوران']) ?? 0, note: r['ملاحظة'] });
+    labels.push({ id: r['المعرف'], kind, name: { ar: r['الاسم'], en: r.Name_EN || r['الاسم'] }, lat, lon, size: SIZES[r['الحجم']] ?? 'm', rotate: num(r['الدوران']) ?? 0, note: r['ملاحظة'], reached: num(r['حدث_بلوغ_الإسلام']), reachNote: r['ملاحظة_بلوغ_الإسلام'] ?? '' });
   }
 
   return { events, byNumber, places, verses, people, routes, labels };

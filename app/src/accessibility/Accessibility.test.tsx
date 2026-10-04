@@ -71,7 +71,7 @@ it('keeps only one dialog open, traps focus, restores the launcher and mirrors w
 
 it('closes settings and hides the launcher during history navigation, preserving preferences', async () => {
   await mount(); await open(); await select(0, '125');
-  await act(async () => { history.replaceState({}, '', '/spread'); window.dispatchEvent(new PopStateEvent('popstate')); });
+  await act(async () => { history.replaceState({}, '', '/journey'); window.dispatchEvent(new PopStateEvent('popstate')); });
   expect(host.querySelector('.accessibility-panel')).toBeNull();
   expect(host.querySelector('.accessibility-launcher')).toBeNull();
   await advance(2100); await advance(20);

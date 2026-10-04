@@ -32,7 +32,15 @@ export function PeopleText({ text, lang }: { text: string; lang: 'ar' | 'en' }) 
   return <>{parts}</>;
 }
 
-/** A Companion's card: name, cited synopsis, and the events the sources link them to. */
+/** English labels for the النوع column; anything not listed shows as written. */
+const KIND_EN: Record<string, string> = {
+  'صحابي': 'Companion', 'صحابية': 'Companion', 'من أسرة النبي ﷺ': 'Family of the Prophet ﷺ', 'من مشركي قريش': 'Polytheist of Quraysh',
+  'من قريش': 'Of Quraysh', 'من أهل مكة': 'Of Makkah', 'من المنافقين': 'Among the hypocrites', 'من يهود المدينة': 'Jew of Madinah',
+  'من يهود بني النضير': 'Jew of Banu al-Nadir', 'راهب نصراني': 'Christian monk', 'مولى جبير بن مطعم': "Slave of Jubayr ibn Mut'im",
+  'ملك الحبشة': 'King of Abyssinia', 'ملك الروم': 'Byzantine emperor', 'ملك الفرس': 'Persian emperor', 'ملك الإسكندرية': 'Ruler of Alexandria',
+};
+
+/** A person's card: name, cited synopsis, and the events the sources link them to. */
 export function PersonDialog({ person, data, locale, onClose, onEvent }: { person: Person; data: Sirah; locale: Locale; onClose: () => void; onEvent: (n: number) => void }) {
   const text = journeyCopy[locale];
   const dialog = useRef<HTMLDialogElement>(null);
@@ -47,7 +55,7 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
   return <dialog ref={dialog} className="person-dialog" aria-labelledby="person-title" onClose={onClose} onClick={e => { if (e.target === dialog.current) onClose(); }}>
     <header className="pd-head">
       <div>
-        <p className="pd-kind">{person.female ? text.sahabiyyah : text.sahabi}</p>
+        <p className="pd-kind">{locale === 'en' ? KIND_EN[person.kind] ?? person.kind : person.kind}</p>
         <h2 id="person-title">{title}</h2>
         {locale === 'en' && <p className="pd-ar" lang="ar" dir="rtl">{person.name.ar}</p>}
       </div>
@@ -56,9 +64,12 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
       </button>
     </header>
     <div className="pd-body">
+      <dl className="pd-facts">
+        <div><dt>{text.islamWhen}</dt><dd lang="ar">{person.islam ?? text.notStated}</dd></div>
+        <div><dt>{text.death}</dt><dd lang="ar">{person.death ?? text.notStated}</dd></div>
+      </dl>
       {locale === 'en' && <p className="pd-note">{text.bioInArabic}</p>}
       <p className="pd-bio" lang="ar" dir="rtl">{person.bio}</p>
-      {person.death && <p className="pd-death">{text.death}: <span lang="ar">{person.death}</span></p>}
       {events.length > 0 && <section className="pd-events">
         <h3>{text.personEvents}</h3>
         <ul>{events.map(e => <li key={e.n}><button type="button" onClick={() => { onEvent(e.n); onClose(); }}>

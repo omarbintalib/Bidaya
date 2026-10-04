@@ -253,7 +253,7 @@ html[data-compact-viewport='true'] .intro { padding-top: 14px; }
 html[data-compact-viewport='true'] .intro .eyebrow, html[data-compact-viewport='true'] .intro-subtitle { display: none; }
 
 /* Actual circle measurements determine the two route segments. */
-.waypoint-route { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 16px; margin-top: 40px; padding-bottom: 12px; }
+.waypoint-route { position: relative; display: grid; grid-template-columns: repeat(var(--stops, 3), minmax(0, 1fr)); max-width: calc(var(--stops, 3) * 320px); margin-inline: auto; column-gap: 16px; margin-top: 40px; padding-bottom: 12px; }
 .route-line { position: absolute; inset: 0; pointer-events: none; overflow: visible; color: var(--ink); opacity: .55; }
 .route-line path { stroke: currentColor; stroke-width: 1.5px; vector-effect: non-scaling-stroke; stroke-linecap: butt; stroke-dasharray: 1; stroke-dashoffset: 0; }
 .waypoint { text-decoration: none; position: relative; display: flex; align-items: center; flex-direction: column; gap: 14px; padding: 8px; min-width: 0; outline-offset: 0 !important; }

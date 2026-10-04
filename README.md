@@ -27,6 +27,13 @@ Two files were added for the period map:
 | `map_labels.csv` | Regions, powers and seas shown on the map, with approximate positions for orientation |
 | `map_routes.csv` | The Quraysh caravan routes (winter to Yemen, summer to al-Sham), approximate |
 
+Columns added for the app (filled only where the Dorar texts state it, each with its quote):
+
+| File | Columns | Meaning |
+|------|---------|---------|
+| `6_sahaba.csv` | `الفئة`, `وقت_الإسلام`, `أسماء_أخرى`, `Aliases_EN` | Group (Companions, the Prophet's family ﷺ, Quraysh, hypocrites, Jews of Madinah, rulers…), when the person became Muslim (or that they did not), and other names used to find them in the texts. People `PER-001`… are the new non-Companion figures; their facts are in `7_sahaba_references.csv`. |
+| `4_places.csv`, `map_labels.csv` | `حدث_بلوغ_الإسلام`, `شاهد_بلوغ_الإسلام` | The Dorar event from which Islam had reached the place or region, with the quote. The map lights these up as the story reaches that event. |
+
 ## Files at a glance
 
 | # | File | Rows | What it is |
