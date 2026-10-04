@@ -94,6 +94,7 @@ export async function loadSirah(): Promise<Sirah> {
     title: { ar: r['الحدث'], en: r['العنوان_EN'] || r['الحدث'] },
     stage: r['المرحلة'],
     surah: r['السورة'], surahEn: r['السورة_EN'] || null, reasonEn: r['وجه_الارتباط_EN'] || null, narratorEn: r['الراوي_EN'] || null,
+    tafseerEn: r['رابط_تفسير_الدرر_EN'] ? { url: r['رابط_تفسير_الدرر_EN'], label: r['مقطع_تفسير_الدرر_EN'], meaning: r['المعنى_الإجمالي_EN'] || null } : null,
     hadithEn: r['نص_الحديث_EN'] ? { ref: r['مرجع_الحديث_EN'], url: r['رابط_الحديث_EN'], chain: r['سند_الحديث_EN'], text: r['نص_الحديث_EN'] } : null,
     ref: r['مرجع_الآيات'], ayat: r['الآيات'],
     mushaf: list(r['روابط_المصحف']), bukhari: list(r['صحيح_البخاري']), muslim: list(r['صحيح_مسلم']),

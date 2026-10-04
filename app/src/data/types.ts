@@ -49,6 +49,8 @@ export interface Verse {
   narratorEn: string | null;
   /** The verse's main hadith in English, as sunnah.com gives it (its own narrator line, text and reference). */
   hadithEn: { ref: string; url: string; chain: string; text: string } | null;
+  /** Dorar's English tafseer for the verses: the page, its verse group, and (where taken) its 'Overall meaning'. */
+  tafseerEn: { url: string; label: string; meaning: string | null } | null;
   ref: string;
   ayat: string;
   mushaf: string[];

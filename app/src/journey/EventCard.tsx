@@ -116,11 +116,19 @@ export function VerseItem({ v, locale, compact = false }: { v: Verse; locale: Lo
                 <p className="verse-hadith-text"><PeopleText text={v.hadithEn.text} lang="en" /></p>
                 <a href={v.hadithEn.url} target="_blank" rel="noreferrer">{v.hadithEn.ref} · sunnah.com ↗</a>
               </blockquote>
-            : reason && <Ar as="p"><PeopleText text={reason} lang="ar" /></Ar>}
+            : locale === 'en' && v.tafseerEn?.meaning
+              // No hadith: Dorar's own English tafseer of the verses ("Overall meaning").
+              ? <blockquote className="verse-hadith">
+                  <p className="verse-hadith-chain">{text.overallMeaning(v.tafseerEn.label)}</p>
+                  <p className="verse-hadith-text"><PeopleText text={v.tafseerEn.meaning} lang="en" /></p>
+                  <a href={v.tafseerEn.url} target="_blank" rel="noreferrer">Dorar · {v.tafseerEn.label} ↗</a>
+                </blockquote>
+              : reason && <Ar as="p"><PeopleText text={reason} lang="ar" /></Ar>}
         {(v.evidence[locale] || v.evidence.ar) && <p className="verse-evidence" lang={v.evidence[locale] ? locale : 'ar'}>{v.evidence[locale] || v.evidence.ar}</p>}
         <p className="verse-refs">
           {hadithLinks(v).map(h => <a key={h.book + h.n} href={h.url} target="_blank" rel="noreferrer">{text[h.book]} {h.n}</a>)}
           {v.tafseer.slice(0, 1).map(u => <a key={u} href={u} target="_blank" rel="noreferrer">{text.tafseer}</a>)}
+          {locale === 'en' && v.tafseerEn && <a href={v.tafseerEn.url} target="_blank" rel="noreferrer">{text.tafseerEn}</a>}
         </p>
         {v.narrator && <p className="verse-narrator">{text.narrator}: {locale === 'en' && v.narratorEn ? v.narratorEn : <Ar>{v.narrator}</Ar>}</p>}
       </div>}

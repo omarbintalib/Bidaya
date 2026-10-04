@@ -171,7 +171,7 @@ The file loads directly into Leaflet or Mapbox.
 
 ## English for the English interface (to be filled by the team)
 
-Nothing in these columns is machine-translated. Where an original source publishes English it is copied from there (named below); the rest is left empty on purpose and a reviewer fills them, and the English interface shows the Arabic (marked as Arabic) until a cell is filled. A repeated value only needs filling once — every row with the same Arabic takes the same English.
+Nothing in these columns is machine-translated. Where an original source publishes English it is copied from there (named below); the rest is left empty on purpose for a reviewer to fill. Until a cell is filled, the English interface shows the Arabic, marked as Arabic. A repeated value only needs filling once — every row with the same Arabic takes the same English.
 
 | File | Column | Next to | To fill |
 |---|---|---|---|
