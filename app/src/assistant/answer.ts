@@ -134,7 +134,7 @@ export function answer(data: Sirah, question: string, locale: Locale): Answer {
   const v = doc.item, ev = v.link?.event ?? undefined;
   const refs = hadithLinks(v).map(h => `${h.book === 'bukhari' ? (ar ? 'البخاري' : 'Bukhari') : (ar ? 'مسلم' : 'Muslim')} ${h.n}`).join(ar ? '، ' : ', ');
   const src = refs ? (ar ? `المصدر: صحيح ${refs}.` : `Source: Sahih ${refs}.`) : (ar ? 'المصدر: موسوعة التفسير – الدرر السنية.' : 'Source: Dorar Tafsir Encyclopedia.');
-  const surah = ar ? `سورة ${v.surah} (${v.whole ? 'السورة كاملة' : v.ref})` : `Surah ${v.surah} (${v.whole ? 'whole surah' : v.ref})`;
+  const surah = ar ? `سورة ${v.surah} (${v.whole ? 'السورة كاملة' : v.ref})` : `Surah ${v.surahEn ?? v.surah} (${v.whole ? 'whole surah' : v.ref})`;
   return { kind: 'verse', event: ev ?? undefined, text: `${surah}: ${v.phrase[locale]} — ${v.title[locale]}. ${src}` };
 }
 

@@ -115,6 +115,29 @@ describe('ask about this event', () => {
   });
 });
 
+describe('English columns filled by the team', () => {
+  it('uses an _EN cell once it is filled, and leaves it empty otherwise', async () => {
+    expect(data.verses.every(v => v.surahEn === null && v.reasonEn === null)).toBe(true);
+    // Simulate a reviewer filling two cells, then load again.
+    const fill = (csv: string, col: string, row: string, value: string) => {
+      const [head, ...lines] = csv.split('\n'), cols = parseCsv(csv)[0] ? Object.keys(parseCsv(csv)[0]) : [];
+      const at = cols.indexOf(col);
+      return [head, ...lines.map(l => (l.startsWith(row + ',') ? l.split(',').map((c, i) => (i === at ? value : c)).join(',') : l))].join('\n');
+    };
+    const surahs = fill(byName.get('1_related_surahs.csv')!, 'السورة_EN', 'ASB-001', 'Al-Alaq');
+    vi.stubGlobal('fetch', async (url: string) => {
+      const name = decodeURIComponent(url.split('/').pop()!);
+      return new Response(name === '1_related_surahs.csv' ? surahs : byName.get(name) ?? '');
+    });
+    const filled = await loadSirah();
+    expect(filled.verses.find(v => v.id === 'ASB-001')?.surahEn).toBe('Al-Alaq');
+    // Filled once, used for every row of the same surah; other surahs stay empty.
+    const alaq = filled.verses.filter(v => v.surah === 'العلق');
+    expect(alaq.every(v => v.surahEn === 'Al-Alaq')).toBe(true);
+    expect(filled.verses.filter(v => v.surah !== 'العلق').every(v => v.surahEn === null)).toBe(true);
+  });
+});
+
 describe('sourced facts about people', () => {
   it('loads every fact in 7_sahaba_references.csv onto its person, with a quote and a source', () => {
     const facts = data.people.flatMap(p => p.facts);

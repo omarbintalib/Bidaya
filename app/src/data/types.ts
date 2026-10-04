@@ -34,6 +34,7 @@ export interface VerseLink {
   from: number | null;
   to: number | null;
   label: string | null;
+  labelEn: string | null;
   reason: string | null;
 }
 
@@ -42,6 +43,10 @@ export interface Verse {
   title: Text;
   stage: string;
   surah: string;
+  /** English fields below are filled by the team in the CSVs (never machine-translated); null until then. */
+  surahEn: string | null;
+  reasonEn: string | null;
+  narratorEn: string | null;
   ref: string;
   ayat: string;
   mushaf: string[];
@@ -58,7 +63,7 @@ export interface Verse {
 }
 
 export interface Person {
-  id: string; name: Text; kind: string; category: string; bio: string;
+  id: string; name: Text; kind: string; category: string; bio: string; bioEn: string | null; islamEn: string | null; deathEn: string | null;
   /** When they became Muslim (or that they did not), as the sources state; null when not stated. */
   islam: string | null;
   death: string | null; events: number[]; verses: string[];

@@ -70,11 +70,11 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
     <div className="pd-body">
       {/* Only what the sources state is shown; a fact they do not give is simply left out. */}
       {(person.islam || person.death) && <dl className="pd-facts">
-        {person.islam && <div><dt>{text.islamWhen}</dt><dd lang="ar">{person.islam}</dd></div>}
-        {person.death && <div><dt>{text.death}</dt><dd lang="ar">{person.death}</dd></div>}
+        {person.islam && <div><dt>{text.islamWhen}</dt>{locale === 'en' && person.islamEn ? <dd>{person.islamEn}</dd> : <dd lang="ar">{person.islam}</dd>}</div>}
+        {person.death && <div><dt>{text.death}</dt>{locale === 'en' && person.deathEn ? <dd>{person.deathEn}</dd> : <dd lang="ar">{person.death}</dd>}</div>}
       </dl>}
-      {locale === 'en' && <p className="pd-note">{text.bioInArabic}</p>}
-      <p className="pd-bio" lang="ar" dir="rtl">{person.bio}</p>
+      {locale === 'en' && !person.bioEn && <p className="pd-note">{text.bioInArabic}</p>}
+      {locale === 'en' && person.bioEn ? <p className="pd-bio">{person.bioEn}</p> : <p className="pd-bio" lang="ar" dir="rtl">{person.bio}</p>}
       {/* Where the summary comes from: one short line of sources, and the sources' own words on request. */}
       {sources.length > 0 && <p className="pd-sources" lang="ar" dir="rtl">
         <span>{text.sourcesLabel}</span>

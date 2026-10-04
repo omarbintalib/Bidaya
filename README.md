@@ -169,6 +169,22 @@ The file loads directly into Leaflet or Mapbox.
 - **English texts:** all 142 events, from dorar.net/en/history. The 131 events in the v9 prototype came through its data. The 11 events before the first revelation (1–11) were copied by the team from the Dorar site, matched to their events by Dorar's exact English title and Hijri date. They are kept word for word, including Dorar's own typos, with paragraph breaks as on the site.
 - **English titles:** all 142 events, taken exactly from dorar.net/en/history (`title_en_dorar`), including Dorar's own spellings and typos. `title_en_display` shows the same words in normal title case, since Dorar writes them in capitals; this is what the prototype shows. Each title was matched to its event by content (names and places checked against the event's English text), because Dorar's English numbering differs from the Arabic one in places and contains duplicate entries where the Arabic list skips numbers (64, 81, 82).
 
+## English for the English interface (to be filled by the team)
+
+These columns are empty on purpose. Nothing in them is machine-translated: a reviewer fills them, and the English interface shows the Arabic (marked as Arabic) until a cell is filled. A repeated value only needs filling once — every row with the same Arabic takes the same English.
+
+| File | Column | Next to | To fill |
+|---|---|---|---|
+| `1_related_surahs.csv` | `السورة_EN` | `السورة` | 44 surah names (shared by all their rows) |
+| `1_related_surahs.csv` | `وجه_الارتباط_EN` | `وجه_الارتباط` | 116 texts: how each verse connects to its event |
+| `1_related_surahs.csv` | `الراوي_EN` | `الراوي` | 55 narrator names (shared) |
+| `3_links_surahs_sirah.csv` | `نص_الربط_في_الواجهة_EN` | `نص_الربط_في_الواجهة` | 8 timing labels (shared), e.g. «وقعت في هذه المرحلة، ولا يُعرف تاريخها بدقة» |
+| `6_sahaba.csv` | `نبذة_موثقة_EN` | `نبذة_موثقة` | 98 synopses |
+| `6_sahaba.csv` | `وقت_الإسلام_EN` | `وقت_الإسلام` | 35 entries |
+| `6_sahaba.csv` | `الوفاة_أو_الاستشهاد_EN` | `الوفاة_أو_الاستشهاد` | 25 entries |
+
+Quotes from the sources (Dorar's Arabic text, hadith wording) stay in Arabic in both interfaces.
+
 ## Open items
 
 | Item | Owner |
