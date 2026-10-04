@@ -63,10 +63,8 @@
 @keyframes label-out { to { opacity: 0; translate: 0 -5px; } }
 @keyframes thinking-dot { 0%, 75%, 100% { opacity: .3; } 35% { opacity: 1; } }
 @keyframes input-shake { 0%, 100% { translate: 0; } 25% { translate: -4px; } 75% { translate: 4px; } }
-@media (prefers-reduced-motion: reduce) {
-  .mo-root *, .mo-root *::before, .mo-root *::after { animation: none !important; transition: none !important; }
-  .mo-out { display: none; }
-}
+html[data-reduced-motion='true'] .mo-root *, html[data-reduced-motion='true'] .mo-root *::before, html[data-reduced-motion='true'] .mo-root *::after { animation: none !important; transition: none !important; }
+html[data-reduced-motion='true'] .mo-out { display: none; }
 @media (max-width: 420px) {
   .mo-input { gap: 10px; }
   .mo-field { font-size: var(--text-body); }

@@ -6,7 +6,7 @@ export type Preferences = {
   characterSpacing: 'standard' | 'spacious';
   contrast: 'brand' | 'light' | 'dark';
   font: 'saudi' | 'plex';
-  motion: 'system' | 'reduced';
+  motion: 'system' | 'reduced' | 'full';
   highlightLinks: boolean;
   strongFocus: boolean;
 };
@@ -18,7 +18,7 @@ export function readPreferences(): Preferences {
     if (!saved || typeof saved !== 'object') return { ...defaults };
     const result = { ...defaults };
     for (const key of Object.keys(defaults) as (keyof Preferences)[]) {
-      const allowed: Record<keyof Preferences, unknown[]> = { textSize: [100,125,150], lineSpacing: ['standard','spacious'], characterSpacing: ['standard','spacious'], contrast: ['brand','light','dark'], font: ['saudi','plex'], motion: ['system','reduced'], highlightLinks: [false,true], strongFocus: [false,true] };
+      const allowed: Record<keyof Preferences, unknown[]> = { textSize: [100,125,150], lineSpacing: ['standard','spacious'], characterSpacing: ['standard','spacious'], contrast: ['brand','light','dark'], font: ['saudi','plex'], motion: ['system','reduced','full'], highlightLinks: [false,true], strongFocus: [false,true] };
       if (allowed[key].includes(saved[key])) Object.assign(result, { [key]: saved[key] });
     }
     return result;
@@ -30,7 +30,8 @@ const AccessibilityContext = createContext<Context | null>(null);
 export function AccessibilityProvider({ children }: { children: ReactNode }) {
   const [preferences, setPreferences] = useState(readPreferences);
   const [systemReduced, setSystemReduced] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  const reducedMotion = systemReduced || preferences.motion === 'reduced';
+  // 'full' turns animations on even when the device asks for less motion; 'system' follows the device.
+  const reducedMotion = preferences.motion === 'reduced' || (preferences.motion === 'system' && systemReduced);
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
     const change = () => setSystemReduced(media.matches);

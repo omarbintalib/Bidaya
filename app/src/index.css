@@ -198,7 +198,7 @@ html { scrollbar-gutter: stable; }
   .waypoint-menu h2 { font-size: calc(28px * var(--text-scale)); }
   .menu-footnote { margin-top: 2px; font-size: var(--text-small); }
 }
-@media (prefers-reduced-motion: no-preference) {
+@media all { /* motion on unless html[data-reduced-motion='true'] (Motion preference) */
   .waypoint-backdrop { animation: menu-backdrop .25s both; }
   .waypoint-menu { animation: menu-arrive .4s cubic-bezier(.2,.65,.3,1) both; }
   .route-line path { animation: trace-route .85s .1s both; }
@@ -207,9 +207,6 @@ html { scrollbar-gutter: stable; }
   @keyframes menu-backdrop { from { opacity: 0; } to { opacity: 1; } }
   @keyframes menu-arrive { from { opacity: 0; transform: translateY(10px) scale(.99); } to { opacity: 1; transform: none; } }
   @keyframes page-arrive { from { opacity: .85; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-}
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
 
 /* Shared reading tokens cover every page and both dialogs. */
@@ -225,7 +222,7 @@ html[data-character-spacing='spacious'][dir='ltr'] :is(h1,h2,p,label,button,a,se
 html[data-character-spacing='spacious'][dir='rtl'] :is(h1,h2,p,label,button,a,select,input,span,strong) { word-spacing: .12em; letter-spacing: 0; }
 html[data-highlight-links='true'] a, html[data-highlight-links='true'] .explore-link { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .2em; }
 html[data-strong-focus='true'] :is(button,a,input,select,[tabindex]):focus-visible { outline: 3px solid var(--ink) !important; outline-offset: 4px !important; box-shadow: 0 0 0 7px var(--paper); }
-html[data-reduced-motion='true'] *, html[data-reduced-motion='true'] *::before, html[data-reduced-motion='true'] *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+html[data-reduced-motion='true'] *, html[data-reduced-motion='true'] *::before, html[data-reduced-motion='true'] *::after, html[data-reduced-motion='true'] ::backdrop { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 html[data-contrast='light'] { --paper: #fff; --surface: #fff; --ink: #21130b; --muted: #4e4034; --brass: #6c481f; --border: #6c481f80; --button-ink: #fff; }
 html[data-contrast='dark'] { --paper: #17130f; --surface: #211c16; --ink: #fffaf0; --muted: #e0d6c4; --brass: #e0bd78; --border: #e0d6c480; --button-ink: #17130f; }
 html[data-contrast='dark'] .workspace::before { display: none; }
@@ -376,4 +373,4 @@ html[lang='en'] { --text-small: calc(16px * var(--text-scale)); --text-control: 
 ::view-transition-new(root) { animation: lang-in .32s .06s ease both; }
 @keyframes lang-out { to { opacity: 0; } }
 @keyframes lang-in { from { opacity: 0; transform: translateY(6px); } }
-@media (prefers-reduced-motion: reduce) { ::view-transition-old(root), ::view-transition-new(root) { animation: none; } }
+html[data-reduced-motion='true']::view-transition-old(root), html[data-reduced-motion='true']::view-transition-new(root) { animation: none; }

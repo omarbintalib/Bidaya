@@ -36,7 +36,7 @@ html[data-contrast='dark'] .hmap-label-sea { fill: #8fa19b; }
 
 .hmap-hit { fill: transparent; }
 .hmap-pin:hover .hmap-dot { fill: var(--brass); }
-@media (prefers-reduced-motion: no-preference) {
+@media all { /* motion on unless html[data-reduced-motion='true'] (Motion preference) */
   html:not([data-reduced-motion='true']) .hmap-pin.is-selected .hmap-halo { animation: hmap-pulse 2.4s ease-out infinite; transform-box: fill-box; transform-origin: center; }
 }
 @keyframes hmap-pulse { 0% { opacity: .8; transform: scale(.7); } 100% { opacity: 0; transform: scale(1.6); } }
@@ -69,7 +69,7 @@ html[data-contrast='dark'] .hmap-label-sea { fill: #8fa19b; }
 html[data-contrast='dark'] .glow-0 { stop-color: #f0c674; stop-opacity: .55; }
 .hmap-glow-place { opacity: 0; transition: opacity 1.2s ease; pointer-events: none; }
 .hmap-glow-place.is-lit { opacity: 1; }
-@media (prefers-reduced-motion: no-preference) {
+@media all { /* motion on unless html[data-reduced-motion='true'] (Motion preference) */
   html:not([data-reduced-motion='true']) .hmap-glow-place.is-lit { animation: hmap-breathe 4.5s ease-in-out infinite; }
 }
 @keyframes hmap-breathe { 0%, 100% { opacity: .85; } 50% { opacity: 1; } }
@@ -81,7 +81,7 @@ html[data-contrast='dark'] .glow-0 { stop-color: #f0c674; stop-opacity: .55; }
 
 /* The current route draws itself. */
 .hmap-route.is-drawing { stroke-dasharray: 1; stroke-dashoffset: 0; opacity: .9; }
-@media (prefers-reduced-motion: no-preference) {
+@media all { /* motion on unless html[data-reduced-motion='true'] (Motion preference) */
   html:not([data-reduced-motion='true']) .hmap-route.is-drawing { animation: hmap-draw 2.2s ease-in-out both; }
 }
 @keyframes hmap-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
@@ -103,7 +103,7 @@ html[data-contrast='dark'] .glow-0 { stop-color: #f0c674; stop-opacity: .55; }
 .hmap-quiz-target.is-right .hmap-quiz-ring { fill: #e2b45c88; stroke: #8a6a2c; }
 .hmap-quiz-target.is-wrong .hmap-quiz-ring { fill: none; stroke: var(--muted); stroke-dasharray: 3 3; }
 .hmap-quiz-target.is-out { opacity: .45; }
-@media (prefers-reduced-motion: no-preference) {
+@media all { /* motion on unless html[data-reduced-motion='true'] (Motion preference) */
   html:not([data-reduced-motion='true']) .hmap-quiz-target:not(.is-right):not(.is-wrong):not(.is-out) .hmap-quiz-ring { animation: quiz-breathe 2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 }
 @keyframes quiz-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }

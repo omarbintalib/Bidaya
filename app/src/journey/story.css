@@ -43,7 +43,7 @@
 .step-peek h3 { margin: 4px 0 0; font-size: var(--text-control); line-height: 1.5; font-weight: 600; }
 .step-date { margin: 0; color: var(--muted); font-size: calc(14px * var(--text-scale)); }
 .step-event.is-on .ecard { background: var(--surface); border: 1px solid var(--border); box-shadow: 0 12px 40px #331b0d14; padding: 26px 28px 22px; }
-@media (prefers-reduced-motion: no-preference) {
+@media all { /* motion on unless html[data-reduced-motion='true'] (Motion preference) */
   html:not([data-reduced-motion='true']) .step-event.is-on .ecard { animation: card-in .45s ease both; }
 }
 
@@ -146,7 +146,7 @@
 .intro-sub { margin: 0; color: var(--muted); font-size: var(--text-body); }
 .intro-actions { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
 .intro-begin { min-height: 52px; padding-inline: 32px; font-size: var(--text-control); }
-@media (prefers-reduced-motion: no-preference) {
+@media all { /* motion on unless html[data-reduced-motion='true'] (Motion preference) */
   html:not([data-reduced-motion='true']) .intro-scene:not(.is-still) .intro-land path { animation: hmap-draw 3.2s ease-in-out both; }
   html:not([data-reduced-motion='true']) .intro-scene:not(.is-still) .intro-content > * { animation: intro-rise .8s ease both; }
   html:not([data-reduced-motion='true']) .intro-scene:not(.is-still) .intro-content > :nth-child(1) { animation-delay: 1.2s; }
@@ -206,7 +206,7 @@
 
 /* Small motions that make things feel alive. Transform and opacity only (cheap to draw); the global
    reduced-motion rules switch them all off. */
-@media (prefers-reduced-motion: no-preference) {
+@media all { /* motion on unless html[data-reduced-motion='true'] (Motion preference) */
   .person-dialog[open], .quran-reader[open] { animation: rise-in .32s cubic-bezier(.2, .7, .3, 1) both; }
   .person-dialog[open]::backdrop, .quran-reader[open]::backdrop { animation: fade-in .25s ease both; }
   .ask-bar { animation: rise-in .4s ease both; }
