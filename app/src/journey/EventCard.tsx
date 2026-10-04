@@ -13,11 +13,6 @@ function lead(body: string) {
   return m >= 0 ? body.slice(0, 40 + m + 1).trim() : excerpt(body, 180);
 }
 
-/** English text with Quran quotations (﴿…﴾) kept in Arabic, each in its own direction. */
-const WithQuran = ({ text }: { text: string }) => <>{text.split(/(﴿[^﴾]*﴾)/).map((part, i) => part.startsWith('﴿')
-  ? <span key={i} className="quran-quote" lang="ar" dir="rtl">{part}</span>
-  : <PeopleText key={i} text={part} lang="en" />)}</>;
-
 /** Arabic-only source text keeps its own language and direction inside the English interface. */
 const Ar = ({ children, as: Tag = 'span' }: { children: React.ReactNode; as?: 'span' | 'p' }) => <Tag lang="ar" dir="rtl">{children}</Tag>;
 
@@ -91,16 +86,11 @@ export function VerseItem({ v, locale, compact = false }: { v: Verse; locale: Lo
   const [open, setOpen] = useState(false);
   const [reading, setReading] = useState<QuranRef | null>(null);
   const refs = quranpediaRefs(v.ref, v.whole, locale);
-  // English text appears once the team has filled the _EN column; until then the Arabic is shown, marked as Arabic.
-  const enSurah = locale === 'en' && v.surahEn;
-  const surahName = locale === 'ar' ? `سورة ${v.surah}` : enSurah ? `Surah ${v.surahEn}` : 'Surah';
-  const label = locale === 'en' && v.link?.labelEn ? v.link.labelEn : v.link?.label;
-  const labelEn = locale === 'en' && !!v.link?.labelEn;
-  const reason = locale === 'en' && v.reasonEn ? v.reasonEn : v.reason;
-  const reasonEn = locale === 'en' && !!v.reasonEn;
+  const surahName = locale === 'ar' ? `سورة ${v.surah}` : `Surah ${v.surah}`;
+  const label = v.link?.label;
   return <li className="verse">
     <p className="verse-ref">
-      <span className="verse-surah">{surahName}{locale === 'en' && !enSurah && <> <span lang="ar" dir="rtl">{v.surah}</span></>}</span>
+      <span className="verse-surah">{surahName}</span>
       {refs.map(r => <a key={r.url} className="verse-ayat" href={r.url} target="_blank" rel="noreferrer" title={text.readQuranpedia}
         onClick={e => { if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return; e.preventDefault(); setReading(r); }}>
         {v.whole ? text.wholeSurah : r.label}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3.5h4.2c.8 0 .8.6.8.6v9s0-.6-.8-.6H3zM13 3.5H8.8c-.8 0-.8.6-.8.6v9s0-.6.8-.6H13z" fill="none" stroke="currentColor" /></svg>
@@ -109,40 +99,17 @@ export function VerseItem({ v, locale, compact = false }: { v: Verse; locale: Lo
     {reading && <QuranReader title={surahName} quranRef={reading} locale={locale} onClose={() => setReading(null)} />}
     <p className="verse-title"><PeopleText text={v.title[locale]} lang={v.title[locale] === v.title.ar ? 'ar' : 'en'} /></p>
     <p className="verse-phrase">{v.phrase[locale]}</p>
-    {label && v.link?.type !== 'direct' && <p className="verse-label">{labelEn ? label : <Ar>{label}</Ar>}</p>}
+    {label && v.link?.type !== 'direct' && <p className="verse-label"><Ar>{label}</Ar></p>}
     {!compact && <>
       <button type="button" className="verse-toggle" aria-expanded={open} onClick={() => setOpen(o => !o)}>{text.reason}</button>
       {open && <div className="verse-detail">
-        {reasonEn ? <>
-            {/* A translation of the Arabic, which stays one tap away as the reference. Quran quotations are left in Arabic. */}
-            <p className="verse-translated"><WithQuran text={reason!} /></p>
-            <details className="verse-ar"><summary>{text.originalArabic}</summary><Ar as="p"><PeopleText text={v.reason} lang="ar" /></Ar></details>
-          </>
-          : locale === 'en' && v.hadithEn
-            // The English version shows the hadith itself, in sunnah.com's published English, with its own narrator line.
-            ? <blockquote className="verse-hadith">
-                <p className="verse-hadith-chain">{v.hadithEn.chain}:</p>
-                <p className="verse-hadith-text"><PeopleText text={v.hadithEn.text} lang="en" /></p>
-                <a href={v.hadithEn.url} target="_blank" rel="noreferrer">{v.hadithEn.ref} · sunnah.com ↗</a>
-              </blockquote>
-            : locale === 'en' && v.tafseerEn?.meaning
-              // No hadith: Dorar's own English tafseer of the verses ("Overall meaning").
-              ? <blockquote className="verse-hadith">
-                  <p className="verse-hadith-chain">{text.overallMeaning(v.tafseerEn.label)}</p>
-                  <p className="verse-hadith-text"><PeopleText text={v.tafseerEn.meaning} lang="en" /></p>
-                  <a href={v.tafseerEn.url} target="_blank" rel="noreferrer">Dorar · {v.tafseerEn.label} ↗</a>
-                </blockquote>
-              : reason && (locale === 'en'
-                // No English from the source yet: the Arabic is kept, folded and marked, rather than shown as the explanation.
-                ? <details className="verse-ar"><summary>{text.arabicPending}</summary><Ar as="p"><PeopleText text={reason} lang="ar" /></Ar></details>
-                : <Ar as="p"><PeopleText text={reason} lang="ar" /></Ar>)}
+        {v.reason && <Ar as="p"><PeopleText text={v.reason} lang="ar" /></Ar>}
         {(v.evidence[locale] || v.evidence.ar) && <p className="verse-evidence" lang={v.evidence[locale] ? locale : 'ar'}>{v.evidence[locale] || v.evidence.ar}</p>}
         <p className="verse-refs">
           {hadithLinks(v).map(h => <a key={h.book + h.n} href={h.url} target="_blank" rel="noreferrer">{text[h.book]} {h.n}</a>)}
           {v.tafseer.slice(0, 1).map(u => <a key={u} href={u} target="_blank" rel="noreferrer">{text.tafseer}</a>)}
-          {locale === 'en' && v.tafseerEn && <a href={v.tafseerEn.url} target="_blank" rel="noreferrer">{text.tafseerEn}</a>}
         </p>
-        {v.narrator && <p className="verse-narrator">{text.narrator}: {locale === 'en' && v.narratorEn ? v.narratorEn : <Ar>{v.narrator}</Ar>}</p>}
+        {v.narrator && <p className="verse-narrator">{text.narrator}: <Ar>{v.narrator}</Ar></p>}
       </div>}
     </>}
   </li>;

@@ -115,44 +115,6 @@ describe('ask about this event', () => {
   });
 });
 
-describe('English from the sources and the team', () => {
-  it('has every surah name from Quran.com and sunnah.com English for each hadith-based verse', () => {
-    expect(data.verses.every(v => v.surahEn)).toBe(true);
-    const withHadith = data.verses.filter(v => v.bukhari.length || v.muslim.length);
-    expect(data.verses.filter(v => v.hadithEn).length).toBeGreaterThanOrEqual(90);
-    for (const v of data.verses.filter(v => v.hadithEn)) expect(v.hadithEn!.url).toMatch(/^https:\/\/sunnah\.com\//);
-    expect(withHadith.length).toBeGreaterThan(0);
-  });
-  it('uses a team-filled _EN cell, shared by every row with the same Arabic', async () => {
-    expect(data.verses.filter(v => v.narrator).every(v => v.narratorEn)).toBe(true);
-    // Clear the column, fill one cell, and check every row with the same Arabic takes it.
-    const rows = parseCsv(byName.get('1_related_surahs.csv')!);
-    for (const r of rows) r['الراوي_EN'] = '';
-    const first = rows.find(r => r['المعرف'] === 'ASB-001')!;
-    first['الراوي_EN'] = 'Aisha';
-    const cols = Object.keys(rows[0]);
-    const csv = [cols, ...rows.map(r => cols.map(c => r[c]))].map(line => line.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
-    vi.stubGlobal('fetch', async (url: string) => {
-      const name = decodeURIComponent(url.split('/').pop()!);
-      return new Response(name === '1_related_surahs.csv' ? csv : byName.get(name) ?? '');
-    });
-    const filled = await loadSirah();
-    const same = filled.verses.filter(v => v.narrator === first['الراوي']);
-    expect(same.length).toBeGreaterThan(0);
-    expect(same.every(v => v.narratorEn === 'Aisha')).toBe(true);
-    expect(filled.verses.filter(v => v.narrator !== first['الراوي']).every(v => v.narratorEn === null)).toBe(true);
-  });
-});
-
-describe('translations keep the Quran untouched', () => {
-  it('copies every Quran quotation in an English translation exactly from the Arabic', () => {
-    const quotes = (t: string) => t.match(/﴿[^﴾]*﴾/g) ?? [];
-    const translated = data.verses.filter(v => v.reasonEn);
-    expect(translated.length).toBeGreaterThanOrEqual(26);
-    for (const v of translated) expect(quotes(v.reasonEn!)).toEqual(quotes(v.reason));
-  });
-});
-
 describe('sourced facts about people', () => {
   it('loads every fact in 7_sahaba_references.csv onto its person, with a quote and a source', () => {
     const facts = data.people.flatMap(p => p.facts);

@@ -126,12 +126,7 @@ export interface Mention { event: SirahEvent; text: string; lang: 'ar' | 'en' }
  */
 export function mentionIn(data: Sirah, person: Person, e: SirahEvent, lang: 'ar' | 'en', max = 280): Mention | null {
   const l = lang === 'en' && e.text.en ? 'en' : 'ar';
-  const said = sentenceNaming(data, person, l === 'en' ? e.text.en : e.text.ar, l, max);
-  return said ? { event: e, text: said, lang: l } : null;
-}
-
-/** The sentence of `text` that names `person`, word for word (clipped with … when long); null if not named. */
-export function sentenceNaming(data: Sirah, person: Person, text: string, l: 'ar' | 'en', max = 280): string | null {
+  const text = l === 'en' ? e.text.en : e.text.ar;
   const hit = findPeople(data, text, l).find(s => s.person.id === person.id);
   if (!hit) return null;
   const stops = /[.!?؟\n]/;
@@ -149,5 +144,5 @@ export function sentenceNaming(data: Sirah, person: Person, text: string, l: 'ar
   }
   const body = text.slice(a, b).trim();
   if (body.length < 12) return null;
-  return `${a > start ? '… ' : ''}${body}${b < end ? ' …' : ''}`;
+  return { event: e, text: `${a > start ? '… ' : ''}${body}${b < end ? ' …' : ''}`, lang: l };
 }

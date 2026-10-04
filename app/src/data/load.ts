@@ -85,7 +85,7 @@ export async function loadSirah(): Promise<Sirah> {
     links.set(r['المعرف'], {
       type: LINK_TYPES[r['نوع_الربط']] ?? 'placeholder', event,
       at: num(r['الموضع_في_الخط_الزمني']), from: num(r['النطاق_من']), to: num(r['النطاق_إلى']),
-      label: r['نص_الربط_في_الواجهة'] || null, labelEn: r['نص_الربط_في_الواجهة_EN'] || null, reason: r['سبب_الموضع'] || null,
+      label: r['نص_الربط_في_الواجهة'] || null, reason: r['سبب_الموضع'] || null,
     });
   }
 
@@ -93,10 +93,7 @@ export async function loadSirah(): Promise<Sirah> {
     id: r['المعرف'],
     title: { ar: r['الحدث'], en: r['العنوان_EN'] || r['الحدث'] },
     stage: r['المرحلة'],
-    surah: r['السورة'], surahEn: r['السورة_EN'] || null, reasonEn: r['وجه_الارتباط_EN'] || null, narratorEn: r['الراوي_EN'] || null,
-    tafseerEn: r['رابط_تفسير_الدرر_EN'] ? { url: r['رابط_تفسير_الدرر_EN'], label: r['مقطع_تفسير_الدرر_EN'], meaning: r['المعنى_الإجمالي_EN'] || null } : null,
-    hadithEn: r['نص_الحديث_EN'] ? { ref: r['مرجع_الحديث_EN'], url: r['رابط_الحديث_EN'], chain: r['سند_الحديث_EN'], text: r['نص_الحديث_EN'] } : null,
-    ref: r['مرجع_الآيات'], ayat: r['الآيات'],
+    surah: r['السورة'], ref: r['مرجع_الآيات'], ayat: r['الآيات'],
     mushaf: list(r['روابط_المصحف']), bukhari: list(r['صحيح_البخاري']), muslim: list(r['صحيح_مسلم']),
     narrator: r['الراوي'] || null,
     reason: r['وجه_الارتباط'], kind: r['نوع_الارتباط'],
@@ -106,16 +103,6 @@ export async function loadSirah(): Promise<Sirah> {
     tafseer: list(r['روابط_موسوعة_التفسير']),
     link: links.get(r['المعرف']) ?? null,
   }));
-  // A repeated value (a surah name, a narrator, a timing label) only needs its English filled once: every row
-  // with the same Arabic takes it.
-  const shared = <T,>(items: T[], ar: (t: T) => string | null | undefined, en: (t: T) => string | null, set: (t: T, v: string) => void) => {
-    const known = new Map<string, string>();
-    for (const t of items) { const a = ar(t), e = en(t); if (a && e && !known.has(a)) known.set(a, e); }
-    for (const t of items) { const a = ar(t); if (a && !en(t) && known.has(a)) set(t, known.get(a)!); }
-  };
-  shared(verses, v => v.surah, v => v.surahEn, (v, e) => { v.surahEn = e; });
-  shared(verses, v => v.narrator, v => v.narratorEn, (v, e) => { v.narratorEn = e; });
-  shared([...links.values()], l => l.label, l => l.labelEn, (l, e) => { l.labelEn = e; });
 
   const stated = (v: string | undefined) => v && !/غير مذكور/.test(v) ? v : null;
   const aliasList = (ar = '', en = '') => {
@@ -127,7 +114,7 @@ export async function loadSirah(): Promise<Sirah> {
     name: { ar: r['الاسم'], en: r.Name_EN || r['الاسم'] },
     kind: r['النوع'],
     category: r['الفئة'] || 'الصحابة',
-    bio: r['نبذة_موثقة'], bioEn: r['نبذة_موثقة_EN'] || null, islamEn: r['وقت_الإسلام_EN'] || null, deathEn: r['الوفاة_أو_الاستشهاد_EN'] || null,
+    bio: r['نبذة_موثقة'],
     islam: stated(r['وقت_الإسلام']),
     death: stated(r['الوفاة_أو_الاستشهاد']),
     aliases: aliasList(r['أسماء_أخرى'], r.Aliases_EN),
@@ -142,7 +129,7 @@ export async function loadSirah(): Promise<Sirah> {
     const id = r['معرف_المصدر_في_المشروع'];
     // Dorar facts cite their event ("حدث 14"); Sahihayn facts cite the hadith ("صحيح مسلم 1748").
     const source = /^حدث\s/.test(id) ? `الدرر السنية · ${id}` : r['المرجع'];
-    p.facts.push({ text: r['الحقيقة'], quote: r['الشاهد_من_المصدر'], source, url: r['الرابط'] || null, ref: id });
+    p.facts.push({ text: r['الحقيقة'], quote: r['الشاهد_من_المصدر'], source, url: r['الرابط'] || null });
   }
 
   const routes: Route[] = [];

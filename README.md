@@ -169,23 +169,6 @@ The file loads directly into Leaflet or Mapbox.
 - **English texts:** all 142 events, from dorar.net/en/history. The 131 events in the v9 prototype came through its data. The 11 events before the first revelation (1–11) were copied by the team from the Dorar site, matched to their events by Dorar's exact English title and Hijri date. They are kept word for word, including Dorar's own typos, with paragraph breaks as on the site.
 - **English titles:** all 142 events, taken exactly from dorar.net/en/history (`title_en_dorar`), including Dorar's own spellings and typos. `title_en_display` shows the same words in normal title case, since Dorar writes them in capitals; this is what the prototype shows. Each title was matched to its event by content (names and places checked against the event's English text), because Dorar's English numbering differs from the Arabic one in places and contains duplicate entries where the Arabic list skips numbers (64, 81, 82).
 
-## English for the English interface (to be filled by the team)
-
-Nothing in these columns is machine-translated. Where an original source publishes English it is copied from there (named below); the rest is left empty on purpose for a reviewer to fill. Until a cell is filled, the English interface shows the Arabic, marked as Arabic. A repeated value only needs filling once — every row with the same Arabic takes the same English.
-
-| File | Column | Next to | To fill |
-|---|---|---|---|
-| `1_related_surahs.csv` | `السورة_EN` | `السورة` | **Filled** from Quran.com (`api.quran.com/api/v4/chapters`, `name_simple`), by `رقم_السورة`; every Arabic name was checked against Quran.com's Arabic name for that number (all 44 matched) |
-| `1_related_surahs.csv` | `وجه_الارتباط_EN` | `وجه_الارتباط` | **Translated** for the 26 TAF rows that have no hadith (AI-assisted translation, to be reviewed by Hassan). Quran quotations inside are not translated: each ﴿…﴾ is copied character for character from the Arabic (a test checks this). The English interface shows the translation with the Arabic beneath it as the reference. The 90 hadith rows show sunnah.com's English instead |
-| `1_related_surahs.csv` | `الراوي_EN` | `الراوي` | **Translated**: 55 narrator names, spelled as in `6_sahaba.csv` (to be reviewed) |
-| `1_related_surahs.csv` | `مرجع_الحديث_EN`, `رابط_الحديث_EN`, `سند_الحديث_EN`, `نص_الحديث_EN` | `روابط_التحقق` | **Filled** for the 90 hadith-based rows from sunnah.com's published English: the reference, page, narrator line and text of the row's first hadith link, word for word. The English interface shows this hadith under "How it connects". (`سند_الحديث_EN` is the hadith's own narrator line, which often names the next narrator in the chain rather than the Companion in `الراوي`, so it does not fill `الراوي_EN`.) |
-| `3_links_surahs_sirah.csv` | `نص_الربط_في_الواجهة_EN` | `نص_الربط_في_الواجهة` | **Translated**: the 8 timing labels, e.g. «نزلت بعد هذا الحدث» → "Revealed after this event" (to be reviewed) |
-| `6_sahaba.csv` | `نبذة_موثقة_EN` | `نبذة_موثقة` | **Translated** for all 98 people (AI-assisted, to be reviewed by Hassan). The English card shows it with the Arabic summary one tap away as its reference. Dorar's English spellings of five names are also in `Aliases_EN` so the people are found in Dorar's English texts |
-| `6_sahaba.csv` | `وقت_الإسلام_EN` | `وقت_الإسلام` | **Translated**, 35 entries (to be reviewed) |
-| `6_sahaba.csv` | `الوفاة_أو_الاستشهاد_EN` | `الوفاة_أو_الاستشهاد` | **Translated**, 25 entries (to be reviewed) |
-
-Quotes from the sources (Dorar's Arabic text, hadith wording) stay in Arabic in both interfaces.
-
 ## Open items
 
 | Item | Owner |

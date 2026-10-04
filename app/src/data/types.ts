@@ -34,7 +34,6 @@ export interface VerseLink {
   from: number | null;
   to: number | null;
   label: string | null;
-  labelEn: string | null;
   reason: string | null;
 }
 
@@ -43,14 +42,6 @@ export interface Verse {
   title: Text;
   stage: string;
   surah: string;
-  /** English fields below are filled by the team in the CSVs (never machine-translated); null until then. */
-  surahEn: string | null;
-  reasonEn: string | null;
-  narratorEn: string | null;
-  /** The verse's main hadith in English, as sunnah.com gives it (its own narrator line, text and reference). */
-  hadithEn: { ref: string; url: string; chain: string; text: string } | null;
-  /** Dorar's English tafseer for the verses: the page, its verse group, and (where taken) its 'Overall meaning'. */
-  tafseerEn: { url: string; label: string; meaning: string | null } | null;
   ref: string;
   ayat: string;
   mushaf: string[];
@@ -67,7 +58,7 @@ export interface Verse {
 }
 
 export interface Person {
-  id: string; name: Text; kind: string; category: string; bio: string; bioEn: string | null; islamEn: string | null; deathEn: string | null;
+  id: string; name: Text; kind: string; category: string; bio: string;
   /** When they became Muslim (or that they did not), as the sources state; null when not stated. */
   islam: string | null;
   death: string | null; events: number[]; verses: string[];
@@ -76,7 +67,7 @@ export interface Person {
   facts: PersonFact[];
 }
 
-export interface PersonFact { text: string; quote: string; source: string; url: string | null; ref: string }
+export interface PersonFact { text: string; quote: string; source: string; url: string | null }
 
 export interface Route { id: string; kind: 'sirah' | 'trade'; name: Text; events: number[]; note: Text; coords: [number, number][] }
 
