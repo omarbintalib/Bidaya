@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { findPeople, mentionIn } from '../data/people';
 import { hijri } from '../data/select';
-import type { Person, Sirah } from '../data/types';
+import type { Person, Sirah, SirahEvent } from '../data/types';
 import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
 
@@ -55,6 +55,12 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
   const sources = person.facts.filter((f, i, all) => all.findIndex(g => g.source === f.source) === i);
   // Dorar events are grouped into one item ("الدرر السنية: حدث 14، حدث 42"); other references follow it.
   const dorar = sources.filter(f => f.url && f.source.startsWith('الدرر السنية · ')), others = sources.filter(f => !dorar.includes(f));
+  // English synopsis from the original source: for each Dorar event the facts cite, the sentence of Dorar's own
+  // English text that names this person, word for word (nothing is translated here). Up to four, in story order.
+  const dorarEn = locale === 'en' && !person.bioEn ? dorar
+    .map(f => data.byNumber.get(Number(/حدث (\d+)/.exec(f.source)?.[1])))
+    .filter((e): e is SirahEvent => !!e).sort((a, b) => a.order - b.order)
+    .map(e => ({ e, m: mentionIn(data, person, e, 'en') })).filter(x => x.m?.lang === 'en').slice(0, 4) : [];
 
   return <dialog ref={dialog} className="person-dialog" aria-labelledby="person-title" onClose={onClose} onClick={e => { if (e.target === dialog.current) onClose(); }}>
     <header className="pd-head">
@@ -73,8 +79,13 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
         {person.islam && <div><dt>{text.islamWhen}</dt>{locale === 'en' && person.islamEn ? <dd>{person.islamEn}</dd> : <dd lang="ar">{person.islam}</dd>}</div>}
         {person.death && <div><dt>{text.death}</dt>{locale === 'en' && person.deathEn ? <dd>{person.deathEn}</dd> : <dd lang="ar">{person.death}</dd>}</div>}
       </dl>}
-      {locale === 'en' && !person.bioEn && <p className="pd-note">{text.bioInArabic}</p>}
-      {locale === 'en' && person.bioEn ? <p className="pd-bio">{person.bioEn}</p> : <p className="pd-bio" lang="ar" dir="rtl">{person.bio}</p>}
+      {locale === 'en' && person.bioEn ? <p className="pd-bio">{person.bioEn}</p>
+        : dorarEn.length > 0 ? <>
+            <p className="pd-note">{text.fromDorarEn}</p>
+            <ul className="pd-en-lines">{dorarEn.map(({ e, m }) => <li key={e.n}>{m!.text} <a href={e.urlEn || e.url} target="_blank" rel="noreferrer">{text.eventN(e.n)}</a></li>)}</ul>
+            <details className="pd-original"><summary>{text.originalSummary}</summary><p className="pd-bio" lang="ar" dir="rtl">{person.bio}</p></details>
+          </>
+        : <>{locale === 'en' && <p className="pd-note">{text.bioInArabic}</p>}<p className="pd-bio" lang="ar" dir="rtl">{person.bio}</p></>}
       {/* Where the summary comes from: one short line of sources, and the sources' own words on request. */}
       {sources.length > 0 && <p className="pd-sources" lang="ar" dir="rtl">
         <span>{text.sourcesLabel}</span>
@@ -88,7 +99,8 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
       {events.length > 0 && <section className="pd-events">
         <h3>{text.personEvents}</h3>
         <ul>{events.map(e => {
-          const said = mentionIn(data, person, e, locale);
+          // In English the synopsis above already quotes Dorar's English for these events, so only titles are listed.
+          const said = dorarEn.length ? null : mentionIn(data, person, e, locale);
           return <li key={e.n}>
             <button type="button" onClick={() => { onEvent(e.n); onClose(); }}>
               <span className="pd-ev-head"><span>{e.title[locale] || e.title.ar}</span><small>{hijri(e.year, locale)}</small></span>
