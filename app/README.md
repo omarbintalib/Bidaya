@@ -2,7 +2,7 @@
 
 An Arabic-first, bilingual web experience for exploring the Sirah in place and time. Built with React and TypeScript, it combines the Islamathon design (animated navigation, reading preferences) with the Bidaya data package.
 
-**Status:** working prototype (v11). The Journey page tells the Sirah as a story on a period map of Arabia: chapters, a card for each of the 142 Dorar events with its verses and people, story mode, places that glow as Islam reaches them, and "Ask the map". All content is read at runtime from the CSV files at the repository root. (The former Spread page is part of Journey now; `/spread` redirects there.)
+**Status:** working prototype (v11). The Journey page tells the Sirah as a scroll-driven story: an opening scene, then chapters you scroll through while the map beside them follows each event, places glowing as Islam reaches them, a question at the end of each chapter (answered on the map), walks along the Hijrah, Ta'if and Farewell Hajj routes, and a closing summary of your progress. "Ask the map" floats over the map. All content is read at runtime from the CSV files at the repository root; `/spread` redirects to Journey.
 
 ## Editing the data
 
@@ -24,12 +24,21 @@ Every piece of content comes from the CSV files at the **root of this repository
 | `5_sirah_map.geojson` | Sirah routes (Hijrah, Isra', Taif, Tabuk, Farewell Hajj) |
 | `map_labels.csv` | Period map labels: regions (`إقليم`), powers (`قوة`), seas (`بحر`); position, size (`كبير`/`متوسط`/`صغير`) and rotation |
 | `map_routes.csv` | Caravan routes, as `lat lon; lat lon; …` |
+| `quiz.csv` | The question at the end of each chapter (answer and choices are place keys) |
+| `route_stops.csv` | The stops of each route walk, with their Dorar lines |
 
 The README of the data package (IslamthonDataandstuff) explains every column.
 
+## How the story works
+
+- **Scrolling drives the map.** The step crossing the middle of the screen (the lower part on phones) becomes the current one. Over the map the wheel scrolls the story; zoom with the + / − buttons, a pinch, or Ctrl/⌘ + wheel.
+- **Story mode** advances one step every few seconds and pauses at each chapter question until it is answered.
+- **Progress** (answers and events read) is kept in this browser only (`localStorage`, key `bidaya.journey.v1`); the opening is shown once per browser session.
+- **Reduced motion** (system setting or the in-app preference) turns off the drawing, pulses, caravans and smooth scrolling.
+
 ## The map
 
-The map is a period map, drawn as SVG: coastlines only (Natural Earth 1:50m, public domain), with the regions, powers and seas of the time from `map_labels.csv`. It draws no modern borders, so no country outline is approximated. Region positions are approximate and labelled for orientation only. To regenerate the coastline after changing the map's extent, run `node scripts/build-land.mjs`.
+The map is a period map, drawn as SVG: coastlines only (Natural Earth 1:50m, public domain), with the regions, powers and seas of the time from `map_labels.csv`. It draws no modern borders, so no country outline is approximated. Region positions are approximate and labelled for orientation only. The mountain marks along the Hijaz and Sarawat are decorative and approximate. To regenerate the coastline after changing the map's extent, run `node scripts/build-land.mjs`.
 
 ## Reading the verses
 
@@ -121,7 +130,7 @@ Open the computer's local network address and the printed port on that device.
 | URL | Page | Current implementation |
 | --- | --- | --- |
 | `/` | The Beginning | Landing title and shared navigation |
-| `/journey` | Islam Journey | The story: period map, chapters, event cards, spread of Islam, timeline, story mode, and Ask the map |
+| `/journey` | Islam Journey | The story: opening, chapters, event cards, spread of Islam, chapter questions, route walks, timeline, story mode, and Ask the map |
 
 The language selection stays in memory during navigation and resets on a full reload. Leaving Journey and returning starts a fresh AI demo.
 

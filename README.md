@@ -34,6 +34,13 @@ Columns added for the app (filled only where the Dorar texts state it, each with
 | `6_sahaba.csv` | `الفئة`, `وقت_الإسلام`, `أسماء_أخرى`, `Aliases_EN` | Group (Companions, the Prophet's family ﷺ, Quraysh, hypocrites, Jews of Madinah, rulers…), when the person became Muslim (or that they did not), and other names used to find them in the texts. People `PER-001`… are the new non-Companion figures; their facts are in `7_sahaba_references.csv`. |
 | `4_places.csv`, `map_labels.csv` | `حدث_بلوغ_الإسلام`, `شاهد_بلوغ_الإسلام` | The Dorar event from which Islam had reached the place or region, with the quote. The map lights these up as the story reaches that event. |
 
+New files for the story (each line quotes its Dorar event; the app's tests check every quote is verbatim):
+
+| File | What it is |
+|------|------------|
+| `quiz.csv` | One question per chapter, answered by choosing a place (`الإجابة` and `الخيارات` are keys from `4_places.csv`), with the explanation, the quote and its Dorar link |
+| `route_stops.csv` | Named stops for the route walks (the Hijrah, the journey to Ta'if, the Farewell Hajj), each with the Dorar line for that stop. Only stops the sources describe are listed. |
+
 ## Files at a glance
 
 | # | File | Rows | What it is |

@@ -1,12 +1,9 @@
-/* Journey page: map + event panel, timeline, and "Ask the map". */
+/* Journey page: event card, verses, people, timeline, dialogs. The story layout is in story.css. */
 .explorer.journey-page { display: flex; flex-direction: column; gap: 26px; min-height: 0; padding-bottom: 32px; }
 .journey-page .intro { padding-top: 32px; }
 .data-status { margin: 40px 0; padding: 18px 22px; border: 1px dashed var(--border); color: var(--muted); font-size: var(--text-body); text-align: center; }
 .data-status.is-error { border-color: var(--brass); color: var(--ink); }
 
-.journey-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(340px, 440px); gap: 28px; height: clamp(520px, calc(var(--viewport-height, 100svh) - 260px), 820px); }
-.journey-grid .hmap { min-height: 0; }
-.journey-panel { min-height: 0; overflow: auto; border: 1px solid var(--border); background: var(--surface); padding: 30px 30px 22px; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
 
 /* Event card */
 .ecard-period { display: flex; align-items: center; gap: 9px; margin: 0 0 10px; color: var(--brass); font-size: var(--text-small); letter-spacing: .04em; }
@@ -48,23 +45,14 @@
 
 .ecard-people { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .ecard-people button { border: 1px solid var(--border); background: var(--paper); border-radius: 99px; padding: 6px 14px; min-height: 40px; font-size: var(--text-small); }
-.ecard-people button[aria-expanded='true'] { background: var(--ink); color: var(--button-ink); border-color: var(--ink); }
-.person-bio { margin-top: 12px; padding: 14px; background: var(--paper); border: 1px solid var(--border); font-size: var(--text-small); line-height: var(--reading-line-height); }
-.person-bio p { margin: 0 0 6px; }
-.person-name { font-weight: 700; }
-.person-death { color: var(--muted); }
 
-.ecard-more-verses summary, .unplaced summary { list-style: none; }
+.ecard-more-verses summary { list-style: none; }
 .ecard-more-verses summary { display: flex; align-items: center; gap: 10px; cursor: pointer; }
 .ecard-more-verses summary h3 { margin: 0; }
-.ecard-more-verses summary::after, .unplaced summary::after { content: '+'; margin-inline-start: auto; color: var(--brass); font-size: 20px; line-height: 1; }
-.ecard-more-verses[open] summary::after, .unplaced[open] summary::after { content: '−'; }
+.ecard-more-verses summary::after { content: '+'; margin-inline-start: auto; color: var(--brass); font-size: 20px; line-height: 1; }
+.ecard-more-verses[open] summary::after { content: '−'; }
 .ecard-more-verses[open] summary { margin-bottom: 14px; }
 .count { min-width: 24px; padding: 0 7px; border-radius: 99px; background: var(--paper); border: 1px solid var(--border); font-size: calc(13px * var(--text-scale)); text-align: center; color: var(--muted); }
-.unplaced { margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--border); font-size: var(--text-small); }
-.unplaced summary { cursor: pointer; color: var(--muted); padding: 6px 0; display: flex; gap: 8px; align-items: center; }
-.unplaced summary span { color: var(--brass); }
-.unplaced p { color: var(--muted); }
 
 /* Timeline */
 .timeline { display: flex; flex-direction: column; gap: 12px; }
@@ -97,51 +85,12 @@
 .tl-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .tl-tick:focus-visible { outline: 2px solid var(--brass); outline-offset: 1px; }
 
-/* Ask the map */
-.journey-page .ai-region { position: relative; inset: auto; height: auto; margin-top: 8px; padding-bottom: calc(24px + var(--text-small) * var(--reading-line-height)); }
-.ai-title { margin: 0 0 4px; text-align: center; font-size: var(--text-control); font-weight: 700; }
-
-@media (max-width: 1000px) {
-  .journey-grid { grid-template-columns: minmax(0, 1fr); height: auto; }
-  .journey-grid .hmap-frame { height: min(68svh, 560px); flex: none; }
-  .journey-panel { max-height: none; }
-}
 @media (max-width: 700px) {
-  .journey-panel { padding: 20px 18px; }
   .ecard-title { font-size: calc(22px * var(--text-scale)); }
   .tl-now { flex-basis: 100%; order: -1; }
-  .journey-page .ai-region { margin-inline: -12px; }
 }
-html[data-compact-viewport='true'] .journey-page .journey-grid, html[data-compact-viewport='true'] .journey-page .timeline { display: none; }
+html[data-compact-viewport='true'] .journey-page .story-timeline { display: none; }
 
-/* Spread of Islam */
-.spread-year { margin: 0; font-family: var(--display); font-size: calc(44px * var(--text-scale)); font-weight: 700; line-height: 1.2; color: var(--brass); }
-.spread-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0 22px; padding: 14px 0; border-block: 1px solid var(--border); }
-.spread-stats p { margin: 0; font-size: var(--text-small); color: var(--muted); }
-.spread-stats b { display: block; font-size: calc(26px * var(--text-scale)); color: var(--ink); font-weight: 700; }
-.spread-h { margin: 0 0 10px; font-size: var(--text-control); }
-.spread-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-.spread-list button { width: 100%; text-align: start; border: 1px solid var(--border); background: var(--paper); padding: 10px 12px; display: grid; gap: 2px; font-size: var(--text-small); }
-.spread-list button[aria-expanded='true'] { border-color: var(--brass); }
-.spread-list small { color: var(--muted); }
-.spread-detail { padding: 10px 12px 4px; font-size: var(--text-small); line-height: var(--reading-line-height); }
-.spread-detail p { margin: 0 0 8px; }
-.spread-detail a { color: var(--ink); text-decoration-color: var(--brass); }
-.spread-date { color: var(--muted); }
-.spread-none { color: var(--muted); font-size: var(--text-small); }
-.spread-controls { display: flex; align-items: flex-start; gap: 22px; }
-.spread-slider { flex: 1; position: relative; padding-bottom: 28px; }
-.spread-slider input { width: 100%; accent-color: var(--brass); height: 44px; margin: 0; }
-.spread-ticks { position: absolute; inset-inline: 9px; bottom: 0; height: 22px; }
-.spread-ticks span { position: absolute; transform: translateX(-50%); font-size: calc(13.5px * var(--text-scale)); color: var(--muted); white-space: nowrap; }
-[dir='rtl'] .spread-ticks span { transform: translateX(50%); }
-.spread-ticks span.is-on { color: var(--ink); font-weight: 700; }
-@media (max-width: 700px) { .spread-ticks span:not(.is-on) { display: none; } .spread-controls { gap: 12px; } }
-
-/* Ask the map — heading, note and example questions sit under the input, leaving the space above for the orb. */
-.journey-page .ai-region { padding-bottom: 8px; margin-top: 24px; border-top: 1px solid var(--border); padding-top: 8px; }
-.ai-foot { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 4px; text-align: center; }
-.ai-foot .ai-title { margin: 0; font-size: var(--text-control); }
 .ai-note { margin: 0; color: var(--muted); font-size: calc(15px * var(--text-scale)); }
 .ai-suggest { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
 .ai-suggest button { min-height: 40px; padding: 6px 16px; border: 1px solid var(--border); border-radius: 99px; background: var(--surface); color: var(--ink); font-size: calc(15px * var(--text-scale)); }
@@ -192,32 +141,9 @@ html[data-compact-viewport='true'] .journey-page .journey-grid, html[data-compac
 .pd-facts dt { color: var(--muted); font-size: calc(14px * var(--text-scale)); }
 .pd-facts dd { margin: 0; font-size: var(--text-small); }
 
-/* ── Story stage: the map is the stage, the event is a card on it ── */
-.story { display: flex; flex-direction: column; gap: 18px; }
-.story .hmap-frame { height: clamp(560px, calc(var(--viewport-height, 100svh) - 210px), 860px); flex: none; border-radius: 2px; box-shadow: 0 18px 60px #331b0d14; }
-.story-card { position: absolute; top: 16px; bottom: 16px; inset-inline-start: 16px; width: min(440px, calc(100% - 32px)); overflow: auto; overscroll-behavior: contain;
-  background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(6px); border: 1px solid var(--border); box-shadow: 0 12px 40px #331b0d1a;
-  padding: 26px 28px 22px; scrollbar-width: thin; scrollbar-color: var(--border) transparent; cursor: auto; touch-action: pan-y; user-select: text; -webkit-user-select: text; z-index: 2; }
-.story-banner { position: absolute; top: 16px; inset-inline-end: 72px; inset-inline-start: calc(440px + 40px); display: flex; flex-wrap: wrap; align-items: baseline; justify-content: flex-end; gap: 4px 12px; pointer-events: none; z-index: 1;
-  font-size: var(--text-small); color: var(--muted); text-shadow: 0 0 6px var(--land), 0 0 2px var(--land); }
-.story-banner b { font-family: var(--display); font-size: calc(22px * var(--text-scale)); color: var(--ink); }
 .story-chapter { color: var(--brass); letter-spacing: .06em; }
 .story-reach { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 99px; background: color-mix(in srgb, var(--surface) 85%, transparent); border: 1px solid #e2b45c88; color: var(--ink); text-shadow: none; }
 .story-reach i { width: 10px; height: 10px; border-radius: 50%; background: radial-gradient(circle, #e2b45c, #e2b45c00 75%); box-shadow: 0 0 8px #e2b45c; }
-.story .hmap-controls { top: auto; bottom: 16px; }
-.story .hmap-north { bottom: 16px; inset-inline-end: 70px; }
-
-.chapter-card { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 6px; pointer-events: none; z-index: 3;
-  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--paper) 92%, transparent) 0%, color-mix(in srgb, var(--paper) 70%, transparent) 45%, transparent 75%); }
-.chapter-card span { color: var(--brass); letter-spacing: .12em; font-size: var(--text-control); }
-.chapter-card strong { font-family: var(--display); font-size: calc(clamp(34px, 4vw, 56px) * var(--text-scale)); line-height: 1.3; }
-@media (prefers-reduced-motion: no-preference) {
-  html:not([data-reduced-motion='true']) .chapter-card { animation: chapter-in 2.6s ease both; }
-  html:not([data-reduced-motion='true']) .story-card .ecard { animation: card-in .5s ease both; }
-}
-@keyframes chapter-in { 0% { opacity: 0; transform: scale(.97); } 15%, 75% { opacity: 1; transform: none; } 100% { opacity: 0; } }
-@keyframes card-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-
 /* Story card content */
 .ecard-year { margin: 0 0 18px; display: flex; flex-direction: column; gap: 8px; }
 .ecard-year-label { font-size: calc(14px * var(--text-scale)); color: var(--muted); }
@@ -232,11 +158,4 @@ html[data-compact-viewport='true'] .journey-page .journey-grid, html[data-compac
 .ecard-lead { font-size: calc(19.5px * var(--text-scale)); color: var(--ink); }
 .ecard-text p + p { margin-top: 12px; color: var(--ink); }
 .tl-undated { margin-inline-start: auto; font-size: calc(14px * var(--text-scale)); color: var(--muted); }
-
-@media (max-width: 1000px) {
-  .story .hmap-frame { height: min(62svh, 560px); }
-  .story-banner { inset-inline-start: 16px; inset-inline-end: 64px; justify-content: flex-start; }
-  .story-banner b { font-size: calc(18px * var(--text-scale)); }
-}
-@media (min-width: 1001px) { .story .hmap-nopin { inset-inline-start: calc(440px + 40px); inset-inline-end: 70px; } }
-@media (max-width: 1000px) { .story-banner { padding: 6px 10px; background: color-mix(in srgb, var(--surface) 82%, transparent); border: 1px solid var(--border); inset-inline-end: auto; max-width: calc(100% - 32px); } }
+@keyframes card-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }

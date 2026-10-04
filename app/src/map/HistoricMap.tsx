@@ -3,7 +3,7 @@ import { LAND } from '../data/land';
 import type { Sirah, SirahEvent } from '../data/types';
 import type { Locale } from '../i18n';
 import { mapCopy } from './copy';
-import { centerOn, clampView, HEIGHT, homeView, project, WIDTH, type View } from './projection';
+import { centerOn, clampView, fit, HEIGHT, homeView, project, WIDTH, type View } from './projection';
 import './map.css';
 
 export type Emphasis = 'selected' | 'active' | 'past' | 'hidden';
@@ -28,7 +28,21 @@ interface Props {
   children?: ReactNode;
   /** Hide the legend under the map. */
   legend?: boolean;
+  /** Chapter question: these places become large tap targets; after an answer, the right one is marked. */
+  quiz?: { options: string[]; answer: string; chosen: string | null; onPick: (key: string) => void } | null;
+  /** Route walk: draw the route up to this stop and fly to it. */
+  walk?: { routeId: string; lat: number; lon: number; key: string } | null;
+  /** A place to fly to instead of the selected event (e.g. the whole map for the summary). */
+  overview?: boolean;
+  /** Caravans moving along the trade routes (the Makkan chapters). */
+  caravans?: boolean;
+  /** In a scrolling page the wheel scrolls; the map zooms with Ctrl/⌘ + wheel, pinch or the buttons. */
+  scrollPage?: boolean;
 }
+
+// Decorative and approximate: the line of the Sarawat / Hijaz mountains.
+const MOUNTAINS: [number, number][] = [[35.6, 28.0], [36.9, 26.5], [38.3, 25.0], [39.3, 23.5], [40.1, 22.0], [41.3, 20.0], [42.5, 18.3], [43.4, 16.5], [43.9, 15.0]];
+
 
 interface PlaceLabel { key: string; x: number; y: number; name: string; priority: number; strong: boolean }
 
@@ -36,12 +50,14 @@ interface Pin { key: string; x: number; y: number; events: SirahEvent[]; emphasi
 
 const RANK: Record<Emphasis, number> = { hidden: 0, past: 1, active: 2, selected: 3 };
 
-export default function HistoricMap({ data, locale, emphasis, selected, activeRoutes = [], onSelect, reducedMotion, focusKey, caption, now, inset = 0, children, legend = true }: Props) {
+export default function HistoricMap({ data, locale, emphasis, selected, activeRoutes = [], onSelect, reducedMotion, focusKey, caption, now, inset = 0, children, legend = true, quiz = null, walk = null, overview = false, caravans = false, scrollPage = false }: Props) {
   const text = mapCopy[locale];
   const frame = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ w: 800, h: 600 });
   const [view, setView] = useState<View>(() => homeView(4 / 3));
   const viewRef = useRef(view);
+  const scrollPageRef = useRef(scrollPage);
+  scrollPageRef.current = scrollPage;
   viewRef.current = view;
   const anim = useRef(0);
   const [showTrade, setShowTrade] = useState(true);
@@ -80,22 +96,53 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
 
   // Follow the selected event when the caller asks.
   useEffect(() => {
-    if (focusKey === undefined || selected === null) return;
-    const e = data.byNumber.get(selected);
-    if (!e || e.lat === null || e.lon === null) return;
-    const v = viewRef.current, [x, y] = project(e.lon, e.lat), el = frame.current;
+    if (focusKey === undefined) return;
+    if (overview) { animateTo(homeView(size.w / size.h)); return; }
+    if (quiz) {
+      // Fit every answer choice in view.
+      const pts = quiz.options.map(k => data.places.get(k)).filter(p => p !== undefined);
+      if (pts.length) {
+        const lons = pts.map(p => p.lon), lats = pts.map(p => p.lat);
+        animateTo(fit(Math.min(...lons), Math.max(...lons), Math.min(...lats), Math.max(...lats), size.w / size.h, 0.3));
+        return;
+      }
+    }
+    const quizCenter = quiz ? (() => {
+      const pts = quiz.options.map(k => data.places.get(k)).filter(p => p !== undefined);
+      return pts.length ? { lon: pts.reduce((a, p) => a + p.lon, 0) / pts.length, lat: pts.reduce((a, p) => a + p.lat, 0) / pts.length } : null;
+    })() : null;
+    const e = selected === null ? null : data.byNumber.get(selected);
+    const target = walk ?? quizCenter ?? (e && e.lat !== null && e.lon !== null ? { lon: e.lon, lat: e.lat } : null);
+    if (!target) return;
+    const v = viewRef.current, [x, y] = project(target.lon, target.lat), el = frame.current;
     const W = el?.clientWidth || 800, u = v.w / W, rtl = locale === 'ar';
     const cover = Math.min(inset, W * 0.6) * u;           // map units hidden under the overlay
     const left = rtl ? v.x : v.x + cover, right = rtl ? v.x + v.w - cover : v.x + v.w;
     const mx = (right - left) * 0.15, my = v.h * 0.15;
     const inside = x > left + mx && x < right - mx && y > v.y + my && y < v.y + v.h - my;
     // Fly closer when the whole peninsula is in view, so the story moves place to place.
-    const w = v.w > 480 ? 400 : v.w;
+    const w = walk ? 230 : quizCenter ? 330 : v.w > 480 ? 400 : v.w;
     if (!inside || w !== v.w) {
-      const target = centerOn(v, e.lon, e.lat, w), tu = target.w / W;
-      animateTo(clampView({ ...target, x: target.x + (rtl ? 1 : -1) * Math.min(inset, W * 0.6) / 2 * tu }));
+      const next = centerOn(v, target.lon, target.lat, w), tu = next.w / W;
+      animateTo(clampView({ ...next, x: next.x + (rtl ? 1 : -1) * Math.min(inset, W * 0.6) / 2 * tu }));
     }
-  }, [focusKey, selected, data, animateTo, inset, locale]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusKey, selected, data, animateTo, inset, locale, overview, walk?.key, quiz?.options.join()]);
+
+  // A place that lights up while you watch sends out one pulse.
+  const [pulses, setPulses] = useState<string[]>([]);
+  const litBefore = useRef<Set<string> | null>(null);
+  useEffect(() => {
+    const lit = new Set([...data.places.values()].filter(p => p.reached !== null && (data.byNumber.get(p.reached)?.order ?? Infinity) <= (now ?? -Infinity)).map(p => p.key));
+    const prev = litBefore.current;
+    litBefore.current = lit;
+    if (!prev || reducedMotion) return;
+    const fresh = [...lit].filter(k => !prev.has(k));
+    if (!fresh.length) return;
+    setPulses(fresh);
+    const id = window.setTimeout(() => setPulses([]), 2600);
+    return () => window.clearTimeout(id);
+  }, [now, data, reducedMotion]);
 
   // SVG units per screen pixel (the SVG uses "slice", so the larger scale wins).
   const unit = Math.min(view.w / size.w, view.h / size.h);
@@ -172,7 +219,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
     if ((ev.target as Element).closest('button, a, [data-map-overlay]')) return;
     cancelAnimationFrame(anim.current);
     pointers.current.set(ev.pointerId, toLocal(ev.clientX, ev.clientY));
-    (ev.currentTarget as Element).setPointerCapture(ev.pointerId);
+    // Capture only once a drag begins (below), so a plain tap still reaches the pin or place under it.
     gesture.current = null;
     startGesture();
   };
@@ -184,7 +231,10 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
     let scale = 1;
     if (pts.length > 1 && g.dist > 0) scale = g.dist / Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
     const u = g.view.w / size.w, w = g.view.w * scale, h = g.view.h * scale;
-    if (Math.abs(cx - g.cx) + Math.abs(cy - g.cy) > 4 || scale !== 1) g.moved = true;
+    if (!g.moved && (Math.abs(cx - g.cx) + Math.abs(cy - g.cy) > 4 || scale !== 1)) {
+      g.moved = true;
+      try { (ev.currentTarget as Element).setPointerCapture(ev.pointerId); } catch { /* pointer already released */ }
+    }
     // Keep the world point under the gesture's start centre under the current centre.
     const wx = g.view.x + g.cx * u, wy = g.view.y + g.cy * u, nu = w / size.w;
     setView(clampView({ x: wx - cx * nu, y: wy - cy * nu, w, h }));
@@ -198,6 +248,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
     if (!el) return;
     const onWheel = (ev: WheelEvent) => {
       if ((ev.target as Element).closest?.('[data-map-overlay]')) return; // let overlays scroll
+      if (scrollPageRef.current && !ev.ctrlKey && !ev.metaKey) return; // let the page scroll
       ev.preventDefault();
       cancelAnimationFrame(anim.current);
       const v = viewRef.current, { x: px, y: py } = toLocal(ev.clientX, ev.clientY);
@@ -227,7 +278,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
   const labelSize = { l: 15, m: 12.5, s: 11 };
 
   return <section className="hmap" aria-label={text.label}>
-    <div className="hmap-frame" ref={frame} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}>
+    <div className={`hmap-frame${scrollPage ? ' is-in-page' : ''}`} ref={frame} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}>
       <svg className="hmap-svg" viewBox={`${view.x} ${view.y} ${view.w} ${view.h}`} preserveAspectRatio="xMidYMid slice" role="img" aria-label={text.label}>
         <defs>
           <radialGradient id="hmap-glow"><stop offset="0" className="glow-0" /><stop offset=".55" className="glow-1" /><stop offset="1" className="glow-2" /></radialGradient>
@@ -237,9 +288,13 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
         </defs>
         <rect className="hmap-sea" x={-WIDTH} y={-HEIGHT} width={WIDTH * 3} height={HEIGHT * 3} />
         <path className="hmap-land" d={LAND} strokeWidth={1.1 * unit} />
+        <g className="hmap-terrain" aria-hidden="true">
+          <path className="hmap-mountains" d={mountainPath(unit)} strokeWidth={1.1 * unit} />
+        </g>
         <g className="hmap-glows" aria-hidden="true">
           {glowRegions.map(l => { const [x, y] = project(l.lon, l.lat); return <circle key={l.id} className={`hmap-glow-region${reachedBy(l.reached) ? ' is-lit' : ''}`} cx={x} cy={y} r={95} fill="url(#hmap-glow)" />; })}
           {glowPlaces.map(p => { const [x, y] = project(p.lon, p.lat); return <circle key={p.key} className={`hmap-glow-place${reachedBy(p.reached) ? ' is-lit' : ''}`} cx={x} cy={y} r={Math.max(26, 34 * unit)} fill="url(#hmap-glow)" />; })}
+          {pulses.map(k => { const p = data.places.get(k); if (!p) return null; const [x, y] = project(p.lon, p.lat); return <circle key={`pulse-${k}-${now}`} className="hmap-pulse" cx={x} cy={y} r={30 * unit} strokeWidth={2 * unit} />; })}
         </g>
         {/* Graticule every 5° — orientation only. */}
         <g className="hmap-grid" strokeWidth={0.6 * unit}>
@@ -254,11 +309,23 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
           </text>;
         })}
 
-        {showTrade && data.routes.filter(r => r.kind === 'trade').map(r => <path key={r.id} className="hmap-trade" d={routeD(r.coords)} strokeWidth={1.3 * unit} strokeDasharray={`${1 * unit} ${4 * unit}`}><title>{`${r.name[locale]} — ${r.note[locale]}`}</title></path>)}
+        {showTrade && data.routes.filter(r => r.kind === 'trade').map(r => <g key={r.id}>
+          <path className="hmap-trade" d={routeD(r.coords)} strokeWidth={1.3 * unit} strokeDasharray={`${1 * unit} ${4 * unit}`}><title>{`${r.name[locale]} — ${r.note[locale]}`}</title></path>
+          {caravans && !reducedMotion && [0, 1].map(i => <circle key={i} className="hmap-caravan" r={2.6 * unit}>
+            <animateMotion dur="22s" begin={`${-i * 11}s`} repeatCount="indefinite" path={routeD(r.coords)} />
+          </circle>)}
+        </g>)}
         {data.routes.filter(r => r.kind === 'sirah').map(r => {
           const on = activeRoutes.includes(r.id);
           const seen = r.events.some(n => { const e = data.byNumber.get(n); return e && emphasis(e) !== 'hidden'; });
           if (!on && !seen) return null;
+          if (walk?.routeId === r.id) {
+            const cut = nearestIndex(r.coords, walk.lon, walk.lat);
+            return <g key={r.id}>
+              <path className="hmap-route" d={routeD(r.coords)} strokeWidth={1.4 * unit} strokeDasharray={`${6 * unit} ${4 * unit}`} />
+              <path key={walk.key} className="hmap-route is-on is-drawing" d={routeD(r.coords.slice(0, cut + 1))} strokeWidth={3 * unit} pathLength={1} />
+            </g>;
+          }
           if (on) return <path key={`${r.id}-${focusKey}`} className="hmap-route is-on is-drawing" d={routeD(r.coords)} strokeWidth={2.6 * unit} pathLength={1}><title>{`${r.name[locale]} — ${r.note[locale]}`}</title></path>;
           return <path key={r.id} className="hmap-route" d={routeD(r.coords)} strokeWidth={1.1 * unit} strokeDasharray={`${6 * unit} ${4 * unit}`}><title>{`${r.name[locale]} — ${r.note[locale]}`}</title></path>;
         })}
@@ -274,8 +341,24 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
           </g>;
         })}
 
+        {quiz && <g className="hmap-quiz">
+          {quiz.options.map(k => {
+            const p = data.places.get(k);
+            if (!p) return null;
+            const [x, y] = project(p.lon, p.lat);
+            const state = quiz.chosen === null ? '' : k === quiz.answer ? ' is-right' : k === quiz.chosen ? ' is-wrong' : ' is-out';
+            return <g key={k} className={`hmap-quiz-target${state}`} transform={`translate(${x} ${y})`} role="button" tabIndex={quiz.chosen === null ? 0 : -1}
+              aria-label={p.name[locale]} onClick={() => quiz.chosen === null && !gesture.current?.moved && quiz.onPick(k)}
+              onKeyDown={ev => { if ((ev.key === 'Enter' || ev.key === ' ') && quiz.chosen === null) { ev.preventDefault(); quiz.onPick(k); } }}>
+              <circle className="hmap-quiz-ring" r={16 * unit} strokeWidth={2 * unit} />
+              <circle className="hmap-quiz-dot" r={6 * unit} />
+              <text className="hmap-quiz-name" y={-22 * unit} fontSize={15 * unit}>{p.name[locale]}</text>
+            </g>;
+          })}
+        </g>}
+
         <g className="hmap-names" aria-hidden="true">
-          {placed.map(l => <text key={l.key} className={`hmap-name${l.priority >= 1000 ? ' is-selected' : l.strong ? ' is-strong' : ''}`} x={l.x} y={l.y - 7 * unit} fontSize={l.size}>{l.name}</text>)}
+          {!quiz && placed.map(l => <text key={l.key} className={`hmap-name${l.priority >= 1000 ? ' is-selected' : l.strong ? ' is-strong' : ''}`} x={l.x} y={l.y - 7 * unit} fontSize={l.size}>{l.name}</text>)}
         </g>
       </svg>
       {children}
@@ -300,4 +383,26 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
       <li><button type="button" className="lg-toggle" aria-pressed={showTrade} onClick={() => setShowTrade(v => !v)}><i className="lg-trade" />{text.trade}</button></li>
     </ul>}
   </section>;
+}
+
+/** Small peaks along the mountain line, spaced evenly on screen. */
+function mountainPath(unit: number) {
+  let d = '';
+  const step = Math.max(14, 22 * unit), size = Math.max(4, 6 * unit);
+  for (let i = 0; i < MOUNTAINS.length - 1; i++) {
+    const [ax, ay] = project(...MOUNTAINS[i]), [bx, by] = project(...MOUNTAINS[i + 1]);
+    const len = Math.hypot(bx - ax, by - ay), n = Math.max(1, Math.floor(len / step));
+    for (let j = 0; j < n; j++) {
+      const t = j / n, x = ax + (bx - ax) * t, y = ay + (by - ay) * t;
+      d += `M${(x - size).toFixed(1)} ${(y + size * 0.6).toFixed(1)}L${x.toFixed(1)} ${(y - size * 0.6).toFixed(1)}L${(x + size).toFixed(1)} ${(y + size * 0.6).toFixed(1)}`;
+    }
+  }
+  return d;
+}
+
+/** Index of the route point nearest to a place. */
+function nearestIndex(coords: [number, number][], lon: number, lat: number) {
+  let best = 0, dist = Infinity;
+  coords.forEach(([x, y], i) => { const d = (x - lon) ** 2 + (y - lat) ** 2; if (d < dist) { dist = d; best = i; } });
+  return best;
 }

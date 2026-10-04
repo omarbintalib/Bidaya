@@ -16,9 +16,9 @@ function lead(body: string) {
 /** Arabic-only source text keeps its own language and direction inside the English interface. */
 const Ar = ({ children, as: Tag = 'span' }: { children: React.ReactNode; as?: 'span' | 'p' }) => <Tag lang="ar" dir="rtl">{children}</Tag>;
 
-interface CardProps { data: Sirah; event: SirahEvent; locale: Locale; chapter: number; yearEvents: SirahEvent[]; onPick: (n: number) => void }
+interface CardProps { data: Sirah; event: SirahEvent; locale: Locale; chapter: number; yearEvents: SirahEvent[]; onPick: (n: number) => void; onWalk?: () => void; walkName?: string }
 
-export default function EventCard({ data, event, locale, chapter, yearEvents, onPick }: CardProps) {
+export default function EventCard({ data, event, locale, chapter, yearEvents, onPick, onWalk, walkName }: CardProps) {
   const text = journeyCopy[locale];
   const [open, setOpen] = useState(false);
   const peopleApi = usePeople();
@@ -51,6 +51,10 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
       {open && rest && <p><PeopleText text={rest} lang={bodyLang} /></p>}
     </div>
     {rest && <button type="button" className="ecard-more" aria-expanded={open} onClick={() => setOpen(v => !v)}>{open ? text.readLess : text.readMore}</button>}
+    {onWalk && walkName && <button type="button" className="ecard-walk" onClick={onWalk}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18c3-6 6 2 9-4s5-6 7-8" fill="none" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 2.5" /><circle cx="4" cy="18" r="2" fill="currentColor" /><circle cx="20" cy="6" r="2" fill="currentColor" /></svg>
+      {text.walk(walkName)}
+    </button>}
     <p className="ecard-source">{text.source}: <a href={locale === 'en' && event.urlEn ? event.urlEn : event.url} target="_blank" rel="noreferrer">{text.dorar} · {locale === 'ar' ? 'حدث' : 'event'} {event.n}</a></p>
 
     {people.length > 0 && <section className="ecard-section">

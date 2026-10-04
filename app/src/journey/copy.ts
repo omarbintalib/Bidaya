@@ -1,6 +1,9 @@
 import { digits } from '../data/select';
 import type { Locale } from '../i18n';
 
+/** Arabic counted noun for events: حدث واحد، حدثان، ٣ أحداث، ١١ حدثًا. */
+const arCount = (n: number) => n === 1 ? 'حدث واحد' : n === 2 ? 'حدثان' : n <= 10 ? `${digits(n, 'ar')} أحداث` : `${digits(n, 'ar')} حدثًا`;
+
 export const journeyCopy = {
   ar: {
     timeline: 'الخط الزمني للسيرة',
@@ -16,6 +19,16 @@ export const journeyCopy = {
     inYear: (y: string, i: number, n: number) => `${y} · الحدث ${digits(i, 'ar')} من ${digits(n, 'ar')}`,
     undated: (n: number) => `آيات غير مؤرخة (${digits(n, 'ar')})`,
     reachedCount: (n: number) => `بلغ الإسلام ${digits(n, 'ar')} من المواضع`,
+    chapterSpan: (from: string, to: string, n: number) => `${from === to ? from : `من ${from} إلى ${to}`} · ${arCount(n)}`,
+    quizKicker: (n: number) => `سؤال الفصل ${digits(n, 'ar')}`, quizHint: 'اختر الإجابة، أو المس المكان على الخريطة.',
+    quizRight: 'إجابة صحيحة', quizWrong: (place: string) => `الإجابة الصحيحة: ${place}`,
+    summaryKicker: 'نهاية الرحلة', summaryTitle: 'تتبّعت سيرة النبي ﷺ من مكة إلى المدينة',
+    statEvents: 'أحداث قرأتها', statPlaces: 'أماكن زرتها', statQuiz: 'إجابات صحيحة', statReached: 'مواضع بلغها الإسلام',
+    restart: 'ابدأ من جديد',
+    walk: (route: string) => `امشِ مع ${route}`, stopOf: (i: number, n: number) => `المحطة ${digits(i, 'ar')} من ${digits(n, 'ar')}`,
+    prevStop: 'المحطة السابقة', nextStop: 'المحطة التالية', endWalk: 'إنهاء المسار',
+    introLabel: 'بداية الرحلة', introKicker: 'السيرة النبوية في الزمان والمكان', introTitle: 'رحلة الإسلام',
+    introSub: 'من مكة إلى المدينة، حدثًا بعد حدث، كما ترويها المصادر.', begin: 'ابدأ الرحلة', skip: 'تخطَّ المقدمة',
     source: 'المصدر', dorar: 'الموسوعة التاريخية – الدرر السنية',
     verses: 'القرآن في هذا الحدث', contextVerses: 'من سياق هذه المرحلة', stageVerses: 'آيات نزلت في هذه المرحلة',
     readQuranpedia: 'اقرأ الآيات في Quranpedia', openQuranpedia: 'افتح في Quranpedia', close: 'إغلاق',
@@ -47,6 +60,16 @@ export const journeyCopy = {
     inYear: (y: string, i: number, n: number) => `${y} · event ${i} of ${n}`,
     undated: (n: number) => `Undated verses (${n})`,
     reachedCount: (n: number) => `Islam has reached ${n} ${n === 1 ? 'place' : 'places'}`,
+    chapterSpan: (from: string, to: string, n: number) => `${from === to ? from : `${from} to ${to}`} · ${n} ${n === 1 ? 'event' : 'events'}`,
+    quizKicker: (n: number) => `Chapter ${n} question`, quizHint: 'Choose an answer, or tap the place on the map.',
+    quizRight: 'Correct', quizWrong: (place: string) => `The answer is ${place}`,
+    summaryKicker: 'End of the journey', summaryTitle: 'You followed the life of the Prophet ﷺ from Makkah to Madinah',
+    statEvents: 'Events read', statPlaces: 'Places visited', statQuiz: 'Correct answers', statReached: 'Places Islam reached',
+    restart: 'Start again',
+    walk: (route: string) => `Walk ${route}`, stopOf: (i: number, n: number) => `stop ${i} of ${n}`,
+    prevStop: 'Previous stop', nextStop: 'Next stop', endWalk: 'Finish the walk',
+    introLabel: 'The beginning of the journey', introKicker: 'The life of the Prophet ﷺ in place and time', introTitle: 'Islam Journey',
+    introSub: 'From Makkah to Madinah, event by event, as the sources tell it.', begin: 'Begin the journey', skip: 'Skip the opening',
     source: 'Source', dorar: 'Dorar Historical Encyclopedia',
     verses: 'The Quran in this event', contextVerses: 'From the context of this stage', stageVerses: 'Verses revealed in this stage',
     readQuranpedia: 'Read the verses on Quranpedia', openQuranpedia: 'Open on Quranpedia', close: 'Close',

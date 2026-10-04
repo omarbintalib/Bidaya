@@ -86,3 +86,25 @@ html[data-contrast='dark'] .hmap-glow-region, html[data-contrast='dark'] .hmap-g
 }
 @keyframes hmap-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 .lg-glow { width: 16px; height: 16px; border-radius: 50%; display: inline-block; background: radial-gradient(circle, #e2b45cdd, #e2b45c00 70%); }
+
+/* Living map */
+.hmap-mountains { fill: none; stroke: var(--coast); stroke-opacity: .22; stroke-linejoin: round; }
+.hmap-caravan { fill: var(--brass); opacity: .85; }
+.hmap-pulse { fill: none; stroke: #e2b45c; transform-box: fill-box; transform-origin: center; animation: hmap-pulse-out 2.4s ease-out both; }
+@keyframes hmap-pulse-out { from { opacity: .95; transform: scale(.4); } to { opacity: 0; transform: scale(2.6); } }
+
+/* Chapter question targets */
+.hmap-quiz-target { cursor: pointer; outline: none; }
+.hmap-quiz-ring { fill: color-mix(in srgb, var(--surface) 70%, transparent); stroke: var(--brass); }
+.hmap-quiz-dot { fill: var(--brass); }
+.hmap-quiz-name { text-anchor: middle; fill: var(--map-ink); font-family: var(--reading-font); font-weight: 700; paint-order: stroke; stroke: var(--land); stroke-width: .32em; stroke-linejoin: round; pointer-events: none; }
+.hmap-quiz-target:hover .hmap-quiz-ring, .hmap-quiz-target:focus-visible .hmap-quiz-ring { fill: #e2b45c55; }
+.hmap-quiz-target:focus-visible .hmap-quiz-ring { stroke-width: 3; stroke: var(--ink); }
+.hmap-quiz-target.is-right .hmap-quiz-ring { fill: #e2b45c88; stroke: #8a6a2c; }
+.hmap-quiz-target.is-wrong .hmap-quiz-ring { fill: none; stroke: var(--muted); stroke-dasharray: 3 3; }
+.hmap-quiz-target.is-out { opacity: .45; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-reduced-motion='true']) .hmap-quiz-target:not(.is-right):not(.is-wrong):not(.is-out) .hmap-quiz-ring { animation: quiz-breathe 2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+}
+@keyframes quiz-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+.hmap-frame.is-in-page { touch-action: pan-y; }

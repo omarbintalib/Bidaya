@@ -69,6 +69,12 @@ export interface Route { id: string; kind: 'sirah' | 'trade'; name: Text; events
 
 export interface MapLabel { id: string; kind: 'region' | 'power' | 'sea'; name: Text; lat: number; lon: number; size: 'l' | 'm' | 's'; rotate: number; note: string; reached: number | null; reachNote: string }
 
+/** A stop on a route walk (route_stops.csv): where the map pauses, with the Dorar line for it. */
+export interface RouteStop { name: Text; lat: number; lon: number; event: number; quote: string; url: string }
+
+/** A chapter question (quiz.csv), answered by choosing a place. */
+export interface QuizQuestion { id: string; period: Period; question: Text; answer: string; options: string[]; explanation: Text; event: number; quote: string; url: string }
+
 export interface Sirah {
   events: SirahEvent[];
   byNumber: Map<number, SirahEvent>;
@@ -77,4 +83,6 @@ export interface Sirah {
   people: Person[];
   routes: Route[];
   labels: MapLabel[];
+  stops: Map<string, RouteStop[]>;
+  quiz: QuizQuestion[];
 }

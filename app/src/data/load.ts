@@ -1,5 +1,5 @@
 import { parseCsv } from './csv';
-import type { LinkType, MapLabel, Period, Person, Place, Precision, Route, Sirah, SirahEvent, Verse, VerseLink } from './types';
+import type { LinkType, MapLabel, Period, Person, Place, Precision, QuizQuestion, Route, RouteStop, Sirah, SirahEvent, Verse, VerseLink } from './types';
 
 /**
  * Everything the interface shows is read at runtime from the CSVs at the repository root (served at /data/).
@@ -17,6 +17,8 @@ const FILES = {
   routes: '5_sirah_map.geojson',
   labels: 'map_labels.csv',
   trade: 'map_routes.csv',
+  stops: 'route_stops.csv',
+  quiz: 'quiz.csv',
 } as const;
 
 const PERIODS: Record<string, Period> = { 'قبل البعثة': 'prologue', 'العهد المكي': 'makkah', 'الهجرة': 'hijrah', 'العهد المدني': 'madinah' };
@@ -145,7 +147,27 @@ export async function loadSirah(): Promise<Sirah> {
     labels.push({ id: r['المعرف'], kind, name: { ar: r['الاسم'], en: r.Name_EN || r['الاسم'] }, lat, lon, size: SIZES[r['الحجم']] ?? 'm', rotate: num(r['الدوران']) ?? 0, note: r['ملاحظة'], reached: num(r['حدث_بلوغ_الإسلام']), reachNote: r['ملاحظة_بلوغ_الإسلام'] ?? '' });
   }
 
-  return { events, byNumber, places, verses, people, routes, labels };
+  const stops = new Map<string, RouteStop[]>();
+  for (const r of parseCsv(raw.stops).sort((a, b) => (num(a['الترتيب']) ?? 0) - (num(b['الترتيب']) ?? 0))) {
+    const lat = num(r.lat), lon = num(r.lon), event = num(r['رقم_حدث_الدرر']);
+    if (lat === null || lon === null || event === null) { warn(`route_stops.csv: a stop of "${r['المسار']}" needs lat, lon and رقم_حدث_الدرر`); continue; }
+    if (!routes.some(x => x.id === r['المسار'])) warn(`route_stops.csv: route "${r['المسار']}" is not in 5_sirah_map.geojson`);
+    const list = stops.get(r['المسار']) ?? [];
+    list.push({ name: { ar: r['الاسم'], en: r.Name_EN || r['الاسم'] }, lat, lon, event, quote: r['الشاهد'], url: r['رابط_الدرر'] || `https://dorar.net/history/event/${event}` });
+    stops.set(r['المسار'], list);
+  }
+
+  const quiz: QuizQuestion[] = [];
+  for (const r of parseCsv(raw.quiz)) {
+    const period = PERIODS[r['الفصل']], event = num(r['رقم_حدث_الدرر']);
+    const options = r['الخيارات'].split(';').map(s => s.trim()).filter(Boolean);
+    const missing = [r['الإجابة'], ...options].filter(k => !places.has(k));
+    if (!period || event === null || missing.length || !options.includes(r['الإجابة'])) { warn(`quiz.csv: "${r['المعرف']}" needs a valid الفصل, رقم_حدث_الدرر, and places from 4_places.csv (missing: ${missing.join(', ') || 'none'})`); continue; }
+    quiz.push({ id: r['المعرف'], period, question: { ar: r['السؤال'], en: r.Question_EN || r['السؤال'] }, answer: r['الإجابة'], options,
+      explanation: { ar: r['الشرح'], en: r.Explanation_EN || r['الشرح'] }, event, quote: r['الشاهد'], url: r['رابط_الدرر'] || `https://dorar.net/history/event/${event}` });
+  }
+
+  return { events, byNumber, places, verses, people, routes, labels, stops, quiz };
 }
 
 let cache: Promise<Sirah> | null = null;

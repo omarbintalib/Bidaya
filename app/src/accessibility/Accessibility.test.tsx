@@ -118,6 +118,7 @@ it('lifts the fixed launcher clear of visible AI content and returns it to the c
     return original.call(this);
   });
   await mount();
+  await click('.ask-fab'); // "Ask the map" lives in a panel on the map; open it first
   (host.querySelector('.mo-actor') as HTMLElement).style.opacity = '1';
   window.dispatchEvent(new Event('resize')); await advance(20);
   expect((host.querySelector('.accessibility-launcher') as HTMLElement).style.getPropertyValue('--launcher-lift')).toBe('246px');

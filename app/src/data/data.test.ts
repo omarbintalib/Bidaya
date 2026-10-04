@@ -38,6 +38,14 @@ describe('data package', () => {
     expect(data.routes.filter(r => r.kind === 'sirah')).toHaveLength(5);
     expect(data.routes.some(r => r.kind === 'trade')).toBe(true);
     expect(data.labels.length).toBeGreaterThan(5);
+    expect(data.stops.get('event_42')?.map(s => s.name.en)).toEqual(['The cave of Thawr', 'The coastal road (approximate)', 'Quba – Banu Amr ibn Awf']);
+    expect(data.quiz.map(q => q.period)).toEqual(['prologue', 'makkah', 'hijrah', 'madinah']);
+  });
+  it('quotes every quiz answer and route stop verbatim from its Dorar event', () => {
+    for (const item of [...data.quiz, ...[...data.stops.values()].flat()]) {
+      const e = data.byNumber.get(item.event)!;
+      expect(e.text.ar.includes(item.quote) || e.title.ar.includes(item.quote.replace(/\s*\.\s*$/, ''))).toBe(true);
+    }
   });
   it('has no broken references', () => {
     expect(warnings).toEqual([]);
