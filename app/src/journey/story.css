@@ -149,6 +149,19 @@
 }
 @keyframes intro-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 
+/* Large screens: give the story more room and a slightly larger reading size, so the map does not dwarf it. */
+@media (min-width: 1440px) {
+  .scrolly { grid-template-columns: minmax(440px, min(36%, 600px)) minmax(0, 1fr); gap: 40px; }
+}
+@media (min-width: 1680px) {
+  .scrolly { grid-template-columns: minmax(480px, min(38%, 720px)) minmax(0, 1fr); gap: 52px; }
+  .scrolly-steps { zoom: 1.1; }
+}
+@media (min-width: 2200px) {
+  .scrolly { grid-template-columns: minmax(560px, min(36%, 900px)) minmax(0, 1fr); gap: 64px; }
+  .scrolly-steps { zoom: 1.25; }
+}
+
 /* Narrow screens: map pinned on top, steps scroll beneath */
 @media (max-width: 1000px) {
   .scrolly { grid-template-columns: minmax(0, 1fr); gap: 0; }
