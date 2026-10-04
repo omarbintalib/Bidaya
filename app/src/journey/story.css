@@ -23,6 +23,16 @@
 .ask-panel { position: absolute; top: calc(100% + 8px); inset-inline-start: clamp(24px, 4.8vw, 88px); z-index: 31; width: min(var(--story-w, 440px), calc(100vw - 32px)); max-height: calc(var(--viewport-height, 100svh) - var(--toolbar-h) - 32px); overflow: auto;
   padding: 14px 16px 16px; background: var(--paper); border: 1px solid var(--brass); box-shadow: 0 20px 60px #331b0d33; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .2s, transform .2s, visibility .2s; }
 .ask-panel.is-open { opacity: 1; visibility: visible; transform: none; }
+.answer-card { position: absolute; top: calc(100% + 8px); inset-inline-start: clamp(24px, 4.8vw, 88px); z-index: 31; width: min(var(--story-w, 440px), calc(100vw - 32px)); max-height: 42vh; overflow: auto;
+  padding: 14px 18px 14px; background: var(--paper); border: 1px solid var(--brass); border-inline-start-width: 3px; box-shadow: 0 14px 40px #331b0d24; transform-origin: top; }
+.answer-kicker { display: flex; align-items: center; gap: 6px; margin: 0; color: var(--brass); font-size: calc(13px * var(--text-scale)); }
+.answer-kicker svg { width: 13px; height: 13px; }
+.answer-card h3 { margin: 4px 0 8px; padding-inline-end: 34px; font-size: calc(18px * var(--text-scale)); line-height: 1.5; }
+.answer-text { margin: 0; font-size: var(--text-small); line-height: var(--reading-line-height); }
+.answer-actions { margin-top: 10px; display: flex; gap: 8px; }
+.answer-actions .btn-quiet { min-height: 38px; padding: 6px 14px; }
+/* The open event card slides down beneath the answer card. */
+.step.is-on > :first-child { translate: 0 var(--answer-push, 0px); transition: translate .5s cubic-bezier(.2, .7, .3, 1); }
 .ask-head { display: flex; align-items: center; justify-content: space-between; }
 .ask-head h2 { margin: 0; font-size: var(--text-control); }
 .ask-panel .ai-note { text-align: center; }
@@ -210,6 +220,7 @@
   .person-dialog[open], .quran-reader[open] { animation: rise-in .32s cubic-bezier(.2, .7, .3, 1) both; }
   .person-dialog[open]::backdrop, .quran-reader[open]::backdrop { animation: fade-in .25s ease both; }
   .ask-bar { animation: rise-in .4s ease both; }
+  .answer-card { animation: answer-fold .5s .16s cubic-bezier(.2, .7, .3, 1) both; }
   .quick-quiz { animation: rise-in .3s cubic-bezier(.2, .7, .3, 1) both; }
   .walk-panel:not(.quick-quiz) { animation: rise-in .3s cubic-bezier(.2, .7, .3, 1) both; }
   .quiz-options button.is-right { animation: answer-pop .42s cubic-bezier(.3, 1.6, .5, 1) both; }
@@ -234,3 +245,4 @@
 /* While dashing to a far step the passing steps dim, so the movement reads as travel, not as content. */
 .scrolly-steps { transition: opacity .25s ease; }
 .scrolly-steps.is-rushing { opacity: .35; }
+@keyframes answer-fold { from { opacity: 0; transform: translateY(24px) scaleY(1.35); } 60% { opacity: 1; } to { opacity: 1; transform: none; } }

@@ -13,6 +13,8 @@ export interface MorphOrbProps {
   speed?: number;
   /** Ask this question programmatically (e.g. from a suggestion). A new `key` asks again; a shown answer is cleared first. */
   ask?: { text: string; key: number } | null;
+  /** Called once an answer has finished appearing. */
+  onAnswered?: () => void;
 }
 
 /* ─────────────────────────── geometry ─────────────────────────── */
@@ -844,6 +846,9 @@ export default function MorphOrb(props: MorphOrbProps) {
   const [value, setValue] = useState("");
   const [lbl, setLbl] = useState<{ cur: string; prev: string | null; n: number }>({ cur: COPY.labels[0], prev: null, n: 0 });
   const [answer, setAnswer] = useState("");
+  const onAnsweredRef = useRef(props.onAnswered);
+  onAnsweredRef.current = props.onAnswered;
+  useEffect(() => { if (phase === "answered") onAnsweredRef.current?.(); }, [phase]);
   const [dbgSpeed, setDbgSpeed] = useState(1);
   const [debug] = useState(() => typeof window !== "undefined" && /[?&]debug(?:[=&]|$)/.test(window.location.search));
 

@@ -286,6 +286,42 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
   // The ask bar's suggested question is about the current event, so its answer keeps the reader in place;
   // a typed question moves the story to the event it is about, like any other.
   const stay = useRef(false);
+  // Once an answer has appeared, the panel folds into a small card at the top of the story column and the
+  // current event slides down beneath it, so the answer and the story are both in view.
+  const lastAsk = useRef<{ q: string; a: string } | null>(null);
+  const [answerCard, setAnswerCard] = useState<{ q: string; a: string; key: number } | null>(null);
+  const fold = useRef(0);
+  const onAnswered = useCallback(() => {
+    const done = lastAsk.current;
+    if (!done || !wide) return;
+    window.clearTimeout(fold.current);
+    fold.current = window.setTimeout(() => { setAnswerCard({ ...done, key: Date.now() }); setAskOpen(false); }, reducedMotion ? 300 : 800);
+  }, [wide, reducedMotion]);
+  useEffect(() => () => window.clearTimeout(fold.current), []);
+  useEffect(() => { if (askOpen) window.clearTimeout(fold.current); }, [askOpen]);
+  useLayoutEffect(() => {
+    // Push the open event card below the answer card (a visual shift only, so scroll tracking is unaffected).
+    const page = column.current?.closest<HTMLElement>('.journey-page');
+    if (!page) return;
+    const card = document.querySelector<HTMLElement>('.answer-card');
+    if (!answerCard || !card) { page.style.setProperty('--answer-push', '0px'); return; }
+    const measure = () => {
+      const target = column.current?.querySelector<HTMLElement>('.step.is-on > :first-child');
+      if (!target) return;
+      // Where the card would sit unshifted: its box minus the shift it has right now (mid-slide included).
+      const shifted = parseFloat(getComputedStyle(target).translate.split(' ')[1] ?? '0') || 0;
+      const natural = target.getBoundingClientRect().top - shifted;
+      // The card's laid-out bottom (its fold-in animation scales it, so its box is not used while that runs).
+      const holder = (card.offsetParent as HTMLElement | null)?.getBoundingClientRect().top ?? 0;
+      const push = Math.max(0, holder + card.offsetTop + card.offsetHeight + 16 - natural);
+      page.style.setProperty('--answer-push', `${Math.round(push)}px`);
+    };
+    measure();
+    const frame = requestAnimationFrame(measure); // the newly opened card renders just after this
+    const ro = new ResizeObserver(measure);
+    ro.observe(card);
+    return () => { cancelAnimationFrame(frame); ro.disconnect(); };
+  }, [answerCard, active]);
   const askAbout = useCallback((question?: string, keepPlace = false) => {
     setQuick(null);
     setAskOpen(true);
@@ -304,10 +340,12 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
       const next = pickQuick();
       setWalk(null);
       setQuick(next);
+      lastAsk.current = null;
       if (next.q) window.setTimeout(() => setAskOpen(false), 1600);
       return next.q ? text.quizFromAsk : next.empty === 'later' ? text.quizLater : text.quizNoneLeft;
     }
     const result = answer(data, question, locale);
+    lastAsk.current = { q: question, a: result.text };
     const keep = stay.current;
     stay.current = false;
     if (result.event !== undefined && !keep) window.setTimeout(() => goToEvent(result.event!), 400);
@@ -354,7 +392,8 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
           <span className="tb-long">{locale === 'ar' ? 'English' : 'العربية'}</span><span className="tb-short">{locale === 'ar' ? 'EN' : 'ع'}</span>
         </button>}
       </div>
-      <AskPanel open={askOpen} onClose={closeAsk} locale={locale} reducedMotion={reducedMotion} onAsk={onAsk} ask={ask} onSuggest={suggest} />
+      <AskPanel open={askOpen} onClose={closeAsk} locale={locale} reducedMotion={reducedMotion} onAsk={onAsk} ask={ask} onSuggest={suggest} onAnswered={onAnswered} />
+      {answerCard && <AnswerCard key={answerCard.key} card={answerCard} locale={locale} onClose={() => setAnswerCard(null)} onAgain={() => { setAnswerCard(null); setAskOpen(true); }} />}
     </nav>
     {built && <div className="scrolly">
       <div className="scrolly-steps" ref={column}>
@@ -460,13 +499,14 @@ const StepList = memo(function StepList({ steps, data, locale, store, goToStep, 
 });
 
 /** The "Ask the map" panel; memoised so moving through the story leaves the orb untouched. */
-const AskPanel = memo(function AskPanel({ open, onClose, locale, reducedMotion, onAsk, ask, onSuggest }: {
+const AskPanel = memo(function AskPanel({ open, onClose, locale, reducedMotion, onAsk, ask, onSuggest, onAnswered }: {
   open: boolean; onClose: () => void; locale: Locale; reducedMotion: boolean; onAsk: (q: string) => string; ask: { text: string; key: number } | null; onSuggest: (q: string) => void;
+  onAnswered: () => void;
 }) {
   const text = journeyCopy[locale];
   return <section id="ask-panel" className={`ask-panel${open ? ' is-open' : ''}`} aria-label={text.ask} inert={!open}>
     <div className="ask-head"><h2>{text.ask}</h2><button type="button" className="qr-close" onClick={onClose} aria-label={text.close}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" /></svg></button></div>
-    <MorphOrb locale={locale} reducedMotion={reducedMotion} onSubmit={onAsk} minThinkMs={900} ask={ask} />
+    <MorphOrb locale={locale} reducedMotion={reducedMotion} onSubmit={onAsk} minThinkMs={900} ask={ask} onAnswered={onAnswered} />
     <p className="ai-note">{text.askNote}</p>
     <ul className="ai-suggest" aria-label={text.tryAsking}>
       {text.suggestions.map(q => <li key={q}><button type="button" onClick={() => onSuggest(q)}>{q}</button></li>)}
@@ -498,6 +538,20 @@ const EventStep = memo(function EventStep({ index, i, store, data, locale, goToS
       : <div className="step-peek"><p className="step-date">{hijri(e.year, locale)} · {e.placeName[locale]}</p><h3>{e.title[locale] || e.title.ar}</h3></div>}
   </section>;
 });
+
+/** An answer folded out of the Ask panel: the question, the sourced answer, and a way to ask again. */
+function AnswerCard({ card, locale, onClose, onAgain }: { card: { q: string; a: string }; locale: Locale; onClose: () => void; onAgain: () => void }) {
+  const text = journeyCopy[locale];
+  return <section className="answer-card" aria-label={text.ask} role="status">
+    <p className="answer-kicker"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor" /></svg>{text.yourQuestion}</p>
+    <h3>{card.q}</h3>
+    <p className="answer-text">{card.a}</p>
+    <div className="answer-actions">
+      <button type="button" className="btn-quiet" onClick={onAgain}>{text.askAgain}</button>
+    </div>
+    <button type="button" className="walk-close" onClick={onClose} aria-label={text.close}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" /></svg></button>
+  </section>;
+}
 
 /** Always on the map: type a question, or press Enter to ask the suggested one. */
 function AskBar({ locale, hint, onAsk }: { locale: Locale; hint: string | null; onAsk: (question?: string, keepPlace?: boolean) => void }) {
