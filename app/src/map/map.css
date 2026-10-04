@@ -1,0 +1,62 @@
+/* Historic map — a clean period map in the paper-and-brass palette. */
+:root { --sea: #d9dcd2; --land: #f8f4ea; --coast: #a88d63; --map-ink: var(--ink); }
+html[data-contrast='light'] { --sea: #d3d9d6; --land: #ffffff; --coast: #6c481f; }
+html[data-contrast='dark'] { --sea: #0d1113; --land: #241e17; --coast: #9e8456; }
+
+.hmap { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+.hmap-frame { position: relative; flex: 1; min-height: 320px; overflow: hidden; border: 1px solid var(--border); background: var(--sea); touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
+.hmap-frame:active { cursor: grabbing; }
+.hmap-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hmap-sea { fill: var(--sea); }
+.hmap-land { fill: var(--land); stroke: var(--coast); stroke-linejoin: round; }
+.hmap-grid line { stroke: var(--coast); opacity: .14; }
+.hmap-hatch-line { stroke: var(--coast); opacity: .4; }
+
+.hmap-label { text-anchor: middle; dominant-baseline: middle; pointer-events: auto; font-family: var(--display); fill: var(--brass); }
+.hmap-label-region { font-weight: 700; letter-spacing: .32em; opacity: .55; }
+[dir='rtl'] .hmap-label-region { letter-spacing: 0; word-spacing: .3em; }
+.hmap-label-power { font-weight: 700; fill: var(--muted); opacity: .62; letter-spacing: .12em; }
+.hmap-label-sea { font-style: italic; fill: #6f7d78; opacity: .9; }
+html[data-contrast='dark'] .hmap-label-sea { fill: #8fa19b; }
+[dir='rtl'] .hmap-label-power, [dir='rtl'] .hmap-label-sea { letter-spacing: 0; font-style: normal; }
+
+.hmap-trade { fill: none; stroke: var(--brass); stroke-linecap: round; opacity: .55; }
+.hmap-route { fill: none; stroke: var(--map-ink); opacity: .22; stroke-linecap: round; }
+.hmap-route.is-on { opacity: .85; stroke: var(--brass); }
+
+.hmap-pin { cursor: pointer; }
+.hmap-dot { fill: var(--map-ink); stroke: var(--land); }
+.hmap-pin.is-past .hmap-dot { fill: var(--coast); opacity: .55; stroke: none; }
+.hmap-pin.is-selected .hmap-dot { fill: var(--brass); stroke: var(--land); }
+.hmap-halo { fill: none; stroke: var(--brass); opacity: .7; }
+.hmap-approx { fill: none; stroke: var(--map-ink); opacity: .55; }
+.hmap-region { fill: var(--brass); opacity: .1; }
+.hmap-pin.is-selected .hmap-region { opacity: .18; }
+.hmap-place { text-anchor: middle; fill: var(--map-ink); font-family: var(--reading-font); font-weight: 500; paint-order: stroke; stroke: var(--land); stroke-width: .3em; stroke-linejoin: round; pointer-events: none; }
+.hmap-hit { fill: transparent; }
+.hmap-pin:hover .hmap-dot { fill: var(--brass); }
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-reduced-motion='true']) .hmap-pin.is-selected .hmap-halo { animation: hmap-pulse 2.4s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+}
+@keyframes hmap-pulse { 0% { opacity: .8; transform: scale(.7); } 100% { opacity: 0; transform: scale(1.6); } }
+
+.hmap-controls { position: absolute; top: 12px; inset-inline-end: 12px; display: flex; flex-direction: column; border: 1px solid var(--border); background: var(--surface); }
+.hmap-controls button { width: 40px; height: 40px; border: 0; background: none; font-size: 20px; line-height: 1; display: grid; place-items: center; color: var(--ink); }
+.hmap-controls button + button { border-top: 1px solid var(--border); }
+.hmap-controls button:hover { color: var(--brass); }
+.hmap-controls svg { width: 18px; height: 18px; }
+.hmap-north { position: absolute; bottom: 14px; inset-inline-end: 22px; display: flex; flex-direction: column; align-items: center; gap: 2px; color: var(--muted); font-size: var(--text-small); pointer-events: none; }
+.hmap-north svg { width: 14px; height: 26px; }
+.hmap-caption { position: absolute; top: 12px; inset-inline-start: 12px; margin: 0; padding: 6px 12px; background: var(--surface); border: 1px solid var(--border); font-size: var(--text-small); color: var(--muted); max-width: calc(100% - 90px); }
+.hmap-nopin { position: absolute; bottom: 12px; inset-inline-start: 12px; inset-inline-end: 60px; margin: 0; padding: 8px 12px; background: var(--surface); border: 1px dashed var(--brass); font-size: var(--text-small); color: var(--muted); }
+
+.hmap-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: calc(14px * var(--text-scale)); color: var(--muted); }
+.hmap-legend li { display: flex; align-items: center; gap: 7px; }
+.lg-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ink); display: inline-block; }
+.lg-dot.is-selected { background: var(--brass); box-shadow: 0 0 0 3px color-mix(in srgb, var(--brass) 30%, transparent); }
+.lg-dot.is-past { background: var(--coast); opacity: .6; width: 7px; height: 7px; }
+.lg-approx { width: 13px; height: 13px; border-radius: 50%; border: 1px dashed var(--ink); display: inline-block; }
+.lg-route { width: 22px; border-top: 2px dashed var(--brass); display: inline-block; }
+.lg-trade { width: 22px; border-top: 2px dotted var(--brass); display: inline-block; opacity: .7; }
+.lg-toggle { display: flex; align-items: center; gap: 7px; border: 0; background: none; padding: 0; font: inherit; color: inherit; }
+.lg-toggle[aria-pressed='false'] { opacity: .45; text-decoration: line-through; }

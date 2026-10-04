@@ -1,0 +1,197 @@
+// @vitest-environment jsdom
+import { act, StrictMode } from 'react';
+import { createRoot, type Root } from 'react-dom/client';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import App from '../App';
+import { sirahFixture } from '../test/sirahFixture';
+
+vi.mock('../data/load', () => ({ getSirah: () => Promise.resolve(sirahFixture) }));
+import { expansionScale } from './LogoTransition';
+import { pageFromPath } from './routes';
+
+let root: Root, host: HTMLDivElement;
+let reduced = false;
+let cancelAnimation: ReturnType<typeof vi.fn>;
+let animate: ReturnType<typeof vi.fn>;
+
+beforeEach(() => {
+  vi.useFakeTimers();
+  vi.stubGlobal('IS_REACT_ACT_ENVIRONMENT', true);
+  vi.stubGlobal('ResizeObserver', class { observe() {} disconnect() {} });
+  vi.stubGlobal('matchMedia', () => ({ matches: reduced, addEventListener() {}, removeEventListener() {} }));
+  vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
+  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(null);
+  cancelAnimation = vi.fn();
+  animate = vi.fn(() => ({ cancel: cancelAnimation }));
+  Object.defineProperty(Element.prototype, 'animate', { configurable: true, value: animate });
+  localStorage.clear();
+  history.replaceState({}, '', '/');
+  host = document.createElement('div'); document.body.append(host);
+  root = createRoot(host);
+});
+
+afterEach(async () => {
+  await act(async () => root.unmount());
+  expect(document.body.style.overflow).toBe('');
+  // jsdom queues a zero-delay selectionchange event when focus is restored.
+  await vi.advanceTimersByTimeAsync(0);
+  expect(vi.getTimerCount()).toBe(0);
+  host.remove(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers();
+  delete (Element.prototype as Partial<Element>).animate;
+  reduced = false;
+});
+
+async function advance(ms: number) { await act(async () => { await vi.advanceTimersByTimeAsync(ms); }); }
+async function mount(path = '/') {
+  history.replaceState({}, '', path);
+  await act(async () => root.render(<StrictMode><App /></StrictMode>));
+}
+async function click(selector: string) { await act(async () => (host.querySelector(selector) as HTMLElement).click()); }
+async function openMenu() { await click('.destination-trigger'); await advance(20); }
+async function navigate(path: string) { await openMenu(); await click(`.waypoint-menu a[href="${path}"]`); }
+async function pop(path: string) {
+  await act(async () => {
+    history.replaceState({}, '', path);
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  });
+}
+const phase = () => host.querySelector('.logo-transition')?.getAttribute('data-phase');
+const heading = () => host.querySelector('h1');
+
+it('uses distinct real routes and accepts trailing slashes', () => {
+  expect(['/','/spread','/journey','/journey/'].map(pageFromPath)).toEqual(['home','spread','journey','journey']);
+});
+
+describe('navigation lifecycle', () => {
+  it('uses the header logo to return home through the same cover and reveal sequence', async () => {
+    await mount('/spread'); await advance(2100); await click('.language-switch');
+    expect(host.querySelector('.brand-home')?.getAttribute('href')).toBe('/');
+    expect(host.querySelector('.brand-home')?.getAttribute('aria-label')).toBe('Go to the home page');
+    await click('.brand-home'); expect(phase()).toBe('cover');
+    expect(location.pathname).toBe('/spread');
+    await advance(650); expect(location.pathname).toBe('/'); expect(phase()).toBe('loading');
+    await advance(600); expect(phase()).toBe('reveal');
+    await advance(850); await advance(20);
+    expect(heading()?.textContent).toBe('The beginning');
+    expect(document.activeElement).toBe(heading());
+    await click('.brand-home'); expect(phase()).toBeUndefined();
+  });
+  it('plays initial entry and commits each destination only while covered, preserving locale', async () => {
+    await mount(); expect(phase()).toBe('cover');
+    expect(host.querySelector('.workspace')?.hasAttribute('inert')).toBe(true);
+    await advance(650); expect(phase()).toBe('loading');
+    const sections = host.querySelectorAll('[data-logo-section]');
+    expect(sections).toHaveLength(7);
+    expect(Number(sections[0].getAttribute('opacity'))).toBeGreaterThan(0);
+    expect(sections[6].getAttribute('opacity')).toBe('0');
+    sections.forEach(section => expect(section.hasAttribute('transform')).toBe(false));
+    await advance(1450); await advance(20); expect(phase()).toBeUndefined();
+    expect(document.activeElement).toBe(heading());
+    await click('.language-switch');
+    for (const [path, name] of [['/spread', 'Spread of Islam'], ['/journey', 'Islam Journey'], ['/', 'The beginning']]) {
+      await navigate(path);
+      expect(location.pathname).not.toBe(path);
+      expect(phase()).toBe('cover');
+      await advance(650);
+      expect(location.pathname).toBe(path); expect(heading()?.textContent).toBe(name);
+      expect(host.querySelector('[role="dialog"]')).toBeNull();
+      await advance(600); expect(phase()).toBe('reveal');
+      expect(host.querySelector('.transition-reveal')?.getAttribute('mask')).toMatch(/^url\(#/);
+      await advance(850); await advance(20);
+      expect(document.activeElement).toBe(heading());
+      expect(document.documentElement.lang).toBe('en');
+      expect(document.documentElement.dir).toBe('ltr');
+    }
+    expect(vi.getTimerCount()).toBeLessThanOrEqual(1);
+  });
+
+  it('supports direct entry at both inner URLs', async () => {
+    await mount('/journey'); await advance(2100);
+    expect(heading()?.textContent).toBe('رحلة الإسلام');
+    expect(host.querySelector('.mo-root')).not.toBeNull();
+    await pop('/spread'); await advance(2100);
+    expect(heading()?.textContent).toBe('انتشار الإسلام');
+    expect(host.querySelector('.mo-root')).toBeNull();
+  });
+
+  it('selecting the current route only dismisses the menu and restores the trigger', async () => {
+    await mount(); await advance(2100); await openMenu(); await click('.waypoint-menu a[href="/"]');
+    expect(phase()).toBeUndefined(); expect(host.querySelector('[role="dialog"]')).toBeNull();
+    expect(document.activeElement).toBe(host.querySelector('.destination-trigger'));
+  });
+
+  it('traps keyboard focus, dismisses with Escape or backdrop, and restores focus', async () => {
+    await mount(); await advance(2100); await openMenu();
+    const first = host.querySelector('.menu-close') as HTMLElement;
+    const last = host.querySelector('.waypoint-menu .accessibility-launcher') as HTMLElement;
+    await act(async () => { last.focus(); last.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true })); });
+    expect(document.activeElement).toBe(first);
+    await act(async () => first.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true, cancelable: true })));
+    expect(document.activeElement).toBe(last);
+    await act(async () => last.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })));
+    expect(document.activeElement).toBe(host.querySelector('.destination-trigger'));
+    await openMenu(); await click('.waypoint-backdrop');
+    expect(host.querySelector('[role="dialog"]')).toBeNull();
+  });
+
+  it('resolves the latest history destination during cover, loading, and reveal', async () => {
+    await mount(); await advance(2100);
+    await navigate('/spread'); await pop('/journey'); await advance(650);
+    expect(heading()?.textContent).toBe('رحلة الإسلام');
+    await pop('/'); await advance(600);
+    expect(heading()?.textContent).toBe('البداية');
+    await pop('/spread'); await pop('/journey'); await advance(850);
+    expect(phase()).toBe('cover'); // latest history request queues a fresh cover
+    await advance(2100);
+    expect(location.pathname).toBe('/journey'); expect(heading()?.textContent).toBe('رحلة الإسلام');
+    expect(phase()).toBeUndefined();
+  });
+
+  it('leaving Journey cancels AI work and returning mounts a fresh demo', async () => {
+    await mount('/journey'); await advance(2100);
+    const field = host.querySelector('input')!;
+    await act(async () => {
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(field, 'Question in flight');
+      field.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    await act(async () => host.querySelector('form')!.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })));
+    await advance(3000); expect(host.querySelector('.mo-root')?.getAttribute('data-phase')).toBe('think');
+    await navigate('/spread'); await advance(2100); await advance(10000);
+    expect(host.querySelector('.mo-answer')).toBeNull();
+    await navigate('/journey'); await advance(2100);
+    expect(host.querySelector('.mo-root')?.getAttribute('data-phase')).toBe('idle');
+    expect(host.querySelector('input')?.value).toBe('');
+  });
+
+  it('uses a short crossfade in reduced motion without stroke animations', async () => {
+    reduced = true; await mount('/spread'); expect(phase()).toBe('crossfade');
+    await advance(300); expect(phase()).toBeUndefined(); expect(animate).not.toHaveBeenCalled();
+    await navigate('/journey'); await advance(300);
+    expect(heading()?.textContent).toBe('رحلة الإسلام'); expect(phase()).toBeUndefined();
+  });
+
+  it('recovers from animation failure and clears active animation handles on unmount', async () => {
+    const setAttribute = Element.prototype.setAttribute;
+    let failed = false;
+    vi.spyOn(Element.prototype, 'setAttribute').mockImplementation(function(this: Element, name, value) {
+      if (!failed && name === 'opacity' && this.hasAttribute('data-logo-section') && this.closest('.logo-transition')?.getAttribute('data-phase') === 'loading') { failed = true; throw new Error('Animation failed'); }
+      return setAttribute.call(this, name, value);
+    });
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    await mount(); await advance(650); await advance(20);
+    expect(phase()).toBeUndefined(); expect(warn).toHaveBeenCalled();
+    await navigate('/spread'); await advance(650);
+    await act(async () => root.unmount()); root = createRoot(host);
+    expect(vi.getTimerCount()).toBeLessThanOrEqual(1); expect(vi.getTimerCount()).toBe(0);
+  });
+});
+
+it.each([[1440,900], [390,844], [3200,300], [300,3200]])('expands solid logo geometry over all corners at %i × %i', (width, height) => {
+  const scale = expansionScale(width, height);
+  for (const x of [0, width]) for (const y of [0, height]) {
+    const sx = (x - width / 2) / scale + 703.5;
+    const sy = (y - height / 2) / scale + 293.5;
+    expect(sx).toBeGreaterThan(650); expect(sx).toBeLessThan(753);
+    expect(sy).toBeGreaterThan(220); expect(sy).toBeLessThan(468);
+  }
+});

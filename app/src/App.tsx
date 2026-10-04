@@ -1,0 +1,88 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import BrandLogo from './components/BrandLogo';
+import JourneyPage from './pages/JourneyPage';
+import SpreadPage from './pages/SpreadPage';
+import TitlePage from './pages/TitlePage';
+import WaypointMenu, { WaypointSymbol } from './navigation/WaypointMenu';
+import LogoTransition from './navigation/LogoTransition';
+import { navigationCopy, routeFor } from './navigation/routes';
+import { useNavigation } from './navigation/useNavigation';
+import { copy, type Locale } from './i18n';
+import { AccessibilityProvider, useAccessibility } from './accessibility/AccessibilityProvider';
+import AccessibilityPanel, { AccessibilityLauncher } from './accessibility/AccessibilityPanel';
+
+function GeometricMark() {
+  return <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="m20 3 5 10 12 7-12 6-5 11-6-11L3 20l11-7Z" stroke="currentColor" /><path d="M8 8h24v24H8Z" stroke="currentColor" transform="rotate(45 20 20)" /><circle cx="20" cy="20" r="3" fill="currentColor" /></svg>;
+}
+
+export default function App() {
+  return <AccessibilityProvider><Workspace /></AccessibilityProvider>;
+}
+
+function Workspace() {
+  const { reducedMotion } = useAccessibility();
+  const [locale, setLocale] = useState<Locale>('ar');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [accessOpen, setAccessOpen] = useState(false);
+  const accessTrigger = useRef<HTMLButtonElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
+  const navigation = useNavigation(closeMenu);
+  const text = copy[locale], route = routeFor(navigation.page);
+  useEffect(() => { if (navigation.busy) setAccessOpen(false); }, [navigation.busy]);
+  const launcher = <AccessibilityLauncher locale={locale} open={accessOpen} buttonRef={accessTrigger} onClick={() => { setMenuOpen(false); setAccessOpen(value => !value); }} />;
+
+  useEffect(() => {
+    document.documentElement.lang = locale;
+    document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
+    document.title = `${route[locale].title} · ${text.title}`;
+  }, [locale, route, text.title]);
+
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    let frame = 0;
+    const update = () => {
+      const height = viewport?.height ?? window.innerHeight;
+      document.documentElement.style.setProperty('--viewport-height', `${height}px`);
+      document.documentElement.style.setProperty('--keyboard-inset', `${Math.max(0, window.innerHeight - height - (viewport?.offsetTop ?? 0))}px`);
+      document.documentElement.dataset.compactViewport = String(height < 600 && window.innerWidth <= 700);
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const field = document.activeElement;
+        if (field instanceof HTMLInputElement && field.classList.contains('mo-field')) field.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' });
+      });
+    };
+    update();
+    viewport?.addEventListener('resize', update);
+    window.addEventListener('resize', update);
+    return () => {
+      cancelAnimationFrame(frame);
+      viewport?.removeEventListener('resize', update);
+      window.removeEventListener('resize', update);
+    };
+  }, []);
+
+  return <>
+    <div className={`workspace ${navigation.busy ? 'page-transitioning' : 'page-ready'}`} dir={locale === 'ar' ? 'rtl' : 'ltr'} inert={menuOpen || accessOpen || navigation.busy}>
+      <header className="site-header">
+        <a className="brand-home" href="/" aria-label={locale === 'ar' ? 'العودة إلى الصفحة الرئيسية' : 'Go to the home page'} aria-current={navigation.page === 'home' ? 'page' : undefined} onClick={event => {
+          if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+          event.preventDefault(); navigation.request('home');
+        }}><BrandLogo className="brand-logo" aria-hidden="true" /></a>
+        <button ref={trigger} className="destination-trigger" aria-label={`${navigationCopy[locale].open} — ${route[locale].title}`} aria-haspopup="dialog" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}>
+          <span className="trigger-chapter">{navigationCopy[locale].chapter}</span><b>{route.number}</b><WaypointSymbol />
+        </button>
+        <button className="language-switch" onClick={() => setLocale(locale === 'ar' ? 'en' : 'ar')} aria-label={text.language}>
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7" stroke="currentColor" /><ellipse cx="10" cy="10" rx="3" ry="7" stroke="currentColor" /><path d="M3 10h14" stroke="currentColor" /></svg>
+          <span lang={locale === 'ar' ? 'en' : 'ar'}>{locale === 'ar' ? 'English' : 'العربية'}</span>
+        </button>
+      </header>
+      {navigation.page === 'journey' ? <JourneyPage key="journey" locale={locale} /> : navigation.page === 'spread' ? <SpreadPage key="spread" locale={locale} /> : <TitlePage key={navigation.page} page={navigation.page} locale={locale} onExplore={() => setMenuOpen(true)} />}
+      <footer className="site-footer"><span>{text.footer}</span><GeometricMark /><span className="footer-edition">{route.number} / 2026</span></footer>
+    </div>
+    {menuOpen && <WaypointMenu locale={locale} page={navigation.page} trigger={trigger} busy={navigation.busy} launcher={launcher} onClose={closeMenu} onNavigate={navigation.request} />}
+    {!navigation.busy && !menuOpen && !accessOpen && launcher}
+    {accessOpen && !navigation.busy && <AccessibilityPanel locale={locale} busy={navigation.busy} trigger={accessTrigger} launcher={launcher} onClose={() => setAccessOpen(false)} />}
+    {navigation.busy && <LogoTransition reducedMotion={reducedMotion} run={navigation.run} initial={navigation.run === 0} locale={locale} onCovered={navigation.commit} onFinish={navigation.finish} />}
+  </>;
+}
