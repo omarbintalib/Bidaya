@@ -31,6 +31,7 @@ The README of the data package (IslamthonDataandstuff) explains every column.
 
 ## How the story works
 
+- **The story toolbar** stays at the top: back to the start, jump to a chapter (✓ once its question is answered), Ask the map, and the language.
 - **Scrolling drives the map.** The step crossing the middle of the screen (the lower part on phones) becomes the current one. Over the map the wheel scrolls the story; zoom with the + / − buttons, a pinch, or Ctrl/⌘ + wheel.
 - **Story mode** advances one step every few seconds and pauses at each chapter question until it is answered.
 - **Progress** (answers and events read) is kept in this browser only (`localStorage`, key `bidaya.journey.v1`); the opening is shown once per browser session.
@@ -38,7 +39,7 @@ The README of the data package (IslamthonDataandstuff) explains every column.
 
 ## The map
 
-The map is a period map, drawn as SVG: coastlines only (Natural Earth 1:50m, public domain), with the regions, powers and seas of the time from `map_labels.csv`. It draws no modern borders, so no country outline is approximated. Region positions are approximate and labelled for orientation only. The mountain marks along the Hijaz and Sarawat are decorative and approximate. To regenerate the coastline after changing the map's extent, run `node scripts/build-land.mjs`.
+The map is a period map, drawn as SVG: coastlines only (Natural Earth 1:50m, public domain), with the regions, powers and seas of the time from `map_labels.csv`. It draws no modern borders, so no country outline is approximated. Region positions are approximate and labelled for orientation only; a region the sources say Islam reached is named in gold, and only places glow, at their own coordinates. The mountain marks along the Hijaz and Sarawat are decorative and approximate. To regenerate the coastline after changing the map's extent, run `node scripts/build-land.mjs`.
 
 ## Reading the verses
 

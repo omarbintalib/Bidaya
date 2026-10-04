@@ -10,7 +10,8 @@ export default function QuranReader({ title, quranRef, locale, onClose }: { titl
   useEffect(() => {
     const d = dialog.current;
     if (d && !d.open) d.showModal?.();
-    return () => d?.close?.();
+    // No close() on cleanup: in development React runs effects twice, and closing here would fire onClose
+    // and dismiss the dialog the moment it opens. Removing the element on unmount closes it anyway.
   }, []);
 
   return <dialog ref={dialog} className="quran-reader" aria-label={title} onClose={onClose} onClick={e => { if (e.target === dialog.current) onClose(); }}>

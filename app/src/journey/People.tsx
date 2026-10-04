@@ -47,7 +47,8 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
   useEffect(() => {
     const d = dialog.current;
     if (d && !d.open) d.showModal?.();
-    return () => d?.close?.();
+    // No close() on cleanup: in development React runs effects twice, and closing here would fire onClose
+    // and dismiss the dialog the moment it opens. Removing the element on unmount closes it anyway.
   }, []);
   const events = person.events.map(n => data.byNumber.get(n)).filter(e => e !== undefined).sort((a, b) => a.order - b.order);
   const title = person.name[locale];
