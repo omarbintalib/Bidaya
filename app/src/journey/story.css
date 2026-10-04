@@ -122,7 +122,8 @@
 .scrolly-map .story-banner b { font-family: var(--display); font-size: calc(22px * var(--text-scale)); color: var(--ink); }
 .scrolly-map .hmap-controls { top: 14px; bottom: auto; inset-inline-end: auto; inset-inline-start: 14px; }
 .scrolly-map .hmap-north { display: none; }
-.scrolly-map .hmap-nopin { inset-inline-start: 14px; inset-inline-end: 14px; bottom: 132px; }
+/* The 'location unknown' note sits above the bottom controls — and above the Ask bar where there is one. */
+.scrolly-map .hmap-nopin { inset-inline-start: 0; inset-inline-end: 0; margin-inline: auto; width: min(520px, calc(100% - 140px)); bottom: calc(var(--timeline-h, 130px) + 12px + 52px + 10px); text-align: center; border-radius: 6px; }
 
 .story-timeline { position: absolute; inset-inline: 0; bottom: 0; z-index: 2; padding: 10px 16px 6px; background: var(--surface); border-top: 1px solid var(--border); cursor: auto; }
 .story-timeline .timeline { gap: 6px; }
@@ -214,6 +215,7 @@
   .story-timeline .tl-scroll { display: none; }
   .walk-panel { inset-inline: 10px; bottom: 62px; width: auto; padding: 14px 16px; }
   .walk-quote { font-size: var(--text-small); }
+  .scrolly-map .hmap-nopin { width: auto; inset-inline: 10px; bottom: calc(var(--timeline-h, 60px) + 8px); }
   .quick-quiz { position: fixed; z-index: 95; top: auto; bottom: 10px; max-height: 44svh; }
   .quick-quiz h3 { font-size: calc(16px * var(--text-scale)); margin-bottom: 6px; }
   .quick-quiz .quiz-hint { display: none; }
