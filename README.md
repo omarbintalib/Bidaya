@@ -166,7 +166,7 @@ The file loads directly into Leaflet or Mapbox.
 ## Arabic and English from Dorar (files 11–12)
 
 - **Arabic titles and texts:** all 142 events, from dorar.net/history.
-- **English texts:** 131 events (all events in the prototype), from dorar.net/en/history. The 11 events before the first revelation are outside the prototype and have no English text in the project data.
+- **English texts:** all 142 events, from dorar.net/en/history. The 131 events in the v9 prototype came through its data. The 11 events before the first revelation (1–11) were copied by the team from the Dorar site, matched to their events by Dorar's exact English title and Hijri date. They are kept word for word, including Dorar's own typos, with paragraph breaks as on the site.
 - **English titles:** all 142 events, taken exactly from dorar.net/en/history (`title_en_dorar`), including Dorar's own spellings and typos. `title_en_display` shows the same words in normal title case, since Dorar writes them in capitals; this is what the prototype shows. Each title was matched to its event by content (names and places checked against the event's English text), because Dorar's English numbering differs from the Arabic one in places and contains duplicate entries where the Arabic list skips numbers (64, 81, 82).
 
 ## Open items
