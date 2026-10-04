@@ -306,9 +306,6 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
         </g>
         <path className="hmap-land" d={LAND} strokeWidth={1.1 * unit} />
         <g className="hmap-terrain" aria-hidden="true">
-          {/* A soft raised band under the mountain marks (decorative, approximate). */}
-          <path className="hmap-relief hmap-relief-wide" d={MOUNTAIN_LINE} />
-          <path className="hmap-relief hmap-relief-core" d={MOUNTAIN_LINE} />
           <path className="hmap-mountains" d={mountainPath(unit)} strokeWidth={1.1 * unit} />
         </g>
         {/* Graticule every 5° — orientation only. */}
@@ -422,7 +419,6 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
   </section>;
 }
 
-const MOUNTAIN_LINE = MOUNTAINS.map(([lon, lat], i) => { const [x, y] = project(lon, lat); return `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`; }).join('');
 
 /** Small peaks along the mountain line, spaced evenly on screen. */
 function mountainPath(unit: number) {

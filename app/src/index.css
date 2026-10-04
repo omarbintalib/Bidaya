@@ -154,7 +154,8 @@ a { color: inherit; }
 .title-coordinate { position: absolute; bottom: 40px; inset-inline-end: 0; font-size: var(--text-small); letter-spacing: .15em; color: var(--muted); direction: ltr; }
 
 /* Route menu: the line connects the waypoints rather than framing panels. */
-.waypoint-backdrop { position: fixed; inset: 0; z-index: 50; background: #331b0d35; backdrop-filter: blur(6px); padding: 24px; display: grid; place-items: center; overflow: auto; }
+html { scrollbar-gutter: stable; }
+.waypoint-backdrop { position: fixed; inset: 0; z-index: 50; background: #331b0d4d; padding: 24px; display: grid; place-items: center; overflow: auto; }
 .waypoint-menu { position: relative; width: min(100%, 1040px); padding: 62px 52px 34px; background: var(--paper); border: 1px solid #a07c4155; box-shadow: 0 24px 100px #331b0d15; text-align: center; }
 .waypoint-menu::before, .waypoint-menu::after { content: ''; position: absolute; width: 12px; height: 12px; border-color: var(--brass); opacity: .6; }
 .waypoint-menu::before { top: 14px; left: 14px; border-top: 1px solid; border-left: 1px solid; }

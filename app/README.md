@@ -241,4 +241,4 @@ No project-wide software license has been selected. Third-party assets retain th
 
 Saudi Regular and Bold are provided unchanged from the Ministry of Culture source; embedded copyright and trademark notices are transcribed in [public/fonts/NOTICES.md](public/fonts/NOTICES.md). Fontsource dependencies carry their own license files. Review the applicable asset terms before redistribution or production use.
 
-The map's texture (water lines along the coast, the band under the mountains, paper grain) is decorative only and carries no data.
+The map's texture (water lines along the coast, paper grain) is decorative only and carries no data.

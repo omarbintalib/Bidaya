@@ -109,15 +109,12 @@ html[data-contrast='dark'] .glow-0 { stop-color: #f0c674; stop-opacity: .55; }
 @keyframes quiz-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
 .hmap-frame.is-in-page { touch-action: pan-y; }
 
-/* Texture: water lines, a raised mountain band, paper grain and a soft edge. All static and blend-free. */
-:root { --relief: #e6dcc5; --relief-core: #ddd0b3; --grain-opacity: .55; --vignette: #331b0d14; }
-html[data-contrast='light'] { --relief: #eee6d4; --relief-core: #e3d8bf; --grain-opacity: .35; }
-html[data-contrast='dark'] { --relief: #2c251c; --relief-core: #342b20; --grain-opacity: .25; --vignette: #00000059; }
+/* Texture: water lines, paper grain and a soft edge. All static and blend-free. */
+:root { --grain-opacity: .55; --vignette: #331b0d14; }
+html[data-contrast='light'] { --grain-opacity: .35; }
+html[data-contrast='dark'] { --grain-opacity: .25; --vignette: #00000059; }
 .hmap-water-ring { fill: none; stroke: var(--coast); stroke-linejoin: round; }
 .hmap-water-gap { fill: none; stroke: var(--sea); stroke-linejoin: round; }
-.hmap-relief { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-.hmap-relief-wide { stroke: var(--relief); stroke-width: 34; opacity: .8; }
-.hmap-relief-core { stroke: var(--relief-core); stroke-width: 12; opacity: .7; }
 .hmap-grain { position: absolute; inset: 0; pointer-events: none;
   background-image:
     radial-gradient(ellipse at center, transparent 58%, var(--vignette) 100%),
