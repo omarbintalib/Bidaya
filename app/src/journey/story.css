@@ -128,9 +128,9 @@
 .story-timeline { position: absolute; inset-inline: 0; bottom: 0; z-index: 2; padding: 10px 16px 6px; background: var(--surface); border-top: 1px solid var(--border); cursor: auto; }
 .story-timeline .timeline { gap: 6px; }
 .story-timeline .tl-btn { min-height: 38px; height: 38px; }
-.story-timeline .tl-track { grid-template-rows: 22px 44px; }
+.story-timeline .tl-track { grid-template-rows: 26px 44px; }
 .story-timeline .tl-tick { height: 44px; }
-.story-timeline .tl-year { top: 22px; }
+.story-timeline .tl-year { top: 26px; }
 
 .walk-panel { position: absolute; z-index: 3; inset-inline-start: 16px; bottom: 136px; width: min(400px, calc(100% - 32px)); padding: 18px 20px 16px; background: var(--paper); border: 1px solid var(--brass); box-shadow: 0 16px 50px #331b0d2a; cursor: auto; }
 .walk-kicker { margin: 0; color: var(--brass); font-size: calc(14px * var(--text-scale)); }
