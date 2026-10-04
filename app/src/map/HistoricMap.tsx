@@ -292,8 +292,19 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
           </pattern>
         </defs>
         <rect className="hmap-sea" x={-WIDTH} y={-HEIGHT} width={WIDTH * 3} height={HEIGHT * 3} />
+        {/* Water lines: thin rings following the coast, as on engraved maps. Each ring is a wide coast-coloured
+            stroke with a slightly narrower sea-coloured stroke on top; the land drawn after covers the inner half. */}
+        <g className="hmap-water" aria-hidden="true">
+          {[[16, 0.16], [10, 0.24], [5, 0.34]].map(([d, o]) => <g key={d} style={{ opacity: o }}>
+            <path className="hmap-water-ring" d={LAND} strokeWidth={2 * d * unit} />
+            <path className="hmap-water-gap" d={LAND} strokeWidth={(2 * d - 1.4) * unit} />
+          </g>)}
+        </g>
         <path className="hmap-land" d={LAND} strokeWidth={1.1 * unit} />
         <g className="hmap-terrain" aria-hidden="true">
+          {/* A soft raised band under the mountain marks (decorative, approximate). */}
+          <path className="hmap-relief hmap-relief-wide" d={MOUNTAIN_LINE} />
+          <path className="hmap-relief hmap-relief-core" d={MOUNTAIN_LINE} />
           <path className="hmap-mountains" d={mountainPath(unit)} strokeWidth={1.1 * unit} />
         </g>
         {/* Graticule every 5° — orientation only. */}
@@ -382,6 +393,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
 
         {nameLayer}
       </svg>
+      <div className="hmap-grain" aria-hidden="true" />
       {children}
 
       <div className="hmap-controls">
@@ -405,6 +417,8 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
     </ul>}
   </section>;
 }
+
+const MOUNTAIN_LINE = MOUNTAINS.map(([lon, lat], i) => { const [x, y] = project(lon, lat); return `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`; }).join('');
 
 /** Small peaks along the mountain line, spaced evenly on screen. */
 function mountainPath(unit: number) {

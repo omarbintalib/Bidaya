@@ -70,6 +70,11 @@
 .quiz-verdict { font-weight: 700; font-size: var(--text-control); }
 .quiz-result blockquote { margin: 8px 0; color: var(--muted); }
 .quiz-result a, .walk-source { color: var(--ink); text-decoration-color: var(--brass); text-underline-offset: .2em; font-size: calc(14px * var(--text-scale)); }
+.quiz-count { margin-inline-start: 12px; padding-inline-start: 12px; border-inline-start: 1px solid var(--border); color: var(--muted); letter-spacing: 0; }
+.quiz-more { align-self: flex-start; margin-top: 14px; min-height: 44px; padding: 8px 20px; border: 1px solid var(--ink); background: var(--ink); color: var(--button-ink); font-size: var(--text-small); cursor: pointer; }
+.quiz-more.is-skip { min-height: 36px; padding: 4px 0; border: 0; background: none; color: var(--muted); text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: .25em; }
+.quiz-more.is-skip:hover { color: var(--ink); }
+.quiz-done { margin: 14px 0 0; color: var(--muted); font-size: var(--text-small); }
 
 .step-summary { min-height: 70vh; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
 .step-summary > span { color: var(--brass); letter-spacing: .1em; font-size: var(--text-small); }

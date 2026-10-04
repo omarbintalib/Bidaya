@@ -1,6 +1,7 @@
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { answer } from '../assistant/answer';
 import MorphOrb from '../components/MorphOrb';
+import { quizPools } from '../data/quiz';
 import { digits, hijri, PERIOD_ORDER, periodName, unplacedVerses } from '../data/select';
 import type { Person, Period, QuizQuestion, Route, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
@@ -21,8 +22,11 @@ import Timeline from './Timeline';
 type Step =
   | { kind: 'chapter'; period: Period; chapter: number; first: number }
   | { kind: 'event'; index: number }
-  | { kind: 'quiz'; q: QuizQuestion; chapter: number; last: number }
+  | { kind: 'quiz'; period: Period; chapter: number; last: number }
   | { kind: 'summary' };
+
+/** Asking the map for a quiz: "quiz me", "another question", "اختبرني", "سؤال آخر"… */
+const QUIZ_ASK = /\bquiz\b|\btest me\b|another question|more questions|اختبرني|بسؤال آخر|سؤال[اًا]* آخر|[أا]سئلة [أا]خرى|المزيد من ال[أا]سئلة/i;
 
 const STORY_MS = 5200;
 const CHAPTER_MS = 2800;
@@ -59,6 +63,15 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
     return () => window.clearTimeout(id);
   }, [built, reducedMotion]);
 
+  // Each chapter asks one question at a time from its pool (quiz.csv first, then questions built from the events).
+  const pools = useMemo(() => quizPools(data), [data]);
+  const [quizAt, setQuizAt] = useState<Partial<Record<Period, number>>>({});
+  const questionOf = useCallback((period: Period, answers: Record<string, string>) => {
+    const pool = pools.get(period) ?? [];
+    const at = quizAt[period] ?? Math.max(0, pool.findIndex(q => !answers[q.id]));
+    return { q: pool[at], at, total: pool.length };
+  }, [pools, quizAt]);
+
   const steps = useMemo(() => {
     const out: Step[] = [];
     PERIOD_ORDER.forEach((period, p) => {
@@ -66,11 +79,11 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
       if (!idx.length) return;
       out.push({ kind: 'chapter', period, chapter: p + 1, first: idx[0] });
       idx.forEach(index => out.push({ kind: 'event', index }));
-      data.quiz.filter(q => q.period === period).forEach(q => out.push({ kind: 'quiz', q, chapter: p + 1, last: idx[idx.length - 1] }));
+      if (pools.get(period)?.length) out.push({ kind: 'quiz', period, chapter: p + 1, last: idx[idx.length - 1] });
     });
     out.push({ kind: 'summary' });
     return out;
-  }, [events, data.quiz]);
+  }, [events, pools]);
   const stepOfEvent = useMemo(() => new Map(steps.flatMap((s, i) => (s.kind === 'event' ? [[s.index, i] as const] : []))), [steps]);
 
   const [active, setActive] = useState(0);
@@ -132,10 +145,10 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
   useEffect(() => {
     if (!playing) return;
     if (active >= steps.length - 1) { setPlaying(false); return; }
-    if (step.kind === 'quiz' && !progress.answers[step.q.id]) { setPlaying(false); return; } // wait for an answer
+    if (step.kind === 'quiz' && !progress.answers[questionOf(step.period, progress.answers).q.id]) { setPlaying(false); return; } // wait for an answer
     const id = window.setTimeout(() => goToStep(active + 1), step.kind === 'chapter' ? CHAPTER_MS : STORY_MS);
     return () => window.clearTimeout(id);
-  }, [playing, active, steps.length, step, progress.answers, goToStep]);
+  }, [playing, active, steps.length, step, progress.answers, goToStep, questionOf]);
 
   // ── map state ──
   const emphasis = useCallback((e: SirahEvent): Emphasis => {
@@ -159,8 +172,26 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
   const startWalk = useCallback((route: Route) => setWalk({ route, stop: 0 }), []);
 
   // ── chapter question ──
-  const quizStep = step.kind === 'quiz' ? step : null;
-  const answerQuiz = useCallback((q: QuizQuestion, key: string) => setProgress(p => (p.answers[q.id] ? p : { ...p, answers: { ...p.answers, [q.id]: key } })), []);
+  const quizNow = step.kind === 'quiz' ? questionOf(step.period, progress.answers).q : null;
+  const answerQuiz = useCallback((q: QuizQuestion, key: string) => {
+    // Keep this question on screen once answered, rather than moving on to the next unanswered one.
+    setQuizAt(a => a[q.period] !== undefined ? a : { ...a, [q.period]: (pools.get(q.period) ?? []).indexOf(q) });
+    setProgress(p => (p.answers[q.id] ? p : { ...p, answers: { ...p.answers, [q.id]: key } }));
+  }, [pools]);
+  /** The chapter's next unanswered question, if any is left. */
+  const nextQuestion = useCallback((period: Period) => {
+    const pool = pools.get(period) ?? [];
+    const { at } = questionOf(period, progress.answers);
+    for (let k = 1; k < pool.length; k++) {
+      const i = (at + k) % pool.length;
+      if (!progress.answers[pool[i].id]) return i;
+    }
+    return -1;
+  }, [pools, questionOf, progress.answers]);
+  const moreQuiz = useCallback((period: Period) => {
+    const i = nextQuestion(period);
+    if (i >= 0) setQuizAt(a => ({ ...a, [period]: i }));
+  }, [nextQuestion]);
 
   // ── people, undated verses, ask ──
   const [person, setPerson] = useState<Person | null>(null);
@@ -172,10 +203,19 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
   const closeAsk = useCallback(() => setAskOpen(false), []);
   const suggest = useCallback((q: string) => setAsk({ text: q, key: Date.now() }), []);
   const onAsk = useCallback((question: string) => {
+    if (QUIZ_ASK.test(question)) {
+      // "Quiz me" / "another question": open the current chapter's question, moved on to one not yet answered.
+      const period = step.kind === 'summary' ? 'madinah' : current.period;
+      const at = steps.findIndex(s => s.kind === 'quiz' && s.period === period);
+      if (at < 0) return text.noMoreQuiz;
+      if (progress.answers[questionOf(period, progress.answers).q.id]) moreQuiz(period);
+      window.setTimeout(() => goToStep(at), 400);
+      return text.quizFromAsk(periodName[locale][period]);
+    }
     const result = answer(data, question, locale);
     if (result.event !== undefined) window.setTimeout(() => goToEvent(result.event!), 400);
     return result.text;
-  }, [data, locale, goToEvent]);
+  }, [data, locale, goToEvent, step.kind, current.period, steps, progress.answers, questionOf, moreQuiz, goToStep, text]);
 
   const begin = () => {
     try { sessionStorage.setItem('bidaya.intro.seen', '1'); } catch { /* storage unavailable */ }
@@ -184,7 +224,7 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
     window.requestAnimationFrame(() => goToStep(0));
   };
 
-  const answered = data.quiz.filter(q => progress.answers[q.id]);
+  const answered = [...pools.values()].flat().filter(q => progress.answers[q.id]);
   const correct = answered.filter(q => progress.answers[q.id] === q.answer).length;
   const placesSeen = new Set(progress.seen.map(n => data.byNumber.get(n)?.place).filter(Boolean)).size;
 
@@ -197,7 +237,7 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
       </button>
       <ol className="tb-chapters" aria-label={text.chapters}>
         {steps.flatMap((s, i) => s.kind === 'chapter' ? [<li key={s.period}>
-          <button type="button" className={`tb-chapter${chapter === s.chapter && step.kind !== 'summary' ? ' is-now' : ''}${data.quiz.some(q => q.period === s.period && progress.answers[q.id]) ? ' is-done' : ''}`} aria-current={chapter === s.chapter && step.kind !== 'summary' ? 'step' : undefined}
+          <button type="button" className={`tb-chapter${chapter === s.chapter && step.kind !== 'summary' ? ' is-now' : ''}${(pools.get(s.period) ?? []).some(q => progress.answers[q.id]) ? ' is-done' : ''}`} aria-current={chapter === s.chapter && step.kind !== 'summary' ? 'step' : undefined}
             title={`${text.chapter(s.chapter)} · ${periodName[locale][s.period]}`} onClick={() => { setPlaying(false); goToStep(i); }}>
             <b>{digits(s.chapter, locale)}</b><span>{periodName[locale][s.period]}</span>
           </button>
@@ -217,14 +257,14 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
     </nav>
     {built && <div className="scrolly">
       <div className="scrolly-steps" ref={column}>
-        <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} answers={progress.answers} onAnswer={answerQuiz} />
+        <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} />
         <section data-step={steps.length - 1} className={`step step-summary${step.kind === 'summary' ? ' is-on' : ''}`}>
           <span>{text.summaryKicker}</span>
           <h2>{text.summaryTitle}</h2>
           <dl className="summary-stats">
             <div><dt>{text.statEvents}</dt><dd>{digits(progress.seen.length, locale)} / {digits(events.length, locale)}</dd></div>
             <div><dt>{text.statPlaces}</dt><dd>{digits(placesSeen, locale)}</dd></div>
-            <div><dt>{text.statQuiz}</dt><dd>{digits(correct, locale)} / {digits(data.quiz.length, locale)}</dd></div>
+            <div><dt>{text.statQuiz}</dt><dd>{digits(correct, locale)} / {digits(answered.length, locale)}</dd></div>
             <div><dt>{text.statReached}</dt><dd>{digits(reached, locale)}</dd></div>
           </dl>
           <div className="summary-actions">
@@ -240,7 +280,7 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
           overview={step.kind === 'summary' || step.kind === 'chapter' && step.chapter === 1}
           caravans={current.period === 'prologue' || current.period === 'makkah'} scrollPage
           walk={walk && walkStop ? { routeId: walk.route.id, lat: walkStop.lat, lon: walkStop.lon, key: `${walk.route.id}-${walk.stop}` } : null}
-          quiz={quizStep ? { options: quizStep.q.options, answer: quizStep.q.answer, chosen: progress.answers[quizStep.q.id] ?? null, onPick: k => answerQuiz(quizStep.q, k) } : null}>
+          quiz={quizNow ? { options: quizNow.options, answer: quizNow.answer, chosen: progress.answers[quizNow.id] ?? null, onPick: k => answerQuiz(quizNow, k) } : null}>
           <div className="story-banner" data-map-overlay aria-hidden="true">
             {step.kind === 'summary' ? <b>{text.summaryKicker}</b> : <><b>{periodName[locale][current.period]}</b><span>{hijri(current.year, locale)}</span></>}
             {reached > 0 && <span className="story-reach"><i />{text.reachedCount(reached)}</span>}
@@ -274,14 +314,19 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
 }
 
 /** All steps but the summary; memoised so it re-renders only when the steps, the language or an answer change. */
-const StepList = memo(function StepList({ steps, data, locale, store, goToStep, goToEvent, onWalk, answers, onAnswer }: {
+const StepList = memo(function StepList({ steps, data, locale, store, goToStep, goToEvent, onWalk, answers, onAnswer, questionOf, nextQuestion, onMore }: {
   steps: Step[]; data: Sirah; locale: Locale; store: ActiveStore; goToStep: (i: number) => void; goToEvent: (n: number) => void;
   onWalk: (route: Route) => void; answers: Record<string, string>; onAnswer: (q: QuizQuestion, key: string) => void;
+  questionOf: (period: Period, answers: Record<string, string>) => { q: QuizQuestion; at: number; total: number };
+  nextQuestion: (period: Period) => number; onMore: (period: Period) => void;
 }) {
   return <>{steps.map((s, i) => {
     if (s.kind === 'chapter') return <ChapterStep key={`c${s.chapter}`} s={s} i={i} store={store} events={data.events} locale={locale} />;
     if (s.kind === 'event') return <EventStep key={data.events[s.index].n} index={s.index} i={i} store={store} data={data} locale={locale} goToStep={goToStep} goToEvent={goToEvent} onWalk={onWalk} />;
-    if (s.kind === 'quiz') return <QuizCard key={s.q.id} step={i} store={store} q={s.q} chapter={s.chapter} data={data} locale={locale} chosen={answers[s.q.id] ?? null} onAnswer={onAnswer} />;
+    if (s.kind === 'quiz') {
+      const { q, at, total } = questionOf(s.period, answers);
+      return <QuizCard key={`q${s.chapter}`} step={i} store={store} q={q} at={at} total={total} hasMore={nextQuestion(s.period) >= 0} chapter={s.chapter} data={data} locale={locale} chosen={answers[q.id] ?? null} onAnswer={onAnswer} onMore={onMore} goToStep={goToStep} />;
+    }
     return null;
   })}</>;
 });
@@ -326,13 +371,16 @@ const EventStep = memo(function EventStep({ index, i, store, data, locale, goToS
   </section>;
 });
 
-const QuizCard = memo(function QuizCard({ step, store, q, chapter, data, locale, chosen, onAnswer }: { step: number; store: ActiveStore; q: QuizQuestion; chapter: number; data: Sirah; locale: Locale; chosen: string | null; onAnswer: (q: QuizQuestion, key: string) => void }) {
+const QuizCard = memo(function QuizCard({ step, store, q, at, total, hasMore, chapter, data, locale, chosen, onAnswer, onMore, goToStep }: {
+  step: number; store: ActiveStore; q: QuizQuestion; at: number; total: number; hasMore: boolean; chapter: number; data: Sirah; locale: Locale;
+  chosen: string | null; onAnswer: (q: QuizQuestion, key: string) => void; onMore: (period: Period) => void; goToStep: (i: number) => void;
+}) {
   const on = useActive(store, a => a === step);
   const onPick = (key: string) => onAnswer(q, key);
   const text = journeyCopy[locale];
   const right = chosen === q.answer;
   return <section data-step={step} className={`step step-quiz${on ? ' is-on' : ''}`} aria-labelledby={`q-${q.id}`}>
-    <span className="quiz-kicker">{text.quizKicker(chapter)}</span>
+    <span className="quiz-kicker">{text.quizKicker(chapter)}{total > 1 && <span className="quiz-count">{text.quizCount(at + 1, total)}</span>}</span>
     <h2 id={`q-${q.id}`}>{q.question[locale]}</h2>
     {chosen === null && <p className="quiz-hint">{text.quizHint}</p>}
     <div className="quiz-options" role="group" aria-label={q.question[locale]}>
@@ -347,6 +395,9 @@ const QuizCard = memo(function QuizCard({ step, store, q, chapter, data, locale,
       <blockquote lang="ar" dir="rtl">«{q.quote}»</blockquote>
       <a href={q.url} target="_blank" rel="noreferrer">{text.dorar} · {locale === 'ar' ? 'حدث' : 'event'} {q.event}</a>
     </div>}
+    {total > 1 && (hasMore
+      ? <button type="button" className={chosen === null ? 'quiz-more is-skip' : 'quiz-more'} onClick={() => { onMore(q.period); window.requestAnimationFrame(() => goToStep(step)); }}>{chosen === null ? text.quizSkip : text.quizMore}</button>
+      : chosen !== null && <p className="quiz-done">{text.quizAllDone(total)}</p>)}
   </section>;
 });
 

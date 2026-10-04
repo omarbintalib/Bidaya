@@ -38,7 +38,7 @@ New files for the story (each line quotes its Dorar event; the app's tests check
 
 | File | What it is |
 |------|------------|
-| `quiz.csv` | One question per chapter, answered by choosing a place (`الإجابة` and `الخيارات` are keys from `4_places.csv`), with the explanation, the quote and its Dorar link |
+| `quiz.csv` | One question per chapter, answered by choosing a place (`الإجابة` and `الخيارات` are keys from `4_places.csv`), with the explanation, the quote and its Dorar link. The app adds more questions per chapter from the events themselves (see `app/README.md`) |
 | `route_stops.csv` | Named stops for the route walks (the Hijrah, the journey to Ta'if, the Farewell Hajj), each with the Dorar line for that stop. Only stops the sources describe are listed. |
 
 ## Files at a glance

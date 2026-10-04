@@ -24,7 +24,7 @@ Every piece of content comes from the CSV files at the **root of this repository
 | `5_sirah_map.geojson` | Sirah routes (Hijrah, Isra', Taif, Tabuk, Farewell Hajj) |
 | `map_labels.csv` | Period map labels: regions (`إقليم`), powers (`قوة`), seas (`بحر`); position, size (`كبير`/`متوسط`/`صغير`) and rotation |
 | `map_routes.csv` | Caravan routes, as `lat lon; lat lon; …` |
-| `quiz.csv` | The question at the end of each chapter (answer and choices are place keys) |
+| `quiz.csv` | The first question at the end of each chapter (answer and choices are place keys). "Another question" then draws on questions built from the events (`src/data/quiz.ts`): "where did this happen?", answered by the event's exact place in `2_sirah_events.csv`, quoting the first sentence of its Dorar text. Events whose title already names a place are skipped |
 | `route_stops.csv` | The stops of each route walk, with their Dorar lines |
 
 The README of the data package (IslamthonDataandstuff) explains every column.
@@ -240,3 +240,5 @@ Keep Arabic and English copy in sync, preserve mirrored layouts, and check keybo
 No project-wide software license has been selected. Third-party assets retain their own terms and notices.
 
 Saudi Regular and Bold are provided unchanged from the Ministry of Culture source; embedded copyright and trademark notices are transcribed in [public/fonts/NOTICES.md](public/fonts/NOTICES.md). Fontsource dependencies carry their own license files. Review the applicable asset terms before redistribution or production use.
+
+The map's texture (water lines along the coast, the band under the mountains, paper grain) is decorative only and carries no data.

@@ -4,6 +4,7 @@ import { parseCsv } from './csv';
 import { loadSirah } from './load';
 import { findPeople } from './people';
 import { quranpediaRefs } from './quranpedia';
+import { quizPools } from './quiz';
 import { versesFor } from './select';
 import type { Sirah } from './types';
 
@@ -45,6 +46,19 @@ describe('data package', () => {
     for (const item of [...data.quiz, ...[...data.stops.values()].flat()]) {
       const e = data.byNumber.get(item.event)!;
       expect(e.text.ar.includes(item.quote) || e.title.ar.includes(item.quote.replace(/\s*\.\s*$/, ''))).toBe(true);
+    }
+  });
+  it('builds more chapter questions from sourced event places', () => {
+    const pools = quizPools(data);
+    for (const period of ['prologue', 'makkah', 'hijrah', 'madinah'] as const) expect(pools.get(period)!.length).toBeGreaterThan(0);
+    for (const q of [...pools.values()].flat()) {
+      const e = data.byNumber.get(q.event)!;
+      expect(q.options).toContain(q.answer);
+      if (q.id.startsWith('E')) {
+        expect(new Set(q.options).size).toBe(3);
+        expect(e.place).toBe(q.answer);
+        expect(e.text.ar.includes(q.quote.replace(/ …$/, ''))).toBe(true);
+      }
     }
   });
   it('has no broken references', () => {
