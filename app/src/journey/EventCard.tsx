@@ -13,6 +13,11 @@ function lead(body: string) {
   return m >= 0 ? body.slice(0, 40 + m + 1).trim() : excerpt(body, 180);
 }
 
+/** English text with Quran quotations (﴿…﴾) kept in Arabic, each in its own direction. */
+const WithQuran = ({ text }: { text: string }) => <>{text.split(/(﴿[^﴾]*﴾)/).map((part, i) => part.startsWith('﴿')
+  ? <span key={i} className="quran-quote" lang="ar" dir="rtl">{part}</span>
+  : <PeopleText key={i} text={part} lang="en" />)}</>;
+
 /** Arabic-only source text keeps its own language and direction inside the English interface. */
 const Ar = ({ children, as: Tag = 'span' }: { children: React.ReactNode; as?: 'span' | 'p' }) => <Tag lang="ar" dir="rtl">{children}</Tag>;
 
@@ -108,7 +113,11 @@ export function VerseItem({ v, locale, compact = false }: { v: Verse; locale: Lo
     {!compact && <>
       <button type="button" className="verse-toggle" aria-expanded={open} onClick={() => setOpen(o => !o)}>{text.reason}</button>
       {open && <div className="verse-detail">
-        {reasonEn ? <p><PeopleText text={reason!} lang="en" /></p>
+        {reasonEn ? <>
+            {/* A translation of the Arabic, which stays one tap away as the reference. Quran quotations are left in Arabic. */}
+            <p className="verse-translated"><WithQuran text={reason!} /></p>
+            <details className="verse-ar"><summary>{text.originalArabic}</summary><Ar as="p"><PeopleText text={v.reason} lang="ar" /></Ar></details>
+          </>
           : locale === 'en' && v.hadithEn
             // The English version shows the hadith itself, in sunnah.com's published English, with its own narrator line.
             ? <blockquote className="verse-hadith">

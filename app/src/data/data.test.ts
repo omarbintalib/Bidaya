@@ -141,6 +141,15 @@ describe('English from the sources and the team', () => {
   });
 });
 
+describe('translations keep the Quran untouched', () => {
+  it('copies every Quran quotation in an English translation exactly from the Arabic', () => {
+    const quotes = (t: string) => t.match(/﴿[^﴾]*﴾/g) ?? [];
+    const translated = data.verses.filter(v => v.reasonEn);
+    expect(translated.length).toBeGreaterThanOrEqual(26);
+    for (const v of translated) expect(quotes(v.reasonEn!)).toEqual(quotes(v.reason));
+  });
+});
+
 describe('sourced facts about people', () => {
   it('loads every fact in 7_sahaba_references.csv onto its person, with a quote and a source', () => {
     const facts = data.people.flatMap(p => p.facts);

@@ -176,7 +176,7 @@ Nothing in these columns is machine-translated. Where an original source publish
 | File | Column | Next to | To fill |
 |---|---|---|---|
 | `1_related_surahs.csv` | `السورة_EN` | `السورة` | **Filled** from Quran.com (`api.quran.com/api/v4/chapters`, `name_simple`), by `رقم_السورة`; every Arabic name was checked against Quran.com's Arabic name for that number (all 44 matched) |
-| `1_related_surahs.csv` | `وجه_الارتباط_EN` | `وجه_الارتباط` | 116 texts: how each verse connects to its event |
+| `1_related_surahs.csv` | `وجه_الارتباط_EN` | `وجه_الارتباط` | **Translated** for the 26 TAF rows that have no hadith (AI-assisted translation, to be reviewed by Hassan). Quran quotations inside are not translated: each ﴿…﴾ is copied character for character from the Arabic (a test checks this). The English interface shows the translation with the Arabic beneath it as the reference. The 90 hadith rows show sunnah.com's English instead |
 | `1_related_surahs.csv` | `الراوي_EN` | `الراوي` | 55 narrator names (shared) |
 | `1_related_surahs.csv` | `مرجع_الحديث_EN`, `رابط_الحديث_EN`, `سند_الحديث_EN`, `نص_الحديث_EN` | `روابط_التحقق` | **Filled** for the 90 hadith-based rows from sunnah.com's published English: the reference, page, narrator line and text of the row's first hadith link, word for word. The English interface shows this hadith under "How it connects". (`سند_الحديث_EN` is the hadith's own narrator line, which often names the next narrator in the chain rather than the Companion in `الراوي`, so it does not fill `الراوي_EN`.) |
 | `3_links_surahs_sirah.csv` | `نص_الربط_في_الواجهة_EN` | `نص_الربط_في_الواجهة` | 8 timing labels (shared), e.g. «وقعت في هذه المرحلة، ولا يُعرف تاريخها بدقة» |

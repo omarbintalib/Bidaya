@@ -181,3 +181,4 @@ html[data-compact-viewport='true'] .journey-page .story-timeline { display: none
 .verse-ar { margin: 0 0 8px; }
 .verse-ar summary { cursor: pointer; color: var(--muted); font-size: calc(13px * var(--text-scale)); width: fit-content; }
 .verse-ar p { margin: 8px 0 0; }
+.quran-quote { font-family: var(--arabic-font, inherit); unicode-bidi: isolate; white-space: normal; }
