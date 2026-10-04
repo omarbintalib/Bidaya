@@ -1,0 +1,3484 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e16",
+    "title": "ولادة النبي محمد بن عبدالله صلى الله عليه وسلم .",
+    "hijri_year": -53,
+    "hijri_month": "",
+    "period": "قبل البعثة",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/1",
+    "asbab": "",
+    "order": 1
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.05,
+     23.1
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e18",
+    "title": "وفاة أم النبي آمنة بنت وهب وحضانة أم أيمن له صلى الله عليه وسلم .",
+    "hijri_year": -48,
+    "hijri_month": "",
+    "period": "قبل البعثة",
+    "place": "الأبواء (ودّان)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/3",
+    "asbab": "",
+    "order": 3
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e19",
+    "title": "كفالة عبد المطلب رسول الله صلَّى اللهُ عليه وسلَّم ومعرفته بشأنه .",
+    "hijri_year": -48,
+    "hijri_month": "",
+    "period": "قبل البعثة",
+    "place": "الكعبة المشرفة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/4",
+    "asbab": "",
+    "order": 4
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e20",
+    "title": "وفاة عبد المطلب ووصيته لأبي طالب برسول الله صلَّى اللهُ عليه وسلَّم .",
+    "hijri_year": -46,
+    "hijri_month": "",
+    "period": "قبل البعثة",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/5",
+    "asbab": "",
+    "order": 5
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     36.4817,
+     32.5181
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e21",
+    "title": "سفر النبي صلَّى اللهُ عليه وسلَّم مع عمه أبي طالب إلى الشام .",
+    "hijri_year": -42,
+    "hijri_month": "",
+    "period": "قبل البعثة",
+    "place": "بُصرى الشام",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/6",
+    "asbab": "",
+    "order": 6
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.43,
+     21.67
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e22",
+    "title": "حرب الفِجَار، وشهود النبي صلَّى اللهُ عليه وسلَّم لها .",
+    "hijri_year": -39,
+    "hijri_month": "شوال",
+    "period": "قبل البعثة",
+    "place": "سوق عكاظ",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/7",
+    "asbab": "",
+    "order": 7
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e23",
+    "title": "حِلْفُ الفُضولِ بين قبائل قريش .",
+    "hijri_year": -33,
+    "hijri_month": "ذي القعدة",
+    "period": "قبل البعثة",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/8",
+    "asbab": "",
+    "order": 8
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e24",
+    "title": "زَواجُ النَّبيِّ صلَّى الله عَليهِ وسلَّم من خَديجةَ بنتِ خُويلدٍ رضِي الله عنها .",
+    "hijri_year": -28,
+    "hijri_month": "",
+    "period": "قبل البعثة",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/9",
+    "asbab": "",
+    "order": 9
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     36.4817,
+     32.5181
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e25",
+    "title": "سفر النبي صلَّى اللهُ عليه وسلَّم للمرة الثانية إلى الشام .",
+    "hijri_year": -28,
+    "hijri_month": "ذي الحجة",
+    "period": "قبل البعثة",
+    "place": "بُصرى الشام",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/10",
+    "asbab": "",
+    "order": 10
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e26",
+    "title": "النَّبيُّ صلَّى الله عَليهِ وسلَّم يضعُ الحَجَرَ الأَسودَ في مكانِه في الكعبةِ .",
+    "hijri_year": -18,
+    "hijri_month": "",
+    "period": "قبل البعثة",
+    "place": "الكعبة المشرفة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/11",
+    "asbab": "",
+    "order": 11
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8592,
+     21.4575
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e27",
+    "title": "أوَّلُ نُزولِ الوَحيِ ونُبوءةُ النَّبيِّ صلَّى الله عَليهِ وسلَّم .",
+    "hijri_year": -13,
+    "hijri_month": "رمضان",
+    "period": "العهد المكي",
+    "place": "غار حراء (جبل النور)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/12",
+    "asbab": "ASB-001، ASB-002",
+    "order": 12
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e28",
+    "title": "فُتورُ الوحيِ عن رسولِ الله صلَّى الله عَليهِ وسلَّم .",
+    "hijri_year": -13,
+    "hijri_month": "شوال",
+    "period": "العهد المكي",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/13",
+    "asbab": "ASB-015",
+    "order": 13
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e29",
+    "title": "أوَّلُ النَّاسِ إيمانًا بالله ورسولِه .",
+    "hijri_year": -13,
+    "hijri_month": "شوال",
+    "period": "العهد المكي",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/14",
+    "asbab": "ASB-003",
+    "order": 14
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e30",
+    "title": "ما لقِي الصَّحابةُ من إيذاءِ قُريشٍ .",
+    "hijri_year": -9,
+    "hijri_month": "",
+    "period": "العهد المكي",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/15",
+    "asbab": "",
+    "order": 15
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e31",
+    "title": "طلب قريش من أبي طالب أن يكف عنهم رسول الله صلى الله عليه وسلم .",
+    "hijri_year": -9,
+    "hijri_month": "",
+    "period": "العهد المكي",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/16",
+    "asbab": "",
+    "order": 16
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     38.7234,
+     14.1211
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e32",
+    "title": "الهِجرةُ الأُولى إلى الحَبشةِ .",
+    "hijri_year": -8,
+    "hijri_month": "رجب",
+    "period": "العهد المكي",
+    "place": "الحبشة (أكسوم)",
+    "precision": "منطقة",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/17",
+    "asbab": "",
+    "order": 17
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8277,
+     21.4219
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e33",
+    "title": "إسلام حمزة بن عبد المطلب رَضي اللهُ عنه .",
+    "hijri_year": -7,
+    "hijri_month": "",
+    "period": "العهد المكي",
+    "place": "الصفا",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/18",
+    "asbab": "",
+    "order": 18
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     38.7234,
+     14.1211
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e34",
+    "title": "الهِجرةُ الثَّانيةُ إلى الحَبشةِ .",
+    "hijri_year": -7,
+    "hijri_month": "",
+    "period": "العهد المكي",
+    "place": "الحبشة (أكسوم)",
+    "precision": "منطقة",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/19",
+    "asbab": "",
+    "order": 19
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p1_e35",
+    "title": "إِسلامُ عُمَرَ رضِي الله عنهُ .",
+    "hijri_year": -7,
+    "hijri_month": "ذي الحجة",
+    "period": "العهد المكي",
+    "place": "الكعبة المشرفة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/20",
+    "asbab": "",
+    "order": 20
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e16",
+    "title": "إسلام الطّفيل بن عمرو الدوسي رَضي اللهُ عنه .",
+    "hijri_year": -6,
+    "hijri_month": "",
+    "period": "العهد المكي",
+    "place": "الكعبة المشرفة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/21",
+    "asbab": "",
+    "order": 21
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8305,
+     21.4245
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e17",
+    "title": "حصار قريش للمسلمين في شعب أبي طالب .",
+    "hijri_year": -6,
+    "hijri_month": "محرم",
+    "period": "العهد المكي",
+    "place": "شعب أبي طالب",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/22",
+    "asbab": "",
+    "order": 22
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e18",
+    "title": "نَقْضُ قريش لمِيثاقِ الصَّحيفةِ .",
+    "hijri_year": -3,
+    "hijri_month": "محرم",
+    "period": "العهد المكي",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/23",
+    "asbab": "",
+    "order": 23
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e19",
+    "title": "وَفاةُ أمِّ المؤمنين خَديجةَ بنتِ خويلدٍ رضِي الله عنها .",
+    "hijri_year": -3,
+    "hijri_month": "رمضان",
+    "period": "العهد المكي",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/24",
+    "asbab": "",
+    "order": 24
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.4158,
+     21.2703
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e20",
+    "title": "خُروجُ رسولِ الله صلَّى الله عَليهِ وسلَّم إلى الطَّائفِ .",
+    "hijri_year": -3,
+    "hijri_month": "شوال",
+    "period": "العهد المكي",
+    "place": "الطائف",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/25",
+    "asbab": "",
+    "order": 25
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.15,
+     21.59
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e21",
+    "title": "إِسلامُ الجِنِّ وتَوافُدهُم على النَّبيِّ صلَّى الله عَليهِ وسلَّم .",
+    "hijri_year": -3,
+    "hijri_month": "شوال",
+    "period": "العهد المكي",
+    "place": "وادي نخلة",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/26",
+    "asbab": "ASB-013",
+    "order": 26
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e22",
+    "title": "وَفاةُ أبي طالبٍ عَمِّ النَّبيِّ صلَّى الله عَليهِ وسلَّم .",
+    "hijri_year": -3,
+    "hijri_month": "شوال",
+    "period": "العهد المكي",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/27",
+    "asbab": "ASB-014",
+    "order": 27
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e23",
+    "title": "زَواجُ النَّبيِّ صلَّى الله عَليهِ وسلَّم من سَوْدَةَ بنتِ زَمْعَةَ رضِي الله عنها .",
+    "hijri_year": -3,
+    "hijri_month": "شوال",
+    "period": "العهد المكي",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/28",
+    "asbab": "",
+    "order": 28
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8731,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e24",
+    "title": "بداية دخول الأنصار في الإسلام .",
+    "hijri_year": -3,
+    "hijri_month": "ذي الحجة",
+    "period": "العهد المكي",
+    "place": "العقبة بمنى (مسجد البيعة)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/29",
+    "asbab": "",
+    "order": 29
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e25",
+    "title": "زَواجُ النَّبيِّ مِن عائشةَ بنتِ أبي بكرٍ الصِّدِّيقِ رضِي الله عنهُما .",
+    "hijri_year": -2,
+    "hijri_month": "محرم",
+    "period": "العهد المكي",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/30",
+    "asbab": "",
+    "order": 30
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8731,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e26",
+    "title": "بَيْعةُ العَقبةِ الأولى .",
+    "hijri_year": -2,
+    "hijri_month": "ذي الحجة",
+    "period": "العهد المكي",
+    "place": "العقبة بمنى (مسجد البيعة)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/31",
+    "asbab": "",
+    "order": 31
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e27",
+    "title": "الإسراءُ والمِعراجُ وفرضُ الصَّلواتِ الخمسِ .",
+    "hijri_year": -1,
+    "hijri_month": "",
+    "period": "العهد المكي",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/32",
+    "asbab": "TAF-28",
+    "order": 32
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6172,
+     24.4393
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e28",
+    "title": "هِجرةُ أبي سَلمةَ وأمِّ سَلمةَ رضي الله عنهما .",
+    "hijri_year": -1,
+    "hijri_month": "محرم",
+    "period": "العهد المكي",
+    "place": "قباء (مسجد قباء)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/33",
+    "asbab": "",
+    "order": 33
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e29",
+    "title": "انتِشارُ الإسلامِ في يَثْرِبَ بعدَ العَقبةِ الأولى .",
+    "hijri_year": -1,
+    "hijri_month": "محرم",
+    "period": "العهد المكي",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/34",
+    "asbab": "",
+    "order": 34
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8731,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e30",
+    "title": "بَيعةُ العَقبةِ الثَّانيةِ .",
+    "hijri_year": -1,
+    "hijri_month": "ذي الحجة",
+    "period": "العهد المكي",
+    "place": "العقبة بمنى (مسجد البيعة)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/35",
+    "asbab": "",
+    "order": 35
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e31",
+    "title": "مُعجِزةُ انشِقاقِ القَمرِ .",
+    "hijri_year": 0,
+    "hijri_month": "",
+    "period": "العهد المكي",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/36",
+    "asbab": "TAF-29",
+    "order": 36
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e32",
+    "title": "إسلام عبد الله بن سلَام رَضي اللهُ عنه .",
+    "hijri_year": 1,
+    "hijri_month": "",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/37",
+    "asbab": "ASB-020",
+    "order": 43
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e33",
+    "title": "معاهدة النبي صلَّى اللهُ عليه وسلَّم مع يهود .",
+    "hijri_year": 1,
+    "hijri_month": "",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/38",
+    "asbab": "",
+    "order": 44
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e34",
+    "title": "مَشروعِيَّةُ الأَذانِ .",
+    "hijri_year": 1,
+    "hijri_month": "",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/39",
+    "asbab": "",
+    "order": 45
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p2_e35",
+    "title": "هِجرةُ الصَّحابةِ إلى المدينةِ .",
+    "hijri_year": 1,
+    "hijri_month": "محرم",
+    "period": "الهجرة",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/40",
+    "asbab": "",
+    "order": 37
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e16",
+    "title": "اجتماعُ المُشركين في دارِ النَّدوَةِ واتِّفاقُهم على قَتلِ النَّبيِّ صلَّى الله عليه وسلَّم .",
+    "hijri_year": 1,
+    "hijri_month": "صفر",
+    "period": "العهد المكي",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/41",
+    "asbab": "",
+    "order": 38
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6172,
+     24.4393
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e17",
+    "title": "هِجرةُ الرَّسولِ صلَّى الله عليه وسلَّم وأبي بكرٍ رضِي الله عنه إلى المدينةِ .",
+    "hijri_year": 1,
+    "hijri_month": "صفر",
+    "period": "الهجرة",
+    "place": "قباء (مسجد قباء)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/42",
+    "asbab": "",
+    "order": 39
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6172,
+     24.4393
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e18",
+    "title": "بِناءُ مَسجدِ قُباءٍ .",
+    "hijri_year": 1,
+    "hijri_month": "ربيع الأول",
+    "period": "العهد المدني",
+    "place": "قباء (مسجد قباء)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/43",
+    "asbab": "",
+    "order": 40
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e19",
+    "title": "بِناءُ المسجدِ النَّبوِيِّ .",
+    "hijri_year": 1,
+    "hijri_month": "ربيع الأول",
+    "period": "العهد المدني",
+    "place": "المسجد النبوي",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/44",
+    "asbab": "",
+    "order": 41
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e20",
+    "title": "المُؤاخاةُ بين المُهاجِرين والأنصارِ .",
+    "hijri_year": 1,
+    "hijri_month": "ربيع الأول",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/45",
+    "asbab": "ASB-021",
+    "order": 42
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.0347,
+     22.7986
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e21",
+    "title": "سرية عبيدة بن الحارث بن المطلب إلى بطن رابغ .",
+    "hijri_year": 1,
+    "hijri_month": "شعبان",
+    "period": "العهد المدني",
+    "place": "رابغ",
+    "precision": "تقريبي",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/46",
+    "asbab": "",
+    "order": 46
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     38.15,
+     25.07
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e22",
+    "title": "سرية حمزة إلى سيف البحر .",
+    "hijri_year": 1,
+    "hijri_month": "رمضان",
+    "period": "العهد المدني",
+    "place": "العيص (سِيف البحر)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/47",
+    "asbab": "",
+    "order": 47
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.17,
+     22.75
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e23",
+    "title": "سرية سعد بن أبي وقاص رضي الله عنه إلى الخَرّار .",
+    "hijri_year": 1,
+    "hijri_month": "ذي القعدة",
+    "period": "العهد المدني",
+    "place": "الخرّار (قرب الجحفة)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/48",
+    "asbab": "",
+    "order": 48
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.05,
+     23.1
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e24",
+    "title": "غَزوةُ الأَبْواءِ (وَدَّانَ) ومُوادَعةُ بني ضَمْرَةَ .",
+    "hijri_year": 2,
+    "hijri_month": "صفر",
+    "period": "العهد المدني",
+    "place": "الأبواء (ودّان)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/49",
+    "asbab": "",
+    "order": 49
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     38.95,
+     23.9
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e25",
+    "title": "غزوة بدر الأولى (وادي سفوان) .",
+    "hijri_year": 2,
+    "hijri_month": "ربيع الأول",
+    "period": "العهد المدني",
+    "place": "وادي سفوان (ناحية بدر)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/50",
+    "asbab": "",
+    "order": 50
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     38.6,
+     24.25
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e26",
+    "title": "غَزوةُ بُواطٍ بِقُربِ يَنْبُعَ .",
+    "hijri_year": 2,
+    "hijri_month": "ربيع الآخر",
+    "period": "العهد المدني",
+    "place": "بواط (جبل قرب ينبع)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/51",
+    "asbab": "",
+    "order": 51
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     38.4,
+     24.18
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e27",
+    "title": "غَزوةُ العُشَيْرَةِ (الْعُسَيْرَةِ) .",
+    "hijri_year": 2,
+    "hijri_month": "جمادى الأولى",
+    "period": "العهد المدني",
+    "place": "العُشيرة (بطن ينبع)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/52",
+    "asbab": "",
+    "order": 52
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.0347,
+     22.7986
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e28",
+    "title": "سرية سعد بن أبي وقاص رضي الله عنه إلى رابغ .",
+    "hijri_year": 2,
+    "hijri_month": "رجب",
+    "period": "العهد المدني",
+    "place": "رابغ",
+    "precision": "تقريبي",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/53",
+    "asbab": "",
+    "order": 53
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.15,
+     21.59
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e29",
+    "title": "سرية عبد الله بن جحش الأسدي إلى نخلة .",
+    "hijri_year": 2,
+    "hijri_month": "رجب",
+    "period": "العهد المدني",
+    "place": "وادي نخلة",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/54",
+    "asbab": "TAF-01",
+    "order": 54
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e30",
+    "title": "تَحويلُ القِبلَةِ إلى الكعبة .",
+    "hijri_year": 2,
+    "hijri_month": "شعبان",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/55",
+    "asbab": "ASB-022",
+    "order": 55
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e31",
+    "title": "نزول فَرْضِيَّة صِيامِ شَهرِ رَمضانَ .",
+    "hijri_year": 2,
+    "hijri_month": "شعبان",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/56",
+    "asbab": "ASB-023، ASB-024",
+    "order": 56
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e32",
+    "title": "نزول فَرْضية زكاةِ الفِطرِ .",
+    "hijri_year": 2,
+    "hijri_month": "رمضان",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/57",
+    "asbab": "",
+    "order": 57
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e33",
+    "title": "سرية عمير بن عدي رضي الله عنه لقتل عصماء بنت مروان .",
+    "hijri_year": 2,
+    "hijri_month": "رمضان",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/58",
+    "asbab": "",
+    "order": 58
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     38.79,
+     23.78
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e34",
+    "title": "غَزوةُ بدرٍ (الكُبرى) وانْتصارُ المُسلمين .",
+    "hijri_year": 2,
+    "hijri_month": "رمضان",
+    "period": "العهد المدني",
+    "place": "بدر",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/59",
+    "asbab": "ASB-026، ASB-027، ASB-029، ASB-030، TAF-10، TAF-12، TAF-13",
+    "order": 59
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p3_e35",
+    "title": "وفاةُ رُقَيَّةَ رضِي الله عنها .",
+    "hijri_year": 2,
+    "hijri_month": "رمضان",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/60",
+    "asbab": "",
+    "order": 60
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e16",
+    "title": "سرية سالم بن عمير رضي الله تعالى عنه إلى أبي عفك اليهودي .",
+    "hijri_year": 2,
+    "hijri_month": "شوال",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/61",
+    "asbab": "",
+    "order": 61
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.605,
+     24.462
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e17",
+    "title": "غَزوةُ بني قَينُقاعٍ .",
+    "hijri_year": 2,
+    "hijri_month": "شوال",
+    "period": "العهد المدني",
+    "place": "ديار بني قينقاع",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/62",
+    "asbab": "",
+    "order": 62
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.6,
+     25.2
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e18",
+    "title": "غزوة السويق أو غزوة بني سليم (قرقرة الكدر) .",
+    "hijri_year": 2,
+    "hijri_month": "شوال",
+    "period": "العهد المدني",
+    "place": "قرقرة الكُدر (ماء لبني سليم)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/63",
+    "asbab": "",
+    "order": 63
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.64,
+     24.425
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e19",
+    "title": "مَقتَلُ كعبِ بنِ الأَشرفِ .",
+    "hijri_year": 3,
+    "hijri_month": "",
+    "period": "العهد المدني",
+    "place": "ديار بني النضير (شرق المدينة)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/65",
+    "asbab": "",
+    "order": 64
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.55,
+     24.95
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e20",
+    "title": "غزوة غطفان إلى نجد (غزوة ذي أمرّ) .",
+    "hijri_year": 3,
+    "hijri_month": "صفر",
+    "period": "العهد المدني",
+    "place": "ذو أمرّ (ناحية نجد)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/66",
+    "asbab": "",
+    "order": 65
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.55,
+     23.5
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e21",
+    "title": "غزوة بحران بين الفُرْعِ والمدينة .",
+    "hijri_year": 3,
+    "hijri_month": "ربيع الآخر",
+    "period": "العهد المدني",
+    "place": "بُحران (ناحية الفُرع)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/67",
+    "asbab": "",
+    "order": 66
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     42.0,
+     25.0
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e22",
+    "title": "سَرِيَّةُ زيدِ بنِ حارِثةَ .",
+    "hijri_year": 3,
+    "hijri_month": "جمادى الأولى",
+    "period": "العهد المدني",
+    "place": "نجد (منطقة)",
+    "precision": "منطقة",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/68",
+    "asbab": "",
+    "order": 67
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6125,
+     24.502
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e23",
+    "title": "غَزوةُ أُحُدٍ وسبب هزيمة المسلمين .",
+    "hijri_year": 3,
+    "hijri_month": "شوال",
+    "period": "العهد المدني",
+    "place": "جبل أحد (موقع المعركة)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/69",
+    "asbab": "ASB-031، ASB-032، ASB-033، ASB-034، ASB-080",
+    "order": 68
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6125,
+     24.502
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e24",
+    "title": "اسْتِشهادُ حَمزةَ رضِي الله عنه في غَزوةِ أُحُدٍ .",
+    "hijri_year": 3,
+    "hijri_month": "شوال",
+    "period": "العهد المدني",
+    "place": "جبل أحد (موقع المعركة)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/70",
+    "asbab": "",
+    "order": 69
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.5,
+     24.38
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e25",
+    "title": "غَزوةُ حَمراءِ الأَسدِ .",
+    "hijri_year": 3,
+    "hijri_month": "شوال",
+    "period": "العهد المدني",
+    "place": "حمراء الأسد",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/71",
+    "asbab": "TAF-04",
+    "order": 70
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     41.5,
+     26.5
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e26",
+    "title": "سرية عبد الله بن عبد الأسد رضي الله عنه إلى قطن .",
+    "hijri_year": 4,
+    "hijri_month": "محرم",
+    "period": "العهد المدني",
+    "place": "ديار بني أسد (نجد)",
+    "precision": "منطقة",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/72",
+    "asbab": "",
+    "order": 71
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.963,
+     21.352
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e27",
+    "title": "سرية عبد الله بن أنيس الجهني إلى سفيان بن خالد ببطن عُرْنة .",
+    "hijri_year": 4,
+    "hijri_month": "محرم",
+    "period": "العهد المدني",
+    "place": "بطن عُرَنة",
+    "precision": "تقريبي",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/73",
+    "asbab": "",
+    "order": 72
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.48,
+     21.7
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e28",
+    "title": "سرية يَوم الرَّجيعِ .",
+    "hijri_year": 4,
+    "hijri_month": "صفر",
+    "period": "العهد المدني",
+    "place": "الهدأة بين عسفان ومكة",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/74",
+    "asbab": "",
+    "order": 73
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.9,
+     24.0
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e29",
+    "title": "سرية بِئر مَعونةَ .",
+    "hijri_year": 4,
+    "hijri_month": "صفر",
+    "period": "العهد المدني",
+    "place": "بئر معونة",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/75",
+    "asbab": "",
+    "order": 74
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.64,
+     24.425
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e30",
+    "title": "غَزوةُ بني النَّضيرِ .",
+    "hijri_year": 4,
+    "hijri_month": "ربيع الأول",
+    "period": "العهد المدني",
+    "place": "ديار بني النضير (شرق المدينة)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/76",
+    "asbab": "ASB-036، TAF-02، TAF-31",
+    "order": 75
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     38.79,
+     23.78
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e31",
+    "title": "غزوة بدر الموعد (بدر الثانية) .",
+    "hijri_year": 4,
+    "hijri_month": "شعبان",
+    "period": "العهد المدني",
+    "place": "بدر",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/78",
+    "asbab": "TAF-05",
+    "order": 76
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e32",
+    "title": "حادِثةُ الإفْكِ .",
+    "hijri_year": 5,
+    "hijri_month": "",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/79",
+    "asbab": "ASB-041، ASB-042، ASB-043، TAF-23",
+    "order": 79
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.87,
+     29.81
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e33",
+    "title": "غزوة دومة الجندل .",
+    "hijri_year": 5,
+    "hijri_month": "ربيع الأول",
+    "period": "العهد المدني",
+    "place": "دومة الجندل",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/80",
+    "asbab": "",
+    "order": 77
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.2,
+     22.25
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e34",
+    "title": "غزوة بني المصطلق (المريسيع) .",
+    "hijri_year": 5,
+    "hijri_month": "شعبان",
+    "period": "العهد المدني",
+    "place": "المريسيع (ماء لبني المصطلق)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/83",
+    "asbab": "ASB-040",
+    "order": 78
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.5967,
+     24.4775
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p4_e35",
+    "title": "غَزوةُ الخَندَقِ (الأَحزابِ) .",
+    "hijri_year": 5,
+    "hijri_month": "شوال",
+    "period": "العهد المدني",
+    "place": "الخندق (عند جبل سلع)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/84",
+    "asbab": "TAF-24",
+    "order": 80
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e16",
+    "title": "نُزولُ آيةِ الحِجابِ .",
+    "hijri_year": 5,
+    "hijri_month": "ذي القعدة",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/85",
+    "asbab": "ASB-039، TAF-26",
+    "order": 81
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.63,
+     24.448
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e17",
+    "title": "غَزوةُ يَهودِ بني قُرَيْظَةَ .",
+    "hijri_year": 5,
+    "hijri_month": "ذي القعدة",
+    "period": "العهد المدني",
+    "place": "ديار بني قريظة",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/86",
+    "asbab": "TAF-14، TAF-25",
+    "order": 82
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.29,
+     25.695
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e18",
+    "title": "مَقتلُ سَلَّامِ بنِ أبي الحُقَيْقِ اليَهوديِّ .",
+    "hijri_year": 6,
+    "hijri_month": "",
+    "period": "العهد المدني",
+    "place": "خيبر",
+    "precision": "منطقة",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/87",
+    "asbab": "",
+    "order": 83
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.85,
+     24.65
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e19",
+    "title": "غَزوةُ ذي قَرَدٍ .",
+    "hijri_year": 6,
+    "hijri_month": "محرم",
+    "period": "العهد المدني",
+    "place": "ذو قَرَد",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/88",
+    "asbab": "",
+    "order": 84
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     42.0,
+     25.0
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e20",
+    "title": "سرية محمد بن مسلمة رضي الله عنه إلى القرطاء .",
+    "hijri_year": 6,
+    "hijri_month": "محرم",
+    "period": "العهد المدني",
+    "place": "نجد (منطقة)",
+    "precision": "منطقة",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/89",
+    "asbab": "",
+    "order": 85
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     41.5,
+     26.5
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e21",
+    "title": "سرية عُكَّاشة بن مِحصَن رضي الله عنه إلى الغَمر (ماء بني أسد) .",
+    "hijri_year": 6,
+    "hijri_month": "ربيع الأول",
+    "period": "العهد المدني",
+    "place": "ديار بني أسد (نجد)",
+    "precision": "منطقة",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/90",
+    "asbab": "",
+    "order": 86
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.85,
+     24.35
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e22",
+    "title": "سرية محمد بن مسلمة رضي الله عنه إلى بني ثعلبة وبني عوال بذي القَصَّةِ .",
+    "hijri_year": 6,
+    "hijri_month": "ربيع الآخر",
+    "period": "العهد المدني",
+    "place": "ذو القَصّة",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/91",
+    "asbab": "",
+    "order": 87
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.85,
+     24.35
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e23",
+    "title": "سرية أبي عبيدة بن الجراح إلى ذي القصة .",
+    "hijri_year": 6,
+    "hijri_month": "ربيع الآخر",
+    "period": "العهد المدني",
+    "place": "ذو القَصّة",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/92",
+    "asbab": "",
+    "order": 88
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.4,
+     24.6
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e24",
+    "title": "سرية زيد بن حارثة رضي الله عنه إلى الجموم (ماءٌ على طَريقِ مكةَ) .",
+    "hijri_year": 6,
+    "hijri_month": "ربيع الآخر",
+    "period": "العهد المدني",
+    "place": "الجَموم (بطن نخل)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/93",
+    "asbab": "",
+    "order": 89
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.37,
+     21.92
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e25",
+    "title": "غزوة بني لحيان (الذين غدروا يوم الرجيع) .",
+    "hijri_year": 6,
+    "hijri_month": "جمادى الأولى",
+    "period": "العهد المدني",
+    "place": "عسفان",
+    "precision": "تقريبي",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/94",
+    "asbab": "",
+    "order": 90
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     38.15,
+     25.07
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e26",
+    "title": "سرية زيد بن حارثة رضي الله عنه إلى العيص .",
+    "hijri_year": 6,
+    "hijri_month": "جمادى الأولى",
+    "period": "العهد المدني",
+    "place": "العيص (سِيف البحر)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/95",
+    "asbab": "",
+    "order": 91
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.1,
+     24.8
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e27",
+    "title": "سرية زيد بن حارثة إلى بني ثعلبة بالطَّرف (ماء قرب المدينة) .",
+    "hijri_year": 6,
+    "hijri_month": "جمادى الآخرة",
+    "period": "العهد المدني",
+    "place": "الطَّرَف (ماء على 36 ميلًا من المدينة)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/96",
+    "asbab": "",
+    "order": 92
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.87,
+     29.81
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e28",
+    "title": "سرية عبد الرحمن بن عوف رضي الله عنه إلى دومة الجندل .",
+    "hijri_year": 6,
+    "hijri_month": "شعبان",
+    "period": "العهد المدني",
+    "place": "دومة الجندل",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/97",
+    "asbab": "",
+    "order": 93
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     37.92,
+     26.61
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e29",
+    "title": "سرية أبي بكر الصديق رضي الله عنه إلى بني فزارة بوادي القرى .",
+    "hijri_year": 6,
+    "hijri_month": "رمضان",
+    "period": "العهد المدني",
+    "place": "وادي القرى",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/98",
+    "asbab": "",
+    "order": 94
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e30",
+    "title": "سرية كُرز بن جابر الفهري إلى العرنيين .",
+    "hijri_year": 6,
+    "hijri_month": "شوال",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/99",
+    "asbab": "",
+    "order": 95
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.617,
+     21.443
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e31",
+    "title": "بَيعةُ الرِّضْوانِ .",
+    "hijri_year": 6,
+    "hijri_month": "ذي القعدة",
+    "period": "العهد المدني",
+    "place": "الحديبية (الشميسي)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/100",
+    "asbab": "",
+    "order": 96
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.617,
+     21.443
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e32",
+    "title": "صُلْحُ الحُدَيبيةِ .",
+    "hijri_year": 6,
+    "hijri_month": "ذي القعدة",
+    "period": "العهد المدني",
+    "place": "الحديبية (الشميسي)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/101",
+    "asbab": "ASB-044، ASB-045، ASB-046، ASB-047، ASB-048",
+    "order": 97
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.29,
+     25.695
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e33",
+    "title": "غَزوةُ خَيبرَ .",
+    "hijri_year": 7,
+    "hijri_month": "محرم",
+    "period": "العهد المدني",
+    "place": "خيبر",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/102",
+    "asbab": "",
+    "order": 98
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.29,
+     25.695
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e34",
+    "title": "تَحريمُ لُحومِ الحُمُرِ الأَهْلِيَّةِ ومُتعةِ النِّساءِ يوم خيبر .",
+    "hijri_year": 7,
+    "hijri_month": "محرم",
+    "period": "العهد المدني",
+    "place": "خيبر",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/103",
+    "asbab": "",
+    "order": 99
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.29,
+     25.695
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p5_e35",
+    "title": "هجرة أبي موسى الأشعري وأصحابه رضي الله عنهم إلى المدينة مروراً بالحَبشةِ .",
+    "hijri_year": 7,
+    "hijri_month": "محرم",
+    "period": "العهد المدني",
+    "place": "خيبر",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/104",
+    "asbab": "",
+    "order": 100
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.29,
+     25.695
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e16",
+    "title": "مُحاوَلةُ اليَهودِ تَسميمِ رسولِ الله صلَّى الله عليه وسلَّم .",
+    "hijri_year": 7,
+    "hijri_month": "محرم",
+    "period": "العهد المدني",
+    "place": "خيبر",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/105",
+    "asbab": "",
+    "order": 101
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e17",
+    "title": "مراسلة النبي صلى الله عليه وسلم إلى المُلوكِ يَدعوهُم إلى الإسلامِ .",
+    "hijri_year": 7,
+    "hijri_month": "محرم",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/106",
+    "asbab": "",
+    "order": 102
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.4,
+     25.2
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e18",
+    "title": "غَزوةُ ذاتِ الرِّقاعِ .",
+    "hijri_year": 7,
+    "hijri_month": "ربيع الأول",
+    "period": "العهد المدني",
+    "place": "نخل – ديار غطفان (ذات الرقاع)",
+    "precision": "منطقة",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/77",
+    "asbab": "",
+    "order": 103
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.3,
+     22.35
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e19",
+    "title": "سَرِيَّةُ غالبِ بنِ عبدِ الله اللَّيثيِّ إلى بني المُلَوَّحِ بُقدَيْدٍ .",
+    "hijri_year": 7,
+    "hijri_month": "ربيع الأول",
+    "period": "العهد المدني",
+    "place": "قُديد",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/107",
+    "asbab": "",
+    "order": 104
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     35.9,
+     28.8
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e20",
+    "title": "سرية زيد بن حارثة إلى أرض حِسْمى .",
+    "hijri_year": 7,
+    "hijri_month": "جمادى الآخرة",
+    "period": "العهد المدني",
+    "place": "حِسمى (وراء وادي القرى)",
+    "precision": "منطقة",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/108",
+    "asbab": "",
+    "order": 105
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     41.63,
+     21.21
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e21",
+    "title": "سَرِيَّةُ عُمَرَ بنِ الخطَّابِ رضِي الله عنه إلى (تُرَبَةَ) طائفةٍ مِن هَوازِنَ .",
+    "hijri_year": 7,
+    "hijri_month": "شعبان",
+    "period": "العهد المدني",
+    "place": "تُربة",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/109",
+    "asbab": "",
+    "order": 106
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.4717,
+     25.9933
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e22",
+    "title": "سَرِيَّةُ بَشيرِ بنِ سعدٍ الأَنصاريِّ إلى بني مُرَّةَ بِناحِيةِ فَدَكٍ .",
+    "hijri_year": 7,
+    "hijri_month": "شعبان",
+    "period": "العهد المدني",
+    "place": "فدك (الحائط)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/110",
+    "asbab": "",
+    "order": 107
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     42.0,
+     25.0
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e23",
+    "title": "سَرِيَّةُ غالبِ بنِ عبدِ الله اللَّيثيِّ إلى بني عُوَالٍ .",
+    "hijri_year": 7,
+    "hijri_month": "رمضان",
+    "period": "العهد المدني",
+    "place": "نجد (منطقة)",
+    "precision": "منطقة",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/111",
+    "asbab": "",
+    "order": 108
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.29,
+     25.695
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e24",
+    "title": "سَرِيَّةُ عبدِ الله بنِ رَواحةَ إلى خَيبرَ لِقَتلِ يَسيرِ بنِ رِزامٍ اليَهوديِّ .",
+    "hijri_year": 7,
+    "hijri_month": "شوال",
+    "period": "العهد المدني",
+    "place": "خيبر",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/112",
+    "asbab": "",
+    "order": 109
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.62,
+     24.58
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e25",
+    "title": "سَرِيَّةُ أبي حَدْرَدٍ الأَسلميٍّ إلى الغابةِ .",
+    "hijri_year": 7,
+    "hijri_month": "ذي القعدة",
+    "period": "العهد المدني",
+    "place": "الغابة (شمال المدينة)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/113",
+    "asbab": "",
+    "order": 110
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e26",
+    "title": "عُمرَةُ الحُديبيةِ وتُسَمَّى (عُمرَةَ القَضاءِ) .",
+    "hijri_year": 7,
+    "hijri_month": "ذي القعدة",
+    "period": "العهد المدني",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/114",
+    "asbab": "",
+    "order": 111
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.5,
+     23.5
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e27",
+    "title": "سَرِيَّةُ ابنِ أبي العَوجاءِ إلى بني سُلَيْمٍ .",
+    "hijri_year": 7,
+    "hijri_month": "ذي الحجة",
+    "period": "العهد المدني",
+    "place": "ديار بني سليم",
+    "precision": "منطقة",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/115",
+    "asbab": "",
+    "order": 112
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e28",
+    "title": "وَفاةُ زَينبَ رضِي الله عنها بنتِ رسولِ الله صلَّى الله عليه وسلَّم .",
+    "hijri_year": 8,
+    "hijri_month": "",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/116",
+    "asbab": "",
+    "order": 113
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.4,
+     21.8
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e29",
+    "title": "سريَّة أَوْطاسٍ (وادٍ بين مكة والطائف) .",
+    "hijri_year": 8,
+    "hijri_month": "",
+    "period": "العهد المدني",
+    "place": "أوطاس",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/117",
+    "asbab": "TAF-08",
+    "order": 128
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e30",
+    "title": "إِسلامُ عَمرِو بنِ العاصِ وخالدِ بنِ الوليدِ وعُثمانَ بنِ طلحةَ رضِي الله عنهم .",
+    "hijri_year": 8,
+    "hijri_month": "صفر",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/118",
+    "asbab": "",
+    "order": 114
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.4717,
+     25.9933
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e31",
+    "title": "سَرِيَّةُ غالبِ بنِ عبدِ الله اللَّيثيِّ إلى أَصحابِ بَشيرِ بنِ سعدٍ بفَدَكٍ .",
+    "hijri_year": 8,
+    "hijri_month": "صفر",
+    "period": "العهد المدني",
+    "place": "فدك (الحائط)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/119",
+    "asbab": "",
+    "order": 115
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     37.5,
+     28.0
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e32",
+    "title": "سَرِيَّةَ كعبِ بنِ عُميرٍ الأنصاريِّ إلى بني قُضَاعَةَ .",
+    "hijri_year": 8,
+    "hijri_month": "ربيع الأول",
+    "period": "العهد المدني",
+    "place": "ديار قضاعة (شمال الحجاز)",
+    "precision": "منطقة",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/120",
+    "asbab": "",
+    "order": 116
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     41.0,
+     22.5
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e33",
+    "title": "سَرِيَّةُ شُجاعِ بنِ وَهْبٍ رضِي الله عنه إلى بني هَوازِنَ .",
+    "hijri_year": 8,
+    "hijri_month": "ربيع الأول",
+    "period": "العهد المدني",
+    "place": "ديار هوازن",
+    "precision": "منطقة",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/121",
+    "asbab": "",
+    "order": 117
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     35.693,
+     31.079
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e34",
+    "title": "غَزوةُ مُؤْتَةَ .",
+    "hijri_year": 8,
+    "hijri_month": "جمادى الأولى",
+    "period": "العهد المدني",
+    "place": "مؤتة (الأردن)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/122",
+    "asbab": "",
+    "order": 118
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     37.5,
+     28.0
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p6_e35",
+    "title": "غَزوةُ ذاتِ السَّلاسِلِ .",
+    "hijri_year": 8,
+    "hijri_month": "جمادى الآخرة",
+    "period": "العهد المدني",
+    "place": "ديار قضاعة (شمال الحجاز)",
+    "precision": "منطقة",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/123",
+    "asbab": "",
+    "order": 119
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     37.92,
+     24.45
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e16",
+    "title": "سَرِيَّةُ أبي عُبيدةَ بنِ الجَرَّاحِ رضِي الله عنه إلى سِيفِ البَحرِ .",
+    "hijri_year": 8,
+    "hijri_month": "رجب",
+    "period": "العهد المدني",
+    "place": "سِيف البحر (ساحل البحر الأحمر)",
+    "precision": "منطقة",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/124",
+    "asbab": "",
+    "order": 120
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     42.0,
+     25.0
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e17",
+    "title": "سَرِيَّةُ أبي قَتادةَ الأَنصاريِّ إلى خَضِرَة .",
+    "hijri_year": 8,
+    "hijri_month": "شعبان",
+    "period": "العهد المدني",
+    "place": "نجد (منطقة)",
+    "precision": "منطقة",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/125",
+    "asbab": "",
+    "order": 121
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.2,
+     24.9
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e18",
+    "title": "سَرِيَّةُ أبي قَتادةَ رضِي الله عنه إلى بَطْنِ إِضَمٍ .",
+    "hijri_year": 8,
+    "hijri_month": "رمضان",
+    "period": "العهد المدني",
+    "place": "بطن إضم",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/126",
+    "asbab": "ASB-049",
+    "order": 122
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8262,
+     21.4225
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e19",
+    "title": "غَزوةُ فَتحِ مكَّةَ .",
+    "hijri_year": 8,
+    "hijri_month": "رمضان",
+    "period": "العهد المدني",
+    "place": "مكة المكرمة (المسجد الحرام)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/127",
+    "asbab": "TAF-18",
+    "order": 123
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.15,
+     21.59
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e20",
+    "title": "سَرِيَّةُ خالدِ بنِ الوليدِ رضِي الله عنه إلى العُزَّى بنَخْلَةَ .",
+    "hijri_year": 8,
+    "hijri_month": "رمضان",
+    "period": "العهد المدني",
+    "place": "وادي نخلة",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/128",
+    "asbab": "",
+    "order": 124
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.6,
+     22.3
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e21",
+    "title": "سَرِيَّةُ عَمرِو بنِ العاصِ رضِي الله عنه إلى سُواعٍ، صَنَمِ هُذيلٍ .",
+    "hijri_year": 8,
+    "hijri_month": "رمضان",
+    "period": "العهد المدني",
+    "place": "رُهاط (موضع صنم سواع)",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/129",
+    "asbab": "",
+    "order": 125
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.4158,
+     21.2703
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e23",
+    "title": "غزوة الطَّائفِ بعد أن حاصرها المسلمون أربعين ليلة .",
+    "hijri_year": 8,
+    "hijri_month": "شوال",
+    "period": "العهد المدني",
+    "place": "الطائف",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/131",
+    "asbab": "",
+    "order": 129
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     40.03,
+     21.5
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e24",
+    "title": "غَزوةُ حُنينٍ (هَوازِنَ) .",
+    "hijri_year": 8,
+    "hijri_month": "ذي القعدة",
+    "period": "العهد المدني",
+    "place": "وادي حُنين",
+    "precision": "تقريبي",
+    "coord_confidence": "تقريبي – يحتاج تحقق",
+    "dorar_url": "https://dorar.net/history/event/132",
+    "asbab": "ASB-050",
+    "order": 127
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.954,
+     21.565
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e25",
+    "title": "عُمرَةُ الجِعْرانَةِ .",
+    "hijri_year": 8,
+    "hijri_month": "ذي القعدة",
+    "period": "العهد المدني",
+    "place": "الجعرانة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/133",
+    "asbab": "",
+    "order": 130
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e26",
+    "title": "وَفاةُ أمِّ كُلثومٍ بنتِ رسولِ الله صلَّى الله عليه وسلَّم .",
+    "hijri_year": 9,
+    "hijri_month": "",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/134",
+    "asbab": "",
+    "order": 131
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e27",
+    "title": "عامُ الوُفودِ .",
+    "hijri_year": 9,
+    "hijri_month": "",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/135",
+    "asbab": "ASB-051",
+    "order": 132
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e29",
+    "title": "وَفاةُ النَّجاشِيِّ صاحِبِ الحَبشةِ رضِي الله عنه .",
+    "hijri_year": 9,
+    "hijri_month": "رجب",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/137",
+    "asbab": "TAF-06",
+    "order": 134
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     36.555,
+     28.3838
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e30",
+    "title": "غَزوةُ تَبوكَ وجَيشُ العُسْرَةِ .",
+    "hijri_year": 9,
+    "hijri_month": "رجب",
+    "period": "العهد المدني",
+    "place": "تبوك",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/138",
+    "asbab": "ASB-052، ASB-053، TAF-15، TAF-16، TAF-17",
+    "order": 135
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e31",
+    "title": "وَفاةُ رَأْسِ المُنافقين عبدِ الله بنِ أُبَيٍّ ابنِ سَلولَ .",
+    "hijri_year": 9,
+    "hijri_month": "ذي القعدة",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/139",
+    "asbab": "ASB-055",
+    "order": 136
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.8933,
+     21.4133
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e32",
+    "title": "حَجَّةُ أبي بكرٍ الصِّدِّيقِ ونُزولُ سُورةِ بَراءَة .",
+    "hijri_year": 9,
+    "hijri_month": "ذي الحجة",
+    "period": "العهد المدني",
+    "place": "منى",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/140",
+    "asbab": "ASB-056",
+    "order": 137
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e33",
+    "title": "تَتابُعُ الوُفودِ إلى النَّبيِّ صلَّى الله عليه وسلَّم .",
+    "hijri_year": 10,
+    "hijri_month": "",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/141",
+    "asbab": "",
+    "order": 138
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e34",
+    "title": "وَفاةُ إبراهيمَ ابنِ النَّبيِّ صلَّى الله عليه وسلَّم .",
+    "hijri_year": 10,
+    "hijri_month": "",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/142",
+    "asbab": "",
+    "order": 139
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.9841,
+     21.3549
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p7_e35",
+    "title": "حَجَّةُ الوَداعِ وتسمى حَجَّةُ الإسلامِ أو حَجَّةُ البَلاغِ .",
+    "hijri_year": 10,
+    "hijri_month": "",
+    "period": "العهد المدني",
+    "place": "عرفات (جبل الرحمة)",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/143",
+    "asbab": "ASB-057",
+    "order": 140
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     44.191,
+     15.3694
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p8_e16",
+    "title": "خروج الأسود العنسي في اليمن وقتله على يد فيروز الديلمي .",
+    "hijri_year": 10,
+    "hijri_month": "ذي الحجة",
+    "period": "العهد المدني",
+    "place": "صنعاء",
+    "precision": "منطقة",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/6103",
+    "asbab": "",
+    "order": 141
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     39.6111,
+     24.4672
+    ]
+   },
+   "properties": {
+    "kind": "event",
+    "event_id": "dorar_era1_p8_e17",
+    "title": "مُصيبَةُ المسلمين الكُبرى بِوَفاةِ رسولِ الله صلَّى الله عليه وسلَّم .",
+    "hijri_year": 11,
+    "hijri_month": "ربيع الأول",
+    "period": "العهد المدني",
+    "place": "المدينة المنورة",
+    "precision": "دقيق",
+    "coord_confidence": "مؤكد",
+    "dorar_url": "https://dorar.net/history/event/145",
+    "asbab": "",
+    "order": 142
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      39.8262,
+      21.4225
+     ],
+     [
+      39.8496,
+      21.3774
+     ],
+     [
+      39.05,
+      22.8
+     ],
+     [
+      39.6172,
+      24.4393
+     ],
+     [
+      39.6111,
+      24.4672
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "route",
+    "name": "الهجرة النبوية",
+    "ref": "event_42",
+    "precision": "تقريبي",
+    "note": "غار ثور وقباء والمدينة مؤكدة؛ نقطة الساحل تقريبية لأن نص الدرر يذكر (طريق السواحل) دون تحديد المنازل"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      39.8262,
+      21.4225
+     ],
+     [
+      35.2358,
+      31.7761
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "route",
+    "name": "الإسراء",
+    "ref": "event_32",
+    "precision": "تقريبي",
+    "note": "مسار رمزي بين المسجدين"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      39.8262,
+      21.4225
+     ],
+     [
+      40.4158,
+      21.2703
+     ],
+     [
+      40.15,
+      21.59
+     ],
+     [
+      39.8262,
+      21.4225
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "route",
+    "name": "الخروج إلى الطائف",
+    "ref": "event_25+26",
+    "precision": "تقريبي",
+    "note": "نص الدرر: الطائف ثم نخلة في العودة"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      39.6111,
+      24.4672
+     ],
+     [
+      36.555,
+      28.3838
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "route",
+    "name": "غزوة تبوك",
+    "ref": "event_138",
+    "precision": "تقريبي",
+    "note": "خط مستقيم تقريبي؛ لم تُحدَّد المنازل"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      39.6111,
+      24.4672
+     ],
+     [
+      39.8262,
+      21.4225
+     ],
+     [
+      39.8933,
+      21.4133
+     ],
+     [
+      39.9841,
+      21.3549
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "route",
+    "name": "حجة الوداع",
+    "ref": "event_143",
+    "precision": "تقريبي",
+    "note": "خط تقريبي"
+   }
+  }
+ ]
+}
