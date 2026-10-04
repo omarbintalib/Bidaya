@@ -51,7 +51,6 @@ export const hadithLinks = (v: Verse) => [
   ...v.muslim.map(n => ({ book: 'muslim' as const, n, url: `https://sunnah.com/muslim:${n.replace(/\D+$/, '')}` })),
 ];
 
-export const mushafUrl = (url: string, locale: Locale) => url.replace(/([?&])l=ar\b/, `$1l=${locale}`);
 
 /** First sentences of a text, cut at a sentence boundary near `max` characters. */
 export function excerpt(text: string, max = 280) {

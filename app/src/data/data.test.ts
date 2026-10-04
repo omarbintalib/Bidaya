@@ -2,6 +2,7 @@ import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { answer } from '../assistant/answer';
 import { parseCsv } from './csv';
 import { loadSirah } from './load';
+import { quranpediaRefs } from './quranpedia';
 import { versesFor } from './select';
 import type { Sirah } from './types';
 
@@ -78,5 +79,17 @@ describe('ask the map (slide 7 test set)', () => {
   });
   it('apologises when the sources have nothing', () => {
     expect(answer(data, 'ما لون السيارة؟', 'ar').kind).toBe('none');
+  });
+});
+
+describe('quranpedia links', () => {
+  it('opens short ranges whole and long ranges at the first ayah', () => {
+    expect(quranpediaRefs('2:184-185', false, 'ar').map(r => r.url)).toEqual(['https://quranpedia.net/embed?surah=2&ayah=184-185']);
+    expect(quranpediaRefs('8:1-75', false, 'en')[0].url).toBe('https://quranpedia.net/embed?surah=8&ayah=1&type=translations');
+    expect(quranpediaRefs('25:68-70; 39:53', false, 'ar').map(r => r.label)).toEqual(['25:68–70', '39:53']);
+  });
+  it('opens short whole surahs in full', () => {
+    expect(quranpediaRefs('108:1-3', true, 'ar')[0].url).toBe('https://quranpedia.net/embed?surah=108&ayah=1-3');
+    expect(quranpediaRefs('9:1-129', true, 'ar')[0].url).toBe('https://quranpedia.net/embed?surah=9&ayah=1');
   });
 });

@@ -31,6 +31,10 @@ The README of the data package (IslamthonDataandstuff) explains every column.
 
 The map is a period map, drawn as SVG: coastlines only (Natural Earth 1:50m, public domain), with the regions, powers and seas of the time from `map_labels.csv`. It draws no modern borders, so no country outline is approximated. Region positions are approximate and labelled for orientation only. To regenerate the coastline after changing the map's extent, run `node scripts/build-land.mjs`.
 
+## Reading the verses
+
+Each verse reference on an event card is a button that opens the verses from Quranpedia (`quranpedia.net/embed`) in a reader window, with a link to open them on Quranpedia directly. English opens Quranpedia's translations view. Ranges of up to 20 ayat open whole; longer ones open at their first ayah (`src/data/quranpedia.ts`).
+
 ## Ask the map
 
 `src/assistant/answer.ts` answers from the sources only: Dorar event texts, the Companions' synopses and the verse records. Each answer names its source and moves the map to the event. Questions asking for a ruling are referred to an official fatwa body, and questions with no matching source get an apology (deck slides 5–7). It runs in the browser, with no API key. To add an LLM later, send the passages from `retrieve()` to a server-side model and keep these rules.

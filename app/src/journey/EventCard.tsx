@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { dateLine, excerpt, hadithLinks, mushafUrl, periodName, peopleFor, versesFor } from '../data/select';
+import { quranpediaRefs, type QuranRef } from '../data/quranpedia';
+import { dateLine, excerpt, hadithLinks, periodName, peopleFor, versesFor } from '../data/select';
 import type { Person, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
+import QuranReader from './QuranReader';
 
 /** Arabic-only source text keeps its own language and direction inside the English interface. */
 /** Characters of the event text shown before "Read the full text" — about three lines. */
@@ -64,12 +66,19 @@ function VerseList({ title, verses, locale, compact = false }: { title: string; 
 export function VerseItem({ v, locale, compact = false }: { v: Verse; locale: Locale; compact?: boolean }) {
   const text = journeyCopy[locale];
   const [open, setOpen] = useState(false);
+  const [reading, setReading] = useState<QuranRef | null>(null);
+  const refs = quranpediaRefs(v.ref, v.whole, locale);
+  const surahName = locale === 'ar' ? `سورة ${v.surah}` : `Surah ${v.surah}`;
   const label = v.link?.label;
   return <li className="verse">
-    <a className="verse-ref" href={v.mushaf[0] ? mushafUrl(v.mushaf[0], locale) : undefined} target="_blank" rel="noreferrer" title={text.readMushaf}>
-      <span className="verse-surah">{locale === 'ar' ? `سورة ${v.surah}` : <>Surah <span lang="ar">{v.surah}</span></>}</span>
-      <span className="verse-ayat">{v.whole ? text.wholeSurah : v.ref}</span>
-    </a>
+    <p className="verse-ref">
+      <span className="verse-surah">{surahName}</span>
+      {refs.map(r => <a key={r.url} className="verse-ayat" href={r.url} target="_blank" rel="noreferrer" title={text.readQuranpedia}
+        onClick={e => { if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return; e.preventDefault(); setReading(r); }}>
+        {v.whole ? text.wholeSurah : r.label}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3.5h4.2c.8 0 .8.6.8.6v9s0-.6-.8-.6H3zM13 3.5H8.8c-.8 0-.8.6-.8.6v9s0-.6.8-.6H13z" fill="none" stroke="currentColor" /></svg>
+      </a>)}
+    </p>
+    {reading && <QuranReader title={surahName} quranRef={reading} locale={locale} onClose={() => setReading(null)} />}
     <p className="verse-title">{v.title[locale]}</p>
     <p className="verse-phrase">{v.phrase[locale]}</p>
     {label && v.link?.type !== 'direct' && <p className="verse-label"><Ar>{label}</Ar></p>}
