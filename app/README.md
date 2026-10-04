@@ -2,11 +2,11 @@
 
 An Arabic-first, bilingual web experience for exploring the Sirah in place and time. Built with React and TypeScript, it combines the Islamathon design (animated navigation, reading preferences) with the Bidaya data package.
 
-**Status:** working prototype (v11). The Journey page has a period map of Arabia, the full timeline of 142 Dorar events, event cards with their verses and Companions, story mode, and "Ask the map". The Spread page shows the events reaching across Arabia year by year. All content is read at runtime from the CSV files in `public/data/`.
+**Status:** working prototype (v11). The Journey page has a period map of Arabia, the full timeline of 142 Dorar events, event cards with their verses and Companions, story mode, and "Ask the map". The Spread page shows the events reaching across Arabia year by year. All content is read at runtime from the CSV files at the repository root.
 
 ## Editing the data
 
-Every piece of content comes from the files in **`public/data/`**. Nothing is written into the code or the HTML.
+Every piece of content comes from the CSV files at the **root of this repository** (one folder up). Nothing is written into the code or the HTML. The dev and preview servers serve them at `/data/`, and `npm run build` copies them into `dist/data/`.
 
 1. Open the CSV in Excel (or any spreadsheet app). Keep the header row and column names unchanged.
 2. Edit, then save as **CSV UTF-8**.
@@ -210,7 +210,7 @@ Saved browser reviews in `qa/` cover desktop and mobile layouts, both languages,
 | The default development port is unavailable | Use the alternate URL printed by Vite, or run `npm run dev -- --port 5174` |
 | A refreshed inner page returns 404 after deployment | Configure the host's SPA fallback to `index.html` |
 | Ask the map apologises for a question | No source text matched it well enough; try the event, place or Companion name |
-| The Journey page says the data could not be loaded | Check that the CSV files are in `public/data/` and are served by the host |
+| The Journey page says the data could not be loaded | Check that the CSV files are at the repository root (or in `dist/data/` on a host) |
 | Settings disappear after a reload | Browser storage may be unavailable or disabled; settings then last only for the session |
 | Animations are reduced | Check the operating system motion setting and the in-app reading preferences |
 

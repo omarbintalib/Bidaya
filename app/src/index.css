@@ -360,3 +360,12 @@ html[data-compact-viewport='true'] .ai-region { margin-inline-start: 60px; }
 .accessibility-toggle input:checked { background: var(--ink); border-color: var(--ink); }
 .accessibility-toggle input::before { content: ''; width: 12px; height: 7px; margin-bottom: 4px; border-left: 2px solid var(--button-ink); border-bottom: 2px solid var(--button-ink); transform: rotate(-45deg); visibility: hidden; }
 .accessibility-toggle input:checked::before { visibility: visible; }
+
+/* English reads in IBM Plex Sans: the Saudi font's Latin letters are capitals only, which slows reading.
+   The Saudi font stays for the brand display (page titles). Arabic passages keep their Arabic font. */
+/* ﷺ in English text: one glyph from the bundled Noto Naskh, scaled to sit at text height. */
+@font-face { font-family: 'Honorific'; src: url('@fontsource/noto-naskh-arabic/files/noto-naskh-arabic-arabic-400-normal.woff2') format('woff2'); unicode-range: U+FDFA; size-adjust: 92%; font-display: swap; }
+html[lang='en'] { --reading-font: 'Honorific', 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif; --display: 'Saudi', 'IBM Plex Sans', sans-serif; }
+html[lang='en'] [lang='ar'] { font-family: 'Saudi', 'IBM Plex Sans Arabic', sans-serif; }
+html[lang='en'][data-reading-font='plex'] [lang='ar'] { font-family: 'IBM Plex Sans Arabic', sans-serif; }
+html[lang='en'] { --text-small: calc(16px * var(--text-scale)); --text-control: calc(17px * var(--text-scale)); --text-body: calc(18px * var(--text-scale)); }

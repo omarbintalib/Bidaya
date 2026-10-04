@@ -60,6 +60,7 @@ function Journey({ data, locale }: { data: Sirah; locale: Locale }) {
   const activeRoutes = useMemo(() => data.routes.filter(r => r.events.includes(current.n)).map(r => r.id), [data, current]);
   const unplaced = useMemo(() => unplacedVerses(data), [data]);
 
+  const [ask, setAsk] = useState<{ text: string; key: number } | null>(null);
   const onAsk = useCallback((question: string) => {
     const result = answer(data, question, locale);
     if (result.event !== undefined) window.setTimeout(() => selectEvent(result.event!), 300);
@@ -72,17 +73,22 @@ function Journey({ data, locale }: { data: Sirah; locale: Locale }) {
       <aside className="journey-panel" aria-live="polite">
         <EventCard key={`${current.n}-${locale}`} data={data} event={current} locale={locale} />
         <details className="unplaced">
-          <summary>{jtext.unplaced} <span>({unplaced.length})</span></summary>
+          <summary>{jtext.unplaced} <span className="count">{unplaced.length}</span></summary>
           <p>{jtext.unplacedNote}</p>
           <ul className="verses is-compact">{unplaced.map(v => <VerseItem key={v.id} v={v} locale={locale} compact />)}</ul>
         </details>
       </aside>
     </div>
     <Timeline events={events} index={index} locale={locale} playing={playing} reducedMotion={reducedMotion} onIndex={goTo} onTogglePlay={() => setPlaying(p => !p)} />
-    <section className="ai-region" aria-label={jtext.ask}>
-      <h2 className="ai-title">{jtext.ask}</h2>
-      <MorphOrb locale={locale} reducedMotion={reducedMotion} onSubmit={onAsk} minThinkMs={900} />
-      <p className="demo-label"><span />{jtext.askNote}</p>
+    <section className="ai-region" aria-labelledby="ask-title">
+      <MorphOrb locale={locale} reducedMotion={reducedMotion} onSubmit={onAsk} minThinkMs={900} ask={ask} />
+      <div className="ai-foot">
+        <h2 className="ai-title" id="ask-title">{jtext.ask}</h2>
+        <p className="ai-note">{jtext.askNote}</p>
+        <ul className="ai-suggest" aria-label={jtext.tryAsking}>
+          {jtext.suggestions.map(q => <li key={q}><button type="button" onClick={() => setAsk({ text: q, key: Date.now() })}>{q}</button></li>)}
+        </ul>
+      </div>
     </section>
   </>;
 }

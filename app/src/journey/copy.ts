@@ -22,6 +22,8 @@ export const journeyCopy = {
     unplacedNote: 'تذكر المصادر هذه الآيات دون ربطها بحدث معين، فلا تظهر على الخط الزمني.',
     ask: 'اسأل الخريطة',
     askNote: 'يجيب من نصوص الدرر والصحيحين فقط، ويذكر المصدر.',
+    tryAsking: 'أمثلة على الأسئلة',
+    suggestions: ['لماذا هاجر النبي ﷺ إلى المدينة؟', 'متى كانت غزوة بدر؟', 'من هي خديجة رضي الله عنها؟'],
     wholeSurah: 'السورة كاملة',
   },
   en: {
@@ -44,6 +46,8 @@ export const journeyCopy = {
     unplacedNote: 'The sources mention these verses without linking them to a specific event, so they stay off the timeline.',
     ask: 'Ask the map',
     askNote: 'Answers come only from the Dorar and Sahihayn texts, with the source named.',
+    tryAsking: 'Example questions',
+    suggestions: ['Why did the Prophet ﷺ migrate to Madinah?', 'When was the Battle of Badr?', 'Who was Khadijah?'],
     wholeSurah: 'The whole surah',
   },
 } satisfies Record<Locale, unknown>;

@@ -5,6 +5,9 @@ import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
 
 /** Arabic-only source text keeps its own language and direction inside the English interface. */
+/** Characters of the event text shown before "Read the full text" — about three lines. */
+const EXCERPT = 200;
+
 const Ar = ({ children, as: Tag = 'span' }: { children: React.ReactNode; as?: 'span' | 'p' }) => <Tag lang="ar" dir="rtl">{children}</Tag>;
 
 export default function EventCard({ data, event, locale }: { data: Sirah; event: SirahEvent; locale: Locale }) {
@@ -23,20 +26,23 @@ export default function EventCard({ data, event, locale }: { data: Sirah; event:
     <h2 id={`ev-${event.n}`} className="ecard-title" lang={title === event.title.ar ? 'ar' : undefined}>{title}</h2>
     <dl className="ecard-facts">
       <div><dt>{text.when}</dt><dd>{dateLine(event, locale) || '—'}</dd></div>
-      <div><dt>{text.place}</dt><dd>{event.placeName[locale] || '—'} <span className={`prec prec-${event.precision}`}>{text.precision[event.precision]}</span></dd></div>
+      <div><dt>{text.place}</dt><dd>{event.placeName[locale] || '—'}{event.precision !== 'exact' && <span className={`prec prec-${event.precision}`}>{text.precision[event.precision]}</span>}</dd></div>
     </dl>
     {event.inferred && <p className="ecard-flag">{text.inferred}</p>}
 
     {locale === 'en' && !event.text.en && <p className="ecard-flag">{text.noEnglish}</p>}
     <div className="ecard-text" lang={bodyLang} dir={bodyLang === 'ar' ? 'rtl' : 'ltr'}>
-      <p>{open ? body : excerpt(body, 320)}</p>
+      <p>{open ? body : excerpt(body, EXCERPT)}</p>
     </div>
-    {body.length > 320 && <button type="button" className="ecard-more" aria-expanded={open} onClick={() => setOpen(v => !v)}>{open ? text.readLess : text.readMore}</button>}
+    {body.length > EXCERPT && <button type="button" className="ecard-more" aria-expanded={open} onClick={() => setOpen(v => !v)}>{open ? text.readLess : text.readMore}</button>}
     <p className="ecard-source">{text.source}: <a href={locale === 'en' && event.urlEn ? event.urlEn : event.url} target="_blank" rel="noreferrer">{text.dorar} · {locale === 'ar' ? 'حدث' : 'event'} {event.n}</a></p>
 
     {verses.direct.length > 0 && <VerseList title={text.verses} verses={verses.direct} locale={locale} />}
     {verses.context.length > 0 && <VerseList title={text.contextVerses} verses={verses.context} locale={locale} />}
-    {verses.stage.length > 0 && <VerseList title={text.stageVerses} verses={verses.stage} locale={locale} compact />}
+    {verses.stage.length > 0 && <details className="ecard-section ecard-more-verses">
+      <summary><h3>{text.stageVerses}</h3><span className="count">{verses.stage.length}</span></summary>
+      <ul className="verses is-compact">{verses.stage.map(v => <VerseItem key={v.id} v={v} locale={locale} compact />)}</ul>
+    </details>}
 
     {people.length > 0 && <section className="ecard-section">
       <h3>{text.people}</h3>
@@ -60,14 +66,12 @@ export function VerseItem({ v, locale, compact = false }: { v: Verse; locale: Lo
   const [open, setOpen] = useState(false);
   const label = v.link?.label;
   return <li className="verse">
-    <div className="verse-head">
-      <a className="verse-ref" href={v.mushaf[0] ? mushafUrl(v.mushaf[0], locale) : undefined} target="_blank" rel="noreferrer" lang="ar">
-        <span className="verse-surah">{locale === 'ar' ? `سورة ${v.surah}` : `Surah ${v.surah}`}</span>
-        <span className="verse-ayat">{v.whole ? text.wholeSurah : v.ref}</span>
-      </a>
-      <span className="verse-phrase">{v.phrase[locale]}</span>
-    </div>
+    <a className="verse-ref" href={v.mushaf[0] ? mushafUrl(v.mushaf[0], locale) : undefined} target="_blank" rel="noreferrer" title={text.readMushaf}>
+      <span className="verse-surah">{locale === 'ar' ? `سورة ${v.surah}` : <>Surah <span lang="ar">{v.surah}</span></>}</span>
+      <span className="verse-ayat">{v.whole ? text.wholeSurah : v.ref}</span>
+    </a>
     <p className="verse-title">{v.title[locale]}</p>
+    <p className="verse-phrase">{v.phrase[locale]}</p>
     {label && v.link?.type !== 'direct' && <p className="verse-label"><Ar>{label}</Ar></p>}
     {!compact && <>
       <button type="button" className="verse-toggle" aria-expanded={open} onClick={() => setOpen(o => !o)}>{text.reason}</button>

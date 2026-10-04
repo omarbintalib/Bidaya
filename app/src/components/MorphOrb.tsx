@@ -11,6 +11,8 @@ export interface MorphOrbProps {
   onSubmit?: (text: string) => Promise<string> | string;
   minThinkMs?: number;
   speed?: number;
+  /** Ask this question programmatically (e.g. from a suggestion). A new `key` asks again; a shown answer is cleared first. */
+  ask?: { text: string; key: number } | null;
 }
 
 /* ─────────────────────────── geometry ─────────────────────────── */
@@ -995,6 +997,28 @@ export default function MorphOrb(props: MorphOrbProps) {
   const onReset = () => {
     if (phaseRef.current === "answered") rtRef.current?.reset();
   };
+
+  // Programmatic questions wait until the orb is idle; a shown answer is cleared first.
+  const pendingAsk = useRef<string | null>(null);
+  useEffect(() => {
+    if (!props.ask) return;
+    pendingAsk.current = props.ask.text;
+  }, [props.ask]);
+  // Runs after every render; while the orb is still settling back to idle it checks again shortly.
+  const [askTick, setAskTick] = useState(0);
+  useEffect(() => {
+    const text = pendingAsk.current, rt = rtRef.current;
+    if (!text || !rt) return;
+    if (phaseRef.current === "answered") { rt.reset(); return; } // clear the shown answer, then ask
+    if (phaseRef.current !== "idle" || rt.busy()) {
+      const id = window.setTimeout(() => setAskTick(t => t + 1), 120);
+      return () => window.clearTimeout(id);
+    }
+    pendingAsk.current = null;
+    setValue(text);
+    lastTextRef.current = text;
+    rt.start(text, makeCfg());
+  }, [phase, askTick, props.ask]);
 
   const replay = () => {
     const rt = rtRef.current;

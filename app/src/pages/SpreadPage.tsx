@@ -17,7 +17,7 @@ const spreadCopy = {
   },
   en: {
     year: 'Year', play: 'Play', pause: 'Pause', slider: 'Choose the Hijri year',
-    places: 'places reached by events', events: 'events up to this year', thisYear: 'Events this year', none: "No events are dated to this year in the project's sources.",
+    places: 'places reached', events: 'events so far', thisYear: 'Events this year', none: "No events are dated to this year in the project's sources.",
     intro: 'Follow how the events of the Sirah reached out from Makkah across Arabia, year by year.',
   },
 };

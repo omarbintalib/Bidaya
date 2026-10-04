@@ -14,6 +14,19 @@ Nothing was added from memory or from outside sources.
 
 ---
 
+---
+
+## The app (`app/`)
+
+`app/` is the interactive version (v11), built on the Islamathon design. It reads the CSV files in this folder directly, so editing a CSV here and reloading the page is all it takes to update the app. See `app/README.md` for how to run it (`cd app && npm ci && npm run dev`).
+
+Two files were added for the period map:
+
+| File | What it is |
+|------|------------|
+| `map_labels.csv` | Regions, powers and seas shown on the map, with approximate positions for orientation |
+| `map_routes.csv` | The Quraysh caravan routes (winter to Yemen, summer to al-Sham), approximate |
+
 ## Files at a glance
 
 | # | File | Rows | What it is |

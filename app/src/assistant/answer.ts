@@ -123,8 +123,8 @@ export function answer(data: Sirah, question: string, locale: Locale): Answer {
     const lead = when && date ? (ar ? `كان ذلك في ${date}.` : `It took place in ${date}.`)
       : where && place ? (ar ? `كان ذلك في ${place}.` : `It took place at ${place}.`)
       : '';
-    const facts = [date, place].filter(Boolean).join(ar ? '، ' : ', ');
-    return { kind: 'event', event: e.n, text: `${title} (${facts}). ${lead} ${excerpt(body, 170)} ${SOURCE[locale].dorar(e.n)}`.replace(/\s+/g, ' ').trim() };
+    const facts = lead ? '' : ` (${[date, place].filter(Boolean).join(ar ? '، ' : ', ')})`;
+    return { kind: 'event', event: e.n, text: `${title}${facts}. ${lead} ${excerpt(body, 170)} ${SOURCE[locale].dorar(e.n)}`.replace(/\s+/g, ' ').trim() };
   }
   if (doc.kind === 'person') {
     const p = doc.item, first = p.events.find(n => data.byNumber.get(n)?.lat !== null);

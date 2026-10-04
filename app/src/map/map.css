@@ -13,9 +13,9 @@ html[data-contrast='dark'] { --sea: #0d1113; --land: #241e17; --coast: #9e8456; 
 .hmap-hatch-line { stroke: var(--coast); opacity: .4; }
 
 .hmap-label { text-anchor: middle; dominant-baseline: middle; pointer-events: auto; font-family: var(--display); fill: var(--brass); }
-.hmap-label-region { font-weight: 700; letter-spacing: .32em; opacity: .55; }
+.hmap-label-region { font-weight: 700; letter-spacing: .32em; opacity: .6; text-transform: uppercase; }
 [dir='rtl'] .hmap-label-region { letter-spacing: 0; word-spacing: .3em; }
-.hmap-label-power { font-weight: 700; fill: var(--muted); opacity: .62; letter-spacing: .12em; }
+.hmap-label-power { font-weight: 700; fill: var(--muted); opacity: .62; letter-spacing: .12em; text-transform: uppercase; }
 .hmap-label-sea { font-style: italic; fill: #6f7d78; opacity: .9; }
 html[data-contrast='dark'] .hmap-label-sea { fill: #8fa19b; }
 [dir='rtl'] .hmap-label-power, [dir='rtl'] .hmap-label-sea { letter-spacing: 0; font-style: normal; }
@@ -50,7 +50,7 @@ html[data-contrast='dark'] .hmap-label-sea { fill: #8fa19b; }
 .hmap-caption { position: absolute; top: 12px; inset-inline-start: 12px; margin: 0; padding: 6px 12px; background: var(--surface); border: 1px solid var(--border); font-size: var(--text-small); color: var(--muted); max-width: calc(100% - 90px); }
 .hmap-nopin { position: absolute; bottom: 12px; inset-inline-start: 12px; inset-inline-end: 60px; margin: 0; padding: 8px 12px; background: var(--surface); border: 1px dashed var(--brass); font-size: var(--text-small); color: var(--muted); }
 
-.hmap-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: calc(14px * var(--text-scale)); color: var(--muted); }
+.hmap-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: calc(15px * var(--text-scale)); color: var(--muted); }
 .hmap-legend li { display: flex; align-items: center; gap: 7px; }
 .lg-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ink); display: inline-block; }
 .lg-dot.is-selected { background: var(--brass); box-shadow: 0 0 0 3px color-mix(in srgb, var(--brass) 30%, transparent); }
