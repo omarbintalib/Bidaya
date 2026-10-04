@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useRef, type ReactNode } from 'react';
-import { findPeople, mentionIn, sentenceNaming } from '../data/people';
+import { findPeople, mentionIn } from '../data/people';
 import { hijri } from '../data/select';
 import type { Person, Sirah } from '../data/types';
 import type { Locale } from '../i18n';
@@ -58,25 +58,6 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
   const sources = person.facts.filter((f, i, all) => all.findIndex(g => g.source === f.source) === i);
   // Dorar events are grouped into one item ("الدرر السنية: حدث 14، حدث 42"); other references follow it.
   const dorar = sources.filter(f => f.url && f.source.startsWith('الدرر السنية · ')), others = sources.filter(f => !dorar.includes(f));
-  // English synopsis that mirrors the Arabic one: the same facts in the same order, each given in its own source's
-  // English, word for word — Dorar's English for a Dorar event, the hadith's English for a Bukhari/Muslim fact.
-  // A fact whose source has no English keeps its Arabic sentence, so nothing is dropped. Nothing is translated here.
-  type Part = { en: string; src: { label: string; url: string } } | { ar: string };
-  const enParts: Part[] = locale === 'en' && !person.bioEn ? person.facts.filter(f => person.bio.includes(f.text)).map((f): Part => {
-    const ev = /حدث (\d+)/.exec(f.ref)?.[1], e = ev ? data.byNumber.get(Number(ev)) : undefined;
-    if (e) {
-      const m = mentionIn(data, person, e, 'en');
-      if (m?.lang === 'en') return { en: tidy(m.text), src: { label: `Dorar, ${text.eventN(e.n)}`, url: e.urlEn || e.url } };
-    }
-    const h = data.verses.find(v => v.id === f.ref)?.hadithEn;
-    if (h) {
-      const line = sentenceNaming(data, person, h.text, 'en', 320) ?? h.text.split(/(?<=[.!?])\s/)[0];
-      return { en: tidy(line), src: { label: h.ref, url: h.url } };
-    }
-    return { ar: f.text };
-  }).filter((p, i, all) => !('en' in p) || all.findIndex(q => 'en' in q && q.en === p.en) === i) : [];
-  const enSources = enParts.flatMap(p => ('src' in p ? [p.src] : [])).filter((s, i, all) => all.findIndex(x => x.label === s.label) === i);
-  const hasEn = enParts.some(p => 'en' in p);
 
   return <dialog ref={dialog} className="person-dialog" aria-labelledby="person-title" onClose={onClose} onClick={e => { if (e.target === dialog.current) onClose(); }}>
     <header className="pd-head">
@@ -96,15 +77,9 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
         {person.death && <div><dt>{text.death}</dt>{locale === 'en' && person.deathEn ? <dd>{person.deathEn}</dd> : <dd lang="ar">{person.death}</dd>}</div>}
       </dl>}
       {locale === 'en' && person.bioEn ? <p className="pd-bio">{person.bioEn}</p>
-        : hasEn ? <>
-            {/* One paragraph, like the Arabic summary, then one line of sources. */}
-            <p className="pd-bio">{enParts.map((p, i) => <span key={i}>{i > 0 && ' '}{'en' in p ? p.en : <span lang="ar" dir="rtl">{p.ar}</span>}</span>)}</p>
-            <p className="pd-sources">{text.sourcesLabel}{enSources.map((s, i) => <span key={s.label}>{i > 0 && ' · '}<a href={s.url} target="_blank" rel="noreferrer">{s.label}</a></span>)}</p>
-            <details className="pd-original"><summary>{text.originalSummary}</summary><p className="pd-bio" lang="ar" dir="rtl">{person.bio}</p></details>
-          </>
         : <>{locale === 'en' && <p className="pd-note">{text.bioInArabic}</p>}<p className="pd-bio" lang="ar" dir="rtl">{person.bio}</p></>}
       {/* Where the summary comes from: one short line of sources, and the sources' own words on request. */}
-      {sources.length > 0 && !hasEn && <p className="pd-sources" lang="ar" dir="rtl">
+      {sources.length > 0 && <p className="pd-sources" lang="ar" dir="rtl">
         <span>{text.sourcesLabel}</span>
         {dorar.length > 0 && <span>الدرر السنية: {dorar.map((f, i) => <span key={f.source}>{i > 0 && '، '}<a href={f.url!} target="_blank" rel="noreferrer">{f.source.replace(/^الدرر السنية · /, '')}</a></span>)}</span>}
         {others.map((f, i) => <span key={f.source}>{(dorar.length > 0 || i > 0) && ' · '}{f.url ? <a href={f.url} target="_blank" rel="noreferrer">{f.source}</a> : f.source}</span>)}
@@ -116,12 +91,12 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
       {events.length > 0 && <section className="pd-events">
         <h3>{text.personEvents}</h3>
         <ul>{events.map(e => {
-          // In English the synopsis above already quotes Dorar's English for these events, so only titles are listed.
-          const said = hasEn ? null : mentionIn(data, person, e, locale);
+          // Under each event's title, the sentence of that event's text naming this person (Dorar's English in English).
+          const said = mentionIn(data, person, e, locale);
           return <li key={e.n}>
             <button type="button" onClick={() => { onEvent(e.n); onClose(); }}>
               <span className="pd-ev-head"><span>{e.title[locale] || e.title.ar}</span><small>{hijri(e.year, locale)}</small></span>
-              {said && <q className="pd-quote" lang={said.lang} dir={said.lang === 'ar' ? 'rtl' : 'ltr'}>{said.text}</q>}
+              {said && <q className="pd-quote" lang={said.lang} dir={said.lang === 'ar' ? 'rtl' : 'ltr'}>{tidy(said.text)}</q>}
             </button>
           </li>;
         })}</ul>
