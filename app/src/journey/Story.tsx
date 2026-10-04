@@ -193,6 +193,21 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
     if (i >= 0) setQuizAt(a => ({ ...a, [period]: i }));
   }, [nextQuestion]);
 
+  // ── a quick question, any time: from the part of the story the reader has reached ──
+  const [quick, setQuick] = useState<{ q: QuizQuestion | null; empty?: 'later' | 'done' } | null>(null);
+  useEffect(() => { setQuick(null); }, [active]);
+  const pickQuick = useCallback((skip?: string) => {
+    const upTo = step.kind === 'summary' ? Infinity : current.order;
+    const pool = step.kind === 'summary' ? [...pools.values()].flat() : pools.get(current.period) ?? [];
+    const orderOf = (q: QuizQuestion) => data.byNumber.get(q.event)?.order ?? Infinity;
+    const open = pool.filter(q => !progress.answers[q.id] && q.id !== skip);
+    // Nearest to where the reader is first: the event they are on, then the ones just before it.
+    const ready = open.filter(q => orderOf(q) <= upTo).sort((a, b) => orderOf(b) - orderOf(a));
+    return ready.length ? { q: ready[0] } : { q: null, empty: open.length ? 'later' as const : 'done' as const };
+  }, [step.kind, current, pools, data, progress.answers]);
+  const openQuick = useCallback(() => { setWalk(null); setQuick(pickQuick()); }, [pickQuick]);
+  const answerQuick = useCallback((q: QuizQuestion, key: string) => setProgress(p => (p.answers[q.id] ? p : { ...p, answers: { ...p.answers, [q.id]: key } })), []);
+
   // ── people, undated verses, ask ──
   const [person, setPerson] = useState<Person | null>(null);
   const peopleApi = useMemo(() => ({ data, open: setPerson }), [data]);
@@ -204,18 +219,17 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
   const suggest = useCallback((q: string) => setAsk({ text: q, key: Date.now() }), []);
   const onAsk = useCallback((question: string) => {
     if (QUIZ_ASK.test(question)) {
-      // "Quiz me" / "another question": open the current chapter's question, moved on to one not yet answered.
-      const period = step.kind === 'summary' ? 'madinah' : current.period;
-      const at = steps.findIndex(s => s.kind === 'quiz' && s.period === period);
-      if (at < 0) return text.noMoreQuiz;
-      if (progress.answers[questionOf(period, progress.answers).q.id]) moreQuiz(period);
-      window.setTimeout(() => goToStep(at), 400);
-      return text.quizFromAsk(periodName[locale][period]);
+      // "Quiz me": a question on the map from where the reader is, or say plainly that none is left here.
+      const next = pickQuick();
+      setWalk(null);
+      setQuick(next);
+      if (next.q) window.setTimeout(() => setAskOpen(false), 1600);
+      return next.q ? text.quizFromAsk : next.empty === 'later' ? text.quizLater : text.quizNoneLeft;
     }
     const result = answer(data, question, locale);
     if (result.event !== undefined) window.setTimeout(() => goToEvent(result.event!), 400);
     return result.text;
-  }, [data, locale, goToEvent, step.kind, current.period, steps, progress.answers, questionOf, moreQuiz, goToStep, text]);
+  }, [data, locale, goToEvent, pickQuick, text]);
 
   const begin = () => {
     try { sessionStorage.setItem('bidaya.intro.seen', '1'); } catch { /* storage unavailable */ }
@@ -244,6 +258,10 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
         </li>] : [])}
       </ol>
       <div className="tb-end">
+        <button type="button" className={`tb-btn tb-quiz${quick ? ' is-open' : ''}`} aria-pressed={!!quick} aria-label={text.quizMe} onClick={() => (quick ? setQuick(null) : openQuick())}>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" strokeWidth="1.4" /><path d="M7.8 8a2.3 2.3 0 1 1 3.2 2.1c-.7.3-1 .8-1 1.5v.4" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /><circle cx="10" cy="14.3" r=".9" fill="currentColor" /></svg>
+          <span className="tb-long">{text.quizMe}</span>
+        </button>
         <button type="button" className={`tb-btn tb-ask${askOpen ? ' is-open' : ''}`} aria-expanded={askOpen} aria-controls="ask-panel" onClick={() => setAskOpen(o => !o)}>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor" /></svg>
           <span className="tb-long">{text.ask}</span><span className="tb-short">{text.askShort}</span>
@@ -276,15 +294,19 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
 
       <div className="scrolly-map">
         <HistoricMap data={data} locale={locale} emphasis={emphasis} selected={step.kind === 'event' ? current.n : null} activeRoutes={activeRoutes}
-          onSelect={goToEvent} reducedMotion={reducedMotion} focusKey={`${active}-${walk?.stop ?? ''}`} now={now} legend={false}
+          onSelect={goToEvent} reducedMotion={reducedMotion} inset={quick && wide ? 430 : 0} focusKey={`${active}-${walk?.stop ?? ''}`} now={now} legend={false}
           overview={step.kind === 'summary' || step.kind === 'chapter' && step.chapter === 1}
           caravans={current.period === 'prologue' || current.period === 'makkah'} scrollPage
           walk={walk && walkStop ? { routeId: walk.route.id, lat: walkStop.lat, lon: walkStop.lon, key: `${walk.route.id}-${walk.stop}` } : null}
-          quiz={quizNow ? { options: quizNow.options, answer: quizNow.answer, chosen: progress.answers[quizNow.id] ?? null, onPick: k => answerQuiz(quizNow, k) } : null}>
+          quiz={quick?.q ? { options: quick.q.options, answer: quick.q.answer, chosen: progress.answers[quick.q.id] ?? null, onPick: k => answerQuick(quick.q!, k) }
+            : quizNow ? { options: quizNow.options, answer: quizNow.answer, chosen: progress.answers[quizNow.id] ?? null, onPick: k => answerQuiz(quizNow, k) } : null}>
           <div className="story-banner" data-map-overlay aria-hidden="true">
             {step.kind === 'summary' ? <b>{text.summaryKicker}</b> : <><b>{periodName[locale][current.period]}</b><span>{hijri(current.year, locale)}</span></>}
             {reached > 0 && <span className="story-reach"><i />{text.reachedCount(reached)}</span>}
           </div>
+
+          {quick && wide && <QuickQuiz quick={quick} data={data} locale={locale} chosen={quick.q ? progress.answers[quick.q.id] ?? null : null}
+            onAnswer={answerQuick} onNext={() => setQuick(pickQuick(quick.q?.id))} onClose={() => setQuick(null)} />}
 
           {walk && walkStop && <div className="walk-panel" data-map-overlay role="group" aria-label={walk.route.name[locale]}>
             <p className="walk-kicker">{walk.route.name[locale]} · {text.stopOf(walk.stop + 1, walkStops.length)}</p>
@@ -308,6 +330,8 @@ export default function Story({ data, locale, reducedMotion, onToggleLocale }: {
         </HistoricMap>
       </div>
     </div>}
+    {quick && !wide && <QuickQuiz quick={quick} data={data} locale={locale} chosen={quick.q ? progress.answers[quick.q.id] ?? null : null}
+      onAnswer={answerQuick} onNext={() => setQuick(pickQuick(quick.q?.id))} onClose={() => setQuick(null)} />}
     {undatedOpen && <UndatedDialog verses={unplaced} locale={locale} onClose={() => setUndatedOpen(false)} />}
     {person && <PersonDialog key={person.id} person={person} data={data} locale={locale} onClose={() => setPerson(null)} onEvent={goToEvent} />}
   </PeopleProvider>;
@@ -370,6 +394,36 @@ const EventStep = memo(function EventStep({ index, i, store, data, locale, goToS
       : <div className="step-peek"><p className="step-date">{hijri(e.year, locale)} · {e.placeName[locale]}</p><h3>{e.title[locale] || e.title.ar}</h3></div>}
   </section>;
 });
+
+/** A question on the map, asked for at any point in the story. */
+function QuickQuiz({ quick, data, locale, chosen, onAnswer, onNext, onClose }: {
+  quick: { q: QuizQuestion | null; empty?: 'later' | 'done' }; data: Sirah; locale: Locale; chosen: string | null;
+  onAnswer: (q: QuizQuestion, key: string) => void; onNext: () => void; onClose: () => void;
+}) {
+  const text = journeyCopy[locale];
+  const { q } = quick;
+  const name = (k: string) => data.places.get(k)?.name[locale] ?? k;
+  return <div className="walk-panel quick-quiz" data-map-overlay role="group" aria-label={text.quizMe}>
+    <p className="walk-kicker">{text.quickKicker}</p>
+    {q ? <>
+      <h3>{q.question[locale]}</h3>
+      {chosen === null && <p className="quiz-hint">{text.quizHint}</p>}
+      <div className="quiz-options is-compact" role="group" aria-label={q.question[locale]}>
+        {q.options.map(k => <button key={k} type="button" disabled={chosen !== null}
+          className={chosen === null ? '' : k === q.answer ? 'is-right' : k === chosen ? 'is-wrong' : 'is-out'} onClick={() => onAnswer(q, k)}>{name(k)}</button>)}
+      </div>
+      {chosen !== null && <div className="quick-result" role="status">
+        <p className="quiz-verdict">{chosen === q.answer ? text.quizRight : text.quizWrong(name(q.answer))}</p>
+        <p className="walk-quote" lang="ar" dir="rtl">«{q.quote}»</p>
+        <a className="walk-source" href={q.url} target="_blank" rel="noreferrer">{text.dorar} · {locale === 'ar' ? 'حدث' : 'event'} {q.event}</a>
+      </div>}
+      <div className="walk-nav">
+        <button type="button" className={chosen === null ? 'btn-quiet' : 'btn-primary'} onClick={onNext}>{chosen === null ? text.quizSkip : text.quizMore}</button>
+      </div>
+    </> : <p className="quick-empty" role="status">{quick.empty === 'later' ? text.quizLater : text.quizNoneLeft}</p>}
+    <button type="button" className="walk-close" onClick={onClose} aria-label={text.close}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" /></svg></button>
+  </div>;
+}
 
 const QuizCard = memo(function QuizCard({ step, store, q, at, total, hasMore, chapter, data, locale, chosen, onAnswer, onMore, goToStep }: {
   step: number; store: ActiveStore; q: QuizQuestion; at: number; total: number; hasMore: boolean; chapter: number; data: Sirah; locale: Locale;

@@ -108,7 +108,11 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
       const pts = quiz.options.map(k => data.places.get(k)).filter(p => p !== undefined);
       if (pts.length) {
         const lons = pts.map(p => p.lon), lats = pts.map(p => p.lat);
-        animateTo(fit(Math.min(...lons), Math.max(...lons), Math.min(...lats), Math.max(...lats), size.w / size.h, 0.3));
+        // With a panel over the inline-start side, fit the choices into the part of the map left uncovered.
+        const W = frame.current?.clientWidth || size.w, cover = Math.min(inset, W * 0.6);
+        const v = fit(Math.min(...lons), Math.max(...lons), Math.min(...lats), Math.max(...lats), (W - cover) / W * size.w / size.h, 0.3);
+        const w = v.w * W / (W - cover);
+        animateTo(clampView({ ...v, w, x: locale === 'ar' ? v.x : v.x - (w - v.w) }));
         return;
       }
     }
