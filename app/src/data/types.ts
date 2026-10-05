@@ -35,8 +35,6 @@ export interface Place {
   reachQuote: string | null;
 }
 
-/** A count of Muslims at a place, as a Dorar event gives it (islam_growth.csv): a lower bound, with what it counts. */
-export interface Growth { event: number; count: number; what: Text; quote: string; url: string }
 
 export interface VerseLink {
   type: LinkType;
@@ -132,5 +130,4 @@ export interface Sirah {
   stops: Map<string, RouteStop[]>;
   quiz: QuizQuestion[];
   arcs: MapArc[];
-  growth: Map<string, Growth[]>;
 }

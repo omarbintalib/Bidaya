@@ -7,4 +7,4 @@ const event = (n: number, order: number, year: number, lat: number, lon: number)
 });
 const events = [event(12, 12, -13, 21.42, 39.83), event(59, 59, 2, 23.78, 38.79)];
 
-export const sirahFixture: Sirah = { events, byNumber: new Map(events.map(e => [e.n, e])), places: new Map(), verses: [], people: [], routes: [], labels: [], stops: new Map(), quiz: [], arcs: [], growth: new Map() };
+export const sirahFixture: Sirah = { events, byNumber: new Map(events.map(e => [e.n, e])), places: new Map(), verses: [], people: [], routes: [], labels: [], stops: new Map(), quiz: [], arcs: [] };

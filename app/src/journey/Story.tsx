@@ -546,7 +546,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
             : quizNow ? { options: quizNow.options, answer: quizNow.answer, chosen: progress.answers[quizNow.id] ?? null, onPick: k => answerQuiz(quizNow, k) } : null}>
           <div className="story-banner" data-map-overlay aria-hidden="true">
             {step.kind === 'summary' ? <b>{text.summaryKicker}</b> : <><b>{periodName[locale][current.period]}</b><span>{hijri(current.year, locale)}</span></>}
-            {reached > 0 && <span className="story-reach"><i /><span>{text.reachedCount(reached)}<small>{text.reachedNote}</small></span></span>}
+            {reached > 0 && <span className="story-reach"><i /><span>{text.reachedCount(reached)}</span></span>}
           </div>
 
 

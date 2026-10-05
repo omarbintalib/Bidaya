@@ -26,7 +26,6 @@ Two files were added for the period map:
 |------|------------|
 | `map_labels.csv` | Regions, powers and seas shown on the map, with approximate positions for orientation |
 | `map_routes.csv` | The Quraysh caravan routes (winter to Yemen, summer to al-Sham), approximate |
-| `islam_growth.csv` | Counts of Muslims at a place as Dorar gives them (emigrants to Abyssinia, the men of Yathrib at al-Aqabah, the armies that marched from Madinah), each with what it counts and its quote. The glow grows with them (see below) |
 | `quran_en.csv` | English for each Quran quotation inside the English reasons (`وجه_الارتباط_EN`): Sahih International, quoted word for word from Quranpedia, with the ayah reference and link (see below) |
 | `map_arcs.csv` | The letters sent from Madinah and the delegations that came to it, drawn as curves while their event is on screen (see below) |
 
@@ -189,8 +188,8 @@ Each place in `4_places.csv` and each region in `map_labels.csv` can carry `حد
   - **Oman, Yemen, Iraq and al-Sham** were regions, not today's states.
   - **The seas** carry their names of the time: al-Qulzum, al-Rum, Faris.
 - - **Names appear gradually.** A place is named on the map from its first event on, so places and mosques do not show before the story reaches them.
-- **The glow grows with the Muslims the sources count.** `islam_growth.csv` gives, per place and event, a number Dorar states, word for word. A lit place glows faintly when no number is given and brighter and wider as the count grows, up to the 30,000 of Tabuk (scaled on a logarithm, so 16 emigrants already shows). Each count is a lower bound and says what it counts, such as "Muslims who marched to Uhud", because the sources count those who emigrated or marched, not a population.
-- The map's key now reads "Gold glow: places Islam had reached (n)", with "Brighter where the sources count more Muslims", and it is shown on phones too.
+- **Every place Islam had reached glows the same.** The sources count only certain groups (those who emigrated or marched), not how many Muslims lived in a place, so the glow does not try to show numbers.
+- The map's key reads "Gold glow: places Islam had reached (n)", and it is shown on phones too.
 
 ### Letters and delegations
 
@@ -215,7 +214,6 @@ The English reasons (`وجه_الارتباط_EN`) quote the Quran in Arabic bet
 - **Place cards** (tap a place's name in an event card, or a place in search):
   - the place's name now and its name at the time, with the note on why;
   - when Islam reached it, with the source's words;
-  - the counts of Muslims there from `islam_growth.csv`, each marked as a lower bound;
   - every event there, each a link to that event.
 - **Distances** are computed from the map's own coordinates (great-circle, rounded) and always called approximate:
   - each journey on its event card, e.g. "about 870 km along an approximate route" (the Isra' line is symbolic, so it gives the straight distance between the two mosques);

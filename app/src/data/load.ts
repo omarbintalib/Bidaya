@@ -1,5 +1,5 @@
 import { parseCsv } from './csv';
-import type { Growth, LinkType, MapArc, MapLabel, Period, Person, Place, Precision, QuizQuestion, Route, RouteStop, Sirah, SirahEvent, Verse, VerseLink } from './types';
+import type { LinkType, MapArc, MapLabel, Period, Person, Place, Precision, QuizQuestion, Route, RouteStop, Sirah, SirahEvent, Verse, VerseLink } from './types';
 
 /**
  * Everything the interface shows is read at runtime from the CSVs at the repository root (served at /data/).
@@ -22,7 +22,6 @@ const FILES = {
   facts: '7_sahaba_references.csv',
   arcs: 'map_arcs.csv',
   quranEn: 'quran_en.csv',
-  growth: 'islam_growth.csv',
 } as const;
 
 const PERIODS: Record<string, Period> = { 'قبل البعثة': 'prologue', 'العهد المكي': 'makkah', 'الهجرة': 'hijrah', 'العهد المدني': 'madinah' };
@@ -210,16 +209,7 @@ export async function loadSirah(): Promise<Sirah> {
       summary: { ar: r['الخلاصة'], en: r.Summary_EN || r['الخلاصة'] }, quote: r['الشاهد'], quoteEn: r['الشاهد_EN'] || null, source: r['المصدر'], url: r['الرابط'], note: { ar: r['ملاحظة'], en: r.Note_EN || r['ملاحظة'] }, end: { ar: r['اسم_الطرف'] || r['الاسم'], en: r.End_EN || r.Name_EN || r['الاسم'] } });
   }
 
-  const growth = new Map<string, Growth[]>();
-  for (const r of parseCsv(raw.growth)) {
-    const event = num(r['رقم_حدث_الدرر']), count = num(r['العدد']);
-    if (event === null || count === null || !places.has(r['رمز_المكان'])) { warn(`islam_growth.csv: a row for "${r['رمز_المكان']}" needs a place from 4_places.csv, رقم_حدث_الدرر and العدد`); continue; }
-    const list = growth.get(r['رمز_المكان']) ?? [];
-    list.push({ event, count, what: { ar: r['ما_يعده'], en: r.What_EN || r['ما_يعده'] }, quote: r['الشاهد'], url: r['الرابط'] || `https://dorar.net/history/event/${event}` });
-    growth.set(r['رمز_المكان'], list);
-  }
-
-  return { events, byNumber, places, verses, people, routes, labels, stops, quiz, arcs, growth };
+  return { events, byNumber, places, verses, people, routes, labels, stops, quiz, arcs };
 }
 
 let cache: Promise<Sirah> | null = null;
