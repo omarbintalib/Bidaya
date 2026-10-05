@@ -6,7 +6,7 @@ import { FILES, trimData } from './files';
 import { findPeople, mentionIn } from './people';
 import { quranpediaRefs } from './quranpedia';
 import { quizPools } from './quiz';
-import { eventPlaceName, unplacedVerses, verseEvent, versesFor } from './select';
+import { eventPlaceName, hadithLinks, unplacedVerses, verseEvent, versesFor } from './select';
 import { search } from './search';
 import { pathKm } from './geo';
 import type { Sirah, Verse } from './types';
@@ -246,6 +246,16 @@ describe('ask the map (slide 7 test set)', () => {
       expect(a.kind, q).toBe('verse');
       expect(data.verses.filter(v => v.surahEn!.split(' / ').includes(name)).map(v => verseEvent(data, v)?.n), q).toContain(a.event);
     }
+  });
+  it('places a backend verse answer that names no event at the verse record it cites', () => {
+    const abasa = data.verses.find(v => v.surah === 'عبس')!;
+    const cites = (locale: 'ar' | 'en') => ({ label: `${locale === 'ar' ? 'الآيات المرتبطة بالسيرة' : 'Verses and the sirah'}: ${abasa.title[locale]}`, url: abasa.tafseer[0] ?? hadithLinks(abasa)[0].url });
+    // Worded so that the answer's words alone lead nowhere in particular.
+    const text = 'The verses were revealed after a blind man came to the Prophet ﷺ while he was busy.';
+    expect(answerEvent(data, 'Tell me about Abasa', { kind: 'verse', text, sources: [cites('en')] }, 'en')).toBe(verseEvent(data, abasa)?.n);
+    expect(answerEvent(data, 'حدثني عن عبس', { kind: 'verse', text: 'نزلت الآيات حين جاء رجل أعمى إلى النبي ﷺ.', sources: [cites('ar')] }, 'ar')).toBe(verseEvent(data, abasa)?.n);
+    // A link alone is not enough: some links serve several records.
+    expect(answerEvent(data, 'Tell me about Abasa', { kind: 'verse', text, sources: [{ label: 'Verses and the sirah: something else', url: cites('en').url }] }, 'en')).not.toBe(verseEvent(data, abasa)?.n);
   });
   it('refuses rulings and refers to an official fatwa body', () => {
     expect(answer(data, 'ما حكم صيام يوم السبت؟', 'ar').kind).toBe('refusal');

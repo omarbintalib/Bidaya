@@ -12,6 +12,9 @@ export interface MorphOrbProps {
   locale?: Locale;
   reducedMotion?: boolean;
   onSubmit?: (text: string) => Promise<string> | string;
+  /** Called as soon as a question is sent, before the opening animation (onSubmit comes once the orb is ready for
+   *  the answer): start fetching the answer here. */
+  onSent?: (text: string) => void;
   minThinkMs?: number;
   speed?: number;
   /** Ask this question programmatically (e.g. from a suggestion). A new `key` asks again; a shown answer is cleared first. */
@@ -439,7 +442,7 @@ interface Env {
   getCopy: () => AiCopy;
   ui: UI; getSpeed: () => number; isReduced: () => boolean;
 }
-interface RunCfg { onSubmit: (text: string) => Promise<string> | string; minThink: number }
+interface RunCfg { onSubmit: (text: string) => Promise<string> | string; onSent?: (text: string) => void; minThink: number }
 interface Runtime {
   start(text: string, cfg: RunCfg): boolean;
   escape(): void;
@@ -689,6 +692,7 @@ function createRuntime(env: Env): Runtime {
       if (sig.aborted) throw ABORT;
     };
     try {
+      cfg.onSent?.(text);
       env.ui.setPhase("launch");
       env.ui.live(env.getCopy().labels[0]);
       hist.length = 0;
@@ -1010,6 +1014,7 @@ export default function MorphOrb(props: MorphOrbProps) {
   const defaultSubmit = () => COPY.answerBody;
   const makeCfg = (): RunCfg => ({
     onSubmit: propsRef.current.onSubmit ?? defaultSubmit,
+    onSent: propsRef.current.onSent,
     minThink: propsRef.current.minThinkMs ?? 4600,
   });
   const lastRequest = useRef<number | undefined>(undefined);

@@ -89,6 +89,21 @@ describe('MorphOrb interaction lifecycle', () => {
     expect(onSubmit.mock.calls).toEqual([['First question'], ['Second question']]);
   });
 
+  it('tells onSent the question as soon as it is sent, and asks onSubmit for the answer once the orb is ready', async () => {
+    const order: string[] = [];
+    const onSent = vi.fn((q: string) => { order.push(`sent ${q}`); });
+    const onSubmit = vi.fn((q: string) => { order.push(`submit ${q}`); return 'An answer'; });
+    await act(async () => root.render(<MorphOrb locale="en" onSent={onSent} onSubmit={onSubmit} minThinkMs={0} speed={2} />));
+    await input('Early question');
+    await submit();
+    expect(order).toEqual(['sent Early question']);
+    await advance(300); // still flying
+    expect(order).toEqual(['sent Early question']);
+    await advance(6000);
+    expect(phase()).toBe('answered');
+    expect(order).toEqual(['sent Early question', 'submit Early question']);
+  });
+
   it('ignores a late response after Escape and accepts a fresh question', async () => {
     let finish!: (answer: string) => void;
     const onSubmit = vi.fn(() => new Promise<string>((resolve) => { finish = resolve; }));

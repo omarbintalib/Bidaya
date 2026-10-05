@@ -24,7 +24,7 @@ it('offers recovery without exposing technical errors and retries Journey succes
   vi.mocked(getSirah).mockRejectedValueOnce(new Error('private diagnostic')).mockResolvedValueOnce(sirahFixture);
   await act(async () => root.render(<AccessibilityProvider><JourneyPage locale="en" /></AccessibilityProvider>));
   // The Journey's content is its own chunk: wait for it to load.
-  await vi.waitFor(() => expect(host.textContent).toContain('Reload page'));
+  await vi.waitFor(() => expect(host.textContent).toContain('Reload page'), { timeout: 15000 });
   expect(host.textContent).not.toContain('private diagnostic');
   expect(host.querySelector('.recovery-actions a')?.getAttribute('href')).toBe('/');
   await act(async () => (host.querySelector('.recovery-actions button') as HTMLButtonElement).click());

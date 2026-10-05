@@ -31,8 +31,25 @@ export function warmServer(fetcher: typeof fetch = fetch) {
   try { fetcher(ASK_API.replace(/\/ask$/, '/health'), { method: 'GET' }).catch(() => { /* offline: the browser answers */ }); } catch { /* no fetch */ }
 }
 
+/** A question already on its way (askEarly), for askServer to pick up. */
+let early: { question: string; locale: Locale; reply: Promise<Answer | null> } | null = null;
+
+/**
+ * Send a question as soon as it is asked, while the orb's opening animation plays (about 2 s on a phone); askServer
+ * then picks the reply up when the orb is ready for it, so what the answer does (moving the map) keeps its moment.
+ */
+export function askEarly(question: string, locale: Locale, fetcher: typeof fetch = fetch) {
+  early = { question, locale, reply: request(question, locale, fetcher) };
+}
+
 /** Ask the RAG backend. Resolves to null when it is off, unreachable, slow or returns something unexpected. */
-export async function askServer(question: string, locale: Locale, fetcher: typeof fetch = fetch): Promise<Answer | null> {
+export function askServer(question: string, locale: Locale, fetcher: typeof fetch = fetch): Promise<Answer | null> {
+  const sent = early;
+  early = null;
+  return sent && sent.question === question && sent.locale === locale ? sent.reply : request(question, locale, fetcher);
+}
+
+async function request(question: string, locale: Locale, fetcher: typeof fetch): Promise<Answer | null> {
   if (!ASK_API || ASK_API === 'off') return null;
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), ASK_TIMEOUT_MS);

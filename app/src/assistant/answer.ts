@@ -19,7 +19,7 @@ import type { Locale } from '../i18n';
  *   the suggested questions (`suggestFor`), which must be instant.
  */
 
-export { askServer, sourceLinks, warmServer, type Answer, type AnswerSource } from './server';
+export { askEarly, askServer, sourceLinks, warmServer, type Answer, type AnswerSource } from './server';
 import { sourceLinks, type Answer } from './server';
 
 type Doc = { kind: 'event'; item: SirahEvent; fields: Field[] } | { kind: 'person'; item: Person; fields: Field[] } | { kind: 'verse'; item: Verse; fields: Field[] };
@@ -104,7 +104,7 @@ export function retrieve(data: Sirah, question: string, limit = 5): Hit[] {
   const q = [...new Set(tokens(question))];
   if (!q.length) return [];
   const nq = normalize(question).trim();
-  const wantsPerson = /^(من هو|من هي|من كان|من كانت|who (is|was))\b/.test(nq);
+  const wantsPerson = /^(من هو|من هي|من كان|من كانت|who (is|was))(?=\s|$)/.test(nq);   // \b knows only ASCII letters
   const wantsVerse = /(سور|ايه|ايات|surah|verse|ayah)/.test(nq);
   const hits: Hit[] = [];
   for (const doc of docs) {
@@ -155,7 +155,11 @@ const BEFORE = /(?:^|[\s،,(])قبل\s|\bbefore\b/i;
  * before) an event goes to the later (or earlier) event the answer's words lead to, when there is one.
  */
 export function answerEvent(data: Sirah, question: string, reply: Answer, locale: Locale): number | undefined {
-  const named = reply.event !== undefined && data.byNumber.has(reply.event) ? reply.event : undefined;
+  // A verse answer names no event when its record is placed by stage only ("Why was Surah Abasa revealed?"):
+  // the record it cites still has its place in the story.
+  const verse = reply.kind === 'verse' && reply.event === undefined ? citedVerse(data, reply) : undefined;
+  const placed = verse && verseEvent(data, verse)?.n;
+  const named = reply.event !== undefined && data.byNumber.has(reply.event) ? reply.event : placed !== undefined && data.byNumber.has(placed) ? placed : undefined;
   if (reply.kind === 'refusal' || reply.kind === 'none') return named;
   const found = answer(data, question, locale).event;
   const asked = found !== undefined && data.byNumber.has(found) ? found : undefined;
@@ -176,6 +180,17 @@ export function answerEvent(data: Sirah, question: string, reply: Answer, locale
   if (asked === undefined || asked === named) return named;
   if (rank(asked) < 0) return named;
   return named === undefined || rank(named) < 0 || rank(asked) < rank(named) ? asked : named;
+}
+
+/** The first verse record a backend answer cites: one of its links, under its title (some links serve several records). */
+function citedVerse(data: Sirah, reply: Answer) {
+  const bare = (url: string) => url.replace(/(\d)[a-z]+$/i, '$1');   // muslim:1748c is muslim:1748 here
+  for (const s of reply.sources ?? []) {
+    const v = data.verses.find(v => [...v.tafseer, ...hadithLinks(v).map(h => h.url)].some(u => bare(u) === bare(s.url))
+      && [v.title.ar, v.title.en].some(t => t && s.label.includes(t.slice(0, 40))));
+    if (v) return v;
+  }
+  return undefined;
 }
 
 // "من هو أبو بكر؟", "who was Khadijah?", "tell me about Bilal": a question about a person, before their name.

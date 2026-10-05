@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { askServer, warmServer } from './answer';
+import { askEarly, askServer, warmServer } from './answer';
 
 const reply = (body: unknown, ok = true) => (async () => ({ ok, json: async () => body })) as unknown as typeof fetch;
 
@@ -21,6 +21,37 @@ describe('askServer', () => {
     expect(await askServer('q', 'en', reply({ kind: 'oops', text: 'x' }))).toBeNull();
     expect(await askServer('q', 'en', reply({ kind: 'event', text: '  ' }))).toBeNull();
     expect(await askServer('q', 'en', (async () => { throw new TypeError('Failed to fetch'); }) as unknown as typeof fetch)).toBeNull();
+  });
+});
+
+describe('askEarly', () => {
+  it('sends the question once, as soon as it is asked; askServer picks that reply up', async () => {
+    const sent: string[] = [];
+    const counting = (async (_url: string, init: RequestInit) => {
+      sent.push(JSON.parse(init.body as string).question);
+      return { ok: true, json: async () => ({ kind: 'event', text: 'Badr was in 2 AH.', event: 59 }) };
+    }) as unknown as typeof fetch;
+    askEarly('When was Badr?', 'en', counting);
+    expect(sent).toEqual(['When was Badr?']);
+    expect(await askServer('When was Badr?', 'en', counting)).toEqual({ kind: 'event', text: 'Badr was in 2 AH.', event: 59 });
+    expect(sent).toEqual(['When was Badr?']);
+    // Picked up once: asking again sends again.
+    await askServer('When was Badr?', 'en', counting);
+    expect(sent).toEqual(['When was Badr?', 'When was Badr?']);
+  });
+
+  it('is not used for a different question or language', async () => {
+    const sent: string[] = [];
+    const counting = (async (_url: string, init: RequestInit) => {
+      const { question, locale } = JSON.parse(init.body as string);
+      sent.push(`${locale}:${question}`);
+      return { ok: true, json: async () => ({ kind: 'none', text: question }) };
+    }) as unknown as typeof fetch;
+    askEarly('When was Badr?', 'en', counting);
+    expect((await askServer('When was Uhud?', 'en', counting))?.text).toBe('When was Uhud?');
+    askEarly('When was Badr?', 'en', counting);
+    expect((await askServer('When was Badr?', 'ar', counting))?.text).toBe('When was Badr?');
+    expect(sent).toEqual(['en:When was Badr?', 'en:When was Uhud?', 'en:When was Badr?', 'ar:When was Badr?']);
   });
 });
 
