@@ -197,11 +197,11 @@ html[data-contrast='dark'] .hmap-arc.out-honoured .hmap-arc-name, html[data-cont
 html[data-reduced-motion='true'] .hmap-arc-runner { display: none; }
 
 /* Terrain (Natural Earth): baked washes and sea depth, shaded relief, dune crests, lakes and rivers. */
-:root { --relief-opacity: .9; --wash-opacity: 1; --depth-opacity: 1; --river: #7d9a97; }
+:root { --relief-opacity: .8; --wash-opacity: 1; --depth-opacity: 1; --river: #7d9a97; }
 html[data-contrast='light'] { --relief-opacity: .5; --wash-opacity: .6; --depth-opacity: .5; }
 html[data-contrast='dark'] { --relief-opacity: .4; --wash-opacity: .45; --depth-opacity: .25; --river: #4f6f6c; }
 .hmap-terrain { pointer-events: none; }
-.hmap-sand-texture { opacity: .6; }
+.hmap-sand-texture { opacity: .4; }
 .hmap-dune { fill: none; stroke: #b08a4e; stroke-linecap: round; opacity: .5; }
 html[data-contrast='dark'] .hmap-dune { stroke: #c2a170; opacity: .35; }
 html[data-contrast='dark'] .hmap-relief { opacity: var(--relief-opacity); }

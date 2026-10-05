@@ -1,10 +1,10 @@
 """Build the map's terrain from Natural Earth (public domain), in the same projection as src/data/land.ts.
 
 Writes:
-  public/map/relief.webp   shaded relief (Natural Earth SR_HR, 1:10m), tinted: shadows brown, sunlit slopes cream,
-                           flat ground transparent, so it sits on the land colour of any theme
+  public/map/relief.webp   shaded relief (Natural Earth SR_HR, 1:10m) as soft brown shadows only: sunlit slopes and
+                           flat ground stay clear, so the land keeps its own colour (a paler land made the map glare)
   public/map/wash.webp     soft washes on the land: sand seas, fertile lands, and a shade just inside the coast
-  public/map/depth.webp    the sea's depth: pale shallows along the coast, deeper water offshore
+  public/map/depth.webp    the sea's depth: a slight darkening offshore (the sea keeps its colour at the coast)
   src/data/terrain.ts      outlines of the sand seas (for their dune texture), rivers and lakes
 The soft layers are baked into images because a browser redraws an SVG on every frame of a pan or zoom, and wide
 blurred strokes along a long coastline are slow to draw; an image costs almost nothing to move.
@@ -48,12 +48,11 @@ flat = float(np.median(v))                               # level ground (206 in 
 d = v - flat
 rgba = np.zeros(v.shape + (4,), np.uint8)
 shade = d < 0
-rgba[shade, :3] = (86, 58, 30)                          # shadow: warm brown
-rgba[~shade, :3] = (255, 251, 240)                      # sunlit slope: cream
+rgba[..., :3] = (86, 58, 30)                            # shadow: warm brown
 # Near-level ground (within a few shades of flat) is left fully clear: it is most of the map, and noise there would
 # only add weight to the file.
 dead = 6
-alpha = np.where(shade, np.clip((-d - dead) / 110, 0, 1) ** 0.8 * 210, np.clip((d - dead) / 36, 0, 1) * 150)
+alpha = np.where(shade, np.clip((-d - dead) / 120, 0, 1) ** 0.85 * 150, 0)
 alpha = np.round(alpha / 6) * 6                          # fewer distinct levels compress far better
 rgba[..., 3] = alpha.astype(np.uint8)
 out = APP / 'public' / 'map'
@@ -155,9 +154,8 @@ def save(img, name):
 
 wash = np.zeros(land.shape + (4,), np.float32)
 wash = over(wash, (138, 154, 88), feather(mask(projected(FERTILE)), 10) * .14)      # fertile: olive
-wash = over(wash, (232, 201, 140), feather(mask(projected(SAND)), 9) * .34)         # sand: warm gold
+wash = over(wash, (232, 201, 140), feather(mask(projected(SAND)), 9) * .22)         # sand: warm gold, light enough for lines to read over it
 wash = over(wash, (168, 141, 99), np.exp(-inland / 7) * .13 * (land > .5))         # shade inside the coast
 depth = np.zeros(land.shape + (4,), np.float32)
-depth = over(depth, (60, 84, 86), (1 - np.exp(-offshore / 70)) * .2)                # deep water: darker
-depth = over(depth, (252, 249, 238), np.exp(-offshore / 9) * .4 * (land <= .5))     # shallows: paler
+depth = over(depth, (60, 84, 86), (1 - np.exp(-offshore / 70)) * .14)               # deep water: a little darker
 print('wash', save(wash, 'wash.webp'), 'KB; depth', save(depth, 'depth.webp'), 'KB')
