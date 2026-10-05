@@ -77,6 +77,12 @@ export const sourceLabel = (s: string, locale: Locale) => locale === 'ar' ? s : 
   .replace(/الدرر السنية/g, 'Dorar').replace(/حدث/g, 'event').replace(/؛\s*/g, '; ').replace(/،\s*/g, ', ').replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)));
 
 /** First sentences of a text, cut at a sentence boundary near `max` characters. */
+/** The opening of an event's text: its first sentence when that is a readable length, else about two lines. */
+export function eventLead(body: string) {
+  const m = body.slice(40, 260).search(/[.!؟](\s|$)/);
+  return m >= 0 ? body.slice(0, 40 + m + 1).trim() : excerpt(body, 180);
+}
+
 export function excerpt(text: string, max = 280) {
   if (text.length <= max) return text;
   const cut = text.slice(0, max + 80);

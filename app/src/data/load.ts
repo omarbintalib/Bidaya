@@ -1,6 +1,6 @@
 import { parseCsv } from './csv';
 import { FILES } from './files';
-import type { EventAudio, EventSound, Growth, LinkType, MapArc, MapLabel, Period, Person, Place, Precision, QuizQuestion, Route, RouteStop, Sirah, SirahEvent, SoundKind, Verse, VerseLink } from './types';
+import type { EventAudio, EventSound, SummaryMoment, Growth, LinkType, MapArc, MapLabel, Period, Person, Place, Precision, QuizQuestion, Route, RouteStop, Sirah, SirahEvent, SoundKind, Verse, VerseLink } from './types';
 
 /**
  * Everything the interface shows is read at runtime from the CSVs at the repository root (served at /data/).
@@ -216,7 +216,16 @@ export async function loadSirah(): Promise<Sirah> {
     if (n === null || !byNumber.has(n) || !/^[\w.-]+\.(mp3|m4a|ogg)$/.test(file)) { warn(`event_audio.csv: row for event "${r['رقم_حدث_الدرر']}" needs a known event and a sound file in public/sounds/`); continue; }
     audio.set(n, { file, label: { ar: r['التسمية'], en: r.Label_EN || r['التسمية'] }, description: { ar: r['الوصف'], en: r.Description_EN || r['الوصف'] } });
   }
-  return { events, byNumber, places, verses, people, routes, labels, stops, quiz, arcs, growth, sounds, audio };
+  // The Sirah summary: moments in order, each with sentences quoted from its event's own text.
+  const split = (v: string | undefined) => (v ?? '').split('|').map(q => q.trim()).filter(Boolean);
+  const summary: SummaryMoment[] = [];
+  for (const r of parseCsv(raw.summary).sort((a, b) => (num(a['الترتيب']) ?? 0) - (num(b['الترتيب']) ?? 0))) {
+    const n = num(r['رقم_حدث_الدرر']), ar = split(r['المقتطفات']);
+    if (n === null || !byNumber.has(n) || !ar.length) { warn(`summary_film.csv: row ${r['الترتيب']} needs a known event and its quotes (المقتطفات)`); continue; }
+    const en = split(r.Quotes_EN);
+    summary.push({ n, overview: r['نظرة_عامة'] === 'نعم', quotes: { ar, en: en.length ? en : ar } });
+  }
+  return { events, byNumber, places, verses, people, routes, labels, stops, quiz, arcs, growth, sounds, audio, summary };
 }
 
 let cache: Promise<Sirah> | null = null;

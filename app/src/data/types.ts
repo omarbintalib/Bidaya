@@ -132,6 +132,9 @@ export interface EventSound { kind: SoundKind; quote: string; horses: string | n
 /** A recording the reader can play on an event's card (event_audio.csv), e.g. the adhan on the event of its legislation. */
 export interface EventAudio { file: string; label: Text; description: Text }
 
+/** One moment of the Sirah summary (summary_film.csv): a Dorar event and the sentences of its own text that tell it. */
+export interface SummaryMoment { n: number; overview: boolean; quotes: Record<Locale, string[]> }
+
 export interface Sirah {
   events: SirahEvent[];
   byNumber: Map<number, SirahEvent>;
@@ -147,5 +150,7 @@ export interface Sirah {
   sounds: Map<number, EventSound>;
   /** Recordings to play on an event's card, by Dorar event number. */
   audio: Map<number, EventAudio>;
+  /** The Sirah summary played on the map, in order. */
+  summary: SummaryMoment[];
   growth: Map<string, Growth[]>;
 }

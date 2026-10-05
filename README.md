@@ -113,6 +113,7 @@ Two files were added for the period map:
 | `map_arcs.csv` | The letters sent from Madinah and the delegations that came to it, drawn as curves while their event is on screen (see below) |
 | `event_sounds.csv` | The background sound for each event (battle, march, caravan, walking, sea, wind), with the words of the event's own Dorar text that justify it; horses are heard only where the text mentions them (column الخيل, with its words), and a note (ملاحظة) where the sound rests on more than the text, as for the sea crossing to Abyssinia, an estimate. Swords are heard only where the text says there was fighting; events with no sound of their own are silent. Field recordings only, no music (`app/public/sounds/CREDITS.md`) |
 | `event_audio.csv` | Recordings the reader can play on an event's card: the adhan, from al-Masjid an-Nabawi, on the event of its legislation (مشروعية الأذان). The file is in `app/public/sounds/` |
+| `summary_film.csv` | The Sirah summary played on the map: thirteen moments in order, each a Dorar event with a few sentences quoted word for word from its own text (Arabic, and Dorar's English) |
 
 Columns added for the app (filled only where the Dorar texts state it, each with its quote):
 

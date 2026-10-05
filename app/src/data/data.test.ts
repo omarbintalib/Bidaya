@@ -91,6 +91,15 @@ describe('data package', () => {
     const files = Object.keys(import.meta.glob('../../public/sounds/*')).map(p => p.split('/').pop());
     for (const a of data.audio.values()) expect(files).toContain(a.file);
   });
+  it('tells every moment of the Sirah summary in its event\'s own words', () => {
+    expect(data.summary.length).toBe(13);
+    expect(data.summary.at(-1)?.overview).toBe(true);
+    for (const m of data.summary) {
+      const e = data.byNumber.get(m.n)!;
+      for (const q of m.quotes.ar) expect(e.text.ar.includes(q), `event ${m.n}: «${q}»`).toBe(true);
+      for (const q of m.quotes.en) expect(e.text.en.includes(q), `event ${m.n}: “${q}”`).toBe(true);
+    }
+  });
   it('builds more chapter questions from sourced event places', () => {
     const pools = quizPools(data);
     for (const period of ['prologue', 'makkah', 'hijrah', 'madinah'] as const) expect(pools.get(period)!.length).toBeGreaterThan(0);

@@ -342,7 +342,7 @@
 .sound-note { margin: 0; color: var(--muted); font-size: calc(12.5px * var(--text-scale)); line-height: 1.7; }
 @media all { html:not([data-reduced-motion='true']) .sound-panel { animation: rise-in .2s ease both; } }
 
-/* The Sirah in a minute: the map full screen, a year counter above, the moment's title and the moments below. */
+/* The Sirah summary: the map full screen, a year counter above, the moment's title, text and verses below. */
 .film { position: fixed; inset: 0; z-index: 120; background: var(--sea); display: flex; }
 .film .hmap { flex: 1; height: 100%; gap: 0; }
 .film .hmap-frame { height: 100%; flex: 1; min-height: 0; border: 0; }
@@ -354,9 +354,14 @@
 .film-close svg { width: 18px; height: 18px; }
 .film-bottom { position: absolute; z-index: 4; bottom: 18px; inset-inline: 16px; display: grid; justify-items: center; gap: 12px; pointer-events: none; }
 .film-bottom > * { pointer-events: auto; }
-.film-caption { width: min(620px, 100%); padding: 14px 20px 12px; background: color-mix(in srgb, var(--paper) 94%, transparent); border: 1px solid var(--brass); border-radius: 10px; box-shadow: 0 14px 40px #331b0d26; text-align: center; }
+.film-caption { width: min(720px, 100%); max-height: 46vh; overflow-y: auto; scrollbar-width: none; padding: 16px 24px 12px; background: color-mix(in srgb, var(--paper) 94%, transparent); border: 1px solid var(--brass); border-radius: 10px; box-shadow: 0 14px 40px #331b0d26; text-align: center; }
 .film-caption h2 { margin: 4px 0 6px; font-family: var(--display); font-size: calc(clamp(18px, 2.2vw, 24px) * var(--text-scale)); line-height: 1.5; }
 .film-period { margin: 0; color: var(--brass); font-size: var(--text-small); }
+.film-gap { color: var(--brass); }
+.film-source { margin: 2px 0 0; color: var(--muted); font-size: calc(12.5px * var(--text-scale)); }
+.film-text { margin: 0 0 8px; font-size: var(--text-body); line-height: calc(var(--reading-line-height) + .2); color: var(--ink); text-align: start; }
+.film-verses { margin: 0 0 4px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 8px; font-size: var(--text-small); color: var(--muted); }
+.film-verses b { font-weight: 600; color: var(--ink); padding: 2px 10px; border: 1px solid color-mix(in srgb, var(--brass) 55%, transparent); border-radius: 999px; background: #e2b45c14; }
 .film-read { border: 0; background: none; padding: 4px 6px; color: var(--muted); font-size: var(--text-small); text-decoration: underline; text-underline-offset: .25em; }
 .film-read:hover { color: var(--ink); }
 .film-controls { display: flex; align-items: center; gap: 14px; padding: 8px 14px; border-radius: 999px; background: color-mix(in srgb, var(--paper) 92%, transparent); border: 1px solid var(--border); }

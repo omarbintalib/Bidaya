@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { quranpediaRefs, type QuranRef } from '../data/quranpedia';
 import { km, pathKm, roundKm } from '../data/geo';
-import { dateLine, digits, eventPlaceName, excerpt, hadithLinks, hijri, periodName, peopleFor, versesFor } from '../data/select';
+import { dateLine, digits, eventLead, eventPlaceName, hadithLinks, hijri, periodName, peopleFor, versesFor } from '../data/select';
 import type { MapArc, QuranEn, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
@@ -10,11 +10,6 @@ import { PeopleText, usePeople } from './People';
 import Fold from './Fold';
 import EventAudio from './EventAudio';
 
-/** The opening of an event's text: its first sentence when that is a readable length, else about two lines. */
-function lead(body: string) {
-  const m = body.slice(40, 260).search(/[.!؟](\s|$)/);
-  return m >= 0 ? body.slice(0, 40 + m + 1).trim() : excerpt(body, 180);
-}
 
 /** Arabic-only source text keeps its own language and direction inside the English interface. */
 const Ar = ({ children, as: Tag = 'span' }: { children: React.ReactNode; as?: 'span' | 'p' }) => <Tag lang="ar" dir="rtl">{children}</Tag>;
@@ -39,7 +34,7 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
   const body = (locale === 'en' && event.text.en) || event.text.ar;
   const bodyLang = body === event.text.ar ? 'ar' : 'en';
   const title = event.title[locale] || event.title.ar;
-  const opening = lead(body), rest = body.slice(opening.replace(/…$/, '').length).trim();
+  const opening = eventLead(body), rest = body.slice(opening.replace(/…$/, '').length).trim();
   // Opened, an opening cut mid-sentence ("…") runs on to the end of its sentence, and the rest follows as a paragraph.
   const cutAt = opening.replace(/…$/, '').length, sentenceEnd = opening.endsWith('…') ? body.slice(cutAt).search(/[.!؟](\s|$)/) : 0;
   const openLead = sentenceEnd < 0 ? body : body.slice(0, cutAt + sentenceEnd + (opening.endsWith('…') ? 1 : 0)).trim();

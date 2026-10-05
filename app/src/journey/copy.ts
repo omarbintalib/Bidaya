@@ -7,7 +7,7 @@ const arCount = (n: number) => n === 1 ? 'حدث واحد' : n === 2 ? 'حدثا
 export const journeyCopy = {
   ar: {
     timeline: 'الخط الزمني للسيرة',
-    prev: 'الحدث السابق', next: 'الحدث التالي', play: 'تشغيل القصة', pause: 'إيقاف', story: 'القصة خطوة بخطوة', sound: 'الأصوات', film: 'السيرة في دقيقة', filmTitle: 'السيرة في دقيقة', filmRead: 'اقرأ الحدث', filmReplay: 'إعادة', filmHint: 'شاهد السيرة كلها على الخريطة في دقيقة', audioPause: 'إيقاف مؤقت', soundTitle: 'أصوات المكان والحدث (بلا موسيقى)', soundOn: 'تشغيل الأصوات', soundVolume: 'مستوى الصوت', soundNote: 'تسجيلات حقيقية بلا موسيقى، تُسمع في الأحداث التي يذكر نصها سفرًا أو بحرًا أو قتالًا، وتسكت في غيرها. صوت القتال لا يُسمع إلا حيث يذكر النص القتال.', paceLabel: 'سرعة القصة', pace: { slow: 'أبطأ', normal: 'عادي', fast: 'أسرع' },
+    prev: 'الحدث السابق', next: 'الحدث التالي', play: 'تشغيل القصة', pause: 'إيقاف', story: 'القصة خطوة بخطوة', sound: 'الأصوات', film: 'ملخص السيرة', filmTitle: 'ملخص السيرة', filmSource: 'من نص الحدث في الدرر السنية', filmRead: 'اقرأ الحدث كاملًا', filmReplay: 'إعادة', filmHint: 'ملخص السيرة على الخريطة: أبرز الأحداث بنصوصها وآياتها', audioPause: 'إيقاف مؤقت', soundTitle: 'أصوات المكان والحدث (بلا موسيقى)', soundOn: 'تشغيل الأصوات', soundVolume: 'مستوى الصوت', soundNote: 'تسجيلات حقيقية بلا موسيقى، تُسمع في الأحداث التي يذكر نصها سفرًا أو بحرًا أو قتالًا، وتسكت في غيرها. صوت القتال لا يُسمع إلا حيث يذكر النص القتال.', paceLabel: 'سرعة القصة', pace: { slow: 'أبطأ', normal: 'عادي', fast: 'أسرع' },
     count: (i: number, n: number) => `${digits(i, 'ar')} من ${digits(n, 'ar')}`,
     error: 'تعذّر تحميل ملفات البيانات من مجلد data. تأكد من وجودها ثم أعد تحميل الصفحة.',
     place: 'المكان', when: 'الزمان',
@@ -65,7 +65,7 @@ export const journeyCopy = {
   },
   en: {
     timeline: 'Timeline of the Sirah',
-    prev: 'Previous event', next: 'Next event', play: 'Play the story', pause: 'Pause', story: 'Story mode', sound: 'Sounds', film: 'The Sirah in a minute', filmTitle: 'The Sirah in a minute', filmRead: 'Read this event', filmReplay: 'Play again', filmHint: 'Watch the whole Sirah on the map in one minute', audioPause: 'Pause', soundTitle: 'Sounds of the place and event (no music)', soundOn: 'Play sounds', soundVolume: 'Volume', soundNote: 'Real recordings with no music, heard on events whose text describes a journey, the sea or fighting, and silent elsewhere. Fighting is heard only where the text describes it.', paceLabel: 'Story speed', pace: { slow: 'Slower', normal: 'Normal', fast: 'Faster' },
+    prev: 'Previous event', next: 'Next event', play: 'Play the story', pause: 'Pause', story: 'Story mode', sound: 'Sounds', film: 'Sirah summary', filmTitle: 'A summary of the Sirah', filmSource: 'From the event\'s text on Dorar', filmRead: 'Read the whole event', filmReplay: 'Play again', filmHint: 'The Sirah on the map: its key events, with their texts and verses', audioPause: 'Pause', soundTitle: 'Sounds of the place and event (no music)', soundOn: 'Play sounds', soundVolume: 'Volume', soundNote: 'Real recordings with no music, heard on events whose text describes a journey, the sea or fighting, and silent elsewhere. Fighting is heard only where the text describes it.', paceLabel: 'Story speed', pace: { slow: 'Slower', normal: 'Normal', fast: 'Faster' },
     count: (i: number, n: number) => `${i} of ${n}`,
     error: 'The data files could not be loaded from the data folder. Check they are there, then reload the page.',
     place: 'Place', when: 'When',
