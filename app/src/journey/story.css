@@ -242,6 +242,9 @@
   .story-reach { font-size: calc(12px * var(--text-scale)); padding: 2px 8px; }
   .story-reach small { display: none; }
   .scrolly-map .story-banner { border-radius: 14px; }
+  /* The Ask sheet standing beside the map (a phone on its side): the zoom buttons and the period banner move clear of it. */
+  .scrolly-map.has-side-sheet .hmap-controls { inset-inline-start: calc(var(--sheet-side) + 14px); }
+  .scrolly-map.has-side-sheet .story-banner { inset-inline-start: calc(var(--sheet-side) + 62px); }
   .story-timeline { padding: 6px 10px 4px; }
   .story-timeline .tl-now, .story-timeline .tl-undated { display: none; }
   .story-timeline .tl-scroll, .story-timeline .tl-key, .story-timeline .tl-rail { display: none; }

@@ -182,7 +182,11 @@ describe('navigation lifecycle', () => {
   it('supports direct entry at Journey and redirects the old Spread address there', async () => {
     await mount('/journey'); await advance(2100);
     expect(heading()?.textContent).toBe('رحلة الإسلام');
+    // The Ask orb is made when its panel first opens.
+    expect(host.querySelector('.mo-root')).toBeNull();
+    await click('.tb-ask');
     expect(host.querySelector('.mo-root')).not.toBeNull();
+    await click('.tb-ask');
     await pop('/'); await advance(2100);
     expect(heading()?.textContent).toBe('البداية');
     expect(host.querySelector('.mo-root')).toBeNull();
@@ -226,18 +230,20 @@ describe('navigation lifecycle', () => {
 
   it('leaving Journey cancels AI work and returning mounts a fresh demo', async () => {
     await mount('/journey'); await advance(2100);
-    const field = host.querySelector('input')!;
+    await click('.tb-ask');
+    const field = host.querySelector<HTMLInputElement>('.ask-panel input')!;
     await act(async () => {
       Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(field, 'Question in flight');
       field.dispatchEvent(new Event('input', { bubbles: true }));
     });
-    await act(async () => host.querySelector('form')!.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })));
+    await act(async () => host.querySelector('.ask-panel form')!.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })));
     await advance(3000); expect(host.querySelector('.mo-root')?.getAttribute('data-phase')).toBe('think');
     await navigate('/'); await advance(2100); await advance(10000);
     expect(host.querySelector('.mo-answer')).toBeNull();
     await navigate('/journey'); await advance(2100);
+    await click('.tb-ask');
     expect(host.querySelector('.mo-root')?.getAttribute('data-phase')).toBe('idle');
-    expect(host.querySelector('input')?.value).toBe('');
+    expect(host.querySelector<HTMLInputElement>('.ask-panel input')?.value).toBe('');
   });
 
   it('uses a short crossfade in reduced motion without stroke animations', async () => {

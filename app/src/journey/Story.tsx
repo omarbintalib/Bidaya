@@ -675,7 +675,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
         </section>
       </div>
 
-      <div className="scrolly-map">
+      <div className={`scrolly-map${sheetCover.side ? ' has-side-sheet' : ''}`} style={sheetCover.side ? { '--sheet-side': `${sheetCover.side}px` } as React.CSSProperties : undefined}>
         <HistoricMap data={data} locale={locale} emphasis={emphasis} selected={step.kind === 'event' ? current.n : null} activeRoutes={activeRoutes}
           onSelect={jumpTo} reducedMotion={reducedMotion} inset={(quick || walk) && wide ? 430 : sheetCover.side} insetTop={topCover} insetBottom={Math.max(timelineH + (wide ? 76 : walk ? walkPanelH + 8 : 0), sheetCover.bottom)} focusKey={`${active}-${walk?.stop ?? ''}`} now={now} legend={false}
           overview={step.kind === 'summary' || step.kind === 'chapter' && step.chapter === 1}
@@ -801,9 +801,13 @@ const AskPanel = memo(function AskPanel({ open, besideMap, onClose, locale, redu
   onHistory: () => void; answerActions: React.ReactNode;
 }) {
   const text = journeyCopy[locale];
+  // The orb is made the first time the panel opens, then kept (with its answer). Made at load, hidden, it laid out
+  // the whole page in the middle of the Journey's first render: the longest pause before the page answers a tap.
+  const [used, setUsed] = useState(open);
+  if (open && !used) setUsed(true);
   return <section id="ask-panel" className={`ask-panel${open ? ' is-open' : ''}${besideMap ? ' is-beside-map' : ''}`} aria-label={text.ask} inert={!open}>
     <div className="ask-head"><h2>{text.ask}</h2><button type="button" className="qr-close" onClick={onClose} aria-label={text.close}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" /></svg></button></div>
-    <MorphOrb locale={locale} reducedMotion={reducedMotion} onSubmit={onAsk} minThinkMs={900} ask={ask} onHistory={onHistory} historyLabel={chatCopy[locale].title} answerActions={answerActions} />
+    {used && <MorphOrb locale={locale} reducedMotion={reducedMotion} onSubmit={onAsk} minThinkMs={900} ask={ask} onHistory={onHistory} historyLabel={chatCopy[locale].title} answerActions={answerActions} />}
     {back && <BackButton label={back.label} locale={locale} onClick={() => { onBack(); onClose(); }} />}
     <p className="ai-note">{text.askNote}</p>
     <ul className="ai-suggest" aria-label={text.tryAsking}>
