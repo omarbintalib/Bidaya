@@ -8,9 +8,9 @@ yemen,إقليم,اليمن,Yemen,15.4,45.3,كبير,0,موقع تقريبي ل�
 oman,إقليم,عُمان,Oman,22.4,57.3,متوسط,0,موقع تقريبي للتوجيه فقط,106,فأجابا إلى الإسلامِ جميعًا,أجاب جيفر وعبّاد ابنا الجلندى ملكا عُمان إلى الإسلام لما جاءهما كتاب النبي ﷺ مع عمرو بن العاص (7 هـ),"Approximate position, for orientation only","Jayfar and Abbad, sons of al-Julanda, kings of Oman, accepted Islam when the Prophet's ﷺ letter reached them with Amr ibn al-As (7 AH)"
 sham,إقليم,الشام,al-Sham,33.4,37.4,كبير,0,موقع تقريبي للتوجيه فقط,,,,"Approximate position, for orientation only",
 iraq,إقليم,العراق,Iraq,32.3,45.0,كبير,0,موقع تقريبي للتوجيه فقط,,,,"Approximate position, for orientation only",
-rum,قوة,الروم,The Byzantines,34.4,34.1,متوسط,0,كانت الشام تحت حكم الروم في عهد النبوة,,,,Al-Sham was under Byzantine rule in the time of the Prophet ﷺ,
+rum,قوة,الروم,al-Rum (the Byzantines),34.4,34.1,متوسط,0,كانت الشام تحت حكم الروم في عهد النبوة,,,,Al-Sham was under Byzantine rule in the time of the Prophet ﷺ,
 furs,قوة,الفرس,The Persians,34.3,47.6,متوسط,0,كان العراق تحت حكم الفرس في عهد النبوة,,,,Iraq was under Persian rule in the time of the Prophet ﷺ,
 habasha,قوة,الحبشة,Abyssinia,12.4,37.2,متوسط,0,موقع تقريبي للتوجيه فقط,17,فنزلنا بخيرِ دارٍ إلى خيرِ جارٍ، أَمَّنَّا على دين,هاجر إليها المسلمون,"Approximate position, for orientation only",The Muslims emigrated there
-qulzum,بحر,بحر القلزم (البحر الأحمر),The Red Sea,20.6,38.9,متوسط,61,,,,,,
-rum_sea,بحر,بحر الروم,The Mediterranean,33.2,32.7,صغير,0,,,,,,
-furs_sea,بحر,بحر فارس (الخليج),The Gulf,27.6,50.6,صغير,-40,,,,,,
+qulzum,بحر,بحر القلزم (البحر الأحمر),Sea of al-Qulzum (the Red Sea),20.6,38.9,متوسط,61,,,,,,
+rum_sea,بحر,بحر الروم,Sea of al-Rum (the Mediterranean),33.2,32.7,صغير,0,,,,,,
+furs_sea,بحر,بحر فارس (الخليج),Sea of Faris (the Gulf),27.6,50.6,صغير,-40,,,,,,

@@ -178,7 +178,13 @@ Each place in `4_places.csv` and each region in `map_labels.csv` can carry `حد
 ### Names and numbers as they were at the time
 
 - **Names change with the story.** `4_places.csv` has `الاسم_قبل` / `Name_Before_EN` and `حدث_الاسم`: the place is called by its earlier name until that Dorar event. al-Madinah is **Yathrib** until the Prophet's ﷺ Hijrah (event 42), the name Dorar itself uses before it (event 34: «وانتشر الإسلامُ في أهلِ يَثْرِبَ»). Quba is plain **Quba** until its mosque is built (event 43). Event cards say "Yathrib (later al-Madinah)", and the map, the walks and the assistant use the name of the time.
-- **Names appear gradually.** A place is named on the map from its first event on, so places and mosques do not show before the story reaches them.
+- **Every place name is a name of the time.** Later honorifics and modern names were removed:
+  - **Later honorifics:** مكة المكرمة → مكة, المدينة المنورة → المدينة, الكعبة المشرفة → الكعبة.
+  - **Later names of landmarks:** Jabal al-Nur, Jabal al-Rahmah (now عرفة, Dorar's word) and Masjid al-Bay'ah, which was built after his time.
+  - **Modern place names:** al-Shumaisi, al-Ha'it, "Jordan" (Mu'tah is now "the land of al-Balqa'", Dorar 122's term) and "Red Sea coast".
+  - **Later term:** المسجد النبوي → مسجد رسول الله ﷺ.
+  - **English sea names:** each sea now has its Arabic name of the time first, such as "Sea of al-Qulzum (the Red Sea)".
+- - **Names appear gradually.** A place is named on the map from its first event on, so places and mosques do not show before the story reaches them.
 - **The glow grows with the Muslims the sources count.** `islam_growth.csv` gives, per place and event, a number Dorar states, word for word. A lit place glows faintly when no number is given and brighter and wider as the count grows, up to the 30,000 of Tabuk (scaled on a logarithm, so 16 emigrants already shows). Each count is a lower bound and says what it counts, such as "Muslims who marched to Uhud", because the sources count those who emigrated or marched, not a population.
 - The map's key now reads "Gold glow: places Islam had reached (n)", with "Brighter where the sources count more Muslims", and it is shown on phones too.
 

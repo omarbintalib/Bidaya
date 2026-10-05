@@ -283,7 +283,7 @@ describe('names and numbers as they were at the time', () => {
   it('calls al-Madinah Yathrib before the Hijrah and al-Madinah after it', () => {
     const before = data.byNumber.get(34)!, after = data.byNumber.get(45)!;
     expect(eventPlaceName(data, before, 'en')).toBe('Yathrib (later al-Madinah)');
-    expect(eventPlaceName(data, before, 'ar')).toBe('يثرب (المدينة المنورة لاحقًا)');
+    expect(eventPlaceName(data, before, 'ar')).toBe('يثرب (المدينة لاحقًا)');
     expect(eventPlaceName(data, after, 'en')).toBe('al-Madinah');
   });
 });
