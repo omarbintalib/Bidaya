@@ -311,7 +311,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
   const [person, setPerson] = useState<Person | null>(null);
   const peopleApi = useMemo(() => ({ data, open: setPerson }), [data]);
   const unplaced = useMemo(() => unplacedVerses(data), [data]);
-  // Timeline marks for events the sources tie verses to (the same links the event card lists under "The Quran in this event").
+  // Timeline marks for events the sources tie verses to (the same links the event card lists under "Verses linked to this event").
   const revealed = useMemo(() => {
     const out = new Map<number, 'direct' | 'suggested'>();
     for (const e of events) {

@@ -211,7 +211,7 @@ The English reasons (`وجه_الارتباط_EN`) quote the Quran in Arabic bet
 
 ### Revelation marks on the timeline
 
-A small green diamond above a timeline tick marks an event that the sources tie verses to, the same verses the event card lists under "The Quran in this event". It is solid when a hadith names the event (`مباشر`, `بعد الحدث`) and hollow when the place is only suggested (`موضع مقترح`).
+A small green diamond above a timeline tick marks an event that the sources tie verses to, the same verses the event card lists under "Verses linked to this event" (آيات متصلة بهذا الحدث). It is solid when a hadith names the event (`مباشر`, `بعد الحدث`) and hollow when the place is only suggested (`موضع مقترح`).
 
 ## 6–7. Companions
 
