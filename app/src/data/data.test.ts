@@ -121,7 +121,7 @@ describe('ask about this event', () => {
 describe('sourced facts about people', () => {
   it('loads every fact in 7_sahaba_references.csv onto its person, with a quote and a source', () => {
     const facts = data.people.flatMap(p => p.facts);
-    expect(facts.length).toBe(211);
+    expect(facts.length).toBe(236);
     expect(data.people.every(p => p.facts.length > 0)).toBe(true);
     for (const f of facts) { expect(f.quote.length).toBeGreaterThan(5); expect(f.source.length).toBeGreaterThan(3); }
   });
@@ -175,4 +175,29 @@ it('attaches structured event sources without reading links from answer prose', 
   expect(result.sources).toEqual([{ label: 'Dorar', url: event.urlEn || event.url }]);
   expect(answer(data, 'is it halal?', 'en').sources).toBeUndefined();
   expect(sourceLinks([{ label: 'missing', url: '' }, { label: 'unsafe', url: 'javascript:alert(1)' }])).toEqual([]);
+});
+
+describe('English, checked against the Arabic', () => {
+  const quotes = (s: string) => s.match(/﴿[^﴾]*﴾/g) ?? [];
+  it('keeps every Quran quotation in Arabic, exactly as in the Arabic explanation', () => {
+    for (const v of data.verses) if (v.reasonEn) expect(quotes(v.reasonEn)).toEqual(quotes(v.reason));
+  });
+  it('quotes each hadith from a sunnah.com page the record cites', () => {
+    const withHadith = data.verses.filter(v => v.hadithEn);
+    expect(withHadith.length).toBeGreaterThan(50);
+    for (const v of withHadith) {
+      expect(v.hadithEn!.url).toMatch(/^https:\/\/sunnah\.com\/(bukhari|muslim):\d+[a-z]?$/);
+      const [, book, n] = v.hadithEn!.url.match(/(bukhari|muslim):(\d+)/)!;
+      expect(book === 'bukhari' ? v.bukhari.join(' ') : v.muslim.join(' ')).toContain(n);
+    }
+  });
+  it('has an English synopsis and English surah names', () => {
+    expect(data.people.every(p => p.bioEn)).toBe(true);
+    expect(data.verses.every(v => v.surahEn)).toBe(true);
+  });
+  it('leaves no Arabic letters in the English it shows', () => {
+    const arabic = /[؀-ۿ]/;
+    for (const v of data.verses) if (v.reasonEn) expect(arabic.test(v.reasonEn.replace(/﴿[^﴾]*﴾/g, ''))).toBe(false);
+    for (const p of data.people) { expect(arabic.test(p.bioEn!.replace(/ﷺ/g, ''))).toBe(false); }
+  });
 });

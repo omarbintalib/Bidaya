@@ -42,6 +42,15 @@
 .verse-evidence { color: var(--muted); }
 .verse-refs { display: flex; flex-wrap: wrap; gap: 4px 14px; }
 .verse-narrator { color: var(--muted); }
+.quran-quote { display: inline-block; max-width: 100%; font-family: var(--font-arabic, inherit); unicode-bidi: isolate; }
+.verse-hadith { margin: 4px 0 10px; padding: 8px 12px; border-inline-start: 2px solid color-mix(in srgb, var(--brass) 55%, transparent); background: color-mix(in srgb, var(--brass) 6%, transparent); }
+.verse-hadith p { margin: 0 0 6px; }
+.verse-hadith-label { color: var(--muted); font-size: calc(12px * var(--text-scale)); letter-spacing: .02em; }
+.verse-hadith a { font-size: calc(12px * var(--text-scale)); color: var(--muted); }
+/* Arabic shown in the English interface because it has no English yet. */
+.no-translation { margin: 0 0 8px; }
+.no-translation p { margin: 0; }
+.no-translation-note { display: inline-block; margin-bottom: 4px !important; padding: 1px 8px; border: 1px dashed var(--border); border-radius: 999px; color: var(--muted); font-size: calc(12px * var(--text-scale)); }
 .verses.is-compact { gap: 14px; }
 .verses.is-compact .verse { border-inline-start-color: var(--border); }
 

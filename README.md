@@ -51,7 +51,7 @@ New files for the story (each line quotes its Dorar event; the app's tests check
 | 4 | `4_places.csv` | 68 | List of places with coordinates |
 | 5 | `5_sirah_map.geojson` | 144 | Map layer: 139 event pins and 5 routes |
 | 6 | `6_sahaba.csv` | 98 | People (74 Companions and 24 other figures), with cited synopses |
-| 7 | `7_sahaba_references.csv` | 211 | One row per fact about a person, with the source quote and link |
+| 7 | `7_sahaba_references.csv` | 236 | One row per fact about a person, with the source quote and link |
 | 9 | `9_dorar_tafseer_review.csv` | 762 | Decision and reason for every candidate from the Dorar Tafsir Encyclopedia crawl |
 | 11 | `11_dorar_titles_ar_en.csv` | 142 | Every Sirah event's title as Dorar gives it, in Arabic and English, with both Dorar links |
 | 12 | `12_dorar_titles_and_texts_ar_en.csv` | 142 | The same titles plus the full Dorar text of each event, in Arabic and English |
@@ -168,6 +168,15 @@ The file loads directly into Leaflet or Mapbox.
 - **Arabic titles and texts:** all 142 events, from dorar.net/history.
 - **English texts:** all 142 events, from dorar.net/en/history. The 131 events in the v9 prototype came through its data. The 11 events before the first revelation (1–11) were copied by the team from the Dorar site, matched to their events by Dorar's exact English title and Hijri date. They are kept word for word, including Dorar's own typos, with paragraph breaks as on the site.
 - **English titles:** all 142 events, taken exactly from dorar.net/en/history (`title_en_dorar`), including Dorar's own spellings and typos. `title_en_display` shows the same words in normal title case, since Dorar writes them in capitals; this is what the prototype shows. Each title was matched to its event by content (names and places checked against the event's English text), because Dorar's English numbering differs from the Arabic one in places and contains duplicate entries where the Arabic list skips numbers (64, 81, 82).
+
+## English in files 1, 3, 6 and 7
+
+The `_EN` columns hold the English the app shows. There are two kinds, and they are never mixed:
+
+- **Quoted word for word from the source:** `نص_الحديث_EN` (sunnah.com's English, with its page in `رابط_نص_الحديث_EN`) and `الشاهد_من_المصدر_EN` (Dorar's English site). `…` marks skipped text.
+- **Translated from the Arabic and checked against it pair by pair:** the explanations, synopses, facts, dates and labels. Quran quotations stay in Arabic inside the English (`﴿…﴾`); a test checks they match the Arabic exactly.
+
+`مصدر_الترجمة_EN` says which applies to each row. Where a cell has no English, the app shows the Arabic with "No English translation yet". `السورة_EN` gives the surah names in English (from quran.com's transliteration, in the glossary style).
 
 ## English glossary (`glossary.csv`)
 

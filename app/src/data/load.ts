@@ -90,19 +90,23 @@ export async function loadSirah(): Promise<Sirah> {
     links.set(r['المعرف'], {
       type: LINK_TYPES[r['نوع_الربط']] ?? 'placeholder', event,
       at: num(r['الموضع_في_الخط_الزمني']), from: num(r['النطاق_من']), to: num(r['النطاق_إلى']),
-      label: r['نص_الربط_في_الواجهة'] || null, reason: r['سبب_الموضع'] || null,
+      label: r['نص_الربط_في_الواجهة'] || null, labelEn: r['نص_الربط_في_الواجهة_EN'] || null, reason: r['سبب_الموضع'] || null,
     });
   }
 
+  // ﷺ is a right-to-left character: in English, a number or dash after it would be pulled into right-to-left order
+  // ("ﷺ — 13 BH" shows as "13 — ﷺ BH"). A left-to-right mark after it keeps the English in order.
+  const en = (s: string | undefined) => s ? s.replace(/ﷺ(?!\u200E)/g, 'ﷺ\u200E') : null;
   const verses: Verse[] = parseCsv(raw.verses).map(r => ({
     id: r['المعرف'],
     title: { ar: r['الحدث'], en: r['العنوان_EN'] || r['الحدث'] },
     stage: r['المرحلة'],
-    surah: r['السورة'], ref: r['مرجع_الآيات'], ayat: r['الآيات'],
+    surah: r['السورة'], surahEn: r['السورة_EN'] || null, ref: r['مرجع_الآيات'], ayat: r['الآيات'],
     mushaf: list(r['روابط_المصحف']), bukhari: list(r['صحيح_البخاري']), muslim: list(r['صحيح_مسلم']),
-    narrator: r['الراوي'] || null,
-    reason: r['وجه_الارتباط'], kind: r['نوع_الارتباط'],
-    phrase: { ar: r['صيغة_العرض'], en: r['صيغة_العرض_EN'] || r['صيغة_العرض'] },
+    narrator: r['الراوي'] || null, narratorEn: en(r['الراوي_EN']),
+    reason: r['وجه_الارتباط'], reasonEn: en(r['وجه_الارتباط_EN']), kind: r['نوع_الارتباط'],
+    hadithEn: r['نص_الحديث_EN'] && r['رابط_نص_الحديث_EN'] ? { text: en(r['نص_الحديث_EN'])!, url: r['رابط_نص_الحديث_EN'] } : null,
+    phrase: { ar: r['صيغة_العرض'], en: en(r['صيغة_العرض_EN']) ?? r['صيغة_العرض'] },
     whole: r['نطاق_السورة'] === 'السورة كاملة',
     evidence: { ar: r['الدليل'], en: r['الدليل_EN'] },
     tafseer: list(r['روابط_موسوعة_التفسير']),
@@ -117,11 +121,11 @@ export async function loadSirah(): Promise<Sirah> {
   const people: Person[] = parseCsv(raw.people).map(r => ({
     id: r['معرف_الصحابي'],
     name: { ar: r['الاسم'], en: r.Name_EN || r['الاسم'] },
-    kind: r['النوع'],
+    kind: r['النوع'], kindEn: en(r['النوع_EN']),
     category: r['الفئة'] || 'الصحابة',
-    bio: r['نبذة_موثقة'],
-    islam: stated(r['وقت_الإسلام']),
-    death: stated(r['الوفاة_أو_الاستشهاد']),
+    bio: r['نبذة_موثقة'], bioEn: en(r['نبذة_موثقة_EN']),
+    islam: stated(r['وقت_الإسلام']), islamEn: stated(r['وقت_الإسلام']) && r['وقت_الإسلام_EN'] ? en(r['وقت_الإسلام_EN']) : null,
+    death: stated(r['الوفاة_أو_الاستشهاد']), deathEn: stated(r['الوفاة_أو_الاستشهاد']) && r['الوفاة_أو_الاستشهاد_EN'] ? en(r['الوفاة_أو_الاستشهاد_EN']) : null,
     aliases: aliasList(r['أسماء_أخرى'], r.Aliases_EN),
     events: list(r['أحداث_الدرر_المرتبطة']).map(Number).filter(Number.isFinite),
     verses: list(r['أسباب_النزول_المرتبطة']),
@@ -134,7 +138,7 @@ export async function loadSirah(): Promise<Sirah> {
     const id = r['معرف_المصدر_في_المشروع'];
     // Dorar facts cite their event ("حدث 14"); Sahihayn facts cite the hadith ("صحيح مسلم 1748").
     const source = /^حدث\s/.test(id) ? `الدرر السنية · ${id}` : r['المرجع'];
-    p.facts.push({ text: r['الحقيقة'], quote: r['الشاهد_من_المصدر'], source, url: r['الرابط'] || null });
+    p.facts.push({ text: r['الحقيقة'], textEn: en(r['الحقيقة_EN']), quote: r['الشاهد_من_المصدر'], quoteEn: en(r['الشاهد_من_المصدر_EN']), source, url: r['الرابط'] || null });
   }
 
   const routes: Route[] = [];

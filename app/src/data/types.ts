@@ -34,6 +34,8 @@ export interface VerseLink {
   from: number | null;
   to: number | null;
   label: string | null;
+  /** English for the label, when the team has written it. */
+  labelEn: string | null;
   reason: string | null;
 }
 
@@ -42,13 +44,20 @@ export interface Verse {
   title: Text;
   stage: string;
   surah: string;
+  /** English surah name(s), e.g. "al-Ankabut / Luqman"; null when not given. */
+  surahEn: string | null;
   ref: string;
   ayat: string;
   mushaf: string[];
   bukhari: string[];
   muslim: string[];
   narrator: string | null;
+  narratorEn: string | null;
   reason: string;
+  /** English of وجه_الارتباط, checked against the Arabic; null means no English yet (show the Arabic with a note). */
+  reasonEn: string | null;
+  /** The hadith in sunnah.com's own English, quoted word for word, with its page. */
+  hadithEn: { text: string; url: string } | null;
   kind: string;
   phrase: Text;
   whole: boolean;
@@ -58,16 +67,21 @@ export interface Verse {
 }
 
 export interface Person {
-  id: string; name: Text; kind: string; category: string; bio: string;
+  id: string; name: Text; kind: string; kindEn: string | null; category: string; bio: string;
+  /** English synopsis, checked against the Arabic; null means no English yet. */
+  bioEn: string | null;
   /** When they became Muslim (or that they did not), as the sources state; null when not stated. */
   islam: string | null;
-  death: string | null; events: number[]; verses: string[];
+  islamEn: string | null;
+  death: string | null;
+  deathEn: string | null; events: number[]; verses: string[];
   aliases: Text[];
   /** Sourced facts (7_sahaba_references.csv): each with the source's own words and where they come from. */
   facts: PersonFact[];
 }
 
-export interface PersonFact { text: string; quote: string; source: string; url: string | null }
+/** `textEn` / `quoteEn`: the fact in English and the source's own English (Dorar's English site), when there is one. */
+export interface PersonFact { text: string; textEn: string | null; quote: string; quoteEn: string | null; source: string; url: string | null }
 
 export interface Route { id: string; kind: 'sirah' | 'trade'; name: Text; events: number[]; note: Text; coords: [number, number][] }
 

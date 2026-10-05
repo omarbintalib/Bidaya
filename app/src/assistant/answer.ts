@@ -57,7 +57,7 @@ function indexFor(data: Sirah) {
   if (index) return index;
   const docs: Doc[] = [
     ...data.events.map(e => ({ kind: 'event' as const, item: e, fields: [field(4, e.title.ar, e.title.en), field(2, e.placeName.ar, e.placeName.en), field(1, e.text.ar, e.text.en)] })),
-    ...data.people.map(p => ({ kind: 'person' as const, item: p, fields: [field(5, p.name.ar, p.name.en, ...p.aliases.flatMap(a => [a.ar, a.en])), field(0.6, p.bio)] })),
+    ...data.people.map(p => ({ kind: 'person' as const, item: p, fields: [field(5, p.name.ar, p.name.en, ...p.aliases.flatMap(a => [a.ar, a.en])), field(0.6, p.bio, p.bioEn)] })),
     ...data.verses.filter(v => v.link?.type !== 'placeholder' || v.reason).map(v => ({ kind: 'verse' as const, item: v, fields: [field(4, `سوره ${v.surah}`, v.surah), field(2.5, v.title.ar, v.title.en), field(0.8, v.reason, v.evidence.en)] })),
   ];
   const df = new Map<string, number>();
@@ -103,7 +103,7 @@ export function retrieve(data: Sirah, question: string, limit = 5): Hit[] {
 
 const SOURCE = {
   ar: { dorar: (n: number) => `المصدر: الموسوعة التاريخية – الدرر السنية، حدث ${digits(n, 'ar')}.`, sahaba: 'المصدر: ملخص موثق من مصادر المشروع (الدرر السنية والصحيحان).' },
-  en: { dorar: (n: number) => `Source: Dorar Historical Encyclopedia, event ${n}.`, sahaba: "Source: a cited summary from the project's sources (Dorar and the Sahihayn), given in Arabic." },
+  en: { dorar: (n: number) => `Source: Dorar Historical Encyclopedia, event ${n}.`, sahaba: "Source: a cited summary from the project's sources (Dorar and the Sahihayn)." },
 };
 
 export function answer(data: Sirah, question: string, locale: Locale): Answer {
@@ -136,12 +136,12 @@ export function answer(data: Sirah, question: string, locale: Locale): Answer {
   if (doc.kind === 'person') {
     const p = doc.item, first = p.events.find(n => data.byNumber.has(n) && data.byNumber.get(n)!.lat !== null && data.byNumber.get(n)!.lon !== null);
     const name = ar ? p.name.ar : `${p.name.en} (${p.name.ar})`;
-    return { kind: 'person', event: first, sources: sourceLinks(p.facts.filter(f => f.url).map(f => ({ label: f.source, url: f.url! }))), text: `${name}: ${excerpt(p.bio, 190)} ${SOURCE[locale].sahaba}` };
+    return { kind: 'person', event: first, sources: sourceLinks(p.facts.filter(f => f.url).map(f => ({ label: f.source, url: f.url! }))), text: `${name}: ${excerpt(!ar && p.bioEn ? p.bioEn : p.bio, 190)} ${SOURCE[locale].sahaba}` };
   }
   const v = doc.item, ev = v.link?.event ?? undefined;
   const refs = hadithLinks(v).map(h => `${h.book === 'bukhari' ? (ar ? 'البخاري' : 'Bukhari') : (ar ? 'مسلم' : 'Muslim')} ${h.n}`).join(ar ? '، ' : ', ');
   const src = refs ? (ar ? `المصدر: صحيح ${refs}.` : `Source: Sahih ${refs}.`) : (ar ? 'المصدر: موسوعة التفسير – الدرر السنية.' : 'Source: Dorar Tafsir Encyclopedia.');
-  const surah = ar ? `سورة ${v.surah} (${v.whole ? 'السورة كاملة' : v.ref})` : `Surah ${v.surah} (${v.whole ? 'whole surah' : v.ref})`;
+  const surah = ar ? `سورة ${v.surah} (${v.whole ? 'السورة كاملة' : v.ref})` : `Surah ${v.surahEn ?? v.surah} (${v.whole ? 'whole surah' : v.ref})`;
   return { kind: 'verse', event: ev ?? undefined, sources: sourceLinks([...hadithLinks(v).map(h => ({ label: `${h.book === 'bukhari' ? 'Bukhari' : 'Muslim'} ${h.n}`, url: h.url })), ...v.tafseer.map(url => ({ label: ar ? 'موسوعة التفسير' : 'Tafsir Encyclopedia', url })), ...quranpediaRefs(v.ref, v.whole, locale).map(r => ({ label: `Quranpedia ${r.label}`, url: r.url }))]), text: `${surah}: ${v.phrase[locale]} — ${v.title[locale]}. ${src}` };
 }
 

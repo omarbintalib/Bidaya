@@ -81,12 +81,29 @@ function VerseList({ title, verses, locale, compact = false }: { title: string; 
   </section>;
 }
 
+/** English text with each Quran quotation (﴿…﴾) kept in Arabic, in its own direction. */
+function WithQuran({ text }: { text: string }) {
+  return <>{text.split(/(﴿[^﴾]*﴾)/).map((part, i) => part.startsWith('﴿')
+    ? <span key={i} className="quran-quote" lang="ar" dir="rtl">{part}</span>
+    : <PeopleText key={i} text={part} lang="en" />)}</>;
+}
+
+/** Arabic shown in the English interface because there is no English for it yet. */
+function ArabicOnly({ text, people = false }: { text: string; people?: boolean }) {
+  const copy = journeyCopy.en;
+  return <div className="no-translation">
+    <p className="no-translation-note">{copy.noTranslation}</p>
+    <p lang="ar" dir="rtl">{people ? <PeopleText text={text} lang="ar" /> : text}</p>
+  </div>;
+}
+
 export function VerseItem({ v, locale, compact = false }: { v: Verse; locale: Locale; compact?: boolean }) {
   const text = journeyCopy[locale];
+  const en = locale === 'en';
   const [open, setOpen] = useState(false);
   const [reading, setReading] = useState<QuranRef | null>(null);
   const refs = quranpediaRefs(v.ref, v.whole, locale);
-  const surahName = locale === 'ar' ? `سورة ${v.surah}` : `Surah ${v.surah}`;
+  const surahName = en ? `Surah ${v.surahEn ?? v.surah}` : `سورة ${v.surah}`;
   const label = v.link?.label;
   return <li className="verse">
     <p className="verse-ref">
@@ -99,17 +116,24 @@ export function VerseItem({ v, locale, compact = false }: { v: Verse; locale: Lo
     {reading && <QuranReader title={surahName} quranRef={reading} locale={locale} onClose={() => setReading(null)} />}
     <p className="verse-title"><PeopleText text={v.title[locale]} lang={v.title[locale] === v.title.ar ? 'ar' : 'en'} /></p>
     <p className="verse-phrase">{v.phrase[locale]}</p>
-    {label && v.link?.type !== 'direct' && <p className="verse-label"><Ar>{label}</Ar></p>}
+    {label && v.link?.type !== 'direct' && <p className="verse-label">{en && v.link?.labelEn ? v.link.labelEn : <Ar>{label}</Ar>}</p>}
     {!compact && <>
       <button type="button" className="verse-toggle" aria-expanded={open} onClick={() => setOpen(o => !o)}>{text.reason}</button>
       {open && <div className="verse-detail">
-        {v.reason && <Ar as="p"><PeopleText text={v.reason} lang="ar" /></Ar>}
+        {v.reason && (!en ? <Ar as="p"><PeopleText text={v.reason} lang="ar" /></Ar>
+          : v.reasonEn ? <p><WithQuran text={v.reasonEn} /></p>
+          : <ArabicOnly text={v.reason} people />)}
+        {en && v.hadithEn && <blockquote className="verse-hadith">
+          <p className="verse-hadith-label">{text.hadithText}</p>
+          <p className="verse-hadith-text">{v.hadithEn.text}</p>
+          <a href={v.hadithEn.url} target="_blank" rel="noreferrer">{v.hadithEn.url.replace('https://', '')} ↗</a>
+        </blockquote>}
         {(v.evidence[locale] || v.evidence.ar) && <p className="verse-evidence" lang={v.evidence[locale] ? locale : 'ar'}>{v.evidence[locale] || v.evidence.ar}</p>}
         <p className="verse-refs">
           {hadithLinks(v).map(h => <a key={h.book + h.n} href={h.url} target="_blank" rel="noreferrer">{text[h.book]} {h.n}</a>)}
           {v.tafseer.slice(0, 1).map(u => <a key={u} href={u} target="_blank" rel="noreferrer">{text.tafseer}</a>)}
         </p>
-        {v.narrator && <p className="verse-narrator">{text.narrator}: <Ar>{v.narrator}</Ar></p>}
+        {v.narrator && <p className="verse-narrator">{text.narrator}: {en && v.narratorEn ? v.narratorEn : <Ar>{v.narrator}</Ar>}</p>}
       </div>}
     </>}
   </li>;
