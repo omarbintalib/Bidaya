@@ -587,7 +587,7 @@ function createRuntime(env: Env): Runtime {
     if (text) text.textContent = body;
     root.append(probe);
     // A little slack, so a last line that wraps differently in the live box (a scrollbar, a late font) never spills.
-    geo.ch = Math.max(CARD_H, Math.ceil(probe.getBoundingClientRect().height) + 14);
+    geo.ch = Math.max(76, Math.ceil(probe.getBoundingClientRect().height) + 14); // a two-line answer gets a two-line box
     // On a phone the panel is a full-height sheet, so the answer gets most of the screen rather than a small box.
     // The answer box takes the height of its text, up to about half the screen; "Expand answer" is only for longer ones.
     const cap = Math.max(220, Math.min(480, Math.round(window.innerHeight * .5)));

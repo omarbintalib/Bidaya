@@ -464,7 +464,8 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
       </div>
       <AskPanel open={askOpen} onClose={closeAsk} locale={locale} reducedMotion={reducedMotion} onAsk={onAsk} ask={ask} onSuggest={suggest} back={returnTo} onBack={goBack} onHistory={openHistory} answerActions={answerActions} />
       {answerCard && <AnswerCard key={answerCard.key} card={answerCard} locale={locale} back={returnTo} onBack={goBack}
-        reducedMotion={reducedMotion} answerActions={<AnswerActions sources={answerCard.metadata?.sources} event={answerCard.metadata?.event !== undefined && mapEvents.has(answerCard.metadata.event) ? answerCard.metadata.event : undefined} locale={locale} onEvent={showAnswerEvent} />} onAnswer={question => {
+        reducedMotion={reducedMotion} answerActions={<AnswerActions sources={answerCard.metadata?.sources} event={answerCard.metadata?.event !== undefined && mapEvents.has(answerCard.metadata.event) ? answerCard.metadata.event : undefined} locale={locale} onEvent={showAnswerEvent}
+          extra={returnTo ? <BackButton label={returnTo.label} locale={locale} onClick={goBack} /> : undefined} />} onAnswer={question => {
           stay.current = answerCard.keepPlace;
           const reply = onAsk(question, metadata => setAnswerCard(card => card?.key === answerCard.key ? { ...card, metadata } : card));
           setAnswerCard(card => card?.key === answerCard.key ? { ...card, a: reply } : card);
@@ -646,12 +647,10 @@ function AnswerCard({ card, locale, reducedMotion, onAnswer, onClose, onAgain, b
     <h3 lang={card.locale} dir="auto">{card.q}</h3>
     <MorphOrb docked request={{ id: card.key, text: card.q }} locale={locale} answerLocale={card.locale}
       reducedMotion={reducedMotion} onSubmit={respond.current} minThinkMs={900} onAnswered={() => setRevealed(true)} onCancel={onClose} answerActions={answerActions} />
-    {revealed && <>
-        <div className="answer-actions">
-          {back && <BackButton label={back.label} locale={locale} onClick={onBack} />}
-          <button type="button" className="btn-quiet" onClick={onAgain}>{text.askAgain}</button>
-        </div>
-      </>}
+    {/* "Ask another" sits in the header beside the close button, so the card ends where the answer ends. */}
+    {revealed && <button type="button" className="answer-again" onClick={onAgain}>
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M15.5 8A6 6 0 1 0 16 11M15.5 3.5V8H11" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>{text.askAgain}
+    </button>}
     <button type="button" className="walk-close" onClick={onClose} aria-label={text.close}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" /></svg></button>
   </section>;
 }

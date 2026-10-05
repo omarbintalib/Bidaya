@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef, type KeyboardEvent } from 'react';
+import { memo, useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react';
 import { hijri, periodName, PERIOD_ORDER } from '../data/select';
 import type { SirahEvent } from '../data/types';
 import type { Locale } from '../i18n';
@@ -89,6 +89,7 @@ export default function Timeline({ events, index, store, locale, playing, reduce
         <Ticks events={events} store={store} yearLabels={yearLabels} locale={locale} onIndex={onIndex} revealed={revealed} />
       </div>
     </div>
+    <ScrollRail scroller={track} locale={locale} />
   </section>;
 }
 
@@ -116,3 +117,52 @@ const Tick = memo(function Tick({ e, i, store, newYear, labelled, locale, onInde
     <span className="tl-sr">{`${e.title[locale] || e.title.ar} — ${hijri(e.year, locale)}${revealed ? ` — ${text.revealedMark[revealed]}` : ''}`}</span>
   </button>;
 });
+
+/**
+ * The timeline's scrollbar: a slim rail under the ticks with a gold handle for the part in view. Drag the handle,
+ * or press anywhere on the rail, to move through the years. Works in both reading directions.
+ */
+function ScrollRail({ scroller, locale }: { scroller: React.RefObject<HTMLDivElement | null>; locale: Locale }) {
+  const [box, setBox] = useState({ at: 0, size: 1 });
+  const rail = useRef<HTMLDivElement>(null);
+  const drag = useRef<{ x: number; at: number } | null>(null);
+  const rtl = locale === 'ar';
+  useEffect(() => {
+    const el = scroller.current;
+    if (!el) return;
+    let frame = 0;
+    const measure = () => { frame = 0; const max = el.scrollWidth - el.clientWidth; setBox({ at: max > 0 ? Math.abs(el.scrollLeft) / max : 0, size: Math.min(1, el.clientWidth / el.scrollWidth) }); };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(measure); };
+    measure();
+    el.addEventListener('scroll', onScroll, { passive: true });
+    const ro = new ResizeObserver(onScroll); ro.observe(el);
+    return () => { cancelAnimationFrame(frame); el.removeEventListener('scroll', onScroll); ro.disconnect(); };
+  }, [scroller]);
+  // Fraction along the rail from its reading start (the right edge in Arabic).
+  const scrollTo = (f: number, smooth: boolean) => {
+    const el = scroller.current;
+    if (!el) return;
+    const max = el.scrollWidth - el.clientWidth, x = Math.max(0, Math.min(1, f)) * max;
+    el.scrollTo({ left: rtl ? -x : x, behavior: smooth ? 'smooth' : 'instant' });
+  };
+  const fractionAt = (clientX: number) => {
+    const r = rail.current!.getBoundingClientRect(), from = rtl ? r.right - clientX : clientX - r.left;
+    return (from / r.width - box.size / 2) / (1 - box.size || 1);
+  };
+  const onDown = (ev: ReactPointerEvent) => {
+    ev.preventDefault();
+    (ev.currentTarget as Element).setPointerCapture?.(ev.pointerId);
+    if ((ev.target as Element).classList.contains('tl-rail-thumb')) drag.current = { x: ev.clientX, at: box.at };
+    else { drag.current = null; scrollTo(fractionAt(ev.clientX), true); }
+  };
+  const onMove = (ev: ReactPointerEvent) => {
+    const d = drag.current, r = rail.current?.getBoundingClientRect();
+    if (!d || !r) return;
+    const moved = (ev.clientX - d.x) * (rtl ? -1 : 1) / (r.width * (1 - box.size || 1));
+    scrollTo(d.at + moved, false);
+  };
+  if (box.size >= 0.999) return null;
+  return <div className="tl-rail" ref={rail} aria-hidden="true" onPointerDown={onDown} onPointerMove={onMove} onPointerUp={() => { drag.current = null; }} onPointerCancel={() => { drag.current = null; }}>
+    <i className="tl-rail-thumb" style={{ width: `${box.size * 100}%`, insetInlineStart: `${box.at * (1 - box.size) * 100}%` }} />
+  </div>;
+}

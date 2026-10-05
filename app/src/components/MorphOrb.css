@@ -105,7 +105,7 @@ html[data-reduced-motion='true'] .mo-out { display: none; }
 html[data-reduced-motion='true'] .mo-out { display: none; }
 .mo-root[data-docked='true'][data-phase='idle'] :is(.mo-surface,.mo-ball,.mo-underglow,.mo-halo-green) { visibility: hidden; }
 .mo-root[data-phase='answered'] { height: calc(var(--answer-height) + 100px) !important; min-height: 0 !important; }
-.mo-root[data-docked='true'][data-phase='answered'] { height: calc(var(--answer-height) + 48px) !important; }
+.mo-root[data-docked='true'][data-phase='answered'] { height: calc(var(--answer-height) + 28px) !important; }
 .mo-root .mo-answer { max-height: var(--answer-height); overflow: auto; overscroll-behavior: contain; }
 .mo-root[data-docked='true'] .mo-answer { max-height: var(--answer-height); }
 .mo-reading-actions { position: relative; padding: 0 16px 12px; text-align: start; }
@@ -119,6 +119,6 @@ html[data-reduced-motion='true'] .mo-out { display: none; }
 .mo-status { top: 160px; }
 .mo-cancel { top: calc(170px + var(--text-control) * var(--reading-line-height)); }
 .mo-root[data-docked='true'] { height: 204px !important; }
-.mo-root[data-docked='true'][data-phase='answered'] { height: calc(var(--answer-height) + 48px) !important; }
+.mo-root[data-docked='true'][data-phase='answered'] { height: calc(var(--answer-height) + 28px) !important; }
 /* Once the answer is showing, "Cancel" has nothing to cancel. */
 .mo-root:is([data-phase='unfold'],[data-phase='answered']) .mo-cancel { display: none; }

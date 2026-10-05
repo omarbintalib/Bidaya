@@ -226,7 +226,7 @@
   .scrolly-map .story-banner { border-radius: 14px; }
   .story-timeline { padding: 6px 10px 4px; }
   .story-timeline .tl-now, .story-timeline .tl-undated { display: none; }
-  .story-timeline .tl-scroll, .story-timeline .tl-key { display: none; }
+  .story-timeline .tl-scroll, .story-timeline .tl-key, .story-timeline .tl-rail { display: none; }
   .walk-panel { inset-inline: 10px; bottom: 62px; width: auto; padding: 14px 16px; }
   .walk-quote { font-size: var(--text-small); }
   .scrolly-map .hmap-nopin { width: auto; inset-inline: 10px; bottom: calc(var(--timeline-h, 60px) + 8px); }
@@ -288,3 +288,12 @@
   .quran-reader { height: min(820px, calc((var(--viewport-height, 100svh) - 48px) / 1.3)); }
   .person-dialog { width: min(660px, calc((100vw - 32px) / 1.3)); }
 }
+
+/* The answer card: tight, with "Ask another" in the header. */
+.answer-card h3 { padding-inline-end: 150px; }
+.answer-again { position: absolute; top: 12px; inset-inline-end: 48px; display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 4px 12px; border: 1px solid var(--border); border-radius: 99px; background: var(--surface); color: var(--ink); font-size: calc(13.5px * var(--text-scale)); cursor: pointer; }
+.answer-again:hover { border-color: var(--brass); color: var(--brass); }
+.answer-again svg { width: 14px; height: 14px; }
+.answer-card .answer-references { margin-block: 4px 0; gap: 6px 14px; }
+.answer-card .answer-references .btn-quiet { min-height: 34px; padding: 4px 12px; }
+.answer-card .answer-actions { margin-top: 8px; }
