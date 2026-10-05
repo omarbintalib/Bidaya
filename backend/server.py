@@ -11,8 +11,8 @@ POST /api/ask   {"question": "...", "locale": "ar" | "en"}
 GET  /api/health -> {"ok": true, "chunks": N, "llm": "...", "reranker": true}
 
 The answer text is plain prose: the [n] citation markers the model writes (and rag.py checks) are removed, and
-the cited passages become the `sources` links. `event` is the Dorar event number of the first cited passage
-that has a map pin, so the frontend can move the map there.
+the cited passages become the `sources` links. `event` is the Dorar event with a map pin that the answer rests on
+most (pipeline/mapevents.py), so the frontend can move the map there.
 """
 import os, re, sys
 

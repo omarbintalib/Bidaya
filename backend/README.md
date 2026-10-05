@@ -10,7 +10,7 @@ question -> router (LLM: language, type, Arabic + English search rewrites; fatwa
          -> bge-reranker-v2-m3 re-scores them; fused with the hybrid ranking (RRF, reranker x2) -> 10 passages
          -> answer (LLM): only from the numbered passages, every sentence cited, else "insufficient"
          -> checks: answered + >=1 valid citation, else the fixed "no source" message
-         -> API: plain text + source links + the Dorar event of the first cited passage with a map pin
+         -> API: plain text + source links + the Dorar event the answer rests on most (`pipeline/mapevents.py`) with a map pin
 ```
 
 ## Run it

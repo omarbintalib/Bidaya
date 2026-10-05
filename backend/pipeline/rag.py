@@ -9,7 +9,7 @@ Returns a dict the front-end can render directly:
   status      answered | insufficient | fatwa | personal | off_topic | unclear
   answer      text with [n] citations (or a fixed, safe message for every non-answer status)
   sources     the cited passages: title, source, url, chunk_id
-  map         dorar event ids (+ lat/lng) of the cited events, to highlight on the map
+  map         dorar event ids (+ lat/lng) of the cited events, to highlight on the map; the one the answer rests on most first
   debug       route, retrieved ids, scores
 """
 import json, os, re, sys, threading
@@ -17,6 +17,7 @@ import json, os, re, sys, threading
 from corpus import load_corpus
 from retriever import Retriever, rrf
 from llm import LLM, ROUTER_MODEL
+from mapevents import map_events
 import prompts
 
 SEARCH_MODEL = os.environ.get('BIDAYAH_EMBEDDER', 'bge-m3')
@@ -112,18 +113,15 @@ class Bidayah:
         if status != 'answered' or not text or not cited or bad:
             base['debug']['rejected'] = dict(status=status, cited=cited, invalid_citations=bad, raw=text[:300])
             return dict(base, status='insufficient', answer=prompts.REFUSAL['insufficient'][lang])
-        sources, events = [], []
+        sources = []
         for n in cited:
             c = hits[n - 1][0]
             sources.append(dict(n=n, chunk_id=c['chunk_id'], source=SOURCE_LABEL[c['source']][0 if lang == 'ar' else 1],
                                 title=c.get('title') or c.get('section') or c.get('bab') or c['context_header'],
                                 url=source_url(c), hadith_no=c.get('hadith_no')))
-            ids = [c['dorar_id']] if c['source'] == 'dorar_sirah' else                 [int(k.split(':')[1]) for k in c.get('event_keys') or []]   # curated asbab linked to a map event
-            for did in ids:
-                e = self.events.get(did)
-                if e and e['lat'] is not None and did not in [x['dorar_id'] for x in events]:
-                    events.append(e)
-        return dict(base, status='answered', answer=text, sources=sources, map=events)
+        # The cited events with a map pin (Dorar events; verse records and Companions linked to events), the one the
+        # answer rests on most first.
+        return dict(base, status='answered', answer=text, sources=sources, map=map_events(text, cited, hits, self.events))
 
 
 if __name__ == '__main__':
