@@ -341,3 +341,44 @@
 .sound-volume input { width: 100%; accent-color: var(--brass); }
 .sound-note { margin: 0; color: var(--muted); font-size: calc(12.5px * var(--text-scale)); line-height: 1.7; }
 @media all { html:not([data-reduced-motion='true']) .sound-panel { animation: rise-in .2s ease both; } }
+
+/* The Sirah in a minute: the map full screen, a year counter above, the moment's title and the moments below. */
+.film { position: fixed; inset: 0; z-index: 120; background: var(--sea); display: flex; }
+.film .hmap { flex: 1; height: 100%; gap: 0; }
+.film .hmap-frame { height: 100%; flex: 1; min-height: 0; border: 0; }
+.film-top { position: absolute; z-index: 4; top: 14px; inset-inline: 16px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; pointer-events: none; }
+.film-top > * { pointer-events: auto; }
+.film-kicker { margin: 0; padding: 6px 14px; border-radius: 999px; background: color-mix(in srgb, var(--paper) 88%, transparent); border: 1px solid var(--border); color: var(--brass); font-size: var(--text-small); font-weight: 700; }
+.film-year { margin: 0; padding: 4px 18px; border-radius: 999px; background: color-mix(in srgb, var(--paper) 90%, transparent); border: 1px solid var(--brass); font-family: var(--display); font-size: calc(26px * var(--text-scale)); color: var(--ink); font-variant-numeric: tabular-nums; }
+.film-close { width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid var(--border); border-radius: 50%; background: var(--paper); color: var(--ink); }
+.film-close svg { width: 18px; height: 18px; }
+.film-bottom { position: absolute; z-index: 4; bottom: 18px; inset-inline: 16px; display: grid; justify-items: center; gap: 12px; pointer-events: none; }
+.film-bottom > * { pointer-events: auto; }
+.film-caption { width: min(620px, 100%); padding: 14px 20px 12px; background: color-mix(in srgb, var(--paper) 94%, transparent); border: 1px solid var(--brass); border-radius: 10px; box-shadow: 0 14px 40px #331b0d26; text-align: center; }
+.film-caption h2 { margin: 4px 0 6px; font-family: var(--display); font-size: calc(clamp(18px, 2.2vw, 24px) * var(--text-scale)); line-height: 1.5; }
+.film-period { margin: 0; color: var(--brass); font-size: var(--text-small); }
+.film-read { border: 0; background: none; padding: 4px 6px; color: var(--muted); font-size: var(--text-small); text-decoration: underline; text-underline-offset: .25em; }
+.film-read:hover { color: var(--ink); }
+.film-controls { display: flex; align-items: center; gap: 14px; padding: 8px 14px; border-radius: 999px; background: color-mix(in srgb, var(--paper) 92%, transparent); border: 1px solid var(--border); }
+.film-play { width: 40px; height: 40px; flex: none; display: grid; place-items: center; border: 0; border-radius: 50%; background: var(--ink); color: var(--button-ink, #fff); }
+.film-play svg { width: 16px; height: 16px; }
+.film-beats { list-style: none; margin: 0; padding: 0; display: flex; gap: 5px; }
+.film-beats button { position: relative; overflow: hidden; width: 26px; height: 6px; padding: 0; border: 0; border-radius: 3px; background: var(--border); cursor: pointer; }
+.film-beats button.is-done { background: var(--brass); }
+.film-beats button.is-on { background: color-mix(in srgb, var(--brass) 35%, var(--border)); }
+.film-beats button i { position: absolute; inset: 0; background: var(--brass); transform-origin: left; transform: scaleX(0); animation: tl-progress linear forwards; }
+.film-beats button i:dir(rtl) { transform-origin: right; }
+.film-beats button:focus-visible, .film-play:focus-visible, .film-close:focus-visible, .film-read:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+@media all { html:not([data-reduced-motion='true']) .film-caption { animation: rise-in .45s ease both; }
+  html:not([data-reduced-motion='true']) .film-year { animation: film-year .45s ease both; } }
+@keyframes film-year { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@media (max-width: 640px) {
+  .film-beats button { width: 14px; }
+  .film-controls { gap: 10px; padding: 6px 10px; }
+  .film-kicker { display: none; }
+  .film-top { justify-content: space-between; }
+  .film-caption { padding: 12px 14px 10px; }
+}
+/* The film steers the map itself, and covers the page like the Ask panel does: no zoom buttons, no accessibility button over its controls. */
+.film .hmap-controls { display: none; }
+body:has(.film) .accessibility-launcher { visibility: hidden; }

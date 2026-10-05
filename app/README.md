@@ -33,7 +33,8 @@ The README of the data package (IslamthonDataandstuff) explains every column.
 
 - **The story toolbar** stays at the top: jump to a chapter (✓ once its question is answered), take a quiz, and Ask the map. The first chapter returns to the beginning; the site header contains the single language switch.
 - **Scrolling drives the map.** The step crossing the middle of the screen (the lower part on phones) becomes the current one. Over the map the wheel scrolls the story; zoom with the + / − buttons, a pinch, or Ctrl/⌘ + wheel.
-- **Story mode** advances one step every few seconds and pauses at each chapter question until it is answered.
+- **Story mode** stays on each event as long as its full text takes to read (slower / normal / faster), shows the whole text, and pauses at each chapter question until it is answered.
+- **The Sirah in a minute** (toolbar, and the end of the story) plays thirteen moments on the map, from the birth to the year of the Prophet's death ﷺ: each a Dorar event captioned with its own title, its route or letters drawn, and every place the sources say Islam had reached lit by then. Pause, jump to a moment, or open it in the story (`src/journey/SummaryFilm.tsx`).
 - **Progress** (answers and events read) is kept in this browser only (`localStorage`, key `bidaya.journey.v1`); the opening is shown once per browser session.
 - **Reduced motion** (system setting or the in-app preference) turns off the drawing, pulses, caravans and smooth scrolling.
 

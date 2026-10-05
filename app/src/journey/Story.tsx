@@ -12,6 +12,7 @@ import { journeyCopy } from './copy';
 import EventCard, { VerseItem } from './EventCard';
 import { Ambience, type Scene } from '../sound/ambience';
 import SoundMenu from './SoundMenu';
+import SummaryFilm from './SummaryFilm';
 import Intro from './Intro';
 import { createActiveStore, useActive, type ActiveStore } from './activeStore';
 import { PeopleProvider, PersonDialog } from './People';
@@ -329,9 +330,14 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     document.addEventListener('visibilitychange', onVisible);
     return () => { document.removeEventListener('visibilitychange', onVisible); ambience.disable(); };
   }, [ambience]);
-  const eventSound = step.kind === 'event' ? data.sounds.get(events[step.index].n) : undefined;
+  // ── the Sirah in one minute (SummaryFilm) ──
+  const [filmOpen, setFilmOpen] = useState(false);
+  const [filmEvent, setFilmEvent] = useState<number | null>(null);
+  const openFilm = useCallback(() => { setPlaying(false); setFilmOpen(true); }, []);
+  const closeFilm = useCallback(() => setFilmOpen(false), []);
+  const eventSound = filmEvent !== null ? data.sounds.get(filmEvent) : step.kind === 'event' ? data.sounds.get(events[step.index].n) : undefined;
   const scene: Scene = eventSound?.kind ?? 'calm', horses = !!eventSound?.horses;
-  useEffect(() => { ambience.setScene(scene, horses); }, [ambience, scene, horses, active]);
+  useEffect(() => { ambience.setScene(scene, horses); }, [ambience, scene, horses, active, filmEvent]);
 
   useEffect(() => {
     if (!playing) return;
@@ -629,6 +635,10 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
         </li>] : [])}
       </ol>
       <div className="tb-end">
+        <button type="button" className="tb-btn tb-film" aria-haspopup="dialog" title={text.filmHint} onClick={openFilm}>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" strokeWidth="1.4" /><path d="M8.3 6.8v6.4l5-3.2z" fill="currentColor" /></svg>
+          <span className="tb-long">{text.film}</span>
+        </button>
         <SoundMenu locale={locale} on={soundOn} volume={volume} onToggle={toggleSound} onVolume={setVolume} />
         <button type="button" className="tb-btn tb-search" aria-haspopup="dialog" aria-label={text.searchTitle} title={`${text.searchTitle} ( / )`} onClick={() => setSearchOpen(true)}>
           <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" strokeWidth="1.5" /><path d="m13 13 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
@@ -669,7 +679,8 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
           </dl>
           <p>{resetNote}</p>
           <div className="summary-actions">
-            <button type="button" className="btn-primary" onClick={startOver}>{text.restart}</button>
+            <button type="button" className="btn-primary" onClick={openFilm}>{text.film}</button>
+            <button type="button" className="btn-quiet" onClick={startOver}>{text.restart}</button>
             <button type="button" className="btn-quiet" onClick={() => (wide ? focusAskBar() : setAskOpen(true))}>{text.ask}</button>
           </div>
         </section>
@@ -728,6 +739,8 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     {quick && !wide && <QuickQuiz quick={quick} data={data} locale={locale} chosen={quick.q ? progress.answers[quick.q.id] ?? null : null}
       onAnswer={answerQuick} onNext={() => setQuick(pickQuick(quick.q?.id))} onClose={() => setQuick(null)} />}
     {undatedOpen && <UndatedDialog verses={unplaced} locale={locale} onClose={() => setUndatedOpen(false)} />}
+    {filmOpen && <SummaryFilm data={data} locale={locale} reducedMotion={reducedMotion} onClose={closeFilm} onBeat={setFilmEvent}
+      onJump={n => { setFilmOpen(false); jumpTo(n); }} />}
     {person && <PersonDialog key={person.id} person={person} data={data} locale={locale} onClose={() => setPerson(null)} onEvent={jumpTo} />}
     {place && <PlaceCard key={place} placeKey={place} data={data} locale={locale} onClose={() => setPlace(null)} onEvent={jumpTo} />}
     {searchOpen && <Search data={data} locale={locale} onClose={() => setSearchOpen(false)} onPick={openResult} />}
