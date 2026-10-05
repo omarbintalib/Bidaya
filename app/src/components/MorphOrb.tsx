@@ -586,8 +586,10 @@ function createRuntime(env: Env): Runtime {
     if (text) text.textContent = body;
     root.append(probe);
     geo.ch = Math.max(CARD_H, Math.ceil(probe.getBoundingClientRect().height));
-    root.dataset.answerOverflow = String(geo.ch > 220);
-    geo.ch = Math.min(root.dataset.expanded === 'true' ? Math.max(220, Math.min(480, window.innerHeight * .6)) : 220, geo.ch);
+    // On a phone the panel is a full-height sheet, so the answer gets most of the screen rather than a small box.
+    const cap = window.matchMedia?.('(max-width: 1000px)').matches ? Math.max(220, Math.round(window.innerHeight * .5)) : 220;
+    root.dataset.answerOverflow = String(geo.ch > cap);
+    geo.ch = Math.min(root.dataset.expanded === 'true' ? Math.max(cap, Math.min(480, window.innerHeight * .6)) : cap, geo.ch);
     probe.remove();
     root.style.setProperty('--answer-height', `${geo.ch}px`);
   };

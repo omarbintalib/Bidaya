@@ -14,13 +14,16 @@ export function AccessibilityLauncher({ locale, open, buttonRef, onClick }: { lo
     if (!button) return;
     let frame = 0;
     const measure = () => {
+      // Nothing can block the button while no Ask controls are showing: skip the layout reads (this runs on scroll).
+      const candidates = document.querySelectorAll<HTMLElement>('.mo-actor, .mo-reset, .mo-cancel');
+      if (!candidates.length && !button.style.getPropertyValue('--launcher-lift')) return;
       const viewport = window.visualViewport;
       const bottom = (viewport?.height ?? window.innerHeight) + (viewport?.offsetTop ?? 0);
       const box = button.getBoundingClientRect();
       const baseTop = bottom - 16 - box.height;
       let top = baseTop;
       // Cheap check first: controls inside a closed (inert) panel never block, so their styles are not read.
-      const blockers = Array.from(document.querySelectorAll<HTMLElement>('.mo-actor, .mo-reset, .mo-cancel')).filter(node => {
+      const blockers = Array.from(candidates).filter(node => {
         if (node.closest('[inert]')) return false;
         const style = getComputedStyle(node);
         return style.visibility !== 'hidden' && Number(style.opacity) > .1;

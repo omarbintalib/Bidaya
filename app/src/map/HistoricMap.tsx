@@ -104,7 +104,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
         svg.setAttribute('viewBox', `${v.x} ${v.y} ${v.w} ${v.h}`);
         // Names and pins were drawn for the zoom of the last render; rescale them every frame so they keep
         // their size on screen during the glide instead of snapping when it ends.
-        const el = frame.current, u = Math.min(v.w / (el?.clientWidth || size.w), v.h / (el?.clientHeight || size.h));
+        const u = Math.min(v.w / size.w, v.h / size.h); // the measured size: reading the layout each frame would force a reflow
         svg.style.setProperty('--k', (u / unitRef.current).toFixed(4));
       }
       if (t < 1) anim.current = requestAnimationFrame(tick);

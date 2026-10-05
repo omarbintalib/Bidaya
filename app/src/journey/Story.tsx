@@ -154,21 +154,30 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     // Each frame the page scrolls, the step under the reading line becomes active. Measuring positions (rather
     // than waiting for a thin band to be crossed) means no step is passed over, however fast the scroll.
     let frame = 0;
+    // The steps, in page order; read once per layout of the list rather than every frame.
+    const els = Array.from(root.querySelectorAll<HTMLElement>('[data-step]'));
     const pick = () => {
       frame = 0;
       if (resume || intro || document.documentElement.dataset.readingRestore === 'true' || performance.now() < lockUntil.current) return;
+      // The last change has not been laid out and held still yet: positions measured now would be stale.
+      if (anchor.current) { frame = requestAnimationFrame(pick); return; }
       const line = window.innerHeight * (wide ? 0.5 : 0.76);
-      let best: HTMLElement | null = null, bestTop = 0, gap = Infinity;
-      for (const el of root.querySelectorAll<HTMLElement>('[data-step]')) {
-        const r = el.getBoundingClientRect();
-        if (r.top <= line && r.bottom >= line) { best = el; bestTop = r.top; break; }
-        const d = Math.min(Math.abs(r.top - line), Math.abs(r.bottom - line));
-        if (d < gap) { gap = d; best = el; bestTop = r.top; }
-        if (r.top > line) break;
+      // Binary search for the last step whose top is at or above the reading line: a handful of measurements
+      // per frame instead of one per step.
+      let lo = 0, hi = els.length - 1, at = -1;
+      while (lo <= hi) {
+        const mid = (lo + hi) >> 1;
+        if (els[mid].getBoundingClientRect().top <= line) { at = mid; lo = mid + 1; } else hi = mid - 1;
+      }
+      let best = els[Math.max(0, at)] ?? null;
+      if (best && at >= 0 && best.getBoundingClientRect().bottom < line && els[at + 1]) {
+        // In a gap between two steps: take the nearer one.
+        const below = els[at + 1], gapUp = line - best.getBoundingClientRect().bottom, gapDown = below.getBoundingClientRect().top - line;
+        if (gapDown < gapUp) best = below;
       }
       const n = best ? Number(best.dataset.step) : -1;
       if (n < 0 || n === activeRef.current) return;
-      anchor.current = { step: n, top: bestTop };
+      anchor.current = { step: n, top: best!.getBoundingClientRect().top };
       setActive(n);
     };
     const onScroll = () => { if (!frame) frame = requestAnimationFrame(pick); };
@@ -466,7 +475,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     {built && <div className="scrolly">
       <div className="scrolly-steps" ref={column}>
         <HoldStill store={stepStore} anchor={anchor} column={column} />
-        <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} />
+        <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} keepOpen={!wide} />
         <section data-step={steps.length - 1} className={`step step-summary${step.kind === 'summary' ? ' is-on' : ''}`}>
           <span>{text.summaryKicker}</span>
           <h2>{text.summaryTitle}</h2>
@@ -552,15 +561,15 @@ function HoldStill({ store, anchor, column }: { store: ActiveStore; anchor: Reac
 }
 
 /** All steps but the summary; memoised so it re-renders only when the steps, the language or an answer change. */
-const StepList = memo(function StepList({ steps, data, locale, store, goToStep, goToEvent, onWalk, answers, onAnswer, questionOf, nextQuestion, onMore }: {
-  steps: Step[]; data: Sirah; locale: Locale; store: ActiveStore; goToStep: (i: number) => void; goToEvent: (n: number) => void;
+const StepList = memo(function StepList({ steps, data, locale, store, goToStep, goToEvent, onWalk, answers, onAnswer, questionOf, nextQuestion, onMore, keepOpen }: {
+  keepOpen: boolean; steps: Step[]; data: Sirah; locale: Locale; store: ActiveStore; goToStep: (i: number) => void; goToEvent: (n: number) => void;
   onWalk: (route: Route) => void; answers: Record<string, string>; onAnswer: (q: QuizQuestion, key: string) => void;
   questionOf: (period: Period, answers: Record<string, string>) => { q: QuizQuestion; at: number; total: number };
   nextQuestion: (period: Period) => number; onMore: (period: Period) => void;
 }) {
   return <>{steps.map((s, i) => {
     if (s.kind === 'chapter') return <ChapterStep key={`c${s.chapter}`} s={s} i={i} store={store} events={data.events} locale={locale} />;
-    if (s.kind === 'event') return <EventStep key={data.events[s.index].n} index={s.index} i={i} store={store} data={data} locale={locale} goToStep={goToStep} goToEvent={goToEvent} onWalk={onWalk} />;
+    if (s.kind === 'event') return <EventStep key={data.events[s.index].n} index={s.index} i={i} store={store} data={data} locale={locale} goToStep={goToStep} goToEvent={goToEvent} onWalk={onWalk} keepOpen={keepOpen} />;
     if (s.kind === 'quiz') {
       const { q, at, total } = questionOf(s.period, answers);
       return <QuizCard key={`q${s.chapter}`} step={i} store={store} q={q} at={at} total={total} hasMore={nextQuestion(s.period) >= 0} chapter={s.chapter} data={data} locale={locale} chosen={answers[q.id] ?? null} onAnswer={onAnswer} onMore={onMore} goToStep={goToStep} />;
@@ -598,14 +607,19 @@ const ChapterStep = memo(function ChapterStep({ s, i, store, events, locale }: {
   </section>;
 });
 
-const EventStep = memo(function EventStep({ index, i, store, data, locale, goToStep, goToEvent, onWalk }: {
+const EventStep = memo(function EventStep({ index, i, store, data, locale, goToStep, goToEvent, onWalk, keepOpen }: {
   index: number; i: number; store: ActiveStore; data: Sirah; locale: Locale; goToStep: (i: number) => void; goToEvent: (n: number) => void; onWalk: (route: Route) => void;
+  /** Narrow screens: a card stays open once read, so nothing above the reader folds shut and moves the page mid-scroll. */
+  keepOpen: boolean;
 }) {
   const on = useActive(store, a => a === i);
+  const [read, setRead] = useState(false);
+  if (on && !read) setRead(true);
+  const open = on || (keepOpen && read);
   const e = data.events[index];
   const route = on ? data.routes.find(r => r.kind === 'sirah' && r.events.includes(e.n) && (data.stops.get(r.id)?.length ?? 0) > 0) ?? null : null;
-  return <section data-step={i} className={`step step-event${on ? ' is-on' : ''}`} onClick={() => !on && goToStep(i)}>
-    {on ? <EventCard data={data} event={e} locale={locale} chapter={PERIOD_ORDER.indexOf(e.period) + 1}
+  return <section data-step={i} className={`step step-event${on ? ' is-on' : ''}${open && !on ? ' is-read' : ''}`} onClick={() => !on && goToStep(i)}>
+    {open ? <EventCard data={data} event={e} locale={locale} chapter={PERIOD_ORDER.indexOf(e.period) + 1}
       yearEvents={data.events.filter(x => x.year === e.year && x.period === e.period)} onPick={goToEvent}
       onWalk={route ? () => onWalk(route) : undefined} walkName={route?.name[locale]} />
       : <div className="step-peek"><p className="step-date">{hijri(e.year, locale)} · {e.placeName[locale]}</p><h3>{e.title[locale] || e.title.ar}</h3></div>}
