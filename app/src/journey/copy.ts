@@ -7,7 +7,7 @@ const arCount = (n: number) => n === 1 ? 'حدث واحد' : n === 2 ? 'حدثا
 export const journeyCopy = {
   ar: {
     timeline: 'الخط الزمني للسيرة',
-    prev: 'الحدث السابق', next: 'الحدث التالي', play: 'تشغيل القصة', pause: 'إيقاف', story: 'القصة خطوة بخطوة', sound: 'الأصوات', full: 'ملء الشاشة', fullTitle: 'السيرة كاملة بملء الشاشة', fullHint: 'السيرة كاملة على الخريطة بملء الشاشة، حدثًا حدثًا بكل تفاصيله', fullScrub: 'الانتقال إلى حدث', film: 'ملخص السيرة', filmTitle: 'ملخص السيرة', filmSource: 'من نص الحدث في الدرر السنية', filmRead: 'اقرأ الحدث كاملًا', filmReplay: 'إعادة', filmHint: 'ملخص السيرة على الخريطة: أبرز الأحداث بنصوصها وآياتها', audioPause: 'إيقاف مؤقت', soundTitle: 'أصوات المكان والحدث (بلا موسيقى)', soundOn: 'تشغيل الأصوات', soundVolume: 'مستوى الصوت', soundNote: 'تسجيلات حقيقية بلا موسيقى، تُسمع في الأحداث التي يذكر نصها سفرًا أو بحرًا أو قتالًا، وتسكت في غيرها. صوت القتال لا يُسمع إلا حيث يذكر النص القتال.', paceLabel: 'سرعة القصة', pace: { slow: 'أبطأ', normal: 'عادي', fast: 'أسرع' },
+    prev: 'الحدث السابق', next: 'الحدث التالي', play: 'تشغيل القصة', pause: 'إيقاف', story: 'القصة خطوة بخطوة', sound: 'الأصوات', film: 'ملخص السيرة', filmTitle: 'ملخص السيرة', filmSource: 'من نص الحدث في الدرر السنية', filmRead: 'اقرأ الحدث كاملًا', filmReplay: 'إعادة', filmHint: 'ملخص السيرة على الخريطة: أبرز الأحداث بنصوصها وآياتها', audioPause: 'إيقاف مؤقت', soundTitle: 'أصوات المكان والحدث (بلا موسيقى)', soundOn: 'تشغيل الأصوات', soundVolume: 'مستوى الصوت', soundNote: 'تسجيلات حقيقية بلا موسيقى، تُسمع في الأحداث التي يذكر نصها سفرًا أو بحرًا أو قتالًا، وتسكت في غيرها. صوت القتال لا يُسمع إلا حيث يذكر النص القتال.', paceLabel: 'سرعة القصة', pace: { slow: 'أبطأ', normal: 'عادي', fast: 'أسرع' },
     count: (i: number, n: number) => `${digits(i, 'ar')} من ${digits(n, 'ar')}`,
     error: 'تعذّر تحميل ملفات البيانات من مجلد data. تأكد من وجودها ثم أعد تحميل الصفحة.',
     place: 'المكان', when: 'الزمان',
@@ -36,7 +36,7 @@ export const journeyCopy = {
     prevStop: 'المحطة السابقة', nextStop: 'المحطة التالية', endWalk: 'إنهاء المسار',
     toolbar: 'التنقل في القصة', fromStart: 'من البداية', chapters: 'فصول القصة', askShort: 'اسأل',
     introLabel: 'بداية الرحلة', introKicker: 'السيرة النبوية في الزمان والمكان', introTitle: 'رحلة الإسلام',
-    introSub: 'من مكة إلى المدينة، حدثًا بعد حدث، كما ترويها المصادر.', begin: 'ابدأ الرحلة', skip: 'تخطَّ المقدمة',
+    introSub: 'من مكة إلى المدينة، حدثًا بعد حدث، كما ترويها المصادر.',
     source: 'المصدر', dorar: 'الموسوعة التاريخية – الدرر السنية',
     verses: 'آيات متصلة بهذا الحدث', contextVerses: 'آيات في موضوع هذا الحدث', stageVerses: 'آيات نزلت في هذه السنوات',
     readQuranpedia: 'اقرأ الآيات في Quranpedia', openQuranpedia: 'افتح في Quranpedia', close: 'إغلاق',
@@ -65,7 +65,7 @@ export const journeyCopy = {
   },
   en: {
     timeline: 'Timeline of the Sirah',
-    prev: 'Previous event', next: 'Next event', play: 'Play the story', pause: 'Pause', story: 'Story mode', sound: 'Sounds', full: 'Full screen', fullTitle: 'The whole Sirah, full screen', fullHint: 'The whole Sirah on the map, full screen: every event with all its details', fullScrub: 'Go to an event', film: 'Sirah summary', filmTitle: 'A summary of the Sirah', filmSource: 'From the event\'s text on Dorar', filmRead: 'Read the whole event', filmReplay: 'Play again', filmHint: 'The Sirah on the map: its key events, with their texts and verses', audioPause: 'Pause', soundTitle: 'Sounds of the place and event (no music)', soundOn: 'Play sounds', soundVolume: 'Volume', soundNote: 'Real recordings with no music, heard on events whose text describes a journey, the sea or fighting, and silent elsewhere. Fighting is heard only where the text describes it.', paceLabel: 'Story speed', pace: { slow: 'Slower', normal: 'Normal', fast: 'Faster' },
+    prev: 'Previous event', next: 'Next event', play: 'Play the story', pause: 'Pause', story: 'Story mode', sound: 'Sounds', film: 'Sirah summary', filmTitle: 'A summary of the Sirah', filmSource: 'From the event\'s text on Dorar', filmRead: 'Read the whole event', filmReplay: 'Play again', filmHint: 'The Sirah on the map: its key events, with their texts and verses', audioPause: 'Pause', soundTitle: 'Sounds of the place and event (no music)', soundOn: 'Play sounds', soundVolume: 'Volume', soundNote: 'Real recordings with no music, heard on events whose text describes a journey, the sea or fighting, and silent elsewhere. Fighting is heard only where the text describes it.', paceLabel: 'Story speed', pace: { slow: 'Slower', normal: 'Normal', fast: 'Faster' },
     count: (i: number, n: number) => `${i} of ${n}`,
     error: 'The data files could not be loaded from the data folder. Check they are there, then reload the page.',
     place: 'Place', when: 'When',
@@ -94,7 +94,7 @@ export const journeyCopy = {
     prevStop: 'Previous stop', nextStop: 'Next stop', endWalk: 'Finish the walk',
     toolbar: 'Story navigation', fromStart: 'From the start', chapters: 'Chapters', askShort: 'Ask',
     introLabel: 'The beginning of the journey', introKicker: 'The life of the Prophet ﷺ in place and time', introTitle: 'Islam Journey',
-    introSub: 'From Makkah to Madinah, event by event, as the sources tell it.', begin: 'Begin the journey', skip: 'Skip the opening',
+    introSub: 'From Makkah to Madinah, event by event, as the sources tell it.',
     source: 'Source', dorar: 'Dorar Historical Encyclopedia',
     verses: 'Verses linked to this event', contextVerses: "Verses on this event's subject", stageVerses: 'Verses revealed in these years',
     readQuranpedia: 'Read the verses on Quranpedia', openQuranpedia: 'Open on Quranpedia', close: 'Close',

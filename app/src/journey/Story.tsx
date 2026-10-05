@@ -13,7 +13,6 @@ import EventCard, { VerseItem } from './EventCard';
 import { Ambience, type Scene } from '../sound/ambience';
 import SoundMenu from './SoundMenu';
 import SummaryFilm from './SummaryFilm';
-import SirahScreen from './SirahScreen';
 import Intro from './Intro';
 import { createActiveStore, useActive, type ActiveStore } from './activeStore';
 import { PeopleProvider, PersonDialog } from './People';
@@ -336,19 +335,6 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
   const [filmEvent, setFilmEvent] = useState<number | null>(null);
   const openFilm = useCallback(() => { setPlaying(false); setFilmOpen(true); }, []);
   const closeFilm = useCallback(() => setFilmOpen(false), []);
-  // ── the whole Sirah full screen (SirahScreen): asks the browser for full screen from the click itself ──
-  const [fullFrom, setFullFrom] = useState<number | null>(null);
-  const openFull = useCallback(() => {
-    setPlaying(false);
-    void document.documentElement.requestFullscreen?.().catch(() => { /* not allowed here (iPhone): the view still covers the page */ });
-    setFullFrom(step.kind === 'event' ? events[step.index].n : events[0].n);
-  }, [step, events]);
-  const closeFull = useCallback((n: number) => { setFullFrom(null); setFilmEvent(null); goToEvent(n, false); }, [goToEvent]);
-  const chapterOf = useCallback((e: SirahEvent) => PERIOD_ORDER.indexOf(e.period) + 1, []);
-  const readMs = useCallback((e: SirahEvent) => {
-    const body = (locale === 'en' && e.text.en) || e.text.ar, words = `${e.title[locale] || e.title.ar} ${body}`.split(/\s+/).filter(Boolean).length;
-    return Math.max(MIN_EVENT_MS, LOOK_MS + words * MS_PER_WORD[pace]);
-  }, [locale, pace]);
   const eventSound = filmEvent !== null ? data.sounds.get(filmEvent) : step.kind === 'event' ? data.sounds.get(events[step.index].n) : undefined;
   const scene: Scene = eventSound?.kind ?? 'calm', horses = !!eventSound?.horses;
   useEffect(() => { ambience.setScene(scene, horses); }, [ambience, scene, horses, active, filmEvent]);
@@ -685,7 +671,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
 
   return <PeopleProvider value={peopleApi}>
     {resume && <ResumeDialog locale={locale} note={resetNote} onContinue={() => { const n = progress.lastEvent!; setResume(false); setIntro(false); setBuilt(true); goToEvent(n, false); }} onRestart={startOver} />}
-    {intro && <Intro locale={locale} reducedMotion={reducedMotion} onBegin={begin} onSkip={() => { try { sessionStorage.setItem('bidaya.intro.seen', '1'); } catch { /* storage unavailable */ } setBuilt(true); setIntro(false); }} />}
+    {intro && <Intro locale={locale} reducedMotion={reducedMotion} onBegin={begin} onSummary={() => { try { sessionStorage.setItem('bidaya.intro.seen', '1'); } catch { /* storage unavailable */ } setBuilt(true); setIntro(false); openFilm(); }} />}
     <nav className="story-toolbar" aria-label={text.toolbar}>
       <ol className="tb-chapters" ref={chaptersRef} aria-label={text.chapters}>
         {steps.flatMap((s, i) => s.kind === 'chapter' ? [<li key={s.period}>
@@ -696,14 +682,6 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
         </li>] : [])}
       </ol>
       <div className="tb-end">
-        <button type="button" className="tb-btn tb-film" aria-haspopup="dialog" title={text.filmHint} onClick={openFilm}>
-          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" strokeWidth="1.4" /><path d="M8.3 6.8v6.4l5-3.2z" fill="currentColor" /></svg>
-          <span className="tb-long">{text.film}</span>
-        </button>
-        <button type="button" className="tb-btn tb-full" aria-haspopup="dialog" title={text.fullHint} onClick={openFull}>
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 7.5v-4h4M12.5 3.5h4v4M16.5 12.5v4h-4M7.5 16.5h-4v-4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-          <span className="tb-long">{text.full}</span>
-        </button>
         <SoundMenu locale={locale} on={soundOn} volume={volume} onToggle={toggleSound} onVolume={setVolume} />
         <button type="button" className="tb-btn tb-search" aria-haspopup="dialog" aria-label={text.searchTitle} title={`${text.searchTitle} ( / )`} onClick={() => setSearchOpen(true)}>
           <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" strokeWidth="1.5" /><path d="m13 13 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
@@ -807,7 +785,6 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     {undatedOpen && <UndatedDialog verses={unplaced} locale={locale} onClose={() => setUndatedOpen(false)} />}
     {filmOpen && <SummaryFilm data={data} locale={locale} reducedMotion={reducedMotion} onClose={closeFilm} onBeat={setFilmEvent}
       onJump={n => { setFilmOpen(false); jumpTo(n); }} />}
-    {fullFrom !== null && <SirahScreen data={data} locale={locale} reducedMotion={reducedMotion} start={fullFrom} chapterOf={chapterOf} readMs={readMs} onClose={closeFull} onBeat={setFilmEvent} />}
     {person && <PersonDialog key={person.id} person={person} data={data} locale={locale} onClose={() => setPerson(null)} onEvent={jumpTo} />}
     {place && <PlaceCard key={place} placeKey={place} data={data} locale={locale} onClose={() => setPlace(null)} onEvent={jumpTo} />}
     {searchOpen && <Search data={data} locale={locale} onClose={() => setSearchOpen(false)} onPick={openResult} />}

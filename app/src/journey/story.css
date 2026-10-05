@@ -420,24 +420,3 @@ body:has(.film) .accessibility-launcher { visibility: hidden; }
   .film-verses { justify-content: flex-start; }
   .film-controls { justify-content: center; }
 }
-
-/* The whole Sirah full screen (SirahScreen): the map, and beside it the event's full card with its controls under it. */
-.fs-panel { position: absolute; z-index: 4; inset-inline: 12px; bottom: 12px; height: min(56svh, 520px); display: flex; flex-direction: column; gap: 10px; }
-.fs-card { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--brass) 45%, transparent) transparent;
-  background: color-mix(in srgb, var(--paper) 96%, transparent); border: 1px solid var(--brass); border-radius: 12px; box-shadow: 0 14px 40px #331b0d26; }
-.fs-card .ecard { padding: 20px 20px 18px; }
-@media all { html:not([data-reduced-motion='true']) .fs-card { animation: rise-in .35s ease both; } }
-.fs-controls { flex: none; display: flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px; border-radius: 999px; background: color-mix(in srgb, var(--paper) 94%, transparent); border: 1px solid var(--border); }
-.fs-controls:dir(rtl) { padding: 6px 6px 6px 14px; }
-.fs-step { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border: 1px solid var(--border); border-radius: 50%; background: var(--paper); color: var(--ink); }
-.fs-step svg { width: 16px; height: 16px; }
-.fs-step:dir(rtl) svg { transform: scaleX(-1); }
-.fs-step:disabled, .fs .film-play:disabled { opacity: .35; }
-.fs-scrub { flex: 1 1 auto; min-width: 0; display: flex; }
-.fs-scrub input { width: 100%; accent-color: var(--brass); }
-.fs-count { flex: none; min-width: 5.5em; text-align: center; font-size: var(--text-small); color: var(--muted); font-variant-numeric: tabular-nums; }
-.fs-step:focus-visible, .fs-scrub input:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
-@media (min-width: 900px) and (min-aspect-ratio: 1/1) {
-  .fs-panel { top: 84px; bottom: 18px; height: auto; inset-inline-start: 18px; inset-inline-end: auto; width: min(480px, 38vw); }
-  .fs-card .ecard { padding: 26px 28px 22px; }
-}
