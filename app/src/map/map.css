@@ -68,6 +68,11 @@ html[data-contrast='dark'] .hmap-label-sea { fill: #8fa19b; }
 .glow-2 { stop-color: #e2b45c; stop-opacity: 0; }
 html[data-contrast='dark'] .glow-0 { stop-color: #f0c674; stop-opacity: .55; }
 .hmap-glow-place { opacity: 0; transition: opacity 1.2s ease; pointer-events: none; }
+.region-glow-0 { stop-color: #e2b45c; stop-opacity: .32; }
+.region-glow-1 { stop-color: #e2b45c; stop-opacity: .16; }
+html[data-contrast='dark'] .region-glow-0 { stop-color: #f0c674; stop-opacity: .22; }
+.hmap-glow-region { opacity: 0; transition: opacity 1.6s ease; pointer-events: none; }
+.hmap-glow-region.is-lit { opacity: 1; }
 .hmap-glow-place.is-lit { opacity: 1; }
 @media all { /* motion on unless html[data-reduced-motion='true'] (Motion preference) */
   html:not([data-reduced-motion='true']) .hmap-glow-place.is-lit { animation: hmap-breathe 4.5s ease-in-out infinite; }

@@ -36,7 +36,7 @@ describe('data package', () => {
     expect(data.places.size).toBeGreaterThan(30);
     expect(data.verses.length).toBeGreaterThan(80);
     expect(data.people.length).toBeGreaterThan(50);
-    expect(data.routes.filter(r => r.kind === 'sirah')).toHaveLength(5);
+    expect(data.routes.filter(r => r.kind === 'sirah')).toHaveLength(16);
     expect(data.routes.some(r => r.kind === 'trade')).toBe(true);
     expect(data.labels.length).toBeGreaterThan(5);
     expect(data.stops.get('event_42')?.map(s => s.name.en)).toEqual(['The cave of Thawr', 'The coastal road (approximate)', 'Quba – Banu Amr ibn Awf']);
@@ -199,5 +199,27 @@ describe('English, checked against the Arabic', () => {
     const arabic = /[؀-ۿ]/;
     for (const v of data.verses) if (v.reasonEn) expect(arabic.test(v.reasonEn.replace(/﴿[^﴾]*﴾/g, ''))).toBe(false);
     for (const p of data.people) { expect(arabic.test(p.bioEn!.replace(/ﷺ/g, ''))).toBe(false); }
+  });
+});
+
+describe('spread of Islam on the map', () => {
+  const raw = (name: string) => parseCsv(byName.get(name)!);
+  const plain = (s: string) => s.replace(/[ً-ْٰـ]/g, '');
+  it('quotes the Dorar event for every place and region it lights', () => {
+    for (const [file, key] of [['4_places.csv', 'رمز_المكان'], ['map_labels.csv', 'المعرف']] as const) {
+      for (const r of raw(file)) {
+        const n = Number(r['حدث_بلوغ_الإسلام']);
+        if (!n) continue;
+        const e = data.byNumber.get(n);
+        expect(e, `${file} ${r[key]}`).toBeDefined();
+        expect(plain(e!.text.ar), `${file} ${r[key]}`).toContain(plain(r['شاهد_بلوغ_الإسلام']));
+      }
+    }
+  });
+  it('reaches every region of Arabia by the end, and not al-Sham, Iraq, Byzantium or Persia', () => {
+    const regions = data.labels.filter(l => l.kind !== 'sea');
+    const reached = new Set(regions.filter(l => l.reached !== null).map(l => l.id));
+    for (const id of ['hijaz', 'tihamah', 'najd', 'yamamah', 'bahrayn', 'yemen']) expect(reached.has(id), id).toBe(true);
+    for (const id of ['sham', 'iraq', 'rum', 'furs']) expect(reached.has(id), id).toBe(false);
   });
 });

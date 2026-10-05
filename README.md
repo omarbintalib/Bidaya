@@ -39,7 +39,7 @@ New files for the story (each line quotes its Dorar event; the app's tests check
 | File | What it is |
 |------|------------|
 | `quiz.csv` | One question per chapter, answered by choosing a place (`الإجابة` and `الخيارات` are keys from `4_places.csv`), with the explanation, the quote and its Dorar link. The app adds more questions per chapter from the events themselves (see `app/README.md`) |
-| `route_stops.csv` | Named stops for the route walks (the Hijrah, the journey to Ta'if, the Farewell Hajj), each with the Dorar line for that stop. Only stops the sources describe are listed. |
+| `route_stops.csv` | Named stops for the route walks (15 routes, from the journeys to al-Sham to the march on Makkah), each with the Dorar line for that stop, quoted word for word. Only stops the sources name are listed. |
 
 ## Files at a glance
 
@@ -49,7 +49,7 @@ New files for the story (each line quotes its Dorar event; the app's tests check
 | 2 | `2_sirah_events.csv` | 142 | Seerah events from Dorar, with titles, dates, order and locations |
 | 3 | `3_links_surahs_sirah.csv` | 94 | **The only file that connects surahs/verses to events.** One row per record |
 | 4 | `4_places.csv` | 68 | List of places with coordinates |
-| 5 | `5_sirah_map.geojson` | 144 | Map layer: 139 event pins and 5 routes |
+| 5 | `5_sirah_map.geojson` | 155 | Map layer: 139 event pins and 16 routes |
 | 6 | `6_sahaba.csv` | 98 | People (74 Companions and 24 other figures), with cited synopses |
 | 7 | `7_sahaba_references.csv` | 236 | One row per fact about a person, with the source quote and link |
 | 9 | `9_dorar_tafseer_review.csv` | 762 | Decision and reason for every candidate from the Dorar Tafsir Encyclopedia crawl |
@@ -143,7 +143,33 @@ Each record has exactly one link type:
 The file loads directly into Leaflet or Mapbox.
 
 - **Event points** (`kind: event`) have these properties: `title`, `hijri_year`, `period`, `precision`, `dorar_url`, `asbab` (IDs of the records linked directly to the event), and `order`.
-- **Routes** (`kind: route`) are the Hijrah, the Isra', the Taif journey, Tabuk, and the Farewell Hajj. All are approximate, and each explains why in its `note`. On the Hijrah route, the cave of Thawr, Quba and Madinah are certain. The coastal point is approximate, because Dorar only says "طريق السواحل" (the coastal road).
+- **Routes** (`kind: route`): the line is drawn while its Dorar event (`ref`, e.g. `event_17+19`) is on screen, and a route with stops in `route_stops.csv` can be walked stop by stop. All lines are approximate, and each `note` says why; the stops are the places the Dorar text names.
+
+| Route | Dorar events | Stops (named in the text) |
+|---|---|---|
+| The Hijrah to Madinah | 42 | Cave of Thawr, the coastal road, Quba, Madinah |
+| The Isra' | 32 | — (a symbolic line between the two mosques) |
+| The journey to Ta'if | 25, 26 | Ta'if, Nakhlah |
+| The Hijrah to Abyssinia (first and second) | 17, 19 | Makkah, Abyssinia. The sea crossing is an estimate: Dorar names no port |
+| Abu Musa's Hijrah by way of Abyssinia | 104 | Yemen, Abyssinia, Khaybar |
+| The journeys to al-Sham (with Abu Talib; Khadijah's trade) | 6; 10 | Busra; the market of Busra |
+| Aminah's journey to Madinah | 3 | The house of al-Nabighah in Madinah, al-Abwa' |
+| Badr, al-Hudaybiyah, Khaybar | 59, 101, 102 | Badr; al-Hudaybiyah; Khaybar |
+| The army of Mu'tah | 122 | Ma'an, Mu'tah |
+| The march to the Conquest of Makkah | 127 | al-Kadid, Marr al-Zahran, Makkah (Kada') |
+| Hunayn and Ta'if | 132, 131 | The valley of Hunayn, Ta'if |
+| Tabuk, the Farewell Hajj | 138; 143 | —; Madinah and onward |
+
+The English route names are in `ROUTE_EN` in `app/src/data/load.ts`.
+
+### The spread of Islam on the map
+
+Each place in `4_places.csv` and each region in `map_labels.csv` can carry `حدث_بلوغ_الإسلام`, the Dorar event from which Islam had reached it, with the quote in `شاهد_بلوغ_الإسلام` (a test checks it is word for word in that event). As the story passes that event, the place glows and the region's name turns gold.
+
+- **Makkah (event 14) and Madinah (event 34)**, and the sites inside them, light first. Abyssinia lights at the first Hijrah (17), al-Yamamah with Thumamah (89), al-Bahrayn when al-Mundhir ibn Sawa accepted Islam (106), Yemen with the Prophet's ﷺ governors (6103).
+- **The rest of Arabia lights at the Year of Delegations (event 135, 9 AH)**: «فلمَّا كانت وَقعةُ أهلِ الفَتحِ بادَر كُلُّ قومٍ بإسلامِهم». This is a statement about the Arabs in general, not about each place by name, and `ملاحظة_بلوغ_الإسلام` says so for Tihamah and Najd.
+- **From the Year of Delegations, each reached region is washed in gold**, so the whole territory reads as reached, not just its few named places. Before then a reached region only has its gold name, because Islam was in a few of its towns, not across it.
+- **Al-Sham, Iraq, Byzantium and Persia stay unlit**: Islam did not reach them in the Prophet's ﷺ lifetime. Oman accepted Islam in 7 AH (event 106), but it lies east of the map's edge (53°E).
 
 ## 6–7. Companions
 

@@ -1,10 +1,16 @@
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
-import { LAND } from '../data/land';
+import { COS, K, LAND } from '../data/land';
 import type { Sirah, SirahEvent } from '../data/types';
 import type { Locale } from '../i18n';
 import { mapCopy } from './copy';
 import { centerOn, clampView, fit, HEIGHT, homeView, project, WIDTH, type View } from './projection';
 import './map.css';
+
+/** How far a region's gold wash reaches, in degrees of latitude, by the label's size. */
+const REGION_REACH = { l: 3.4, m: 2.6, s: 1.8 } as const;
+/** The Year of Delegations (Dorar event 135, 9 AH): «بادر كل قوم بإسلامهم». Until then a reached region only has its
+ * name in gold, since early on Islam was in a few of its towns, not across it; from then on the region is washed in gold. */
+const DELEGATIONS = 135;
 
 export type Emphasis = 'selected' | 'active' | 'past' | 'hidden';
 
@@ -306,6 +312,9 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
   const baseLayers = useMemo(() => <>
         <defs>
           <radialGradient id="hmap-glow"><stop offset="0" className="glow-0" /><stop offset=".55" className="glow-1" /><stop offset="1" className="glow-2" /></radialGradient>
+          <radialGradient id="hmap-region-glow"><stop offset="0" className="region-glow-0" /><stop offset=".6" className="region-glow-1" /><stop offset="1" className="glow-2" /></radialGradient>
+          {/* Region washes stay on land, so a lit region never spills into the sea. */}
+          <clipPath id="hmap-land-clip"><path d={LAND} /></clipPath>
           <pattern id="hmap-hatch" width={6 * unit} height={6 * unit} patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
             <line x1="0" y1="0" x2="0" y2={6 * unit} className="hmap-hatch-line" strokeWidth={unit} />
           </pattern>
@@ -330,6 +339,14 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
         </g>
   </>, [unit]);
   const glowLayer = useMemo(() => <>
+        {/* A region the sources say Islam had reached is washed in gold, so the whole territory reads as reached, not
+            only its few named places. Powers (Abyssinia, Byzantium, Persia) keep just their gold name. */}
+        <g className="hmap-region-glows" aria-hidden="true" clipPath="url(#hmap-land-clip)">
+          {data.labels.filter(l => l.kind === 'region' && l.reached !== null).map(l => {
+            const [x, y] = project(l.lon, l.lat), deg = REGION_REACH[l.size];
+            return <ellipse key={l.id} className={`hmap-glow-region${reachedBy(l.reached) && reachedBy(DELEGATIONS) ? ' is-lit' : ''}`} cx={x} cy={y} rx={deg * K * COS} ry={deg * K} fill="url(#hmap-region-glow)" />;
+          })}
+        </g>
         <g className="hmap-glows" aria-hidden="true">
           {glowPlaces.map(p => { const [x, y] = project(p.lon, p.lat); return <circle key={p.key} className={`hmap-glow-place${reachedBy(p.reached) ? ' is-lit' : ''}`} cx={x} cy={y} r={Math.max(18, 26 * unit)} fill="url(#hmap-glow)" />; })}
           {pulses.map(k => { const p = data.places.get(k); if (!p) return null; const [x, y] = project(p.lon, p.lat); return <circle key={`pulse-${k}-${now}`} className="hmap-pulse" cx={x} cy={y} r={30 * unit} strokeWidth={2 * unit} />; })}
