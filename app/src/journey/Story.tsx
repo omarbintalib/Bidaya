@@ -656,7 +656,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     {built && <div className="scrolly">
       <div className="scrolly-steps" ref={column}>
         <HoldStill store={stepStore} anchor={anchor} column={column} lockUntil={lockUntil} glide={wide && !reducedMotion} />
-        <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} keepOpen={!wide} playing={playing} soundOn={soundOn} />
+        <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} keepOpen={!wide} playing={playing} />
         <section data-step={steps.length - 1} className={`step step-summary${step.kind === 'summary' ? ' is-on' : ''}`}>
           <span>{text.summaryKicker}</span>
           <h2>{text.summaryTitle}</h2>
@@ -776,15 +776,15 @@ function HoldStill({ store, anchor, column, lockUntil, glide }: { store: ActiveS
 }
 
 /** All steps but the summary; memoised so it re-renders only when the steps, the language or an answer change. */
-const StepList = memo(function StepList({ steps, data, locale, store, goToStep, goToEvent, onWalk, answers, onAnswer, questionOf, nextQuestion, onMore, keepOpen, playing, soundOn }: {
-  keepOpen: boolean; playing: boolean; soundOn: boolean; steps: Step[]; data: Sirah; locale: Locale; store: ActiveStore; goToStep: (i: number) => void; goToEvent: (n: number) => void;
+const StepList = memo(function StepList({ steps, data, locale, store, goToStep, goToEvent, onWalk, answers, onAnswer, questionOf, nextQuestion, onMore, keepOpen, playing }: {
+  keepOpen: boolean; playing: boolean; steps: Step[]; data: Sirah; locale: Locale; store: ActiveStore; goToStep: (i: number) => void; goToEvent: (n: number) => void;
   onWalk: (route: Route) => void; answers: Record<string, string>; onAnswer: (q: QuizQuestion, key: string) => void;
   questionOf: (period: Period, answers: Record<string, string>) => { q: QuizQuestion; at: number; total: number };
   nextQuestion: (period: Period) => number; onMore: (period: Period) => void;
 }) {
   return <>{steps.map((s, i) => {
     if (s.kind === 'chapter') return <ChapterStep key={`c${s.chapter}`} s={s} i={i} store={store} events={data.events} locale={locale} />;
-    if (s.kind === 'event') return <EventStep key={data.events[s.index].n} index={s.index} i={i} store={store} data={data} locale={locale} goToStep={goToStep} goToEvent={goToEvent} onWalk={onWalk} keepOpen={keepOpen} playing={playing} soundOn={soundOn} />;
+    if (s.kind === 'event') return <EventStep key={data.events[s.index].n} index={s.index} i={i} store={store} data={data} locale={locale} goToStep={goToStep} goToEvent={goToEvent} onWalk={onWalk} keepOpen={keepOpen} playing={playing} />;
     if (s.kind === 'quiz') {
       const { q, at, total } = questionOf(s.period, answers);
       return <QuizCard key={`q${s.chapter}`} step={i} store={store} q={q} at={at} total={total} hasMore={nextQuestion(s.period) >= 0} chapter={s.chapter} data={data} locale={locale} chosen={answers[q.id] ?? null} onAnswer={onAnswer} onMore={onMore} goToStep={goToStep} />;
@@ -822,14 +822,12 @@ const ChapterStep = memo(function ChapterStep({ s, i, store, events, locale }: {
   </section>;
 });
 
-const EventStep = memo(function EventStep({ index, i, store, data, locale, goToStep, goToEvent, onWalk, keepOpen, playing, soundOn }: {
+const EventStep = memo(function EventStep({ index, i, store, data, locale, goToStep, goToEvent, onWalk, keepOpen, playing }: {
   index: number; i: number; store: ActiveStore; data: Sirah; locale: Locale; goToStep: (i: number) => void; goToEvent: (n: number) => void; onWalk: (route: Route) => void;
   /** Narrow screens: a card stays open once read, so nothing above the reader folds shut and moves the page mid-scroll. */
   keepOpen: boolean;
   /** Story mode is playing: the open card shows its whole text. */
   playing: boolean;
-  /** Background sound is on: the open card says what is heard, and why. */
-  soundOn: boolean;
 }) {
   const on = useActive(store, a => a === i);
   const [read, setRead] = useState(false);
@@ -841,7 +839,7 @@ const EventStep = memo(function EventStep({ index, i, store, data, locale, goToS
   return <section data-step={i} className={`step step-event${on ? ' is-on' : ''}${open && !on ? ' is-read' : ''}`} onClick={() => !on && goToStep(i)}>
     {open ? <EventCard data={data} event={e} locale={locale} chapter={PERIOD_ORDER.indexOf(e.period) + 1}
       yearEvents={data.events.filter(x => x.year === e.year && x.period === e.period)} onPick={goToEvent}
-      onWalk={route ? () => onWalk(route) : undefined} walkName={route?.name[locale]} full={on && playing} sound={on && soundOn ? data.sounds.get(e.n) : undefined} />
+      onWalk={route ? () => onWalk(route) : undefined} walkName={route?.name[locale]} full={on && playing} />
       : <div className="step-peek"><p className="step-date">{hijri(e.year, locale)} · {eventPlaceName(data, e, locale)}</p><h3>{e.title[locale] || e.title.ar}</h3></div>}
   </section>;
 });

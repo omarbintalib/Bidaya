@@ -23,10 +23,6 @@
 .ecard-text p { margin: 0; font-size: var(--text-body); line-height: calc(var(--reading-line-height) + .15); white-space: pre-line; }
 .ecard-text[lang='ar'] p { line-height: calc(var(--reading-line-height) + .3); }
 .ecard-more, .verse-toggle { margin-top: 6px; border: 0; background: none; padding: 6px 0; color: var(--brass); font-size: var(--text-small); text-decoration: underline; text-underline-offset: .25em; text-decoration-thickness: 1px; }
-.ecard-sound { margin: 14px 0 0; display: flex; align-items: flex-start; gap: 8px; color: var(--muted); font-size: var(--text-small); line-height: 1.7; }
-.ecard-sound svg { width: 16px; height: 16px; flex: none; margin-top: .3em; color: var(--brass); }
-.ecard-sound q { color: var(--ink); quotes: '«' '»'; }
-.ecard-sound-note { display: block; margin-top: 2px; }
 .ecard-source { margin: 14px 0 0; font-size: calc(15px * var(--text-scale)); color: var(--muted); }
 .ecard-source a, .verse-refs a, .verse-ref { color: var(--ink); text-decoration-color: var(--brass); text-underline-offset: .2em; }
 .ecard-section { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--border); }
