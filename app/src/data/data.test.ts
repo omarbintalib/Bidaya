@@ -77,6 +77,8 @@ describe('data package', () => {
     // Swords are heard only where the text says there was fighting, never on an expedition that ended without it.
     expect(data.sounds.get(59)?.kind).toBe('battle');
     expect(data.sounds.get(49)?.kind).toBe('march');
+    // A sound the text does not state outright says so.
+    expect(data.sounds.get(17)?.note?.ar).toContain('تقديري');
   });
   it('builds more chapter questions from sourced event places', () => {
     const pools = quizPools(data);

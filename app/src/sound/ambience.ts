@@ -2,7 +2,7 @@ import type { SoundKind } from '../data/types';
 
 /**
  * The story's background sound: field recordings only, no music (public/sounds/CREDITS.md).
- * A scene is a few quiet layers — desert wind under everything, then footsteps, the sea or the clash of swords —
+ * A scene is a few quiet layers — footsteps with a little wind on the road, the sea, or the clash of swords —
  * plus occasional single sounds (a camel's groan, horses passing). Scenes cross-fade as the reader moves through
  * the story. Nothing loads or plays until the reader turns sound on.
  */
@@ -14,26 +14,35 @@ const FILES: (Loop | Shot)[] = ['wind', 'steps', 'sea', 'swords', 'camel', 'hors
 
 /** Each scene's loops (with their volume) and its occasional sound (every `every` seconds, give or take). */
 const SCENES: Record<Scene, { loops: Partial<Record<Loop, number>>; shot?: { name: Shot; gain: number; every: [number, number] } }> = {
-  calm: { loops: { wind: .55 } },
-  walk: { loops: { wind: .45, steps: .5 } },
-  caravan: { loops: { wind: .45, steps: .42 }, shot: { name: 'camel', gain: .32, every: [16, 28] } },
-  sea: { loops: { wind: .3, sea: .7 } },
-  march: { loops: { wind: .5 }, shot: { name: 'horses', gain: .5, every: [14, 24] } },
-  'march+sea': { loops: { wind: .3, sea: .55 }, shot: { name: 'horses', gain: .45, every: [16, 26] } },
-  battle: { loops: { wind: .35, swords: .32 }, shot: { name: 'horses', gain: .5, every: [12, 20] } },
+  // An event with no sound of its own is quiet: wind is not always blowing, so it is heard only on the road.
+  calm: { loops: {} },
+  walk: { loops: { wind: .14, steps: .5 } },
+  caravan: { loops: { wind: .14, steps: .38 }, shot: { name: 'camel', gain: .22, every: [16, 28] } },
+  sea: { loops: { sea: .7 } },
+  march: { loops: { wind: .14 }, shot: { name: 'horses', gain: .3, every: [14, 24] } },
+  'march+sea': { loops: { sea: .55 }, shot: { name: 'horses', gain: .28, every: [16, 26] } },
+  battle: { loops: { swords: .16 }, shot: { name: 'horses', gain: .3, every: [12, 20] } },
 };
-const FADE = 1.6; // seconds
+const FADE = 1; // seconds
+/**
+ * The slider's position (0–1) as a gain. Hearing is logarithmic, so the gain follows the square of the position (the
+ * slider's steps sound even), and full volume stays well below the recordings' own level: this is background sound.
+ */
+const MAX_GAIN = 0.4;
+export const loudness = (v: number) => MAX_GAIN * v * v;
 
 export class Ambience {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
   private buffers = new Map<string, AudioBuffer>();
   private loops = new Map<Loop, { src: AudioBufferSourceNode; gain: GainNode }>();
+  /** One-off sounds still playing (a gallop lasts 15 s): faded out when the reader moves on. */
+  private shots = new Set<{ src: AudioBufferSourceNode; gain: GainNode }>();
   private scene: Scene = 'calm';
   private shotTimer = 0;
   private on = false;
   private loading: Promise<void> | null = null;
-  private volume = 0.35;
+  private volume = 0.5;
 
   constructor(private base: string) {}
 
@@ -52,13 +61,14 @@ export class Ambience {
     await this.loading;
     if (!this.on) return;
     this.apply();
-    this.master!.gain.setTargetAtTime(this.volume, this.ctx.currentTime, 0.4);
+    this.master!.gain.setTargetAtTime(loudness(this.volume), this.ctx.currentTime, 0.4);
   }
 
   /** Turn sound off: fade out, then let the audio device rest. */
   disable() {
     this.on = false;
     window.clearTimeout(this.shotTimer);
+    this.fadeShots();
     if (!this.ctx || !this.master) return;
     this.master.gain.setTargetAtTime(0, this.ctx.currentTime, 0.25);
     const ctx = this.ctx;
@@ -67,14 +77,28 @@ export class Ambience {
 
   setVolume(v: number) {
     this.volume = Math.max(0, Math.min(1, v));
-    if (this.on && this.ctx && this.master) this.master.gain.setTargetAtTime(this.volume, this.ctx.currentTime, 0.1);
+    if (this.on && this.ctx && this.master) this.master.gain.setTargetAtTime(loudness(this.volume), this.ctx.currentTime, 0.1);
   }
 
   /** Move to another scene; its layers fade in as the last scene's fade out. */
   setScene(scene: Scene) {
-    if (scene === this.scene) return;
+    // Every move to another step silences what is still sounding from the last one, even within the same scene.
+    this.fadeShots();
+    if (scene === this.scene) { if (this.on) this.scheduleShot(true); return; }
     this.scene = scene;
     if (this.on && this.buffers.size) this.apply();
+  }
+
+  private fadeShots() {
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    for (const shot of this.shots) {
+      shot.gain.gain.cancelScheduledValues(now);
+      shot.gain.gain.setValueAtTime(shot.gain.gain.value, now);
+      shot.gain.gain.linearRampToValueAtTime(0, now + 0.6);
+      try { shot.src.stop(now + 0.65); } catch { /* already stopped */ }
+    }
+    this.shots.clear();
   }
 
   /** Pause while the page is hidden, and carry on when it comes back. */
@@ -147,6 +171,9 @@ export class Ambience {
     gain.gain.value = level * (0.75 + Math.random() * 0.25);
     if (pan) { pan.pan.value = Math.random() * 1.2 - 0.6; src.connect(gain).connect(pan).connect(this.master!); }
     else src.connect(gain).connect(this.master!);
+    const shot = { src, gain };
+    this.shots.add(shot);
+    src.onended = () => this.shots.delete(shot);
     src.start();
   }
 }

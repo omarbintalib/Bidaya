@@ -123,7 +123,8 @@ export interface QuizQuestion { id: string; period: Period; question: Text; answ
 
 /** An event's background sound (event_sounds.csv), with the source's words that justify it. */
 export type SoundKind = 'battle' | 'march' | 'caravan' | 'walk' | 'sea' | 'march+sea';
-export interface EventSound { kind: SoundKind; quote: string }
+/** `note`: what the sound rests on beyond the quote, e.g. a crossing the text does not mention but the route requires. */
+export interface EventSound { kind: SoundKind; quote: string; note: Text | null }
 
 export interface Sirah {
   events: SirahEvent[];

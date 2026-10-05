@@ -208,7 +208,7 @@ export async function loadSirah(): Promise<Sirah> {
   for (const r of parseCsv(raw.sounds)) {
     const n = num(r['رقم_حدث_الدرر']), kind = r.Sound as SoundKind, quote = (r['الشاهد'] ?? '').trim();
     if (n === null || !byNumber.has(n) || !SOUNDS.includes(kind) || !quote) { warn(`event_sounds.csv: row for event "${r['رقم_حدث_الدرر']}" needs a known event, a Sound (${SOUNDS.join(', ')}) and الشاهد`); continue; }
-    sounds.set(n, { kind, quote });
+    sounds.set(n, { kind, quote, note: r['ملاحظة'] ? { ar: r['ملاحظة'], en: r.Note_EN || r['ملاحظة'] } : null });
   }
   return { events, byNumber, places, verses, people, routes, labels, stops, quiz, arcs, growth, sounds };
 }

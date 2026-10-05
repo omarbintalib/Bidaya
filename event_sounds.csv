@@ -1,78 +1,80 @@
-﻿رقم_حدث_الدرر,الصوت,Sound,الشاهد,المصدر
-3,قافلة,caravan,وهم على بَعيرَين,https://dorar.net/history/event/3
-6,قافلة,caravan,سافر عمُّه أبو طالِبٍ إلى الشَّامِ في رَكبٍ للتِّجارةِ,https://dorar.net/history/event/6
-10,قافلة,caravan,وهذه عيرُ قومِك قد حَضَرَ خروجُها إلى الشامِ,https://dorar.net/history/event/10
-25,مشي,walk,سارها ماشِيًا على قَدميهِ جِيئةً وذِهابًا,https://dorar.net/history/event/25
-33,قافلة,caravan,ثمَّ خرج يقود بي بَعيرَهُ,https://dorar.net/history/event/33
-42,قافلة,caravan,فأَمِناهُ فدَفعا إليه راحِلَتَيْهِما,https://dorar.net/history/event/42
-44,قافلة,caravan,ركِب رسولُ الله صلى الله عليه وسلم راحِلتَه مِن قُباءٍ,https://dorar.net/history/event/44
-46,مسير,march,سرية عبيدة بن الحارث بن المطلب إلى بطن رابغ,https://dorar.net/history/event/46
-47,مسير+بحر,march+sea,فبَلَغوا سِيفَ البحرِ,https://dorar.net/history/event/47
-48,مسير,march,سرية سعد بن أبي وقاص رضي الله عنه إلى الخَرّار,https://dorar.net/history/event/48
-49,مسير,march,غَزوةُ الأَبْواءِ (وَدَّانَ) ومُوادَعةُ بني ضَمْرَةَ,https://dorar.net/history/event/49
-50,مسير,march,غزوة بدر الأولى (وادي سفوان),https://dorar.net/history/event/50
-51,مسير,march,غَزوةُ بُواطٍ بِقُربِ يَنْبُعَ,https://dorar.net/history/event/51
-52,مسير,march,غَزوةُ العُشَيْرَةِ (الْعُسَيْرَةِ),https://dorar.net/history/event/52
-53,مسير,march,سرية سعد بن أبي وقاص رضي الله عنه إلى رابغ,https://dorar.net/history/event/53
-54,معركة,battle,فرَمَى أحدُهم عمرَو بنَ الحَضرَميِّ فقَتَلَه,https://dorar.net/history/event/54
-58,مسير,march,سرية عمير بن عدي رضي الله عنه لقتل عصماء بنت مروان,https://dorar.net/history/event/58
-59,معركة,battle,ثمَّ بدأ القِتالُ وكان شديدًا,https://dorar.net/history/event/59
-61,مسير,march,سرية سالم بن عمير رضي الله تعالى عنه إلى أبي عفك اليهودي,https://dorar.net/history/event/61
-62,مسير,march,غَزوةُ بني قَينُقاعٍ,https://dorar.net/history/event/62
-63,مسير,march,غزوة السويق أو غزوة بني سليم (قرقرة الكدر),https://dorar.net/history/event/63
-66,مسير,march,غزوة غطفان إلى نجد (غزوة ذي أمرّ),https://dorar.net/history/event/66
-67,مسير,march,غزوة بحران بين الفُرْعِ والمدينة,https://dorar.net/history/event/67
-68,مسير,march,سَرِيَّةُ زيدِ بنِ حارِثةَ,https://dorar.net/history/event/68
-69,معركة,battle,غَزوةُ أُحُدٍ وسبب هزيمة المسلمين,https://dorar.net/history/event/69
-70,معركة,battle,خرجتُ مع النَّاسِ إلى القِتالِ,https://dorar.net/history/event/70
-71,مسير,march,غَزوةُ حَمراءِ الأَسدِ,https://dorar.net/history/event/71
-72,مسير,march,سرية عبد الله بن عبد الأسد رضي الله عنه إلى قطن,https://dorar.net/history/event/72
-73,مسير,march,سرية عبد الله بن أنيس الجهني إلى سفيان بن خالد ببطن عُرْنة,https://dorar.net/history/event/73
-74,معركة,battle,فرَمَوْهُم بالنَّبْلِ فقَتلوا عاصمًا في سَبعةٍ,https://dorar.net/history/event/74
-75,مسير,march,سرية بِئر مَعونةَ,https://dorar.net/history/event/75
-76,مسير,march,غَزوةُ بني النَّضيرِ,https://dorar.net/history/event/76
-77,مسير,march,غَزوةُ ذاتِ الرِّقاعِ,https://dorar.net/history/event/77
-78,مسير,march,غزوة بدر الموعد (بدر الثانية),https://dorar.net/history/event/78
-79,قافلة,caravan,حتَّى أناخ راحلتَه,https://dorar.net/history/event/79
-80,مسير,march,غزوة دومة الجندل,https://dorar.net/history/event/80
-83,معركة,battle,فتَزاحَفَ النَّاسُ واقتَتَلوا,https://dorar.net/history/event/83
-84,مسير,march,غَزوةُ الخَندَقِ (الأَحزابِ),https://dorar.net/history/event/84
-86,مسير,march,غَزوةُ يَهودِ بني قُرَيْظَةَ,https://dorar.net/history/event/86
-88,معركة,battle,وقُتِلَ في هذه الغَزوةِ الأَخْرَمُ,https://dorar.net/history/event/88
-89,معركة,battle,فلمَّا أغار عليهم هَرَب سائِرُهم بعد أن قَتَل نَفَرًا منهم,https://dorar.net/history/event/89
-90,مسير,march,سرية عُكَّاشة بن مِحصَن رضي الله عنه إلى الغَمر (ماء بني أسد),https://dorar.net/history/event/90
-91,معركة,battle,ثم حَمَلتِ الأعرابُ عليهم بالرِّماحِ فقَتَلوهم جميعًا,https://dorar.net/history/event/91
-92,مسير,march,سرية أبي عبيدة بن الجراح إلى ذي القصة,https://dorar.net/history/event/92
-93,مسير,march,سرية زيد بن حارثة رضي الله عنه إلى الجموم (ماءٌ على طَريقِ مكةَ),https://dorar.net/history/event/93
-94,مسير,march,غزوة بني لحيان (الذين غدروا يوم الرجيع),https://dorar.net/history/event/94
-95,مسير+بحر,march+sea,إلى العيصِ -اسمِ مَوضِعٍ قُربَ المدينةِ على ساحِلِ البحرِ,https://dorar.net/history/event/95
-96,مسير,march,سرية زيد بن حارثة إلى بني ثعلبة بالطَّرف (ماء قرب المدينة),https://dorar.net/history/event/96
-97,مسير,march,سرية عبد الرحمن بن عوف رضي الله عنه إلى دومة الجندل,https://dorar.net/history/event/97
-98,معركة,battle,وقَتَل وأسَر وسَبَى,https://dorar.net/history/event/98
-99,مسير,march,سرية كُرز بن جابر الفهري إلى العرنيين,https://dorar.net/history/event/99
-102,مسير,march,غَزوةُ خَيبرَ,https://dorar.net/history/event/102
-104,بحر,sea,فأَلقَتْنا سَفينتُنا إلى النَّجاشيِّ بالحَبشةِ,https://dorar.net/history/event/104
-107,معركة,battle,فشَنُّوا الغارةَ في اللَّيلِ فقَتلوا مَن قَتلوا,https://dorar.net/history/event/107
-108,معركة,battle,فقَتل فيهم قتلًا ذَريعًا,https://dorar.net/history/event/108
-109,مسير,march,سَرِيَّةُ عُمَرَ بنِ الخطَّابِ رضِي الله عنه إلى (تُرَبَةَ) طائفةٍ مِن هَوازِنَ,https://dorar.net/history/event/109
-110,معركة,battle,فرَمَوْهُم بالنَّبْلِ حتَّى فَنِيَ نَبْلُ بَشيرٍ وأصحابِه,https://dorar.net/history/event/110
-111,معركة,battle,وقتَلوا مَن أَشرفَ لهم,https://dorar.net/history/event/111
-112,معركة,battle,فضرَب به وَجْهَ عبدِ الله بنِ رَواحةَ,https://dorar.net/history/event/112
-113,مسير,march,سَرِيَّةُ أبي حَدْرَدٍ الأَسلميٍّ إلى الغابةِ,https://dorar.net/history/event/113
-115,معركة,battle,ثمَّ قاتَلوا قِتالًا شَديدًا,https://dorar.net/history/event/115
-117,معركة,battle,فاخْتلَفْنا ضَربتين بالسَّيفِ فقَتلتُه,https://dorar.net/history/event/117
-119,معركة,battle,وقتلوا منهم قَتْلى,https://dorar.net/history/event/119
-120,معركة,battle,وأَرشَقوهُم بالنَّبْلِ حتَّى قُتِلوا كُلُّهم إلَّا رجلًا واحدًا,https://dorar.net/history/event/120
-121,مسير,march,سَرِيَّةُ شُجاعِ بنِ وَهْبٍ رضِي الله عنه إلى بني هَوازِنَ,https://dorar.net/history/event/121
-122,معركة,battle,فاقتَتَلوا,https://dorar.net/history/event/122
-123,معركة,battle,فلَقوا العَدُوَّ فهَزموهُم,https://dorar.net/history/event/123
-124,مسير+بحر,march+sea,إلى سِيفِ البَحرِ,https://dorar.net/history/event/124
-125,معركة,battle,فقَتَلَ منهم,https://dorar.net/history/event/125
-126,مسير,march,سَرِيَّةُ أبي قَتادةَ رضِي الله عنه إلى بَطْنِ إِضَمٍ,https://dorar.net/history/event/126
-127,مسير,march,غَزوةُ فَتحِ مكَّةَ,https://dorar.net/history/event/127
-128,مسير,march,سَرِيَّةُ خالدِ بنِ الوليدِ رضِي الله عنه إلى العُزَّى بنَخْلَةَ,https://dorar.net/history/event/128
-129,مسير,march,سَرِيَّةُ عَمرِو بنِ العاصِ رضِي الله عنه إلى سُواعٍ، صَنَمِ هُذيلٍ,https://dorar.net/history/event/129
-130,مسير,march,سَرِيَّةُ خالدِ بنِ الوليدِ رضِي الله عنه إلى بني جَذِيمَةَ,https://dorar.net/history/event/130
-131,معركة,battle,اغْدوا على القِتالِ,https://dorar.net/history/event/131
-132,معركة,battle,انْهزَموا ورَبِّ محمَّدٍ,https://dorar.net/history/event/132
-138,مسير,march,غَزوةُ تَبوكَ وجَيشُ العُسْرَةِ,https://dorar.net/history/event/138
+﻿رقم_حدث_الدرر,الصوت,Sound,الشاهد,ملاحظة,Note_EN,المصدر
+3,قافلة,caravan,وهم على بَعيرَين,,,https://dorar.net/history/event/3
+6,قافلة,caravan,سافر عمُّه أبو طالِبٍ إلى الشَّامِ في رَكبٍ للتِّجارةِ,,,https://dorar.net/history/event/6
+10,قافلة,caravan,وهذه عيرُ قومِك قد حَضَرَ خروجُها إلى الشامِ,,,https://dorar.net/history/event/10
+17,بحر,sea,فخرجنا إليها حتَّى اجتمعنا بها,عبور البحر تقديري: لا يذكره النص، لكن الطريق من مكة إلى الحبشة يعبر البحر الأحمر,"The sea crossing is an estimate: the text does not mention it, but the way from Makkah to Abyssinia crosses the Red Sea",https://dorar.net/history/event/17
+19,بحر,sea,بالهجرةِ إلى الحَبشةِ مَرَّةً أُخرى,عبور البحر تقديري: لا يذكره النص، لكن الطريق من مكة إلى الحبشة يعبر البحر الأحمر,"The sea crossing is an estimate: the text does not mention it, but the way from Makkah to Abyssinia crosses the Red Sea",https://dorar.net/history/event/19
+25,مشي,walk,سارها ماشِيًا على قَدميهِ جِيئةً وذِهابًا,,,https://dorar.net/history/event/25
+33,قافلة,caravan,ثمَّ خرج يقود بي بَعيرَهُ,,,https://dorar.net/history/event/33
+42,قافلة,caravan,فأَمِناهُ فدَفعا إليه راحِلَتَيْهِما,,,https://dorar.net/history/event/42
+44,قافلة,caravan,ركِب رسولُ الله صلى الله عليه وسلم راحِلتَه مِن قُباءٍ,,,https://dorar.net/history/event/44
+46,مسير,march,سرية عبيدة بن الحارث بن المطلب إلى بطن رابغ,,,https://dorar.net/history/event/46
+47,مسير+بحر,march+sea,فبَلَغوا سِيفَ البحرِ,,,https://dorar.net/history/event/47
+48,مسير,march,سرية سعد بن أبي وقاص رضي الله عنه إلى الخَرّار,,,https://dorar.net/history/event/48
+49,مسير,march,غَزوةُ الأَبْواءِ (وَدَّانَ) ومُوادَعةُ بني ضَمْرَةَ,,,https://dorar.net/history/event/49
+50,مسير,march,غزوة بدر الأولى (وادي سفوان),,,https://dorar.net/history/event/50
+51,مسير,march,غَزوةُ بُواطٍ بِقُربِ يَنْبُعَ,,,https://dorar.net/history/event/51
+52,مسير,march,غَزوةُ العُشَيْرَةِ (الْعُسَيْرَةِ),,,https://dorar.net/history/event/52
+53,مسير,march,سرية سعد بن أبي وقاص رضي الله عنه إلى رابغ,,,https://dorar.net/history/event/53
+54,معركة,battle,فرَمَى أحدُهم عمرَو بنَ الحَضرَميِّ فقَتَلَه,,,https://dorar.net/history/event/54
+58,مسير,march,سرية عمير بن عدي رضي الله عنه لقتل عصماء بنت مروان,,,https://dorar.net/history/event/58
+59,معركة,battle,ثمَّ بدأ القِتالُ وكان شديدًا,,,https://dorar.net/history/event/59
+61,مسير,march,سرية سالم بن عمير رضي الله تعالى عنه إلى أبي عفك اليهودي,,,https://dorar.net/history/event/61
+62,مسير,march,غَزوةُ بني قَينُقاعٍ,,,https://dorar.net/history/event/62
+63,مسير,march,غزوة السويق أو غزوة بني سليم (قرقرة الكدر),,,https://dorar.net/history/event/63
+66,مسير,march,غزوة غطفان إلى نجد (غزوة ذي أمرّ),,,https://dorar.net/history/event/66
+67,مسير,march,غزوة بحران بين الفُرْعِ والمدينة,,,https://dorar.net/history/event/67
+68,مسير,march,سَرِيَّةُ زيدِ بنِ حارِثةَ,,,https://dorar.net/history/event/68
+69,معركة,battle,غَزوةُ أُحُدٍ وسبب هزيمة المسلمين,,,https://dorar.net/history/event/69
+70,معركة,battle,خرجتُ مع النَّاسِ إلى القِتالِ,,,https://dorar.net/history/event/70
+71,مسير,march,غَزوةُ حَمراءِ الأَسدِ,,,https://dorar.net/history/event/71
+72,مسير,march,سرية عبد الله بن عبد الأسد رضي الله عنه إلى قطن,,,https://dorar.net/history/event/72
+73,مسير,march,سرية عبد الله بن أنيس الجهني إلى سفيان بن خالد ببطن عُرْنة,,,https://dorar.net/history/event/73
+74,معركة,battle,فرَمَوْهُم بالنَّبْلِ فقَتلوا عاصمًا في سَبعةٍ,,,https://dorar.net/history/event/74
+75,مسير,march,سرية بِئر مَعونةَ,,,https://dorar.net/history/event/75
+76,مسير,march,غَزوةُ بني النَّضيرِ,,,https://dorar.net/history/event/76
+77,مسير,march,غَزوةُ ذاتِ الرِّقاعِ,,,https://dorar.net/history/event/77
+78,مسير,march,غزوة بدر الموعد (بدر الثانية),,,https://dorar.net/history/event/78
+79,قافلة,caravan,حتَّى أناخ راحلتَه,,,https://dorar.net/history/event/79
+80,مسير,march,غزوة دومة الجندل,,,https://dorar.net/history/event/80
+83,معركة,battle,فتَزاحَفَ النَّاسُ واقتَتَلوا,,,https://dorar.net/history/event/83
+84,مسير,march,غَزوةُ الخَندَقِ (الأَحزابِ),,,https://dorar.net/history/event/84
+86,مسير,march,غَزوةُ يَهودِ بني قُرَيْظَةَ,,,https://dorar.net/history/event/86
+88,معركة,battle,وقُتِلَ في هذه الغَزوةِ الأَخْرَمُ,,,https://dorar.net/history/event/88
+89,معركة,battle,فلمَّا أغار عليهم هَرَب سائِرُهم بعد أن قَتَل نَفَرًا منهم,,,https://dorar.net/history/event/89
+90,مسير,march,سرية عُكَّاشة بن مِحصَن رضي الله عنه إلى الغَمر (ماء بني أسد),,,https://dorar.net/history/event/90
+91,معركة,battle,ثم حَمَلتِ الأعرابُ عليهم بالرِّماحِ فقَتَلوهم جميعًا,,,https://dorar.net/history/event/91
+92,مسير,march,سرية أبي عبيدة بن الجراح إلى ذي القصة,,,https://dorar.net/history/event/92
+93,مسير,march,سرية زيد بن حارثة رضي الله عنه إلى الجموم (ماءٌ على طَريقِ مكةَ),,,https://dorar.net/history/event/93
+94,مسير,march,غزوة بني لحيان (الذين غدروا يوم الرجيع),,,https://dorar.net/history/event/94
+95,مسير+بحر,march+sea,إلى العيصِ -اسمِ مَوضِعٍ قُربَ المدينةِ على ساحِلِ البحرِ,,,https://dorar.net/history/event/95
+96,مسير,march,سرية زيد بن حارثة إلى بني ثعلبة بالطَّرف (ماء قرب المدينة),,,https://dorar.net/history/event/96
+97,مسير,march,سرية عبد الرحمن بن عوف رضي الله عنه إلى دومة الجندل,,,https://dorar.net/history/event/97
+98,معركة,battle,وقَتَل وأسَر وسَبَى,,,https://dorar.net/history/event/98
+99,مسير,march,سرية كُرز بن جابر الفهري إلى العرنيين,,,https://dorar.net/history/event/99
+102,مسير,march,غَزوةُ خَيبرَ,,,https://dorar.net/history/event/102
+104,بحر,sea,فأَلقَتْنا سَفينتُنا إلى النَّجاشيِّ بالحَبشةِ,,,https://dorar.net/history/event/104
+107,معركة,battle,فشَنُّوا الغارةَ في اللَّيلِ فقَتلوا مَن قَتلوا,,,https://dorar.net/history/event/107
+108,معركة,battle,فقَتل فيهم قتلًا ذَريعًا,,,https://dorar.net/history/event/108
+109,مسير,march,سَرِيَّةُ عُمَرَ بنِ الخطَّابِ رضِي الله عنه إلى (تُرَبَةَ) طائفةٍ مِن هَوازِنَ,,,https://dorar.net/history/event/109
+110,معركة,battle,فرَمَوْهُم بالنَّبْلِ حتَّى فَنِيَ نَبْلُ بَشيرٍ وأصحابِه,,,https://dorar.net/history/event/110
+111,معركة,battle,وقتَلوا مَن أَشرفَ لهم,,,https://dorar.net/history/event/111
+112,معركة,battle,فضرَب به وَجْهَ عبدِ الله بنِ رَواحةَ,,,https://dorar.net/history/event/112
+113,مسير,march,سَرِيَّةُ أبي حَدْرَدٍ الأَسلميٍّ إلى الغابةِ,,,https://dorar.net/history/event/113
+115,معركة,battle,ثمَّ قاتَلوا قِتالًا شَديدًا,,,https://dorar.net/history/event/115
+117,معركة,battle,فاخْتلَفْنا ضَربتين بالسَّيفِ فقَتلتُه,,,https://dorar.net/history/event/117
+119,معركة,battle,وقتلوا منهم قَتْلى,,,https://dorar.net/history/event/119
+120,معركة,battle,وأَرشَقوهُم بالنَّبْلِ حتَّى قُتِلوا كُلُّهم إلَّا رجلًا واحدًا,,,https://dorar.net/history/event/120
+121,مسير,march,سَرِيَّةُ شُجاعِ بنِ وَهْبٍ رضِي الله عنه إلى بني هَوازِنَ,,,https://dorar.net/history/event/121
+122,معركة,battle,فاقتَتَلوا,,,https://dorar.net/history/event/122
+123,معركة,battle,فلَقوا العَدُوَّ فهَزموهُم,,,https://dorar.net/history/event/123
+124,مسير+بحر,march+sea,إلى سِيفِ البَحرِ,,,https://dorar.net/history/event/124
+125,معركة,battle,فقَتَلَ منهم,,,https://dorar.net/history/event/125
+126,مسير,march,سَرِيَّةُ أبي قَتادةَ رضِي الله عنه إلى بَطْنِ إِضَمٍ,,,https://dorar.net/history/event/126
+127,مسير,march,غَزوةُ فَتحِ مكَّةَ,,,https://dorar.net/history/event/127
+128,مسير,march,سَرِيَّةُ خالدِ بنِ الوليدِ رضِي الله عنه إلى العُزَّى بنَخْلَةَ,,,https://dorar.net/history/event/128
+129,مسير,march,سَرِيَّةُ عَمرِو بنِ العاصِ رضِي الله عنه إلى سُواعٍ، صَنَمِ هُذيلٍ,,,https://dorar.net/history/event/129
+130,مسير,march,سَرِيَّةُ خالدِ بنِ الوليدِ رضِي الله عنه إلى بني جَذِيمَةَ,,,https://dorar.net/history/event/130
+131,معركة,battle,اغْدوا على القِتالِ,,,https://dorar.net/history/event/131
+132,معركة,battle,انْهزَموا ورَبِّ محمَّدٍ,,,https://dorar.net/history/event/132
+138,مسير,march,غَزوةُ تَبوكَ وجَيشُ العُسْرَةِ,,,https://dorar.net/history/event/138

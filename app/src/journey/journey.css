@@ -26,6 +26,7 @@
 .ecard-sound { margin: 14px 0 0; display: flex; align-items: flex-start; gap: 8px; color: var(--muted); font-size: var(--text-small); line-height: 1.7; }
 .ecard-sound svg { width: 16px; height: 16px; flex: none; margin-top: .3em; color: var(--brass); }
 .ecard-sound q { color: var(--ink); quotes: '«' '»'; }
+.ecard-sound-note { display: block; margin-top: 2px; }
 .ecard-source { margin: 14px 0 0; font-size: calc(15px * var(--text-scale)); color: var(--muted); }
 .ecard-source a, .verse-refs a, .verse-ref { color: var(--ink); text-decoration-color: var(--brass); text-underline-offset: .2em; }
 .ecard-section { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--border); }

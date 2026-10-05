@@ -78,7 +78,7 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
         {(r.note.ar.includes('رمزي') ? text.distanceArc : text.distanceRoute)(digits(roundKm(pathKm(r.coords)).toLocaleString('en'), locale))}</span>
     </p>)}
     {sound && <p className="ecard-sound"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 7.5h3l4-3.5v12l-4-3.5h-3z" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /><path d="M13.5 7a4 4 0 0 1 0 6" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>
-      <span>{text.soundKind[sound.kind]}{' — '}<q lang="ar" dir="rtl">{sound.quote}</q></span></p>}
+      <span>{text.soundKind[sound.kind]}{' — '}<q lang="ar" dir="rtl">{sound.quote}</q>{sound.note && <small className="ecard-sound-note">{sound.note[locale]}</small>}</span></p>}
     <p className="ecard-source">{text.source}: <a href={locale === 'en' && event.urlEn ? event.urlEn : event.url} target="_blank" rel="noreferrer">{text.dorar} · {locale === 'ar' ? 'حدث' : 'event'} {event.n}</a></p>
 
     {people.length > 0 && <section className="ecard-section">

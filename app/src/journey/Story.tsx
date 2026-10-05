@@ -47,7 +47,7 @@ export type Pace = 'slow' | 'normal' | 'fast';
 const MS_PER_WORD: Record<Pace, number> = { slow: 430, normal: 300, fast: 200 };
 const LOOK_MS = 3000, MIN_EVENT_MS = 5000;
 const PACE_KEY = 'bidaya.storyPace';
-const SOUND_KEY = 'bidaya.sound', VOLUME_KEY = 'bidaya.soundVolume', DEFAULT_VOLUME = 0.35;
+const SOUND_KEY = 'bidaya.sound', VOLUME_KEY = 'bidaya.soundLevel', DEFAULT_VOLUME = 0.5;
 
 function useMedia(query: string) {
   const [match, setMatch] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.(query).matches);
