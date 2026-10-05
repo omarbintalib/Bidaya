@@ -2,10 +2,12 @@ import { createReadStream, readdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { defineConfig, type Connect, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
+import { FILES, trimData } from './src/data/files';
 
 /**
  * The data files live at the root of the repository (one copy, edited in Excel).
- * This plugin serves them at /data/ during development and preview, and copies them into dist/data/ on build.
+ * This plugin serves them at /data/ during development and preview, and on build writes the ones the app reads into
+ * dist/data/, trimmed to the columns it reads (src/data/files.ts).
  */
 const DATA_DIR = resolve(__dirname, '..');
 const isData = (name: string) => /\.(csv|geojson)$/i.test(name);
@@ -30,8 +32,8 @@ function sirahData(): Plugin {
     },
     configurePreviewServer(server) { server.middlewares.use(serve); },
     generateBundle() {
-      for (const name of readdirSync(DATA_DIR).filter(isData)) {
-        this.emitFile({ type: 'asset', fileName: `data/${name}`, source: readFileSync(resolve(DATA_DIR, name)) });
+      for (const name of Object.values(FILES)) {
+        this.emitFile({ type: 'asset', fileName: `data/${name}`, source: trimData(name, readFileSync(resolve(DATA_DIR, name), 'utf8')) });
       }
     },
   };

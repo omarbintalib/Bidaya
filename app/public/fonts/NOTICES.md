@@ -42,3 +42,23 @@ Name record 11: http://arabictype.com/
 ## WOFF2 copies
 
 `Saudi-Regular.woff2` and `Saudi-Bold.woff2` are the same fonts repackaged losslessly as WOFF2 (fontTools, no subsetting; glyphs, outlines, layout tables and the name records above are unchanged). The only table not carried over is `DSIG`, the original file's digital signature, which no longer matches once the file is re-encoded and which browsers ignore. Browsers download about a third of the bytes. The TrueType files above remain the originals and are listed as the fallback in `src/index.css`.
+
+## Honorific.woff2
+
+Noto Naskh Arabic (© 2022 The Noto Project Authors, SIL Open Font License 1.1, no Reserved Font Name; licence in `Honorific-OFL.txt`), cut down to what the app uses it for: drawing ﷺ in English text (`src/index.css`, `unicode-range: U+FDFA`). 4.6 kB instead of 52.7 kB. Besides ﷺ it keeps the Arabic letters the browser's font renderer measures to align a font (ا إ ل ك ط ظ ت ث ـ); without them ﷺ rendered slightly differently. With them it renders pixel for pixel as the full font did. Made from the `@fontsource/noto-naskh-arabic` package with:
+
+```sh
+pyftsubset node_modules/@fontsource/noto-naskh-arabic/files/noto-naskh-arabic-arabic-400-normal.woff2 \
+  --unicodes="U+FDFA,U+0627,U+0625,U+0644,U+0643,U+0637,U+0638,U+062A,U+062B,U+0640" \
+  --flavor=woff2 --layout-features='*' --name-IDs='*' --name-languages='*' --output-file=public/fonts/Honorific.woff2
+```
+
+## Honorific-Arabic-400/500/700.woff2
+
+IBM Plex Sans Arabic (© 2019 IBM Corp., SIL Open Font License 1.1; licence in `Honorific-Arabic-OFL.txt`), cut down to ﷺ for Arabic text: the Saudi font has no ﷺ, and without these the browser downloaded the full Plex Arabic font (43–44 kB per weight) to draw that one character. Like `Honorific.woff2`, each keeps the Arabic letters the font renderer measures for alignment, and renders pixel for pixel as the full font. As modified versions, they are renamed "Honorific Arabic" in their name tables; the copyright and licence records are unchanged. Made from the `@fontsource/ibm-plex-sans-arabic` package (for W in 400 500 700), then renamed with fontTools:
+
+```sh
+pyftsubset node_modules/@fontsource/ibm-plex-sans-arabic/files/ibm-plex-sans-arabic-arabic-$W-normal.woff2 \
+  --unicodes="U+FDFA,U+0627,U+0625,U+0644,U+0643,U+0637,U+0638,U+062A,U+062B,U+0640" \
+  --flavor=woff2 --layout-features='*' --name-IDs='*' --name-languages='*' --output-file=public/fonts/Honorific-Arabic-$W.woff2
+```

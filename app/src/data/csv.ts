@@ -3,20 +3,31 @@ export function parseCsv(text: string): Record<string, string>[] {
   const rows: string[][] = [];
   let row: string[] = [], field = '', quoted = false;
   const src = text.charCodeAt(0) === 0xfeff ? text.slice(1) : text;
-  for (let i = 0; i < src.length; i++) {
-    const c = src[i];
+  // Copies runs of plain text with slice() and stops only at the characters that matter: this runs over ~1.4 MB on every load.
+  const special = /[",\r\n]/g;
+  let i = 0;
+  while (i < src.length) {
     if (quoted) {
-      if (c === '"') {
-        if (src[i + 1] === '"') { field += '"'; i++; } else quoted = false;
-      } else field += c;
-    } else if (c === '"') quoted = true;
+      const end = src.indexOf('"', i);
+      if (end === -1) { field += src.slice(i); break; }
+      field += src.slice(i, end);
+      if (src.charCodeAt(end + 1) === 34) { field += '"'; i = end + 2; } else { quoted = false; i = end + 1; }
+      continue;
+    }
+    special.lastIndex = i;
+    const match = special.exec(src);
+    if (!match) { field += src.slice(i); break; }
+    const at = match.index, c = match[0];
+    field += src.slice(i, at);
+    i = at + 1;
+    if (c === '"') quoted = true;
     else if (c === ',') { row.push(field); field = ''; }
-    else if (c === '\n' || c === '\r') {
-      if (c === '\r' && src[i + 1] === '\n') i++;
+    else {
+      if (c === '\r' && src.charCodeAt(i) === 10) i++;
       row.push(field); field = '';
       if (row.some(v => v !== '')) rows.push(row);
       row = [];
-    } else field += c;
+    }
   }
   row.push(field);
   if (row.some(v => v !== '')) rows.push(row);

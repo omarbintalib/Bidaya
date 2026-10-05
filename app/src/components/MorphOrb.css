@@ -46,6 +46,8 @@
 .mo-dots i { width: 2px; height: 2px; border-radius: 50%; background: currentColor; animation: thinking-dot 1.2s infinite; }
 .mo-dots i:nth-child(2) { animation-delay: .15s; }
 .mo-dots i:nth-child(3) { animation-delay: .3s; }
+/* While idle the label is hidden: keep its dots still rather than animating something no one can see. */
+.mo-root[data-phase='idle'] .mo-dots i { animation: none; }
 .mo-reset, .mo-cancel { position: absolute; top: 170px; left: 50%; transform: translateX(-50%); padding: 7px 14px; border: 0; background: transparent; color: var(--muted); font-size: var(--text-control); white-space: nowrap; }
 .mo-reset { display: flex; align-items: center; gap: 8px; opacity: 0; visibility: hidden; transition: opacity .25s; }
 .mo-reset svg { width: 15px; height: 15px; }

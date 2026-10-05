@@ -71,7 +71,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
   useEffect(() => {
     // Build the Ask index while nothing else is happening — never during the opening scene.
     if (intro) return;
-    return onIdle(() => warmUp(data), 4000);
+    return warmUp(data);
   }, [data, intro]);
   useEffect(() => {
     if (built) return;
