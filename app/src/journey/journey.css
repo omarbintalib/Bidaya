@@ -139,7 +139,7 @@ html[data-compact-viewport='true'] .journey-page .story-timeline { display: none
 /* Companion card */
 .person-dialog { width: min(560px, calc(100vw - 32px)); max-height: min(760px, calc(var(--viewport-height, 100svh) - 48px)); padding: 0; border: 1px solid var(--brass); background: var(--paper); color: var(--ink); box-shadow: 0 24px 80px #331b0d33; overflow: auto; }
 .person-dialog::backdrop { background: #1f120a66; }
-.pd-head { position: sticky; top: 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 22px 16px 16px 26px; background: var(--paper); border-bottom: 1px solid var(--border); }
+.pd-head { position: sticky; top: 0; z-index: 3; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 22px 16px 16px 26px; background: var(--paper); border-bottom: 1px solid var(--border); }
 [dir='rtl'] .pd-head { padding: 22px 26px 16px 16px; }
 .pd-kind { margin: 0 0 4px; color: var(--brass); font-size: calc(14px * var(--text-scale)); }
 .pd-head h2 { margin: 0; font-size: calc(22px * var(--text-scale)); line-height: 1.4; }
@@ -234,7 +234,7 @@ html[data-contrast='dark'] .tl-revealed.is-suggested { background: transparent; 
 /* Search */
 .search-dialog { width: min(640px, calc(100vw - 32px)); max-height: min(640px, calc(var(--viewport-height, 100svh) - 96px)); margin-top: 72px; padding: 0; border: 1px solid var(--brass); background: var(--paper); color: var(--ink); box-shadow: 0 24px 80px #331b0d33; overflow: auto; }
 .search-dialog::backdrop { background: #1f120a55; }
-.search-field { position: sticky; top: 0; display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--paper); border-bottom: 1px solid var(--border); }
+.search-field { position: sticky; top: 0; z-index: 3; display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--paper); border-bottom: 1px solid var(--border); }
 .search-field > svg { width: 20px; height: 20px; color: var(--brass); flex: none; }
 .search-field input { flex: 1; min-width: 0; border: 0; background: none; font: inherit; font-size: var(--text-body); color: var(--ink); outline: none; padding: 6px 0; }
 .search-hint { margin: 0; padding: 18px; color: var(--muted); font-size: var(--text-small); }
