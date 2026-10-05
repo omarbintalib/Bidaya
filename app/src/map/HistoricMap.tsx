@@ -387,7 +387,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
         </g>
         {/* Graticule every 5° — orientation only. */}
         <g className="hmap-grid" strokeWidth={0.6 * unit}>
-          {[30, 35, 40, 45, 50, 55].map(lon => { const [x] = project(lon, 0); return <line key={lon} x1={x} x2={x} y1={0} y2={HEIGHT} />; })}
+          {[20, 25, 30, 35, 40, 45, 50, 55, 60, 65].map(lon => { const [x] = project(lon, 0); return <line key={lon} x1={x} x2={x} y1={0} y2={HEIGHT} />; })}
           {[5, 10, 15, 20, 25, 30, 35].map(lat => { const [, y] = project(0, lat); return <line key={lat} x1={0} x2={WIDTH} y1={y} y2={y} />; })}
         </g>
   </>, [unit]);
@@ -512,7 +512,8 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
             const d = arcPath(a), far = a.kind === 'letter' ? a.to : a.from, [fx, fy] = project(far.lon, far.lat);
             return <g key={a.id} className={`hmap-arc is-${a.kind} out-${a.outcome}`} style={{ ['--i' as string]: i }}>
               {/* A dashed line cannot draw itself with its own dashes, so it is revealed through a mask that does. */}
-              {a.outcome === 'declined' && <mask id={`arc-reveal-${a.id}`} maskUnits="userSpaceOnUse" x={-WIDTH} y={-HEIGHT} width={WIDTH * 3} height={HEIGHT * 3}>
+              {/* The mask covers only the arc's own box: a mask the size of the map was repainted whole every frame of the draw. */}
+              {a.outcome === 'declined' && <mask id={`arc-reveal-${a.id}`} maskUnits="userSpaceOnUse" {...arcBox(a, 8 * unit)}>
                 <path className="hmap-arc-reveal" d={d} stroke="#fff" strokeWidth={8 * unit} fill="none" pathLength={1} />
               </mask>}
               <path className="hmap-arc-line" d={d} strokeWidth={2 * unit} pathLength={1} mask={a.outcome === 'declined' ? `url(#arc-reveal-${a.id})` : undefined}><title>{`${a.name[locale]} — ${a.summary[locale]}`}</title></path>
@@ -588,10 +589,20 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
 
 /** Small peaks along the mountain line, spaced evenly on screen. */
 /** A gentle curve from one end of a letter or delegation to the other, bowing to the same side each time. */
-function arcPath(a: MapArc) {
+function arcPoints(a: MapArc) {
   const [x0, y0] = project(a.from.lon, a.from.lat), [x1, y1] = project(a.to.lon, a.to.lat);
   const mx = (x0 + x1) / 2, my = (y0 + y1) / 2, k = 0.18;
-  return `M${x0.toFixed(1)} ${y0.toFixed(1)}Q${(mx - (y1 - y0) * k).toFixed(1)} ${(my + (x1 - x0) * k).toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`;
+  return [[x0, y0], [mx - (y1 - y0) * k, my + (x1 - x0) * k], [x1, y1]];
+}
+function arcPath(a: MapArc) {
+  const [[x0, y0], [cx, cy], [x1, y1]] = arcPoints(a);
+  return `M${x0.toFixed(1)} ${y0.toFixed(1)}Q${cx.toFixed(1)} ${cy.toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`;
+}
+/** A box holding the whole arc (a curve stays inside the triangle of its points), widened by `pad` for the stroke. */
+function arcBox(a: MapArc, pad: number) {
+  const pts = arcPoints(a), xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+  const x = Math.min(...xs) - pad, y = Math.min(...ys) - pad;
+  return { x, y, width: Math.max(...xs) + pad - x, height: Math.max(...ys) + pad - y };
 }
 
 /** The points of a route worth naming: its start, its end, and its farthest point from the start (so a round trip

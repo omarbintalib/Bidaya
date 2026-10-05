@@ -24,7 +24,7 @@ from PIL import Image
 
 SRC = Path(sys.argv[1] if len(sys.argv) > 1 else '/tmp/ne')
 APP = Path(__file__).resolve().parent.parent
-BOX = dict(west=28, east=60, south=4, north=38)   # as scripts/build-land.mjs
+BOX = dict(west=18, east=68, south=4, north=38)   # as scripts/build-land.mjs
 K = 40
 COS = math.cos(math.radians((BOX['south'] + BOX['north']) / 2))
 WIDTH, HEIGHT = (BOX['east'] - BOX['west']) * COS * K, (BOX['north'] - BOX['south']) * K

@@ -387,3 +387,14 @@
 /* The film steers the map itself, and covers the page like the Ask panel does: no zoom buttons, no accessibility button over its controls. */
 .film .hmap-controls { display: none; }
 body:has(.film) .accessibility-launcher { visibility: hidden; }
+
+/* Wide screens: the summary's caption and controls stand as a panel at the reading side, the map beside them. */
+@media (min-width: 900px) and (min-aspect-ratio: 1/1) {
+  .film-bottom { top: 84px; bottom: 18px; inset-inline-start: 18px; inset-inline-end: auto; width: min(440px, 36vw); display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; }
+  .film-caption { width: auto; max-height: none; flex: 0 1 auto; min-height: 0; text-align: start; }
+  .film-caption h2, .film-period, .film-source { text-align: start; }
+  .film-verses { justify-content: flex-start; }
+  .film-controls { justify-content: center; }
+  .film-beats { flex-wrap: wrap; justify-content: center; }
+  .film-beats button { width: 18px; }
+}

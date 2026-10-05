@@ -58,16 +58,21 @@ export default function SummaryFilm({ data, locale, reducedMotion, onClose, onJu
     return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = overflow; before?.focus?.({ preventScroll: true }); };
   }, [onClose]);
 
-  // The caption grows with its text: the map keeps the place clear of it.
-  const bottom = useRef<HTMLDivElement>(null);
-  const [bottomH, setBottomH] = useState(260);
+  // Wide screens: the caption is a panel at the side, so the map keeps its full height (the letters reach from
+  // Alexandria to Oman). Narrow screens: it sits at the bottom. Either way the map keeps the places clear of it.
+  const panel = useRef<HTMLDivElement>(null);
+  const [cover, setCover] = useState({ side: 0, bottom: 260 });
   useLayoutEffect(() => {
-    const el = bottom.current;
+    const el = panel.current;
     if (!el) return;
-    const measure = () => setBottomH(el.offsetHeight + 24);
+    const measure = () => {
+      const side = window.matchMedia('(min-width: 900px) and (min-aspect-ratio: 1/1)').matches;
+      setCover(side ? { side: el.offsetWidth + 32, bottom: 24 } : { side: 0, bottom: el.offsetHeight + 24 });
+    };
     measure();
     const ro = new ResizeObserver(measure); ro.observe(el);
-    return () => ro.disconnect();
+    window.addEventListener('resize', measure);
+    return () => { ro.disconnect(); window.removeEventListener('resize', measure); };
   }, []);
 
   const emphasis = useCallback((e: SirahEvent): Emphasis => e.n === ev.n ? 'selected' : e.order <= ev.order ? 'past' : 'hidden', [ev]);
@@ -79,7 +84,7 @@ export default function SummaryFilm({ data, locale, reducedMotion, onClose, onJu
   return <div className="film" ref={root} role="dialog" aria-modal="true" aria-label={text.filmTitle}>
     <HistoricMap data={data} locale={locale} emphasis={emphasis} selected={ev.n} activeRoutes={activeRoutes} onSelect={() => {}}
       reducedMotion={reducedMotion} focusKey={`film-${i}`} now={moment.overview ? Infinity : ev.order} legend={false}
-      overview={moment.overview} caravans={ev.period === 'prologue' || ev.period === 'makkah'} insetTop={96} insetBottom={bottomH}>
+      overview={moment.overview} caravans={ev.period === 'prologue' || ev.period === 'makkah'} inset={cover.side} insetTop={96} insetBottom={cover.bottom}>
       <div className="film-top" data-map-overlay>
         <p className="film-kicker">{text.filmTitle}</p>
         <p className="film-year" key={ev.year} aria-live="polite">{hijri(ev.year, locale)}</p>
@@ -87,7 +92,7 @@ export default function SummaryFilm({ data, locale, reducedMotion, onClose, onJu
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" /></svg>
         </button>
       </div>
-      <div className="film-bottom" ref={bottom} data-map-overlay>
+      <div className="film-bottom" ref={panel} data-map-overlay>
         <div className="film-caption" key={ev.n}>
           <p className="film-period">{periodName[locale][ev.period]} · {eventPlaceName(data, ev, locale)}</p>
           <h2 lang={title === ev.title.ar ? 'ar' : undefined}>{title}</h2>
