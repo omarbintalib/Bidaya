@@ -564,6 +564,22 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     window.addEventListener('story-settled', measure);
     return () => { cancelAnimationFrame(frame); ro.disconnect(); window.removeEventListener('scrollend', measure); window.removeEventListener('story-settled', measure); };
   }, [answerCard, active]);
+  // The chapter tabs show only their numbers (the current one its name too) when the names do not fit beside the
+  // toolbar's buttons; measured, as that depends on the language, the text size and the buttons shown.
+  const chaptersRef = useRef<HTMLOListElement>(null);
+  useLayoutEffect(() => {
+    const strip = chaptersRef.current;
+    if (!strip) return;
+    const fit = () => {
+      strip.classList.remove('is-tight');
+      strip.classList.toggle('is-tight', strip.scrollWidth > strip.clientWidth + 1);
+    };
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(strip);
+    if (strip.nextElementSibling) ro.observe(strip.nextElementSibling);
+    return () => ro.disconnect();
+  }, [chapter, locale]);
   // One suggested question for where the reader is, worked out at idle time and shown in the ask bar.
   const [askHint, setAskHint] = useState<string | null>(null);
   useEffect(() => {
@@ -656,7 +672,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     {resume && <ResumeDialog locale={locale} note={resetNote} onContinue={() => { const n = progress.lastEvent!; setResume(false); setIntro(false); setBuilt(true); goToEvent(n, false); }} onRestart={startOver} />}
     {intro && <Intro locale={locale} reducedMotion={reducedMotion} onBegin={begin} onSkip={() => { try { sessionStorage.setItem('bidaya.intro.seen', '1'); } catch { /* storage unavailable */ } setBuilt(true); setIntro(false); }} />}
     <nav className="story-toolbar" aria-label={text.toolbar}>
-      <ol className="tb-chapters" aria-label={text.chapters}>
+      <ol className="tb-chapters" ref={chaptersRef} aria-label={text.chapters}>
         {steps.flatMap((s, i) => s.kind === 'chapter' ? [<li key={s.period}>
           <button type="button" className={`tb-chapter${chapter === s.chapter && step.kind !== 'summary' ? ' is-now' : ''}${(pools.get(s.period) ?? []).some(q => progress.answers[q.id]) ? ' is-done' : ''}`} aria-current={chapter === s.chapter && step.kind !== 'summary' ? 'step' : undefined}
             title={`${text.chapter(s.chapter)} · ${periodName[locale][s.period]}`} onClick={() => { setPlaying(false); goToStep(i); }}>

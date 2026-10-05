@@ -49,7 +49,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--brass); outline
   min-height: var(--viewport-height, 100svh);
   display: flex;
   flex-direction: column;
-  padding: 0 clamp(24px, 4.8vw, 88px);
+  --gutter: clamp(24px, 4.8vw, 88px); /* the page's side margin; full-width bars bleed through it (story.css) */
+  padding: 0 var(--gutter);
   position: relative;
   isolation: isolate;
   background: radial-gradient(ellipse at 50% 42%, var(--surface) 0%, transparent 63%);
@@ -103,7 +104,7 @@ h1 { font-family: var(--display); font-size: calc(clamp(32px, 3.1vw, 48px) * var
 
 @media (min-width: 1450px) { .map-region { left: 20%; right: 20%; } }
 @media (max-width: 700px) {
-  .workspace { padding: 0 22px; }
+  .workspace { --gutter: 22px; }
   .site-header { height: 82px; flex-basis: 82px; }
   .brand-logo { width: 88px; }
   .language-switch { font-size: var(--text-small); gap: 6px; }
@@ -305,7 +306,7 @@ html[data-compact-viewport='true'] .intro .eyebrow, html[data-compact-viewport='
 .accessibility-reset { width: 100%; min-height: 48px; border: 1px solid var(--ink); color: var(--ink); background: none; font-size: var(--text-control); padding: 10px; margin-top: 26px; }
 .accessibility-notice { margin: 16px 0 0; }
 @media (max-width: 700px) {
-  .workspace { padding-inline: 20px; }
+  .workspace { --gutter: 20px; }
   .brand-logo { width: 78px; }
   .language-switch { gap: 5px; font-size: var(--text-control); }
   .language-switch svg { display: none; }
