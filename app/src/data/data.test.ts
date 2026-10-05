@@ -5,7 +5,7 @@ import { loadSirah } from './load';
 import { findPeople, mentionIn } from './people';
 import { quranpediaRefs } from './quranpedia';
 import { quizPools } from './quiz';
-import { versesFor } from './select';
+import { eventPlaceName, versesFor } from './select';
 import type { Sirah } from './types';
 
 // Load the real files at the repository root — these tests also catch broken CSV edits.
@@ -260,5 +260,30 @@ describe('Quran quotations in English', () => {
       expect(q.text.length, v.id).toBeGreaterThan(5);
       expect(q.ayah, v.id).toContain(q.text); // a part is the translation's own words, never reworded
     }
+  });
+});
+
+describe('names and numbers as they were at the time', () => {
+  const plain = (s: string) => s.replace(/[ً-ْٰـ]/g, '');
+  it('quotes the count of Muslims word for word from its Dorar event', () => {
+    expect(data.growth.size).toBeGreaterThan(0);
+    for (const [key, list] of data.growth) for (const g of list) {
+      const e = data.byNumber.get(g.event);
+      expect(e, `${key} ${g.event}`).toBeDefined();
+      expect(plain(e!.text.ar), `${key} ${g.event}`).toContain(plain(g.quote));
+    }
+  });
+  it("quotes the earlier name from a Dorar text that uses it", () => {
+    for (const p of data.places.values()) if (p.nameBefore) {
+      const r = parseCsv(byName.get('4_places.csv')!).find(x => x['رمز_المكان'] === p.key)!;
+      expect(data.events.some(e => plain(e.text.ar).includes(plain(r['شاهد_الاسم']))), p.key).toBe(true);
+      expect(data.byNumber.has(p.renamedAt!), p.key).toBe(true);
+    }
+  });
+  it('calls al-Madinah Yathrib before the Hijrah and al-Madinah after it', () => {
+    const before = data.byNumber.get(34)!, after = data.byNumber.get(45)!;
+    expect(eventPlaceName(data, before, 'en')).toBe('Yathrib (later al-Madinah)');
+    expect(eventPlaceName(data, before, 'ar')).toBe('يثرب (المدينة المنورة لاحقًا)');
+    expect(eventPlaceName(data, after, 'en')).toBe('al-Madinah');
   });
 });

@@ -221,7 +221,8 @@
   .step-chapter, .step-quiz { min-height: 40vh; }
   .scrolly-map .story-banner { inset-inline-start: 62px; inset-inline-end: 10px; top: 10px; justify-content: flex-start; }
   .scrolly-map .story-banner b { font-size: calc(17px * var(--text-scale)); }
-  .story-reach { display: none !important; }
+  .story-reach { font-size: calc(12px * var(--text-scale)); padding: 2px 8px; }
+  .story-reach small { display: none; }
   .scrolly-map .story-banner { border-radius: 14px; }
   .story-timeline { padding: 6px 10px 4px; }
   .story-timeline .tl-now, .story-timeline .tl-undated { display: none; }

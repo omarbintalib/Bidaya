@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { quranpediaRefs, type QuranRef } from '../data/quranpedia';
-import { dateLine, excerpt, hadithLinks, hijri, periodName, peopleFor, versesFor } from '../data/select';
+import { dateLine, eventPlaceName, excerpt, hadithLinks, hijri, periodName, peopleFor, versesFor } from '../data/select';
 import type { MapArc, QuranEn, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
@@ -41,7 +41,7 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
     <p className="ecard-meta">
       <span>{dateLine(event, locale) || '—'}</span>
       <span aria-hidden="true">·</span>
-      <span>{event.placeName[locale] || '—'}</span>
+      <span>{eventPlaceName(data, event, locale) || '—'}</span>
       {event.precision !== 'exact' && <span className={`prec prec-${event.precision}`}>{text.precision[event.precision]}</span>}
     </p>
     {event.inferred && <p className="ecard-flag">{text.inferred}</p>}

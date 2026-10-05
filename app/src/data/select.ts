@@ -62,3 +62,20 @@ export function excerpt(text: string, max = 280) {
   const stop = Math.max(cut.lastIndexOf('. ', max + 60), cut.lastIndexOf('.', max + 60), cut.lastIndexOf('،', max), cut.lastIndexOf(' ', max));
   return text.slice(0, stop > max * 0.5 ? stop + 1 : max).trim() + '…';
 }
+
+/** A place's name at a point in the story (ترتيب_العرض): its earlier name until the event that changed it. */
+export function placeNameAt(data: Sirah, key: string | null, order: number | undefined, locale: Locale): string | null {
+  const p = key ? data.places.get(key) : undefined;
+  if (!p?.nameBefore || p.renamedAt === null || order === undefined) return null;
+  const at = data.byNumber.get(p.renamedAt)?.order ?? -Infinity;
+  return order < at ? p.nameBefore[locale] : null;
+}
+
+/** Where an event happened, named as it was then: "Yathrib (later al-Madinah)" before the Hijrah. */
+export function eventPlaceName(data: Sirah, e: SirahEvent, locale: Locale) {
+  const then = placeNameAt(data, e.place, e.order, locale);
+  if (!then) return e.placeName[locale];
+  const now = data.places.get(e.place!)!.name[locale];
+  // A name that only gained a later addition ("Quba" → "Quba (Masjid Quba)") is just shown as it was.
+  return now.startsWith(then) ? then : locale === 'ar' ? `${then} (${now} لاحقًا)` : `${then} (later ${now})`;
+}

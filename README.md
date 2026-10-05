@@ -26,6 +26,7 @@ Two files were added for the period map:
 |------|------------|
 | `map_labels.csv` | Regions, powers and seas shown on the map, with approximate positions for orientation |
 | `map_routes.csv` | The Quraysh caravan routes (winter to Yemen, summer to al-Sham), approximate |
+| `islam_growth.csv` | Counts of Muslims at a place as Dorar gives them (emigrants to Abyssinia, the men of Yathrib at al-Aqabah, the armies that marched from Madinah), each with what it counts and its quote. The glow grows with them (see below) |
 | `quran_en.csv` | English for each Quran quotation inside the English reasons (`وجه_الارتباط_EN`): Sahih International, quoted word for word from Quranpedia, with the ayah reference and link (see below) |
 | `map_arcs.csv` | The letters sent from Madinah and the delegations that came to it, drawn as curves while their event is on screen (see below) |
 
@@ -173,6 +174,13 @@ Each place in `4_places.csv` and each region in `map_labels.csv` can carry `حد
 - **From the Year of Delegations, each reached region is washed in gold**, so the whole territory reads as reached, not just its few named places. Before then a reached region only has its gold name, because Islam was in a few of its towns, not across it.
 - **Al-Sham, Iraq, Byzantium and Persia stay unlit**: Islam did not reach them in the Prophet's ﷺ lifetime.
 - The map runs from 28°E to 60°E and from 4°N to 38°N, so Oman and Alexandria are on it (`app/scripts/build-land.mjs`).
+
+### Names and numbers as they were at the time
+
+- **Names change with the story.** `4_places.csv` has `الاسم_قبل` / `Name_Before_EN` and `حدث_الاسم`: the place is called by its earlier name until that Dorar event. al-Madinah is **Yathrib** until the Prophet's ﷺ Hijrah (event 42), the name Dorar itself uses before it (event 34: «وانتشر الإسلامُ في أهلِ يَثْرِبَ»). Quba is plain **Quba** until its mosque is built (event 43). Event cards say "Yathrib (later al-Madinah)", and the map, the walks and the assistant use the name of the time.
+- **Names appear gradually.** A place is named on the map from its first event on, so places and mosques do not show before the story reaches them.
+- **The glow grows with the Muslims the sources count.** `islam_growth.csv` gives, per place and event, a number Dorar states, word for word. A lit place glows faintly when no number is given and brighter and wider as the count grows, up to the 30,000 of Tabuk (scaled on a logarithm, so 16 emigrants already shows). Each count is a lower bound and says what it counts, such as "Muslims who marched to Uhud", because the sources count those who emigrated or marched, not a population.
+- The map's key now reads "Gold glow: places Islam had reached (n)", with "Brighter where the sources count more Muslims", and it is shown on phones too.
 
 ### Letters and delegations
 

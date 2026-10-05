@@ -3,6 +3,7 @@ import { COS, K, LAND } from '../data/land';
 import type { MapArc, Sirah, SirahEvent } from '../data/types';
 import type { Locale } from '../i18n';
 import { mapCopy } from './copy';
+import { eventPlaceName, placeNameAt } from '../data/select';
 import { centerOn, clampView, fit, HEIGHT, homeView, project, WIDTH, type View } from './projection';
 import './map.css';
 
@@ -201,7 +202,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
       const key = e.place ?? `${e.lat},${e.lon}`;
       const [x, y] = project(e.lon, e.lat);
       const pin = groups.get(key);
-      if (!pin) groups.set(key, { key, x, y, events: [e], emphasis: em, precision: e.precision, name: e.placeName[locale] });
+      if (!pin) groups.set(key, { key, x, y, events: [e], emphasis: em, precision: e.precision, name: eventPlaceName(data, e, locale) });
       else {
         pin.events.push(e);
         if (RANK[em] > RANK[pin.emphasis]) { pin.emphasis = em; pin.precision = e.precision; }
@@ -209,6 +210,19 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
     }
     return [...groups.values()].sort((a, b) => RANK[a.emphasis] - RANK[b.emphasis]);
   }, [data, emphasis, locale]);
+
+  // The first event at each place, in story order: its name appears on the map from then on.
+  const firstOrder = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const e of data.events) if (e.place && e.order < (m.get(e.place) ?? Infinity)) m.set(e.place, e.order);
+    return m;
+  }, [data]);
+  // How many Muslims the sources count at a place by now (islam_growth.csv; a lower bound), 0 when none is given.
+  const countAt = (key: string) => {
+    let c = 0;
+    for (const g of data.growth.get(key) ?? []) if ((data.byNumber.get(g.event)?.order ?? Infinity) <= (now ?? -Infinity)) c = Math.max(c, g.count);
+    return c;
+  };
 
   // Spread of Islam: places and regions whose sourced "Islam reached" event is at or before `now`.
   const reachedBy = (n: number | null) => n !== null && now !== undefined && (data.byNumber.get(n)?.order ?? Infinity) <= now;
@@ -224,15 +238,22 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
       const [x, y] = project(lon, lat);
       cand.set(key, { key, x, y, name, priority, strong });
     };
-    for (const p of data.places.values()) if (p.events > 0) add(p.key, p.lon, p.lat, p.name[locale], Math.min(p.events, 20) + (reachedBy(p.reached) ? 120 : 0), reachedBy(p.reached));
+    // Names appear as the story reaches them (a place is named from its first event on), and as they were then:
+    // Yathrib until the Hijrah, then al-Madinah.
+    const nameNow = (key: string) => { const p = data.places.get(key); return p ? placeNameAt(data, key, now, locale) ?? p.name[locale] : null; };
+    for (const p of data.places.values()) {
+      if (p.events === 0) continue;
+      if (now !== undefined && (firstOrder.get(p.key) ?? Infinity) > now && !reachedBy(p.reached)) continue;
+      add(p.key, p.lon, p.lat, nameNow(p.key)!, Math.min(p.events, 20) + (reachedBy(p.reached) ? 120 : 0), reachedBy(p.reached));
+    }
     for (const pin of pins) {
       const pl = pin.events[0];
       if (pin.emphasis === 'past') continue;
-      add(pin.key, pl.lon!, pl.lat!, data.places.get(pin.key)?.name[locale] ?? pin.name, pin.emphasis === 'selected' ? 1000 : 100, true);
+      add(pin.key, pl.lon!, pl.lat!, nameNow(pin.key) ?? pin.name, pin.emphasis === 'selected' ? 1000 : 100, true);
     }
     return [...cand.values()].sort((a, b) => b.priority - a.priority);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, pins, locale, now]);
+  }, [data, pins, locale, now, firstOrder]);
   const placed = useMemo(() => {
     const boxes: { x0: number; y0: number; x1: number; y1: number }[] = [], out: (PlaceLabel & { size: number })[] = [];
     for (const l of labels) {
@@ -323,7 +344,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
   const labelSize = { l: 15, m: 12.5, s: 11 };
 
   // Layers are memoised so moving through the story only redraws what changed.
-  const reachedKey = glowPlaces.map(p => reachedBy(p.reached) ? 1 : 0).join('') + data.labels.map(l => reachedBy(l.reached) ? 1 : 0).join('');
+  const reachedKey = glowPlaces.map(p => reachedBy(p.reached) ? countAt(p.key) + 1 : 0).join(',') + data.labels.map(l => reachedBy(l.reached) ? 1 : 0).join('');
   const baseLayers = useMemo(() => <>
         <defs>
           <radialGradient id="hmap-glow"><stop offset="0" className="glow-0" /><stop offset=".55" className="glow-1" /><stop offset="1" className="glow-2" /></radialGradient>
@@ -363,7 +384,14 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
           })}
         </g>
         <g className="hmap-glows" aria-hidden="true">
-          {glowPlaces.map(p => { const [x, y] = project(p.lon, p.lat); return <circle key={p.key} className={`hmap-glow-place${reachedBy(p.reached) ? ' is-lit' : ''}`} cx={x} cy={y} r={Math.max(18, 26 * unit)} fill="url(#hmap-glow)" />; })}
+          {glowPlaces.map(p => {
+            // Brighter and wider where the sources count more Muslims: from a faint glow for a place with no count given
+            // up to full strength at 30,000 (the army of Tabuk).
+            const [x, y] = project(p.lon, p.lat), c = countAt(p.key), level = c ? Math.min(1, Math.log10(c) / Math.log10(30000)) : 0;
+            return <g key={p.key} style={{ opacity: 0.45 + 0.55 * level }}>
+              <circle className={`hmap-glow-place${reachedBy(p.reached) ? ' is-lit' : ''}`} cx={x} cy={y} r={Math.max(18, 26 * unit) * (0.85 + 1.1 * level)} fill="url(#hmap-glow)" />
+            </g>;
+          })}
           {pulses.map(k => { const p = data.places.get(k); if (!p) return null; const [x, y] = project(p.lon, p.lat); return <circle key={`pulse-${k}-${now}`} className="hmap-pulse" cx={x} cy={y} r={30 * unit} strokeWidth={2 * unit} />; })}
         </g>
   </>,
@@ -426,7 +454,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
                 const [x, y] = project(lon, lat), place = nearestPlace(data, lon, lat);
                 return <g key={i} className="hmap-route-end" transform={`translate(${x} ${y})`}>
                   <circle r={5 * unit} strokeWidth={1.6 * unit} />
-                  {place && i === 1 && <text y={-10 * unit} fontSize={13 * unit}>{place.name[locale]}</text>}
+                  {place && i === 1 && <text y={-10 * unit} fontSize={13 * unit}>{placeNameAt(data, place.key, now, locale) ?? place.name[locale]}</text>}
                 </g>;
               })}
               {!reducedMotion && <circle className="hmap-arc-runner" r={3.2 * unit}><animateMotion dur="2.6s" fill="freeze" path={d} /></circle>}

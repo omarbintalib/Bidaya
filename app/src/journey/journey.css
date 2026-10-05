@@ -209,3 +209,6 @@ html[data-contrast='dark'] .tl-revealed.is-suggested { background: transparent; 
 .quran-en q { font-style: italic; }
 .quran-en a { white-space: nowrap; font-size: var(--text-small); color: var(--muted); }
 .quran-credit { margin: 6px 0 0; font-size: var(--text-small); color: var(--muted); }
+
+.story-reach > span { display: flex; flex-direction: column; line-height: 1.25; }
+.story-reach small { font-size: calc(11.5px * var(--text-scale)); color: var(--muted); }

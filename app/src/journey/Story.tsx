@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useStat
 import { answer, suggestFor, warmUp, type Answer } from '../assistant/answer';
 import MorphOrb from '../components/MorphOrb';
 import { quizPools } from '../data/quiz';
-import { digits, hijri, PERIOD_ORDER, periodName, unplacedVerses, versesFor } from '../data/select';
+import { digits, eventPlaceName, hijri, PERIOD_ORDER, periodName, unplacedVerses, versesFor } from '../data/select';
 import type { Person, Period, QuizQuestion, Route, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 import HistoricMap, { type Emphasis } from '../map/HistoricMap';
@@ -503,7 +503,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
             : quizNow ? { options: quizNow.options, answer: quizNow.answer, chosen: progress.answers[quizNow.id] ?? null, onPick: k => answerQuiz(quizNow, k) } : null}>
           <div className="story-banner" data-map-overlay aria-hidden="true">
             {step.kind === 'summary' ? <b>{text.summaryKicker}</b> : <><b>{periodName[locale][current.period]}</b><span>{hijri(current.year, locale)}</span></>}
-            {reached > 0 && <span className="story-reach"><i />{text.reachedCount(reached)}</span>}
+            {reached > 0 && <span className="story-reach"><i /><span>{text.reachedCount(reached)}<small>{text.reachedNote}</small></span></span>}
           </div>
 
 
@@ -623,7 +623,7 @@ const EventStep = memo(function EventStep({ index, i, store, data, locale, goToS
     {open ? <EventCard data={data} event={e} locale={locale} chapter={PERIOD_ORDER.indexOf(e.period) + 1}
       yearEvents={data.events.filter(x => x.year === e.year && x.period === e.period)} onPick={goToEvent}
       onWalk={route ? () => onWalk(route) : undefined} walkName={route?.name[locale]} />
-      : <div className="step-peek"><p className="step-date">{hijri(e.year, locale)} · {e.placeName[locale]}</p><h3>{e.title[locale] || e.title.ar}</h3></div>}
+      : <div className="step-peek"><p className="step-date">{hijri(e.year, locale)} · {eventPlaceName(data, e, locale)}</p><h3>{e.title[locale] || e.title.ar}</h3></div>}
   </section>;
 });
 

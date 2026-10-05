@@ -1,5 +1,5 @@
 import { quranpediaRefs } from '../data/quranpedia';
-import { dateLine, digits, excerpt, hadithLinks } from '../data/select';
+import { dateLine, digits, eventPlaceName, excerpt, hadithLinks } from '../data/select';
 import type { Person, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 
@@ -125,7 +125,7 @@ export function answer(data: Sirah, question: string, locale: Locale): Answer {
   const { doc } = top;
 
   if (doc.kind === 'event') {
-    const e = doc.item, title = e.title[locale] || e.title.ar, date = dateLine(e, locale), place = e.placeName[locale];
+    const e = doc.item, title = e.title[locale] || e.title.ar, date = dateLine(e, locale), place = eventPlaceName(data, e, locale);
     const body = (!ar && e.text.en) || e.text.ar;
     const lead = when && date ? (ar ? `كان ذلك في ${date}.` : `It took place in ${date}.`)
       : where && place ? (ar ? `كان ذلك في ${place}.` : `It took place at ${place}.`)

@@ -1,5 +1,5 @@
 import { parseCsv } from './csv';
-import type { LinkType, MapArc, MapLabel, Period, Person, Place, Precision, QuizQuestion, Route, RouteStop, Sirah, SirahEvent, Verse, VerseLink } from './types';
+import type { Growth, LinkType, MapArc, MapLabel, Period, Person, Place, Precision, QuizQuestion, Route, RouteStop, Sirah, SirahEvent, Verse, VerseLink } from './types';
 
 /**
  * Everything the interface shows is read at runtime from the CSVs at the repository root (served at /data/).
@@ -22,6 +22,7 @@ const FILES = {
   facts: '7_sahaba_references.csv',
   arcs: 'map_arcs.csv',
   quranEn: 'quran_en.csv',
+  growth: 'islam_growth.csv',
 } as const;
 
 const PERIODS: Record<string, Period> = { 'قبل البعثة': 'prologue', 'العهد المكي': 'makkah', 'الهجرة': 'hijrah', 'العهد المدني': 'madinah' };
@@ -56,7 +57,8 @@ export async function loadSirah(): Promise<Sirah> {
   for (const r of parseCsv(raw.places)) {
     const lat = num(r.lat), lon = num(r.lon);
     if (lat === null || lon === null) { warn(`4_places.csv: "${r['رمز_المكان']}" has no coordinates`); continue; }
-    places.set(r['رمز_المكان'], { key: r['رمز_المكان'], name: { ar: r['الاسم'], en: r.Name_EN || r['الاسم'] }, lat, lon, kind: r['النوع'], confirmed: r['دقة_الإحداثيات'] === 'مؤكد', events: num(r['عدد_الأحداث']) ?? 0, reached: num(r['حدث_بلوغ_الإسلام']) });
+    places.set(r['رمز_المكان'], { key: r['رمز_المكان'], name: { ar: r['الاسم'], en: r.Name_EN || r['الاسم'] }, lat, lon, kind: r['النوع'], confirmed: r['دقة_الإحداثيات'] === 'مؤكد', events: num(r['عدد_الأحداث']) ?? 0, reached: num(r['حدث_بلوغ_الإسلام']),
+      nameBefore: r['الاسم_قبل'] ? { ar: r['الاسم_قبل'], en: r.Name_Before_EN || r['الاسم_قبل'] } : null, renamedAt: num(r['حدث_الاسم']) });
   }
 
   const texts = new Map(parseCsv(raw.texts).map(r => [num(r.dorar_event_number), r]));
@@ -207,7 +209,16 @@ export async function loadSirah(): Promise<Sirah> {
       summary: { ar: r['الخلاصة'], en: r.Summary_EN || r['الخلاصة'] }, quote: r['الشاهد'], quoteEn: r['الشاهد_EN'] || null, source: r['المصدر'], url: r['الرابط'], note: { ar: r['ملاحظة'], en: r.Note_EN || r['ملاحظة'] } });
   }
 
-  return { events, byNumber, places, verses, people, routes, labels, stops, quiz, arcs };
+  const growth = new Map<string, Growth[]>();
+  for (const r of parseCsv(raw.growth)) {
+    const event = num(r['رقم_حدث_الدرر']), count = num(r['العدد']);
+    if (event === null || count === null || !places.has(r['رمز_المكان'])) { warn(`islam_growth.csv: a row for "${r['رمز_المكان']}" needs a place from 4_places.csv, رقم_حدث_الدرر and العدد`); continue; }
+    const list = growth.get(r['رمز_المكان']) ?? [];
+    list.push({ event, count, what: { ar: r['ما_يعده'], en: r.What_EN || r['ما_يعده'] }, quote: r['الشاهد'], url: r['الرابط'] || `https://dorar.net/history/event/${event}` });
+    growth.set(r['رمز_المكان'], list);
+  }
+
+  return { events, byNumber, places, verses, people, routes, labels, stops, quiz, arcs, growth };
 }
 
 let cache: Promise<Sirah> | null = null;

@@ -25,7 +25,14 @@ export interface SirahEvent {
 }
 
 /** `reached`: Dorar event number from which Islam had reached this place (sourced in the CSV), if any. */
-export interface Place { key: string; name: Text; lat: number; lon: number; kind: string; confirmed: boolean; events: number; reached: number | null }
+export interface Place {
+  key: string; name: Text; lat: number; lon: number; kind: string; confirmed: boolean; events: number; reached: number | null;
+  /** The name used before `renamedAt` (a Dorar event), e.g. Yathrib before the Hijrah; null when the name never changed. */
+  nameBefore: Text | null; renamedAt: number | null;
+}
+
+/** A count of Muslims at a place, as a Dorar event gives it (islam_growth.csv): a lower bound, with what it counts. */
+export interface Growth { event: number; count: number; what: Text; quote: string; url: string }
 
 export interface VerseLink {
   type: LinkType;
@@ -119,4 +126,5 @@ export interface Sirah {
   stops: Map<string, RouteStop[]>;
   quiz: QuizQuestion[];
   arcs: MapArc[];
+  growth: Map<string, Growth[]>;
 }
