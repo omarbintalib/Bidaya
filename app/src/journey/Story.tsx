@@ -242,7 +242,9 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
       rush.current = requestAnimationFrame(tick);
     });
   }, [steps.length, reducedMotion, wide]);
-  const onTimelineIndex = useCallback((i: number) => goToStep(stepOfEvent.get(i)!), [goToStep, stepOfEvent]);
+  // A click further along the timeline than the next event also offers the way back (set once returnTo exists below).
+  const timelineJump = useRef<(from: number, to: number) => void>(() => {});
+  const onTimelineIndex = useCallback((i: number) => { const to = stepOfEvent.get(i)!; timelineJump.current(activeRef.current, to); goToStep(to); }, [goToStep, stepOfEvent]);
   // The arrows move to the next (or previous) event in the story from wherever the reader is — so from a
   // chapter's opening, "next" is that chapter's first event, not the one after it.
   const stepEvent = useCallback((dir: 1 | -1) => {
@@ -378,6 +380,23 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     if (there !== undefined && there !== from) setReturnTo({ step: from, label: stepLabel(from) });
     goToEvent(n);
   }, [events, stepOfEvent, stepLabel, goToEvent]);
+  timelineJump.current = (from, to) => {
+    let between = 0;
+    for (let s = Math.min(from, to) + 1; s < Math.max(from, to); s++) if (steps[s].kind === 'event') between++;
+    // Keep the first place left, so browsing several ticks still leads back to where the reader was.
+    if (between > 0) setReturnTo(r => r ?? { step: from, label: stepLabel(from) });
+  };
+  // The back button sits just under the period banner, whose height changes with the screen and the text.
+  const banner = useRef<HTMLDivElement>(null);
+  const [bannerBottom, setBannerBottom] = useState(0);
+  useLayoutEffect(() => {
+    const el = banner.current;
+    if (!el || !returnTo) return;
+    const measure = () => setBannerBottom(el.offsetTop + el.offsetHeight);
+    measure();
+    const ro = new ResizeObserver(measure); ro.observe(el);
+    return () => ro.disconnect();
+  }, [returnTo]);
   // Back where they started (by the button or by scrolling): the way back is no longer needed.
   useEffect(() => { if (returnTo && active === returnTo.step) setReturnTo(null); }, [active, returnTo]);
   // Opening a search result: an event or a verse goes to its place in the story, a person or place opens its card.
@@ -552,12 +571,12 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
           walk={walk && walkStop ? { routeId: walk.route.id, lat: walkStop.lat, lon: walkStop.lon, key: `${walk.route.id}-${walk.stop}`, name: walkStop.name[locale] } : null}
           quiz={quick?.q ? { options: quick.q.options, answer: quick.q.answer, chosen: progress.answers[quick.q.id] ?? null, onPick: k => answerQuick(quick.q!, k) }
             : quizNow ? { options: quizNow.options, answer: quizNow.answer, chosen: progress.answers[quizNow.id] ?? null, onPick: k => answerQuiz(quizNow, k) } : null}>
-          <div className="story-banner" data-map-overlay aria-hidden="true">
+          <div className="story-banner" ref={banner} data-map-overlay aria-hidden="true">
             {step.kind === 'summary' ? <b>{text.summaryKicker}</b> : <><b>{periodName[locale][current.period]}</b><span>{hijri(current.year, locale)}</span></>}
             {reached > 0 && <span className="story-reach"><i /><span>{text.reachedCount(reached)}<small>{text.reachedNote}</small></span></span>}
           </div>
           {/* After a jump from the map, a card or search: one tap back to where the reader was. */}
-          {returnTo && !answerCard && <div className="map-back" data-map-overlay><BackButton label={returnTo.label} locale={locale} onClick={goBack} /></div>}
+          {returnTo && !answerCard && <div className="map-back" style={bannerBottom ? { top: bannerBottom + 8 } : undefined} data-map-overlay><BackButton label={returnTo.label} locale={locale} onClick={goBack} /></div>}
 
 
           {wide && !quick && !walk && <AskBar locale={locale} hint={askHint} onAsk={askAbout} onHistory={openHistory} />}
