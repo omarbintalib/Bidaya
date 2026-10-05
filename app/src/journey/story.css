@@ -24,6 +24,7 @@
 .tb-chapter.is-done b { position: relative; }
 .tb-chapter.is-done b::after { content: '✓'; position: absolute; top: -6px; inset-inline-end: -7px; width: 14px; height: 14px; border-radius: 50%; display: grid; place-items: center; background: #e2b45c; color: #21130b; font-size: 9px; font-weight: 700; }
 .tb-short { display: none; }
+.tb-film { display: none; } /* wide screens: the summary is on the opening page (and at the end of the story) */
 .tb-end { display: flex; align-items: center; gap: 8px; margin-inline-start: auto; }
 .tb-ask { background: var(--ink); color: var(--button-ink); border-color: var(--ink); }
 .tb-ask svg { color: #e2b45c; }
@@ -259,8 +260,7 @@
   .scrolly-map.has-side-sheet .hmap-controls { inset-inline-start: calc(var(--sheet-side) + 14px); }
   .scrolly-map.has-side-sheet .story-banner { inset-inline-start: calc(var(--sheet-side) + 62px); }
   .scrolly-map.has-side-sheet .story-timeline { padding-inline-start: calc(var(--sheet-side) + 10px); }
-  /* A phone zooms the map by pinching: no zoom buttons over it. */
-  @media (pointer: coarse) { .scrolly-map .hmap-controls { display: none; } }
+  .tb-film { display: inline-flex; } /* the Sirah summary, from the toolbar on phones */
   /* A narrow phone: the toolbar's buttons fit side by side, rather than pushing the page wider than the screen. */
   @media (max-width: 420px) { .tb-end { gap: 4px; } }
   @media (max-width: 350px) {

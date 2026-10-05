@@ -687,6 +687,9 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
         </li>] : [])}
       </ol>
       <div className="tb-end">
+        <button type="button" className="tb-btn tb-film" aria-haspopup="dialog" aria-label={text.film} title={text.filmHint} onClick={openFilm}>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" strokeWidth="1.4" /><path d="M8.3 6.8v6.4l5-3.2z" fill="currentColor" /></svg>
+        </button>
         <button type="button" className="tb-btn tb-search" aria-haspopup="dialog" aria-label={text.searchTitle} title={`${text.searchTitle} ( / )`} onClick={() => setSearchOpen(true)}>
           <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" strokeWidth="1.5" /><path d="m13 13 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
           <span className="tb-long">{text.search}</span>
