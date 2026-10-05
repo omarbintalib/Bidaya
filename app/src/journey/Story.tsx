@@ -670,7 +670,8 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
   const placesSeen = new Set(progress.seen.map(n => data.byNumber.get(n)?.place).filter(Boolean)).size;
 
   return <PeopleProvider value={peopleApi}>
-    {resume && <ResumeDialog locale={locale} note={resetNote} onContinue={() => { const n = progress.lastEvent!; setResume(false); setIntro(false); setBuilt(true); goToEvent(n, false); }} onRestart={startOver} />}
+    {resume && <ResumeDialog locale={locale} note={resetNote} onContinue={() => { const n = progress.lastEvent!; setResume(false); setIntro(false); setBuilt(true); goToEvent(n, false); }} onRestart={startOver}
+      onSummary={() => { const n = progress.lastEvent!; setResume(false); setIntro(false); setBuilt(true); goToEvent(n, false); openFilm(); }} />}
     {intro && <Intro locale={locale} reducedMotion={reducedMotion} onBegin={begin} onSummary={() => { try { sessionStorage.setItem('bidaya.intro.seen', '1'); } catch { /* storage unavailable */ } setBuilt(true); setIntro(false); openFilm(); }} />}
     <nav className="story-toolbar" aria-label={text.toolbar}>
       <ol className="tb-chapters" ref={chaptersRef} aria-label={text.chapters}>
@@ -1023,12 +1024,12 @@ function UndatedDialog({ verses, locale, onClose }: { verses: Verse[]; locale: L
   </dialog>;
 }
 
-function ResumeDialog({ locale, note, onContinue, onRestart }: { locale: Locale; note: string; onContinue: () => void; onRestart: () => void }) {
+function ResumeDialog({ locale, note, onContinue, onRestart, onSummary }: { locale: Locale; note: string; onContinue: () => void; onRestart: () => void; onSummary: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => { ref.current?.showModal(); return () => ref.current?.close(); }, []);
   return <dialog ref={ref} className="chat-history resume-dialog" aria-labelledby="resume-title" dir={locale === 'ar' ? 'rtl' : 'ltr'} onCancel={event => { event.preventDefault(); onContinue(); }}>
     <h2 id="resume-title">{locale === 'ar' ? 'تابع من حيث توقفت' : 'Continue where you left off'}</h2>
-    <div className="resume-actions"><button className="btn-primary" autoFocus onClick={onContinue}>{locale === 'ar' ? 'متابعة القراءة' : 'Continue reading'}</button><button className="btn-quiet" onClick={onRestart}>{locale === 'ar' ? 'البدء من جديد' : 'Start over'}</button></div>
+    <div className="resume-actions"><button className="btn-primary" autoFocus onClick={onContinue}>{locale === 'ar' ? 'متابعة القراءة' : 'Continue reading'}</button><button className="btn-quiet" onClick={onSummary}>{journeyCopy[locale].film}</button><button className="btn-quiet" onClick={onRestart}>{locale === 'ar' ? 'البدء من جديد' : 'Start over'}</button></div>
     <p>{note}</p>
   </dialog>;
 }
