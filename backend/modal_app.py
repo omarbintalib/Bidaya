@@ -5,8 +5,8 @@ Deploy the backend to Modal (serverless GPU, scales to zero: no visitors = no co
     modal secret create bidayah-openai OPENAI_API_KEY=sk-... OPENAI_MODEL=gpt-6-luna OPENAI_ROUTER_MODEL=gpt-6-luna
     cd backend && modal deploy modal_app.py                       # prints https://<workspace>--bidayah-api-serve.modal.run
 
-The image bakes in both models (bge-m3, bge-reranker-v2-m3) and the corpus embeddings (built once on a GPU at
-deploy time), so a cold start only loads them: roughly 20-60 s for the first question after the app has been
+The image bakes in both models (bge-m3, bge-reranker-v2-m3) and the corpus embeddings (data/index, rebuilt on
+a GPU at deploy time only if the chunks changed), so a cold start only loads them: roughly 20-60 s for the first question after the app has been
 idle, then ~4 s per answer. The frontend pings /api/health when the page opens, so the backend is usually awake
 by the time a visitor asks.
 """
@@ -40,8 +40,9 @@ image = (
     .run_function(download_models)
     .add_local_dir(HERE / 'pipeline', '/app/pipeline', copy=True)
     .add_local_dir(HERE / 'data' / 'chunks', '/app/data/chunks', copy=True)
+    .add_local_dir(HERE / 'data' / 'index', '/app/data/index', copy=True)     # committed embeddings
     .add_local_file(HERE / 'server.py', '/app/server.py', copy=True)
-    .run_function(build_index, gpu='T4')
+    .run_function(build_index, gpu='T4')                                        # no-op unless chunks changed
     .env({'HF_HUB_OFFLINE': '1'})                                                # never re-download at runtime
 )
 

@@ -69,7 +69,7 @@ backend/
                    data/index), bm25.py, retriever.py (hybrid, RRF), reranker.py, prompts.py (router, answer rules,
                    fixed refusals), llm.py (OpenAI or Gemini), rag.py (the assistant)
   data/chunks/     the indexed corpus (2,905 chunks, JSONL) + report.json (counts per source)
-  data/index/      embedding cache, built on first start (not committed)
+  data/index/      corpus embeddings (bge-m3, 12 MB, committed; rebuilt automatically if the chunks change)
 ```
 
 This repo holds only what the live demo runs. The corpus was built, reviewed and evaluated with a development

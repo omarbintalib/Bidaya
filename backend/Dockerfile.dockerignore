@@ -5,5 +5,4 @@ app
 *.html
 backend/.env
 backend/.venv
-backend/data/index
 **/__pycache__

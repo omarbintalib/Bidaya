@@ -10,6 +10,76 @@
 
 Data for the interactive Seerah map: Seerah events, the surahs and verses related to each event or stage, places, and Companions, plus the links between them.
 
+## Run the project locally
+
+Use this if the live demo is down, or to inspect the system on your own machine. You need an OpenAI API key for
+the assistant's answers; without the backend the map still works and answers from its own data.
+
+**Requirements:** Git, [Python 3.12 or 3.13](https://www.python.org/downloads/), [Node.js 24](https://nodejs.org/),
+~8 GB of free RAM and ~6 GB of disk (the two AI models). An NVIDIA GPU is optional (faster answers).
+
+### 1. Get the code
+
+```sh
+git clone https://github.com/omarbintalib/Bidaya.git
+cd Bidaya
+```
+
+### 2. Start the backend (terminal 1)
+
+Windows (PowerShell):
+
+```powershell
+cd backend
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+# NVIDIA GPU:  pip install torch --index-url https://download.pytorch.org/whl/cu128
+# no GPU:      pip install torch --index-url https://download.pytorch.org/whl/cpu
+pip install -r requirements.txt
+copy .env.example .env          # then open .env and set OPENAI_API_KEY=sk-...
+python -m uvicorn server:app --port 8000
+```
+
+macOS / Linux:
+
+```sh
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install torch               # Linux without a GPU: add --index-url https://download.pytorch.org/whl/cpu
+pip install -r requirements.txt
+cp .env.example .env            # then edit .env and set OPENAI_API_KEY=sk-...
+python -m uvicorn server:app --port 8000
+```
+
+The first start downloads the two models (~4.5 GB, once) and takes a few minutes; later starts take ~30 s. It is
+ready when <http://127.0.0.1:8000/api/health> shows `"ok": true`.
+
+### 3. Start the website (terminal 2)
+
+```sh
+cd app
+npm ci
+npm run dev
+```
+
+Open <http://127.0.0.1:5173>. The website forwards "Ask the map" questions to the backend on port 8000.
+
+### Troubleshooting
+
+| Problem | Fix |
+|---|---|
+| Answers are short and have no book sources | The backend is not running or not reachable: check terminal 1 and `/api/health` |
+| `OPENAI_API_KEY` / authentication error in terminal 1 | Set the key in `backend/.env` and restart the backend |
+| Answers are slow on a computer without a GPU | Expected (~10-20 s). Set `BIDAYAH_RERANK=0` in `backend/.env` for faster, slightly less accurate search |
+| `torch` cannot use an RTX 50-series GPU | Install the CUDA 12.8+ build (`--index-url https://download.pytorch.org/whl/cu128`) |
+| `npm ci` fails | Check `node --version` is 24.x |
+| Port 8000 is busy | Start the backend with `--port 8010`, then run the website with `BIDAYAH_API=http://127.0.0.1:8010 npm run dev` (PowerShell: `$env:BIDAYAH_API="http://127.0.0.1:8010"; npm run dev`) |
+
+More detail (API, architecture, deployment, methodology and evaluation): `backend/README.md`.
+
+---
+
 **Sources.** Every record traces back to one of two approved sources:
 
 - **Dorar's historical encyclopedia** (الموسوعة التاريخية – الدرر السنية), for the Seerah events. Each event has a direct link.
