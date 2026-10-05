@@ -398,6 +398,36 @@
 .film-beats button i { position: absolute; inset: 0; background: var(--brass); transform-origin: left; transform: scaleX(0); animation: tl-progress linear forwards; }
 .film-beats button i:dir(rtl) { transform-origin: right; }
 .film-beats button:focus-visible, .film-play:focus-visible, .film-close:focus-visible, .film-read:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+/* Moving between moments: arrows beside play, and "3 / 21", which opens the list of every moment. */
+.film-step { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border: 1px solid var(--border); border-radius: 50%; background: var(--paper); color: var(--ink); }
+.film-step svg { width: 16px; height: 16px; }
+.film-step:dir(rtl) svg { transform: scaleX(-1); }
+.film-step:disabled { opacity: .35; }
+.film-count { flex: none; min-height: 36px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 999px; background: var(--paper); color: var(--ink); font-size: var(--text-small); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.film-count[aria-expanded='true'] { border-color: var(--brass); }
+.film-list { list-style: none; margin: 0; padding: 6px; width: min(520px, 100%); max-height: min(50vh, 420px); overflow-y: auto; overscroll-behavior: contain; background: var(--paper); border: 1px solid var(--brass); border-radius: 12px; box-shadow: 0 14px 40px #331b0d33; }
+.film-list button { width: 100%; display: grid; grid-template-columns: 5.5em 1fr; gap: 10px; align-items: baseline; padding: 8px 10px; border: 0; border-radius: 8px; background: none; color: var(--ink); text-align: start; font-size: var(--text-small); line-height: 1.5; }
+.film-list button span { color: var(--brass); font-variant-numeric: tabular-nums; }
+.film-list button:hover, .film-list button[aria-current='step'] { background: #e2b45c26; }
+.film-step:focus-visible, .film-count:focus-visible, .film-list button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+/* Ask about this moment, in the caption: the answer shows there and the film waits. */
+.film-ask { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); text-align: start; }
+.film-ask form { display: flex; align-items: center; gap: 6px; padding: 3px 3px 3px 12px; border: 1px solid var(--border); border-radius: 999px; background: var(--paper); }
+.film-ask form:dir(rtl) { padding: 3px 12px 3px 3px; }
+.film-ask form:focus-within { border-color: var(--brass); }
+.film-ask input { flex: 1; min-width: 0; border: 0; background: none; color: var(--ink); font: inherit; font-size: var(--text-small); padding: 6px 0; outline: none; }
+.film-ask form button { width: 34px; height: 34px; flex: none; display: grid; place-items: center; border: 0; border-radius: 50%; background: var(--ink); color: var(--button-ink, #fff); }
+.film-ask form button:disabled { opacity: .35; }
+.film-ask form button svg { width: 16px; height: 16px; }
+.film-ask form button:dir(rtl) svg { transform: scaleX(-1); }
+.film-ask-suggest { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.film-ask-suggest button { padding: 5px 12px; border: 1px solid color-mix(in srgb, var(--brass) 55%, transparent); border-radius: 999px; background: #e2b45c14; color: var(--ink); font-size: calc(12.5px * var(--text-scale)); text-align: start; }
+.film-ask-wait { margin: 8px 0 0; color: var(--muted); font-size: var(--text-small); }
+.film-ask-answer { position: relative; margin-top: 10px; padding: 12px 14px; padding-inline-end: 40px; border: 1px solid var(--border); border-radius: 10px; background: var(--paper); }
+.film-ask-answer > p { margin: 0; font-size: var(--text-small); line-height: var(--reading-line-height); }
+.film-ask-close { position: absolute; top: 6px; inset-inline-end: 6px; width: 30px; height: 30px; display: grid; place-items: center; border: 0; background: none; color: var(--muted); }
+.film-ask-close svg { width: 14px; height: 14px; }
+@media (max-width: 520px) { .film-beats { display: none; } .film-controls { justify-content: center; } }
 @media all { html:not([data-reduced-motion='true']) .film-caption { animation: rise-in .45s ease both; }
   html:not([data-reduced-motion='true']) .film-year { animation: film-year .45s ease both; } }
 @keyframes film-year { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }

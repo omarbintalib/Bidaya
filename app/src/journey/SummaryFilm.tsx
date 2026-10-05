@@ -5,6 +5,7 @@ import type { Sirah, SirahEvent } from '../data/types';
 import type { Locale } from '../i18n';
 import HistoricMap, { type Emphasis } from '../map/HistoricMap';
 import { journeyCopy } from './copy';
+import SummaryAsk from './SummaryAsk';
 
 /**
  * A summary of the Sirah, played on the map (summary_film.csv): moments from the birth to the year of the Prophet's
@@ -25,6 +26,12 @@ export default function SummaryFilm({ data, locale, reducedMotion, onClose, onJu
   const [playing, setPlaying] = useState(true);
   const moment = moments[i], ev = data.byNumber.get(moment.n)!;
   const last = i === moments.length - 1;
+  // Step to another moment: the arrows, the keys, a swipe on the caption, the list of moments or the dots.
+  const go = useCallback((k: number) => setI(Math.max(0, Math.min(moments.length - 1, k))), [moments.length]);
+  const [listOpen, setListOpen] = useState(false);
+  // While the reader asks about a moment or reads the answer, the film waits.
+  const [asking, setAsking] = useState(false);
+  const onAsking = useCallback((active: boolean) => { setAsking(active); if (active) setPlaying(false); }, []);
 
   // What each moment shows, and for how long: time to read its passages (about 230 words a minute) and to watch the map.
   const told = useMemo(() => moments.map(m => {
@@ -37,10 +44,10 @@ export default function SummaryFilm({ data, locale, reducedMotion, onClose, onJu
 
   // Move on when the moment's time is up; stop on the last one.
   useEffect(() => {
-    if (!playing || last) return;
+    if (!playing || last || asking) return;
     const id = window.setTimeout(() => setI(x => x + 1), say.ms);
     return () => window.clearTimeout(id);
-  }, [playing, i, say.ms, last]);
+  }, [playing, i, say.ms, last, asking]);
   useEffect(() => { onBeat(moment.n); }, [moment.n, onBeat]);
   useEffect(() => () => onBeat(null), [onBeat]);
 
@@ -51,12 +58,29 @@ export default function SummaryFilm({ data, locale, reducedMotion, onClose, onJu
     document.body.style.overflow = 'hidden';
     root.current?.querySelector<HTMLButtonElement>('.film-play')?.focus();
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { e.preventDefault(); onClose(); }
+      const typing = !!(e.target as HTMLElement).closest('input, textarea');
+      if (e.key === 'Escape') { e.preventDefault(); if (typing) (e.target as HTMLElement).blur(); else if (listRef.current) setListOpen(false); else onClose(); }
+      if (typing) return;
       if (e.key === ' ' && !(e.target as HTMLElement).closest('button')) { e.preventDefault(); setPlaying(p => !p); }
+      // The arrow toward the reading direction goes on (← in Arabic, → in English).
+      const on = locale === 'ar' ? 'ArrowLeft' : 'ArrowRight', back = locale === 'ar' ? 'ArrowRight' : 'ArrowLeft';
+      if (e.key === on || e.key === back) { e.preventDefault(); setI(x => Math.max(0, Math.min(moments.length - 1, x + (e.key === on ? 1 : -1)))); }
     };
     window.addEventListener('keydown', onKey);
     return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = overflow; before?.focus?.({ preventScroll: true }); };
-  }, [onClose]);
+  }, [onClose, locale, moments.length]);
+  const listRef = useRef(false);
+  listRef.current = listOpen;
+  // A swipe across the caption on a phone: toward the reading direction goes on.
+  const touch = useRef<{ x: number; y: number } | null>(null);
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const start = touch.current, t = e.changedTouches[0];
+    touch.current = null;
+    if (!start || !t) return;
+    const dx = t.clientX - start.x, dy = t.clientY - start.y;
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    go(i + ((dx < 0) === (locale !== 'ar') ? 1 : -1));
+  };
 
   // Wide screens: the caption is a panel at the side, so the map keeps its full height (the letters reach from
   // Alexandria to Oman). Narrow screens: it sits at the bottom. Either way the map keeps the places clear of it.
@@ -93,7 +117,7 @@ export default function SummaryFilm({ data, locale, reducedMotion, onClose, onJu
         </button>
       </div>
       <div className="film-bottom" ref={panel} data-map-overlay>
-        <div className="film-caption" key={ev.n}>
+        <div className="film-caption" key={ev.n} onTouchStart={e => { touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }} onTouchEnd={onTouchEnd}>
           <p className="film-period">{periodName[locale][ev.period]} · {eventPlaceName(data, ev, locale)}</p>
           <h2 lang={title === ev.title.ar ? 'ar' : undefined}>{title}</h2>
           {/* The source's own passages, word for word, each whole; «…» opens a passage that follows a part left out. */}
@@ -105,13 +129,23 @@ export default function SummaryFilm({ data, locale, reducedMotion, onClose, onJu
             {say.verses.map(v => <b key={v.id}>{locale === 'en' ? `Surah ${v.surahEn ?? v.surah}` : `سورة ${v.surah}`} {v.whole ? text.wholeSurah : digits(quranpediaRefs(v.ref, false, locale).map(r => r.label.split(':')[1]).join(locale === 'ar' ? '، ' : ', '), locale)}</b>)}
           </p>}
           <p className="film-source">{text.filmSource} · <button type="button" className="film-read" onClick={() => onJump(ev.n)}>{text.filmRead}</button></p>
+          <SummaryAsk key={ev.n} data={data} locale={locale} event={ev} quotes={say.quotes} onActive={onAsking} onOpenEvent={onJump} />
         </div>
+        {listOpen && <ol className="film-list" aria-label={text.filmMoments}>
+          {moments.map((m, k) => { const e = data.byNumber.get(m.n)!; return <li key={m.n}>
+            <button type="button" aria-current={k === i ? 'step' : undefined} onClick={() => { go(k); setListOpen(false); }}>
+              <span>{hijri(e.year, locale)}</span>{e.title[locale] || e.title.ar}
+            </button>
+          </li>; })}
+        </ol>}
         <div className="film-controls">
+          <button type="button" className="film-step" onClick={() => go(i - 1)} disabled={i === 0} aria-label={text.filmPrev}><Chevron back /></button>
           <button type="button" className="film-play" onClick={() => (last ? replay() : setPlaying(p => !p))} aria-label={last ? text.filmReplay : playing ? text.pause : text.play}>
             {last ? <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M15.5 8A6 6 0 1 0 16 11M15.5 3.5V8H11" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
               : playing ? <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4h3v12H6zM11 4h3v12h-3z" fill="currentColor" /></svg>
               : <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4l10 6-10 6z" fill="currentColor" /></svg>}
           </button>
+          <button type="button" className="film-step" onClick={() => go(i + 1)} disabled={last} aria-label={text.filmNext}><Chevron /></button>
           <ol className="film-beats" aria-label={text.filmTitle}>
             {moments.map((m, k) => <li key={m.n}>
               <button type="button" className={k < i ? 'is-done' : k === i ? 'is-on' : ''} aria-current={k === i ? 'step' : undefined}
@@ -120,8 +154,15 @@ export default function SummaryFilm({ data, locale, reducedMotion, onClose, onJu
               </button>
             </li>)}
           </ol>
+          <button type="button" className="film-count" aria-expanded={listOpen} aria-label={`${text.filmMoments}: ${i + 1} / ${moments.length}`} onClick={() => setListOpen(o => !o)}>
+            {digits(i + 1, locale)} / {digits(moments.length, locale)}
+          </button>
         </div>
       </div>
     </HistoricMap>
   </div>;
+}
+
+function Chevron({ back }: { back?: boolean }) {
+  return <svg viewBox="0 0 20 20" aria-hidden="true"><path d={back ? 'M12 5l-5 5 5 5' : 'M8 5l5 5-5 5'} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }
