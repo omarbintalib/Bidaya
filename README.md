@@ -127,7 +127,7 @@ Each record has exactly one link type:
 | `نوع_الربط` | Count | How to display |
 |---|---|---|
 | مباشر (direct) | 58 | On the event's card |
-| سياق (context) | 8 | As a "من سياق هذه المرحلة" link from the card. **It is not the event itself.** |
+| سياق (context) | 8 | Under "آيات في موضوع هذا الحدث" (Verses on this event's subject) in the card. **It is not the event itself.** |
 | موضع مقترح (suggested position) | 10 | On the timeline after the named event, labelled as an estimate. The reason is in `سبب_الموضع`. |
 | بعد الحدث (after the event) | 2 | On the event's card with the tag "نزلت بعد هذا الحدث" |
 | مرحلة (period) | 16 | In a "verses revealed in this stage" section at the end of the stage |
