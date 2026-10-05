@@ -178,16 +178,16 @@ it('keeps resize measurements from snapping the card during the globe-to-answer 
   const mover = host.querySelector<HTMLElement>('.mo-mover')!;
   const width = actor.style.getPropertyValue('--w');
   const height = actor.style.getPropertyValue('--h');
-  expect(parseFloat(width)).toBeGreaterThan(124); expect(parseFloat(width)).toBeLessThan(440);
-  expect(parseFloat(mover.style.top)).toBeGreaterThan(100); expect(parseFloat(mover.style.top)).toBeLessThan(166);
+  expect(parseFloat(width)).toBeGreaterThan(124); expect(parseFloat(width)).toBeLessThan(568);
+  expect(parseFloat(mover.style.top)).toBeGreaterThan(100); expect(parseFloat(mover.style.top)).toBeLessThan(173);
   await act(async () => observers.forEach(callback => callback()));
   expect(actor.style.getPropertyValue('--w')).toBe(width);
   expect(actor.style.getPropertyValue('--h')).toBe(height);
   await advance(1500);
   expect(phase()).toBe('answered');
-  // A 292px answer fits under the limit, so the box takes its full height.
-  expect(actor.style.getPropertyValue('--h')).toBe('292px');
-  expect(mover.style.top).toBe('166px');
+  // A 292px answer fits under the limit, so the box takes its full height (plus 14px slack).
+  expect(actor.style.getPropertyValue('--h')).toBe('306px');
+  expect(mover.style.top).toBe('173px');
 });
 
 it('starts response-only requests with globe assembly and cancels without a late reveal', async () => {

@@ -31,7 +31,8 @@ const CARD_H = 140;
 const FLY_D = 138;
 // Geometry belongs to the local AI stage, never to the page or map.
 const pillW = (root: HTMLElement) => Math.min(560, Math.max(160, root.clientWidth - 32));
-const cardW = (root: HTMLElement) => Math.min(440, Math.max(160, root.clientWidth - 32));
+// The answer card uses the width it is given (up to a comfortable reading line), not a fixed narrow column.
+const cardW = (root: HTMLElement) => Math.min(760, Math.max(160, root.clientWidth - 32));
 const homeDy = (root: HTMLElement) => Math.min(80, Math.max(50, root.clientHeight - 180));
 
 /* ───────────────────────── math + easing ───────────────────────── */
@@ -585,7 +586,8 @@ function createRuntime(env: Env): Runtime {
     const text = probe.querySelector('.mo-a-body');
     if (text) text.textContent = body;
     root.append(probe);
-    geo.ch = Math.max(CARD_H, Math.ceil(probe.getBoundingClientRect().height));
+    // A little slack, so a last line that wraps differently in the live box (a scrollbar, a late font) never spills.
+    geo.ch = Math.max(CARD_H, Math.ceil(probe.getBoundingClientRect().height) + 14);
     // On a phone the panel is a full-height sheet, so the answer gets most of the screen rather than a small box.
     // The answer box takes the height of its text, up to about half the screen; "Expand answer" is only for longer ones.
     const cap = Math.max(220, Math.min(480, Math.round(window.innerHeight * .5)));

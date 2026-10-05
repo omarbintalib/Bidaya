@@ -142,7 +142,7 @@ export function answer(data: Sirah, question: string, locale: Locale): Answer {
   const refs = hadithLinks(v).map(h => `${h.book === 'bukhari' ? (ar ? 'البخاري' : 'Bukhari') : (ar ? 'مسلم' : 'Muslim')} ${h.n}`).join(ar ? '، ' : ', ');
   const src = refs ? (ar ? `المصدر: صحيح ${refs}.` : `Source: Sahih ${refs}.`) : (ar ? 'المصدر: موسوعة التفسير – الدرر السنية.' : 'Source: Dorar Tafsir Encyclopedia.');
   const surah = ar ? `سورة ${v.surah} (${v.whole ? 'السورة كاملة' : v.ref})` : `Surah ${v.surahEn ?? v.surah} (${v.whole ? 'whole surah' : v.ref})`;
-  return { kind: 'verse', event: ev ?? undefined, sources: sourceLinks([...hadithLinks(v).map(h => ({ label: `${h.book === 'bukhari' ? 'Bukhari' : 'Muslim'} ${h.n}`, url: h.url })), ...v.tafseer.map(url => ({ label: ar ? 'موسوعة التفسير' : 'Tafsir Encyclopedia', url })), ...quranpediaRefs(v.ref, v.whole, locale).map(r => ({ label: `Quranpedia ${r.label}`, url: r.url }))]), text: `${surah}: ${v.phrase[locale]} — ${v.title[locale]}. ${src}` };
+  return { kind: 'verse', event: ev ?? undefined, sources: sourceLinks([...hadithLinks(v).map(h => ({ label: ar ? `${h.book === 'bukhari' ? 'صحيح البخاري' : 'صحيح مسلم'} ${h.n}` : `${h.book === 'bukhari' ? 'Sahih al-Bukhari' : 'Sahih Muslim'} ${h.n}`, url: h.url })), ...v.tafseer.map(url => ({ label: ar ? 'موسوعة التفسير' : 'Tafsir Encyclopedia', url })), ...quranpediaRefs(v.ref, v.whole, locale).map(r => ({ label: `${ar ? 'الموسوعة القرآنية' : 'Quranpedia'} ${r.label}`, url: r.url }))]), text: `${surah}: ${v.phrase[locale]} — ${v.title[locale]}. ${src}` };
 }
 
 /**
