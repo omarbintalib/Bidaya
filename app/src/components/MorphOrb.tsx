@@ -3,6 +3,7 @@ import AskIcon from './AskIcon';
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { copy, type Locale, type AiCopy } from "../i18n";
 import "./MorphOrb.css";
+import { ORB_LOOKS, THINK_LOOKS, globeLight, globePose, type OrbLook } from "./globeEffects";
 
 type Phase = "idle" | "launch" | "assemble" | "think" | "resolve" | "condense" | "unfold" | "answered" | "reset";
 
@@ -270,23 +271,23 @@ const COLORS: string[] = (() => {
 
 interface OrbParams {
   k: number; alpha: number; spin: number; rot: number; sweep: number; pop: number;
-  vortex: number; gain: number; floor: number; rad: number; prog: number;
+  vortex: number; gain: number; floor: number; rad: number; look: OrbLook;
 }
 const ORB_KEYS = ["k", "alpha", "spin", "sweep", "pop", "vortex", "gain", "floor", "rad"] as const;
 
 function createOrb(canvas: HTMLCanvasElement, getSpeed: () => number, isReduced: () => boolean) {
-  const P: OrbParams = { k: 0, alpha: 0, spin: 0, rot: 0, sweep: 0, pop: 1, vortex: 0, gain: 1, floor: 0, rad: 0, prog: 0 };
+  const P: OrbParams = { k: 0, alpha: 0, spin: 0, rot: 0, sweep: 0, pop: 1, vortex: 0, gain: 1, floor: 0, rad: 0, look: "base" };
   const ctx = canvas.getContext("2d");
   const lit = new Float32Array(N);
   const SX = new Float32Array(N), SY = new Float32Array(N), SR = new Float32Array(N), SD = new Float32Array(N);
   const SC = new Int16Array(N);
-  const pw = [1, 0, 0, 0];
+  const weights: number[] = ORB_LOOKS.map((look) => look === "base" ? 1 : 0);
   let time = 0, raf = 0, last = 0, dead = false;
 
   const reset = () => {
-    P.k = 0; P.alpha = 0; P.spin = 0; P.rot = 0; P.sweep = 0; P.pop = 1; P.vortex = 0; P.gain = 1; P.floor = 0; P.rad = 0; P.prog = 0;
+    P.k = 0; P.alpha = 0; P.spin = 0; P.rot = 0; P.sweep = 0; P.pop = 1; P.vortex = 0; P.gain = 1; P.floor = 0; P.rad = 0; P.look = "base";
     lit.fill(0);
-    pw[0] = 1; pw[1] = 0; pw[2] = 0; pw[3] = 0;
+    weights.fill(0); weights[0] = 1;
     time = isReduced() ? 1.2 : 0;
   };
   reset();
@@ -298,53 +299,33 @@ function createOrb(canvas: HTMLCanvasElement, getSpeed: () => number, isReduced:
   canvas.height = Math.round(CANVAS * dpr);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  const S = 0.6, CP = Math.cos(0.35), SP = Math.sin(0.35), C0 = CANVAS / 2;
+  const S = 0.6, C0 = CANVAS / 2;
 
   const draw = (dt: number) => {
     ctx.clearRect(0, 0, CANVAS, CANVAS);
     time += dt;
     P.rot += P.spin * dt;
-    const yaw = P.rot + P.vortex, cyw = Math.cos(yaw), syw = Math.sin(yaw);
-    const stepW = dt / 0.35;
-    for (let q = 0; q < 4; q++) {
-      const d = (q === P.prog ? 1 : 0) - pw[q];
-      pw[q] += Math.abs(d) <= stepW ? d : d > 0 ? stepW : -stepW;
+    const yaw = P.rot + P.vortex;
+    // Blend both lighting and geometry when the request changes state.
+    const blend = 1 - Math.exp(-dt / 0.22);
+    for (let q = 0; q < weights.length; q++) {
+      const target = ORB_LOOKS[q] === P.look ? 1 : 0;
+      weights[q] = isReduced() ? target : weights[q] + (target - weights[q]) * blend;
     }
     const decay = Math.exp(-dt / 0.5);
-    const h0 = (time * 300) % N, h3 = (time * 480) % N;
-    const a1 = time * 0.8, b1 = Math.sin(time * 0.5) * 0.9;
-    const f1x = Math.cos(b1) * Math.cos(a1), f1y = Math.sin(b1), f1z = Math.cos(b1) * Math.sin(a1);
-    const a2 = time * 0.55 + 2.1, b2 = Math.cos(time * 0.42) * 0.9;
-    const f2x = Math.cos(b2) * Math.cos(a2), f2y = Math.sin(b2), f2z = Math.cos(b2) * Math.sin(a2);
-    const lat = Math.sin(time * 2.2);
+    const pose = globePose(time, weights);
+    const CP = Math.cos(pose.pitch), SP = Math.sin(pose.pitch);
+    const CR = Math.cos(pose.roll), SRoll = Math.sin(pose.roll);
     const swirlK = P.vortex * 1.5;
 
     for (let n = 0; n < N; n++) {
       const dx = DX[n], dy = DY[n], dz = DZ[n], u = DU[n];
 
-      /* light programs: dots are lit in turn */
-      let pulse = 0;
-      if (pw[0] > 0.001) {
-        let dd = Math.abs(n - h0); if (dd > N - dd) dd = N - dd;
-        const v = Math.max(0, 1 - dd / 16);
-        pulse = Math.max(pulse, v * v * pw[0]);
-      }
-      if (pw[1] > 0.001) {
-        const v1 = Math.max(0, (dx * f1x + dy * f1y + dz * f1z - 0.72) / 0.28);
-        const v2 = Math.max(0, (dx * f2x + dy * f2y + dz * f2z - 0.72) / 0.28);
-        const v = Math.max(v1, v2);
-        pulse = Math.max(pulse, v * v * pw[1]);
-      }
-      if (pw[2] > 0.001) {
-        const e = dy - lat;
-        const v = Math.max(0, 1 - (e * e) / 0.02);
-        pulse = Math.max(pulse, v * v * pw[2]);
-      }
-      if (pw[3] > 0.001) {
-        let dd = Math.abs(n - h3); if (dd > N - dd) dd = N - dd;
-        const v = Math.max(0, 1 - dd / 22);
-        pulse = Math.max(pulse, v * v * pw[3]);
-      }
+      const turn = yaw + pose.twist * dy;
+      const cyw = Math.cos(turn), syw = Math.sin(turn);
+      const x1 = dx * cyw + dz * syw, z1 = -dx * syw + dz * cyw;
+      const y2 = dy * CP - z1 * SP, z2 = dy * SP + z1 * CP;
+      const pulse = globeLight(time, dx, dy, dz, x1, y2, z2, weights);
       const l = Math.max(lit[n] * decay, pulse * P.gain);
       lit[n] = l;
 
@@ -353,10 +334,8 @@ function createOrb(canvas: HTMLCanvasElement, getSpeed: () => number, isReduced:
       if (ki <= 0.001) { SC[n] = -1; continue; }
       const eo = E.out(ki), kk = eo * P.pop;
 
-      const x1 = dx * cyw + dz * syw, z1 = -dx * syw + dz * cyw;
-      const y2 = dy * CP - z1 * SP, z2 = dy * SP + z1 * CP;
       const f = 2.8 / (2.8 - z2), depth = (z2 + 1) / 2;
-      let ox = x1 * ORB_R * kk * f, oy = -y2 * ORB_R * kk * f;
+      let ox = (x1 * CR - y2 * SRoll) * ORB_R * kk * f * pose.scale, oy = -(x1 * SRoll + y2 * CR) * ORB_R * kk * f * pose.scale;
       if (swirlK > 0.001) {
         const sw = (1 - ki) * swirlK, cc = Math.cos(sw), ss = Math.sin(sw);
         const tx = ox * cc - oy * ss;
@@ -577,6 +556,11 @@ function createRuntime(env: Env): Runtime {
   const set = (ch: string, v: number) => { vals[ch] = v; dirty.add(ch); };
   const flush = () => { dirty.forEach((ch) => CH[ch]?.(vals[ch])); dirty.clear(); };
   const setNow = (ch: string, v: number) => { vals[ch] = v; CH[ch]?.(v); };
+  const setLook = (look: OrbLook) => {
+    orb.P.look = look;
+    root.dataset.orbState = look;
+    orb.ensure();
+  };
   const measureAnswer = (body = latestBody || env.getCopy().answerBody) => {
     const answer = env.getAnswer();
     if (!answer) return;
@@ -613,6 +597,7 @@ function createRuntime(env: Env): Runtime {
     else if (env.getPhase() === 'answered') { setNow('w', geo.cw); setNow('h', geo.ch); setNow('anchorY', geo.ch / 2 + 20); }
   };
   const resetChannels = () => {
+    setLook("base");
     setNow("w", geo.pw);
     for (const ch of Object.keys(INIT)) setNow(ch, INIT[ch]);
     measurePill(); setNow("h", geo.ph);
@@ -655,12 +640,13 @@ function createRuntime(env: Env): Runtime {
 
   /* ── thinking labels ── */
   const labelLoop = async (sig: AbortSignal, ctl: { stop: boolean }) => {
-    let i = 0;
+    let i = 0, steps = 0;
     for (;;) {
       await sleep(1150 / env.getSpeed(), sig);
       if (sig.aborted || ctl.stop) return;
+      if (++steps >= THINK_LOOKS.length * 2) { setLook("waiting"); return; }
       i = (i + 1) % env.getCopy().labels.length;
-      orb.P.prog = i % 4;
+      setLook(THINK_LOOKS[i % THINK_LOOKS.length]);
       env.ui.swapLabel(env.getCopy().labels[i]);
     }
   };
@@ -679,22 +665,26 @@ function createRuntime(env: Env): Runtime {
         for (const ch of ['oInput', 'oPill', 'oGlow', 'oAur', 'oRing', 'oBall', 'trail']) setNow(ch, 0);
         setNow('u', 1); setNow('w', ORB_D); setNow('h', ORB_D); setNow('r', ORB_R);
         setNow('anchorY', 100); setNow('orb.k', 0); setNow('orb.alpha', 0);
+        setLook("working-gyro");
         env.ui.setPhase('assemble');
         await go(env.isReduced() ? R_IN : ASSEMBLE.filter(track => track.ch !== 'oBall' && track.ch !== 'oRing'));
       } else if (!env.isReduced()) {
         await go(launchTracks(geo));
         setNow("r", ORB_D / 2);
+        setLook("working-gyro");
         env.ui.setPhase("assemble");
         await go(env.isReduced() ? R_IN : ASSEMBLE);
       } else {
         await go(R_OUT);
         setNow("u", 1); setNow("w", ORB_D); setNow("h", ORB_D); setNow("r", ORB_D / 2);
         setNow("sTy", 0); setNow("orb.k", 1); setNow("orb.spin", 0);
+        setLook("working-gyro");
         env.ui.setPhase("assemble");
         await go(R_IN);
       }
 
       /* think — until the answer settled AND the minimum time elapsed */
+      setLook(THINK_LOOKS[0]);
       env.ui.setPhase("think");
       env.ui.live(env.getCopy().labels[0]);
       const ctl = { stop: false };
@@ -711,6 +701,7 @@ function createRuntime(env: Env): Runtime {
       ctl.stop = true;
       if (sig.aborted) throw ABORT;
 
+      setLook("base");
       const words = body.split(/\s+/).filter(Boolean);
       const n = Math.max(1, words.length);
 
@@ -719,6 +710,7 @@ function createRuntime(env: Env): Runtime {
         env.ui.swapLabel(env.getCopy().done);
         await go(RESOLVE);
 
+        setLook("compacting-squeeze");
         env.ui.setPhase("condense");
         await go(CONDENSE);
 
@@ -734,6 +726,7 @@ function createRuntime(env: Env): Runtime {
         await sleep(350 / env.getSpeed(), sig);
         if (sig.aborted) throw ABORT;
 
+        setLook("compacting-squeeze");
         env.ui.setPhase("condense");
         setNow("gs", 1);
         await go(R_CONDENSE);

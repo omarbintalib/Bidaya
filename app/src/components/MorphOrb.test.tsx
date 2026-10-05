@@ -204,3 +204,21 @@ it('starts response-only requests with globe assembly and cancels without a late
   expect(cancelled).toHaveBeenCalledTimes(1);
   expect(phase()).not.toBe('answered');
 });
+
+it('selects globe effects for each processing status and returns waiting requests to base on Escape', async () => {
+  await act(async () => root.render(<MorphOrb locale="en" onSubmit={() => new Promise(() => {})} minThinkMs={0} speed={2} />));
+  const look = () => host.querySelector('.mo-root')?.getAttribute('data-orb-state');
+  await input('A pending question'); await submit(); await advance(1500);
+  expect(phase()).toBe('think');
+  expect(look()).toBe('reasoning-twins');
+  for (const state of ['searching-lighthouse', 'working-gyro', 'working']) {
+    await advance(575);
+    expect(look()).toBe(state);
+  }
+  await advance(3000);
+  expect(look()).toBe('waiting');
+  await act(async () => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })));
+  await advance(1000);
+  expect(phase()).toBe('idle');
+  expect(look()).toBe('base');
+});
