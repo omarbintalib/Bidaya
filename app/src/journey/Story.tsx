@@ -510,7 +510,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
           <div className="story-timeline" data-map-overlay ref={timelineBox}>
             <Timeline events={events} index={index} store={eventStore} locale={locale} playing={playing} reducedMotion={reducedMotion}
               onIndex={onTimelineIndex} onStep={stepEvent} onTogglePlay={() => setPlaying(p => !p)}
-              extra={<button type="button" className="tl-btn tl-undated" aria-haspopup="dialog" onClick={() => setUndatedOpen(true)}>{text.undated(unplaced.length)}</button>} />
+              extra={unplaced.length > 0 && <button type="button" className="tl-btn tl-undated" aria-haspopup="dialog" onClick={() => setUndatedOpen(true)}>{text.undated(unplaced.length)}</button>} />
           </div>
         </HistoricMap>
       </div>

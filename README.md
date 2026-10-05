@@ -45,9 +45,9 @@ New files for the story (each line quotes its Dorar event; the app's tests check
 
 | # | File | Rows | What it is |
 |---|------|------|------------|
-| 1 | `1_related_surahs.csv` | 116 | Surahs and verses related to Sirah events or stages: 84 from the Sahihayn (ASB-) and 32 from the Dorar Tafsir Encyclopedia review (TAF-) |
+| 1 | `1_related_surahs.csv` | 94 | Surahs and verses related to Sirah events or stages: 62 from the Sahihayn (ASB-) and 32 from the Dorar Tafsir Encyclopedia review (TAF-) |
 | 2 | `2_sirah_events.csv` | 142 | Seerah events from Dorar, with titles, dates, order and locations |
-| 3 | `3_links_surahs_sirah.csv` | 116 | **The only file that connects surahs/verses to events.** One row per record |
+| 3 | `3_links_surahs_sirah.csv` | 94 | **The only file that connects surahs/verses to events.** One row per record |
 | 4 | `4_places.csv` | 68 | List of places with coordinates |
 | 5 | `5_sirah_map.geojson` | 144 | Map layer: 139 event pins and 5 routes |
 | 6 | `6_sahaba.csv` | 74 | Companions, with cited synopses |
@@ -55,7 +55,7 @@ New files for the story (each line quotes its Dorar event; the app's tests check
 | 9 | `9_dorar_tafseer_review.csv` | 762 | Decision and reason for every candidate from the Dorar Tafsir Encyclopedia crawl |
 | 11 | `11_dorar_titles_ar_en.csv` | 142 | Every Sirah event's title as Dorar gives it, in Arabic and English, with both Dorar links |
 | 12 | `12_dorar_titles_and_texts_ar_en.csv` | 142 | The same titles plus the full Dorar text of each event, in Arabic and English |
-| 8 | `8_hadith_verification.csv` | 289 | Every hadith number in the package, checked against the hadith text, with a sunnah.com link |
+| 8 | `8_hadith_verification.csv` | 223 | Every hadith number in the package, checked against the hadith text, with a sunnah.com link |
 
 Files 1, 2, 4 and 6 hold the core records. Files 3 and 7 connect them.
 
@@ -128,7 +128,7 @@ Each record has exactly one link type:
 | موضع مقترح (suggested position) | 8 | On the timeline after the named event, labelled as an estimate. The reason is in `سبب_الموضع`. |
 | بعد الحدث (after the event) | 2 | On the event's card with the tag "نزلت بعد هذا الحدث" |
 | مرحلة (period) | 16 | In a "verses revealed in this stage" section at the end of the stage |
-| عنصر نائب (placeholder) | 22 | **Not shown on the timeline.** The sources give no connection to any event. Show them in a separate panel. |
+| عنصر نائب (placeholder) | 0 | None left. The 22 records the sources could not place in time (ASB-016, 019, 059, 060, 062–069, 071–077, 079, 081, 085) were removed; they are in the git history if a source later dates them. |
 
 - **`الموضع_في_الخط_الزمني`**: matches `ترتيب_العرض` in file 2. It is blank for placeholders.
 - **`النطاق_من` / `النطاق_إلى`**: the range of the stage, also in `ترتيب_العرض` values.
@@ -173,9 +173,9 @@ The file loads directly into Leaflet or Mapbox.
 
 | Item | Owner |
 |---|---|
-| Review the edited ASB rows and the 32 new TAF rows. All 289 hadith numbers were checked against the hadith texts (file 8); spot-check a sample using the links | Hassan |
+| Review the edited ASB rows and the 32 new TAF rows. All 223 hadith numbers were checked against the hadith texts (file 8); spot-check a sample using the links | Hassan |
 | Check the approximate coordinates and the 17 inferred locations | Hassan |
-| Review the 9 suggested timeline positions; fill in placeholders if a connection is found | Hassan |
+| Review the 9 suggested timeline positions | Hassan |
 | Decide whether the 11 pre-prophethood events are a prologue or are removed, and update the deck's scope line to match | Team |
 | Flag events resting on disputed reports (e.g. Dorar events 58 and 61: Asma' bint Marwan, Abu 'Afak), and decide how to frame sensitive events for a beginner audience | Hassan |
 | Fetch the Quran text and an approved English translation by `مرجع_الآيات` | Omar / Elyas |
