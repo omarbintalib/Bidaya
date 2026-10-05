@@ -26,6 +26,7 @@ Two files were added for the period map:
 |------|------------|
 | `map_labels.csv` | Regions, powers and seas shown on the map, with approximate positions for orientation |
 | `map_routes.csv` | The Quraysh caravan routes (winter to Yemen, summer to al-Sham), approximate |
+| `map_arcs.csv` | The letters sent from Madinah and the delegations that came to it, drawn as curves while their event is on screen (see below) |
 
 Columns added for the app (filled only where the Dorar texts state it, each with its quote):
 
@@ -166,10 +167,24 @@ The English route names are in `ROUTE_EN` in `app/src/data/load.ts`.
 
 Each place in `4_places.csv` and each region in `map_labels.csv` can carry `حدث_بلوغ_الإسلام`, the Dorar event from which Islam had reached it, with the quote in `شاهد_بلوغ_الإسلام` (a test checks it is word for word in that event). As the story passes that event, the place glows and the region's name turns gold.
 
-- **Makkah (event 14) and Madinah (event 34)**, and the sites inside them, light first. Abyssinia lights at the first Hijrah (17), al-Yamamah with Thumamah (89), al-Bahrayn when al-Mundhir ibn Sawa accepted Islam (106), Yemen with the Prophet's ﷺ governors (6103).
+- **Makkah (event 14) and Madinah (event 34)**, and the sites inside them, light first. Abyssinia lights at the first Hijrah (17), al-Yamamah with Thumamah (89), al-Bahrayn when al-Mundhir ibn Sawa accepted Islam (106), and al-Bahrayn, Yemen and Oman when their kings accepted Islam on receiving the Prophet's ﷺ letters (106, 7 AH).
 - **The rest of Arabia lights at the Year of Delegations (event 135, 9 AH)**: «فلمَّا كانت وَقعةُ أهلِ الفَتحِ بادَر كُلُّ قومٍ بإسلامِهم». This is a statement about the Arabs in general, not about each place by name, and `ملاحظة_بلوغ_الإسلام` says so for Tihamah and Najd.
 - **From the Year of Delegations, each reached region is washed in gold**, so the whole territory reads as reached, not just its few named places. Before then a reached region only has its gold name, because Islam was in a few of its towns, not across it.
-- **Al-Sham, Iraq, Byzantium and Persia stay unlit**: Islam did not reach them in the Prophet's ﷺ lifetime. Oman accepted Islam in 7 AH (event 106), but it lies east of the map's edge (53°E).
+- **Al-Sham, Iraq, Byzantium and Persia stay unlit**: Islam did not reach them in the Prophet's ﷺ lifetime.
+- The map runs from 28°E to 60°E and from 4°N to 38°N, so Oman and Alexandria are on it (`app/scripts/build-land.mjs`).
+
+### Letters and delegations
+
+`map_arcs.csv` holds one row per letter or delegation. While its event is on screen the map draws a curve between Madinah and the other end, coloured by what the source says came of it (gold: accepted Islam; dashed: did not; green: honoured the letter or made peace), and the event card lists each one with the source's own words.
+
+- **The nine letters (event 106, 7 AH)** all come from Dorar's text for that event, Arabic and English quoted word for word: Caesar, Chosroes, the Negus, al-Muqawqis, the kings of Oman, Hawdhah of al-Yamamah, al-Mundhir of al-Bahrayn, al-Harith al-Ghassani and al-Harith al-Himyari. Where the source names a king but not his city, the line ends at the region's name on the map and `ملاحظة` says so. Caesar's end is Iliya (Jerusalem), from Sahih al-Bukhari 7.
+- **The delegations** come from the chapters of Sahih al-Bukhari's Book of Military Expeditions and from Dorar: the people of Yemen (al-Bukhari 4386) and Banu Hanifah with Musaylimah (4373, with 4375 for al-Yamamah) are shown with the Year of Delegations (event 135), and each note says the hadith gives no year. The Christians of Najran come from Dorar event 141 (10 AH), with al-Bukhari 4380.
+- **Left out on purpose:** Banu Tamim, because the hadith does not say where they came from; Abd al-Qays, because their hadith places them before the Conquest, while Mudar still stood between them and Madinah; Daws and the Ash'aris, who came at Khaybar (the Ash'aris already have their own route).
+- Tests check that every Dorar quote is in the event's text and that each hadith links to its sunnah.com page.
+
+### Revelation marks on the timeline
+
+A small green diamond above a timeline tick marks an event that the sources tie verses to, the same verses the event card lists under "The Quran in this event". It is solid when a hadith names the event (`مباشر`, `بعد الحدث`) and hollow when the place is only suggested (`موضع مقترح`).
 
 ## 6–7. Companions
 

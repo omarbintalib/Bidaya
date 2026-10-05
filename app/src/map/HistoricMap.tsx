@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import { COS, K, LAND } from '../data/land';
-import type { Sirah, SirahEvent } from '../data/types';
+import type { MapArc, Sirah, SirahEvent } from '../data/types';
 import type { Locale } from '../i18n';
 import { mapCopy } from './copy';
 import { centerOn, clampView, fit, HEIGHT, homeView, project, WIDTH, type View } from './projection';
@@ -114,21 +114,28 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
   }, [reducedMotion, size]);
   useEffect(() => () => cancelAnimationFrame(anim.current), []);
 
+  // Letters sent from Madinah and delegations that came to it, drawn while their event is selected.
+  const arcsHere = useMemo(() => selected === null ? [] : data.arcs.filter(a => a.event === selected), [data, selected]);
+
   // Follow the selected event when the caller asks.
   useEffect(() => {
     if (focusKey === undefined) return;
     if (overview) { animateTo(homeView(size.w / size.h)); return; }
-    if (quiz) {
-      // Fit every answer choice in view.
-      const pts = quiz.options.map(k => data.places.get(k)).filter(p => p !== undefined);
+    if (quiz || (arcsHere.length && !walk)) {
+      // Fit every answer choice, or both ends of every letter or delegation, in view.
+      const pts = quiz ? quiz.options.map(k => data.places.get(k)).filter(p => p !== undefined) : arcsHere.flatMap(a => [a.from, a.to]);
       if (pts.length) {
         const lons = pts.map(p => p.lon), lats = pts.map(p => p.lat);
         // Fit the choices into the part of the map left uncovered by a side panel and the bottom controls.
         const W = frame.current?.clientWidth || size.w, H = frame.current?.clientHeight || size.h;
         const cover = Math.min(inset, W * 0.6), coverB = Math.min(insetBottom, H * 0.5);
-        const v = fit(Math.min(...lons), Math.max(...lons), Math.min(...lats), Math.max(...lats), (W - cover) / (H - coverB), 0.3);
+        const coverT = quiz ? 0 : 64; // the period badge over the top of the map
+        const v = fit(Math.min(...lons), Math.max(...lons), Math.min(...lats), Math.max(...lats), (W - cover) / (H - coverB - coverT), quiz ? 0.3 : 0.1);
         const s = v.w / (W - cover);
-        animateTo(clampView({ x: locale === 'ar' ? v.x : v.x - cover * s, y: v.y, w: W * s, h: H * s }));
+        const fv = clampView({ x: locale === 'ar' ? v.x : v.x - cover * s, y: v.y - coverT * s, w: W * s, h: H * s });
+        // When the map is too short to hold the whole fit, keep the southernmost point above the bottom controls.
+        const u = fv.w / W, south = project(0, Math.min(...lats))[1] + 14 * u, over = south - (fv.y + fv.h - coverB * u);
+        animateTo(over > 0 ? clampView({ ...fv, y: fv.y + over }) : fv);
         return;
       }
     }
@@ -155,7 +162,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
       animateTo(clampView({ ...next, x: next.x + (rtl ? 1 : -1) * Math.min(inset, W * 0.6) / 2 * tu, y: next.y + coverB / 2 * tu }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focusKey, selected, data, animateTo, inset, insetBottom, locale, overview, walk?.key, quiz?.options.join()]);
+  }, [focusKey, selected, data, animateTo, inset, insetBottom, locale, overview, walk?.key, quiz?.options.join(), arcsHere]);
 
   // A place that lights up while you watch sends out one pulse.
   const [pulses, setPulses] = useState<string[]>([]);
@@ -334,8 +341,8 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
         </g>
         {/* Graticule every 5° — orientation only. */}
         <g className="hmap-grid" strokeWidth={0.6 * unit}>
-          {[35, 40, 45, 50].map(lon => { const [x] = project(lon, 0); return <line key={lon} x1={x} x2={x} y1={0} y2={HEIGHT} />; })}
-          {[15, 20, 25, 30].map(lat => { const [, y] = project(0, lat); return <line key={lat} x1={0} x2={WIDTH} y1={y} y2={y} />; })}
+          {[30, 35, 40, 45, 50, 55].map(lon => { const [x] = project(lon, 0); return <line key={lon} x1={x} x2={x} y1={0} y2={HEIGHT} />; })}
+          {[5, 10, 15, 20, 25, 30, 35].map(lat => { const [, y] = project(0, lat); return <line key={lat} x1={0} x2={WIDTH} y1={y} y2={y} />; })}
         </g>
   </>, [unit]);
   const glowLayer = useMemo(() => <>
@@ -406,6 +413,17 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
           return <path key={r.id} className="hmap-route" d={routeD(r.coords)} strokeWidth={1.1 * unit} strokeDasharray={`${6 * unit} ${4 * unit}`}><title>{`${r.name[locale]} — ${r.note[locale]}`}</title></path>;
         })}
 
+        {arcsHere.length > 0 && <g className="hmap-arcs" key={`arcs-${selected}-${focusKey}`}>
+          {arcsHere.map((a, i) => {
+            const d = arcPath(a), far = a.kind === 'letter' ? a.to : a.from, [fx, fy] = project(far.lon, far.lat);
+            return <g key={a.id} className={`hmap-arc is-${a.kind} out-${a.outcome}`} style={{ ['--i' as string]: i }}>
+              <path className="hmap-arc-line" d={d} strokeWidth={2 * unit} pathLength={1}><title>{`${a.name[locale]} — ${a.summary[locale]}`}</title></path>
+              <circle className="hmap-arc-end" cx={fx} cy={fy} r={4.5 * unit} strokeWidth={1.4 * unit}><title>{`${a.name[locale]} — ${a.summary[locale]}`}</title></circle>
+              {!reducedMotion && <circle className="hmap-arc-runner" r={3 * unit}><animateMotion dur="2.4s" begin={`${i * 0.2}s`} fill="freeze" path={d} /></circle>}
+            </g>;
+          })}
+        </g>}
+
         {pins.map(pin => <PinMark key={pin.key} id={pin.key} x={pin.x} y={pin.y} emphasis={pin.emphasis} precision={pin.precision} unit={unit} onPick={pickPin} />)}
 
         {quiz && <g className="hmap-quiz">
@@ -446,6 +464,11 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
       <li><i className="lg-approx" />{text.approx}</li>
       <li><i className="lg-route" />{text.route}</li>
       {now !== undefined && <li><i className="lg-glow" />{text.reached}</li>}
+      {arcsHere.length > 0 && <>
+        <li><i className="lg-arc out-accepted" />{text.arcAccepted}</li>
+        <li><i className="lg-arc out-declined" />{text.arcDeclined}</li>
+        {arcsHere.some(a => a.outcome === 'honoured' || a.outcome === 'treaty') && <li><i className="lg-arc out-honoured" />{text.arcOther}</li>}
+      </>}
       <li><button type="button" className="lg-toggle" aria-pressed={showTrade} onClick={() => setShowTrade(v => !v)}><i className="lg-trade" />{text.trade}</button></li>
     </ul>}
   </section>;
@@ -465,6 +488,13 @@ function mountainPath(unit: number) {
     }
   }
   return d;
+}
+
+/** A gentle curve from one end of a letter or delegation to the other, bowing to the same side each time. */
+function arcPath(a: MapArc) {
+  const [x0, y0] = project(a.from.lon, a.from.lat), [x1, y1] = project(a.to.lon, a.to.lat);
+  const mx = (x0 + x1) / 2, my = (y0 + y1) / 2, k = 0.18;
+  return `M${x0.toFixed(1)} ${y0.toFixed(1)}Q${(mx - (y1 - y0) * k).toFixed(1)} ${(my + (x1 - x0) * k).toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`;
 }
 
 /** Index of the route point nearest to a place. */

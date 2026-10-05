@@ -219,7 +219,31 @@ describe('spread of Islam on the map', () => {
   it('reaches every region of Arabia by the end, and not al-Sham, Iraq, Byzantium or Persia', () => {
     const regions = data.labels.filter(l => l.kind !== 'sea');
     const reached = new Set(regions.filter(l => l.reached !== null).map(l => l.id));
-    for (const id of ['hijaz', 'tihamah', 'najd', 'yamamah', 'bahrayn', 'yemen']) expect(reached.has(id), id).toBe(true);
+    for (const id of ['hijaz', 'tihamah', 'najd', 'yamamah', 'bahrayn', 'yemen', 'oman']) expect(reached.has(id), id).toBe(true);
     for (const id of ['sham', 'iraq', 'rum', 'furs']) expect(reached.has(id), id).toBe(false);
+  });
+});
+
+describe('letters and delegations on the map', () => {
+  const plain = (s: string) => s.replace(/[ً-ْٰـ]/g, '');
+  const madinah = (p: { lat: number; lon: number }) => Math.abs(p.lat - 24.4672) < 1e-6 && Math.abs(p.lon - 39.6111) < 1e-6;
+  it('loads all twelve, each at a Dorar event', () => {
+    expect(data.arcs).toHaveLength(12);
+    expect(warnings.filter(w => w.startsWith('map_arcs.csv'))).toEqual([]);
+    for (const a of data.arcs) expect(data.byNumber.has(a.event), a.id).toBe(true);
+  });
+  it('sends every letter from Madinah and brings every delegation to it', () => {
+    for (const a of data.arcs) expect(madinah(a.kind === 'letter' ? a.from : a.to), a.id).toBe(true);
+  });
+  it("quotes Dorar's own words, Arabic and English, where Dorar is the source", () => {
+    for (const a of data.arcs.filter(x => x.source.startsWith('الدرر السنية · حدث'))) {
+      const n = Number(a.source.replace(/\D+/g, '')), e = data.byNumber.get(n)!;
+      expect(n, a.id).toBe(a.event);
+      for (const part of a.quote.split(' … ')) expect(plain(e.text.ar), a.id).toContain(plain(part));
+      if (a.quoteEn) for (const part of a.quoteEn.split(' … ')) expect(e.text.en, a.id).toContain(part);
+    }
+  });
+  it('links each hadith to its sunnah.com page', () => {
+    for (const a of data.arcs.filter(x => x.source.startsWith('صحيح البخاري'))) expect(a.url, a.id).toBe(`https://sunnah.com/bukhari:${a.source.replace(/\D+/g, '')}`);
   });
 });

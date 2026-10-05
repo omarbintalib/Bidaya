@@ -128,3 +128,23 @@ html[data-contrast='dark'] { --grain-opacity: .25; --vignette: #00000059; }
 
 /* During a glide, names and pins are rescaled by --k (set each frame) so they keep their on-screen size. */
 .hmap-pin, .hmap-name, .hmap-label, .hmap-quiz-target { scale: var(--k, 1); transform-box: fill-box; transform-origin: center; }
+
+/* Letters from Madinah and delegations to it: one curve each, coloured by what the source says came of it. */
+.hmap-arc-line { fill: none; stroke-linecap: round; stroke: var(--map-ink); opacity: .6; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.hmap-arc-end { fill: var(--land); stroke: var(--map-ink); }
+.hmap-arc-runner { fill: var(--brass); }
+.hmap-arc.out-accepted .hmap-arc-line { stroke: #c08a2c; opacity: .95; }
+.hmap-arc.out-accepted .hmap-arc-end { fill: #e2b45c; stroke: #8a6220; }
+.hmap-arc.out-honoured .hmap-arc-line, .hmap-arc.out-treaty .hmap-arc-line { stroke: #4f7f78; opacity: .9; }
+.hmap-arc.out-honoured .hmap-arc-end, .hmap-arc.out-treaty .hmap-arc-end { stroke: #4f7f78; }
+.hmap-arc.out-declined .hmap-arc-line { stroke-dasharray: .02 .015; opacity: .55; }
+html[data-contrast='dark'] .hmap-arc.out-accepted .hmap-arc-line { stroke: #f0c674; }
+html[data-contrast='dark'] .hmap-arc.out-honoured .hmap-arc-line, html[data-contrast='dark'] .hmap-arc.out-treaty .hmap-arc-line { stroke: #7fb3aa; }
+@media all { /* motion on unless html[data-reduced-motion='true'] */
+  html:not([data-reduced-motion='true']) .hmap-arc:not(.out-declined) .hmap-arc-line { animation: hmap-draw 2.4s ease-in-out both; animation-delay: calc(var(--i) * .2s); }
+  html:not([data-reduced-motion='true']) .hmap-arc-end { animation: hmap-arc-pop .5s ease-out both; animation-delay: calc(2.2s + var(--i) * .2s); transform-box: fill-box; transform-origin: center; }
+}
+@keyframes hmap-arc-pop { from { opacity: 0; transform: scale(.2); } to { opacity: 1; transform: scale(1); } }
+.lg-arc { width: 22px; border-top: 2px solid #c08a2c; display: inline-block; }
+.lg-arc.out-declined { border-top: 2px dashed var(--map-ink); opacity: .6; }
+.lg-arc.out-honoured { border-top-color: #4f7f78; }

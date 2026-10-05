@@ -182,3 +182,25 @@ html[data-compact-viewport='true'] .journey-page .story-timeline { display: none
 .ecard-text p + p { margin-top: 12px; color: var(--ink); }
 .tl-undated { margin-inline-start: auto; font-size: calc(14px * var(--text-scale)); color: var(--muted); }
 @keyframes card-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* Letters and delegations drawn on the map, listed under the event. */
+.ecard-arcs { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.ecard-arc { border-inline-start: 3px solid var(--border); padding-inline-start: 12px; }
+.ecard-arc.out-accepted { border-inline-start-color: #c08a2c; }
+.ecard-arc.out-honoured, .ecard-arc.out-treaty { border-inline-start-color: #4f7f78; }
+.ecard-arc p { margin: 0; }
+.ecard-arc-head { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; justify-content: space-between; }
+.ecard-arc-head b { font-weight: 600; }
+.ecard-arc-out { font-size: var(--text-small); color: var(--muted); white-space: nowrap; }
+.ecard-arc.out-accepted .ecard-arc-out { color: #9a6c1c; }
+html[data-contrast='dark'] .ecard-arc.out-accepted .ecard-arc-out { color: #f0c674; }
+.ecard-arc-quote { display: block; margin-top: 4px; font-size: var(--text-small); }
+.ecard-arc-note, .ecard-arc-source { display: block; margin-top: 4px; font-size: var(--text-small); color: var(--muted); }
+
+/* Revelation marks: a small open-book diamond above an event the sources tie verses to; hollow when the place is only suggested. */
+.tl-revealed { position: absolute; top: -9px; inset-inline-start: 50%; translate: -50% 0; width: 7px; height: 7px; rotate: 45deg; background: #4f7f78; border: 1px solid #4f7f78; pointer-events: none; }
+.tl-revealed.is-suggested { background: transparent; }
+html[data-contrast='dark'] .tl-revealed { background: #7fb3aa; border-color: #7fb3aa; }
+html[data-contrast='dark'] .tl-revealed.is-suggested { background: transparent; }
+.tl-key { display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-small); color: var(--muted); white-space: nowrap; }
+.tl-revealed.is-key { position: static; translate: none; display: inline-block; }

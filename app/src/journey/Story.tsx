@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useStat
 import { answer, suggestFor, warmUp, type Answer } from '../assistant/answer';
 import MorphOrb from '../components/MorphOrb';
 import { quizPools } from '../data/quiz';
-import { digits, hijri, PERIOD_ORDER, periodName, unplacedVerses } from '../data/select';
+import { digits, hijri, PERIOD_ORDER, periodName, unplacedVerses, versesFor } from '../data/select';
 import type { Person, Period, QuizQuestion, Route, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 import HistoricMap, { type Emphasis } from '../map/HistoricMap';
@@ -302,6 +302,16 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
   const [person, setPerson] = useState<Person | null>(null);
   const peopleApi = useMemo(() => ({ data, open: setPerson }), [data]);
   const unplaced = useMemo(() => unplacedVerses(data), [data]);
+  // Timeline marks for events the sources tie verses to (the same links the event card lists under "The Quran in this event").
+  const revealed = useMemo(() => {
+    const out = new Map<number, 'direct' | 'suggested'>();
+    for (const e of events) {
+      const { direct } = versesFor(data, e);
+      if (direct.some(v => v.link?.type === 'direct' || v.link?.type === 'after')) out.set(e.n, 'direct');
+      else if (direct.length) out.set(e.n, 'suggested');
+    }
+    return out;
+  }, [data, events]);
   const [undatedOpen, setUndatedOpen] = useState(false);
   const [askOpen, setAskOpen] = useState(false);
   const [ask, setAsk] = useState<{ text: string; key: number } | null>(null);
@@ -509,7 +519,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
 
           <div className="story-timeline" data-map-overlay ref={timelineBox}>
             <Timeline events={events} index={index} store={eventStore} locale={locale} playing={playing} reducedMotion={reducedMotion}
-              onIndex={onTimelineIndex} onStep={stepEvent} onTogglePlay={() => setPlaying(p => !p)}
+              onIndex={onTimelineIndex} onStep={stepEvent} onTogglePlay={() => setPlaying(p => !p)} revealed={revealed}
               extra={unplaced.length > 0 && <button type="button" className="tl-btn tl-undated" aria-haspopup="dialog" onClick={() => setUndatedOpen(true)}>{text.undated(unplaced.length)}</button>} />
           </div>
         </HistoricMap>

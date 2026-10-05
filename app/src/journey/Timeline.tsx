@@ -19,9 +19,11 @@ interface Props {
   onTogglePlay: () => void;
   /** Extra control shown at the end of the bar. */
   extra?: React.ReactNode;
+  /** Events the sources tie verses to: 'direct' when a hadith names the event, 'suggested' for a proposed place. */
+  revealed?: Map<number, 'direct' | 'suggested'>;
 }
 
-export default function Timeline({ events, index, store, locale, playing, reducedMotion, onIndex, onStep, onTogglePlay, extra }: Props) {
+export default function Timeline({ events, index, store, locale, playing, reducedMotion, onIndex, onStep, onTogglePlay, extra, revealed }: Props) {
   const text = journeyCopy[locale];
   const track = useRef<HTMLDivElement>(null);
   const current = events[index];
@@ -77,13 +79,14 @@ export default function Timeline({ events, index, store, locale, playing, reduce
         <span className="tl-count">{text.count(index + 1, events.length)}</span>
         <b>{current?.title[locale] || current?.title.ar}</b>
       </p>
+      {revealed && revealed.size > 0 && <span className="tl-key" aria-hidden="true"><b className="tl-revealed is-key" />{text.revealedKey}</span>}
       {extra}
     </div>
 
     <div className="tl-scroll" ref={track} role="listbox" aria-label={text.timeline} aria-activedescendant={`tl-${index}`} onKeyDown={onKey}>
       <div className="tl-track" style={{ ['--n' as string]: events.length }}>
         {bands.map(b => <div key={b.p} className={`tl-band band-${b.p}`} style={{ gridColumn: `${b.first + 1} / ${b.last + 2}` }} title={periodName[locale][b.p]}>{b.last - b.first >= 5 && <span>{periodName[locale][b.p]}</span>}</div>)}
-        <Ticks events={events} store={store} yearLabels={yearLabels} locale={locale} onIndex={onIndex} />
+        <Ticks events={events} store={store} yearLabels={yearLabels} locale={locale} onIndex={onIndex} revealed={revealed} />
       </div>
     </div>
   </section>;
@@ -94,20 +97,22 @@ function Chevron({ back = false }: { back?: boolean }) {
   return <svg viewBox="0 0 20 20" aria-hidden="true" className={back ? 'chev-back' : 'chev-fwd'}><path d="M8 4l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="1.6" /></svg>;
 }
 
-const Ticks = memo(function Ticks({ events, store, yearLabels, locale, onIndex }: { events: SirahEvent[]; store: ActiveStore; yearLabels: Set<number>; locale: Locale; onIndex: (i: number) => void }) {
-  return <>{events.map((e, i) => <Tick key={e.n} e={e} i={i} store={store} newYear={i === 0 || events[i - 1].year !== e.year}
+const Ticks = memo(function Ticks({ events, store, yearLabels, locale, onIndex, revealed }: { events: SirahEvent[]; store: ActiveStore; yearLabels: Set<number>; locale: Locale; onIndex: (i: number) => void; revealed?: Map<number, 'direct' | 'suggested'> }) {
+  return <>{events.map((e, i) => <Tick key={e.n} e={e} i={i} store={store} newYear={i === 0 || events[i - 1].year !== e.year} revealed={revealed?.get(e.n)}
     labelled={(i === 0 || events[i - 1].year !== e.year) && yearLabels.has(i)} locale={locale} onIndex={onIndex} />)}</>;
 });
 
 /** One tick; it re-renders only when it becomes, or stops being, current or past. */
-const Tick = memo(function Tick({ e, i, store, newYear, labelled, locale, onIndex }: { e: SirahEvent; i: number; store: ActiveStore; newYear: boolean; labelled: boolean; locale: Locale; onIndex: (i: number) => void }) {
+const Tick = memo(function Tick({ e, i, store, newYear, labelled, locale, onIndex, revealed }: { e: SirahEvent; i: number; store: ActiveStore; newYear: boolean; labelled: boolean; locale: Locale; onIndex: (i: number) => void; revealed?: 'direct' | 'suggested' }) {
+  const text = journeyCopy[locale];
   const state = useActive(store, a => (a === i ? 'on' : a > i ? 'past' : ''));
   const on = state === 'on', past = state === 'past';
   return <button id={`tl-${i}`} data-i={i} type="button" role="option" aria-selected={on} tabIndex={on ? 0 : -1}
     className={`tl-tick${on ? ' is-on' : ''}${past ? ' is-past' : ''}${newYear ? ' new-year' : ''}`}
-    style={{ gridColumn: i + 1 }} onClick={() => onIndex(i)} title={e.title[locale] || e.title.ar}>
+    style={{ gridColumn: i + 1 }} onClick={() => onIndex(i)} title={`${e.title[locale] || e.title.ar}${revealed ? ` · ${text.revealedMark[revealed]}` : ''}`}>
+    {revealed && <b className={`tl-revealed is-${revealed}`} aria-hidden="true" />}
     <i aria-hidden="true" />
     {labelled && e.year !== null && <span className="tl-year" aria-hidden="true">{hijri(e.year, locale)}</span>}
-    <span className="tl-sr">{`${e.title[locale] || e.title.ar} — ${hijri(e.year, locale)}`}</span>
+    <span className="tl-sr">{`${e.title[locale] || e.title.ar} — ${hijri(e.year, locale)}${revealed ? ` — ${text.revealedMark[revealed]}` : ''}`}</span>
   </button>;
 });

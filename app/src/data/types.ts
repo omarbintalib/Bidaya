@@ -90,6 +90,15 @@ export interface MapLabel { id: string; kind: 'region' | 'power' | 'sea'; name: 
 /** A stop on a route walk (route_stops.csv): where the map pauses, with the Dorar line for it. */
 export interface RouteStop { name: Text; lat: number; lon: number; event: number; quote: string; url: string }
 
+/** A letter sent from Madinah or a delegation that came to it (map_arcs.csv), drawn on the map at its event.
+ * `outcome` is what the source says came of it; `quote` is the source's own words, `quoteEn` its own English if any. */
+export interface MapArc {
+  id: string; kind: 'letter' | 'delegation'; event: number;
+  from: { lat: number; lon: number }; to: { lat: number; lon: number };
+  name: Text; outcome: 'accepted' | 'declined' | 'honoured' | 'treaty';
+  summary: Text; quote: string; quoteEn: string | null; source: string; url: string; note: Text;
+}
+
 /** A chapter question (quiz.csv), answered by choosing a place. */
 export interface QuizQuestion { id: string; period: Period; question: Text; answer: string; options: string[]; explanation: Text; event: number; quote: string; url: string }
 
@@ -103,4 +112,5 @@ export interface Sirah {
   labels: MapLabel[];
   stops: Map<string, RouteStop[]>;
   quiz: QuizQuestion[];
+  arcs: MapArc[];
 }

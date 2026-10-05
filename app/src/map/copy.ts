@@ -1,11 +1,12 @@
 import type { Locale } from '../i18n';
 
-export const mapCopy: Record<Locale, Record<'label' | 'zoomIn' | 'zoomOut' | 'reset' | 'north' | 'legend' | 'selected' | 'stage' | 'past' | 'approx' | 'route' | 'trade' | 'noPin' | 'reached', string>> = {
+export const mapCopy: Record<Locale, Record<'label' | 'zoomIn' | 'zoomOut' | 'reset' | 'north' | 'legend' | 'selected' | 'stage' | 'past' | 'approx' | 'route' | 'trade' | 'noPin' | 'reached' | 'arcAccepted' | 'arcDeclined' | 'arcOther', string>> = {
   ar: {
     label: 'خريطة جزيرة العرب في عهد النبوة',
     zoomIn: 'تكبير', zoomOut: 'تصغير', reset: 'عرض الخريطة كاملة', north: 'ش',
     legend: 'دليل الخريطة', selected: 'الحدث المختار', stage: 'أحداث المرحلة', past: 'أحداث سابقة',
     approx: 'موضع تقريبي', route: 'مسار تقريبي', trade: 'طرق القوافل', reached: 'بلغها الإسلام',
+    arcAccepted: 'أسلم', arcDeclined: 'لم يسلم', arcOther: 'أكرم الكتاب أو صالح',
     noPin: 'لا يُعرف موضع هذا الحدث على الخريطة، فيبقى على الخط الزمني فقط.',
   },
   en: {
@@ -13,6 +14,7 @@ export const mapCopy: Record<Locale, Record<'label' | 'zoomIn' | 'zoomOut' | 're
     zoomIn: 'Zoom in', zoomOut: 'Zoom out', reset: 'Show the whole map', north: 'N',
     legend: 'Map key', selected: 'Selected event', stage: 'Events in this stage', past: 'Earlier events',
     approx: 'Approximate location', route: 'Approximate route', trade: 'Caravan routes', reached: 'Islam had reached',
+    arcAccepted: 'Accepted Islam', arcDeclined: 'Did not accept Islam', arcOther: 'Honoured the letter or made peace',
     noPin: 'The location of this event is not known, so it appears on the timeline only.',
   },
 };

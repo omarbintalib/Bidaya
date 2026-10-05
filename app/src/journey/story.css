@@ -220,7 +220,7 @@
   .scrolly-map .story-banner { border-radius: 14px; }
   .story-timeline { padding: 6px 10px 4px; }
   .story-timeline .tl-now, .story-timeline .tl-undated { display: none; }
-  .story-timeline .tl-scroll { display: none; }
+  .story-timeline .tl-scroll, .story-timeline .tl-key { display: none; }
   .walk-panel { inset-inline: 10px; bottom: 62px; width: auto; padding: 14px 16px; }
   .walk-quote { font-size: var(--text-small); }
   .scrolly-map .hmap-nopin { width: auto; inset-inline: 10px; bottom: calc(var(--timeline-h, 60px) + 8px); }

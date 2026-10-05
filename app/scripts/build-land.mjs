@@ -5,7 +5,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { feature } from 'topojson-client';
 
-const BOX = { west: 28, east: 53, south: 10, north: 36 };
+const BOX = { west: 28, east: 60, south: 4, north: 38 };
 const K = 40; // SVG units per degree of latitude
 const COS = Math.cos(((BOX.south + BOX.north) / 2) * Math.PI / 180);
 const project = ([lon, lat]) => [(lon - BOX.west) * COS * K, (BOX.north - lat) * K];

@@ -1,5 +1,5 @@
 import { parseCsv } from './csv';
-import type { LinkType, MapLabel, Period, Person, Place, Precision, QuizQuestion, Route, RouteStop, Sirah, SirahEvent, Verse, VerseLink } from './types';
+import type { LinkType, MapArc, MapLabel, Period, Person, Place, Precision, QuizQuestion, Route, RouteStop, Sirah, SirahEvent, Verse, VerseLink } from './types';
 
 /**
  * Everything the interface shows is read at runtime from the CSVs at the repository root (served at /data/).
@@ -20,12 +20,15 @@ const FILES = {
   stops: 'route_stops.csv',
   quiz: 'quiz.csv',
   facts: '7_sahaba_references.csv',
+  arcs: 'map_arcs.csv',
 } as const;
 
 const PERIODS: Record<string, Period> = { 'قبل البعثة': 'prologue', 'العهد المكي': 'makkah', 'الهجرة': 'hijrah', 'العهد المدني': 'madinah' };
 const PRECISION: Record<string, Precision> = { 'دقيق': 'exact', 'تقريبي': 'approx', 'منطقة': 'region', 'غير محدد': 'none' };
 const LINK_TYPES: Record<string, LinkType> = { 'مباشر': 'direct', 'سياق': 'context', 'موضع مقترح': 'suggested', 'بعد الحدث': 'after', 'مرحلة': 'stage', 'عنصر نائب': 'placeholder' };
 const LABEL_KINDS: Record<string, MapLabel['kind']> = { 'إقليم': 'region', 'قوة': 'power', 'بحر': 'sea' };
+const ARC_KINDS: Record<string, MapArc['kind']> = { 'رسالة': 'letter', 'وفد': 'delegation' };
+const OUTCOMES: Record<string, MapArc['outcome']> = { 'أسلم': 'accepted', 'لم يسلم': 'declined', 'أكرم الكتاب': 'honoured', 'صلح': 'treaty' };
 const SIZES: Record<string, MapLabel['size']> = { 'كبير': 'l', 'متوسط': 'm', 'صغير': 's' };
 const ROUTE_EN: Record<string, string> = { 'الهجرة النبوية': 'The Hijrah', 'الإسراء': "The Isra'", 'الخروج إلى الطائف': "The journey to Ta'if", 'غزوة تبوك': 'The expedition to Tabuk', 'حجة الوداع': 'The Farewell Hajj', 'الهجرة إلى الحبشة': 'The Hijrah to Abyssinia', 'هجرة أبي موسى الأشعري وأصحابه مرورا بالحبشة': "Abu Musa's Hijrah by way of Abyssinia", 'سفر النبي ﷺ مع عمه أبي طالب إلى الشام': 'The journey to al-Sham with Abu Talib', 'سفر النبي ﷺ للمرة الثانية إلى الشام': 'The second journey to al-Sham', 'رحلة آمنة بالنبي ﷺ إلى المدينة': "Aminah's journey to Madinah", 'الخروج إلى بدر': 'The march to Badr', 'الخروج إلى الحديبية': 'The journey to al-Hudaybiyah', 'الخروج إلى خيبر': 'The march to Khaybar', 'جيش مؤتة': "The army of Mu'tah", 'المسير إلى فتح مكة': 'The march to the Conquest of Makkah', 'حنين والطائف': "Hunayn and Ta'if" };
 
@@ -187,7 +190,16 @@ export async function loadSirah(): Promise<Sirah> {
       explanation: { ar: r['الشرح'], en: r.Explanation_EN || r['الشرح'] }, event, quote: r['الشاهد'], url: r['رابط_الدرر'] || `https://dorar.net/history/event/${event}` });
   }
 
-  return { events, byNumber, places, verses, people, routes, labels, stops, quiz };
+  const arcs: MapArc[] = [];
+  for (const r of parseCsv(raw.arcs)) {
+    const kind = ARC_KINDS[r['النوع']], outcome = OUTCOMES[r['النتيجة']], event = num(r['رقم_حدث_الدرر']);
+    const [fLat, fLon, tLat, tLon] = [r['من_lat'], r['من_lon'], r['إلى_lat'], r['إلى_lon']].map(num);
+    if (!kind || !outcome || event === null || fLat === null || fLon === null || tLat === null || tLon === null) { warn(`map_arcs.csv: "${r['المعرف']}" needs النوع (رسالة / وفد), النتيجة, رقم_حدث_الدرر and both ends`); continue; }
+    arcs.push({ id: r['المعرف'], kind, event, from: { lat: fLat, lon: fLon }, to: { lat: tLat, lon: tLon }, name: { ar: r['الاسم'], en: r.Name_EN || r['الاسم'] }, outcome,
+      summary: { ar: r['الخلاصة'], en: r.Summary_EN || r['الخلاصة'] }, quote: r['الشاهد'], quoteEn: r['الشاهد_EN'] || null, source: r['المصدر'], url: r['الرابط'], note: { ar: r['ملاحظة'], en: r.Note_EN || r['ملاحظة'] } });
+  }
+
+  return { events, byNumber, places, verses, people, routes, labels, stops, quiz, arcs };
 }
 
 let cache: Promise<Sirah> | null = null;

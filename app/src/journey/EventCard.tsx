@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { quranpediaRefs, type QuranRef } from '../data/quranpedia';
 import { dateLine, excerpt, hadithLinks, hijri, periodName, peopleFor, versesFor } from '../data/select';
-import type { Sirah, SirahEvent, Verse } from '../data/types';
+import type { MapArc, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
 import QuranReader from './QuranReader';
@@ -24,6 +24,7 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
   const peopleApi = usePeople();
   const verses = versesFor(data, event);
   const people = peopleFor(data, event);
+  const arcs = data.arcs.filter(a => a.event === event.n);
   const body = (locale === 'en' && event.text.en) || event.text.ar;
   const bodyLang = body === event.text.ar ? 'ar' : 'en';
   const title = event.title[locale] || event.title.ar;
@@ -64,6 +65,11 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
       </ul>
     </section>}
 
+    {arcs.length > 0 && <section className="ecard-section">
+      <h3>{arcs.every(a => a.kind === 'letter') ? text.letters : text.delegations}</h3>
+      <ul className="ecard-arcs">{arcs.map(a => <ArcItem key={a.id} a={a} locale={locale} />)}</ul>
+    </section>}
+
     {verses.direct.length > 0 && <VerseList title={text.verses} verses={verses.direct} locale={locale} />}
     {verses.context.length > 0 && <VerseList title={text.contextVerses} verses={verses.context} locale={locale} />}
     {verses.stage.length > 0 && <details className="ecard-section ecard-more-verses">
@@ -72,6 +78,22 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
     </details>}
 
   </article>;
+}
+
+/** A source reference in English: "صحيح البخاري 4386" → "Sahih al-Bukhari 4386". */
+const refEn = (s: string) => s.replace(/^الدرر السنية · حدث\s*/, 'Dorar · event ').replace(/صحيح البخاري/, 'Sahih al-Bukhari').replace(/صحيح مسلم/, 'Sahih Muslim');
+
+/** One letter or delegation: who, what came of it, and the source's own words. */
+function ArcItem({ a, locale }: { a: MapArc; locale: Locale }) {
+  const text = journeyCopy[locale], en = locale === 'en';
+  return <li className={`ecard-arc out-${a.outcome}`}>
+    <p className="ecard-arc-head"><b>{a.name[locale]}</b><span className="ecard-arc-out">{text.outcome[a.outcome]}</span></p>
+    {!en ? <p className="ecard-arc-quote">«{a.quote}»</p>
+      : a.quoteEn ? <q className="ecard-arc-quote" lang="en">{a.quoteEn}</q>
+      : <><small className="no-translation-note">{text.inArabicQuote}</small><p className="ecard-arc-quote" lang="ar" dir="rtl">«{a.quote}»</p></>}
+    {a.note[locale] && <p className="ecard-arc-note">{a.note[locale]}</p>}
+    <a className="ecard-arc-source" href={a.url} target="_blank" rel="noreferrer">{en ? refEn(a.source) : a.source}</a>
+  </li>;
 }
 
 function VerseList({ title, verses, locale, compact = false }: { title: string; verses: Verse[]; locale: Locale; compact?: boolean }) {
