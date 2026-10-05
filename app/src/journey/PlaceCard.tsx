@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { hijri } from '../data/select';
+import { digits, hijri } from '../data/select';
 import type { Sirah } from '../data/types';
 import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
 
-/** A place's card: its name then and now, when Islam reached it, and its events. */
+/** A place's card: its name then and now, when Islam reached it, the minimum counts the sources give, and its events. */
 export default function PlaceCard({ placeKey, data, locale, onClose, onEvent }: { placeKey: string; data: Sirah; locale: Locale; onClose: () => void; onEvent: (n: number) => void }) {
   const text = journeyCopy[locale], en = locale === 'en';
   const dialog = useRef<HTMLDialogElement>(null);
@@ -13,6 +13,8 @@ export default function PlaceCard({ placeKey, data, locale, onClose, onEvent }: 
   if (!place) return null;
   const events = data.events.filter(e => e.place === placeKey).sort((a, b) => a.order - b.order);
   const reached = place.reached !== null ? data.byNumber.get(place.reached) : undefined;
+  const counts = [...(data.growth.get(placeKey) ?? [])].sort((a, b) => (data.byNumber.get(a.event)?.order ?? 0) - (data.byNumber.get(b.event)?.order ?? 0));
+  const n = (v: number) => digits(v.toLocaleString('en'), locale);
 
   return <dialog ref={dialog} className="person-dialog place-card" aria-labelledby="place-title" onClose={onClose} onClick={e => { if (e.target === dialog.current) onClose(); }}>
     <header className="pd-head">
@@ -33,6 +35,15 @@ export default function PlaceCard({ placeKey, data, locale, onClose, onEvent }: 
           {place.reachQuote && <q className="pd-quote" lang="ar" dir="rtl">{place.reachQuote}</q>}
         </dd></div>}
       </dl>}
+
+      {counts.length > 0 && <section className="pd-events">
+        <h3>{text.placeCounts}</h3>
+        <ul className="place-counts">{counts.map(g => { const e = data.byNumber.get(g.event); return <li key={g.event}>
+          <b><small className="at-least">{text.atLeast}</small>{n(g.count)}</b><span>{g.what[locale]}</span><small>{e ? hijri(e.year, locale) : ''}</small>
+          <q className="pd-quote" lang="ar" dir="rtl">{g.quote}</q>
+        </li>; })}</ul>
+        <p className="pd-quote-note">{text.placeCountNote}</p>
+      </section>}
 
       <section className="pd-events">
         <h3>{text.placeEvents(events.length)}</h3>
