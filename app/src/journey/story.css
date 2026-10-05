@@ -299,3 +299,9 @@
 .answer-card .answer-actions { margin-top: 8px; }
 
 .walk-distance { margin: 2px 0 0; font-size: calc(12.5px * var(--text-scale)); color: var(--muted); }
+
+/* The way back after a jump, floating under the period banner. */
+.map-back { position: absolute; z-index: 4; top: 66px; inset-inline-end: 16px; max-width: calc(100% - 90px); }
+.map-back .back-btn { box-shadow: 0 8px 24px #331b0d33; }
+@media all { html:not([data-reduced-motion='true']) .map-back { animation: rise-in .3s ease both; } }
+@media (max-width: 1000px) { .map-back { top: 58px; inset-inline-end: 10px; max-width: calc(100% - 70px); } }

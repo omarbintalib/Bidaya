@@ -336,19 +336,6 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     return () => window.removeEventListener('keydown', onKey);
   }, []);
   const unplaced = useMemo(() => unplacedVerses(data), [data]);
-  // Opening a search result: an event or a verse goes to its place in the story, a person or place opens its card.
-  const openResult = useCallback((r: SearchResult) => {
-    if (r.kind === 'event') goToEvent(Number(r.id));
-    else if (r.kind === 'person') { const p = data.people.find(x => x.id === r.id); if (p) setPerson(p); }
-    else if (r.kind === 'place') setPlace(r.id);
-    else {
-      const v = data.verses.find(x => x.id === r.id), l = v?.link;
-      if (!l) { setUndatedOpen(true); return; }
-      const order = l.type === 'suggested' ? l.at : l.type === 'stage' ? l.from : null;
-      const e = l.event !== null ? data.byNumber.get(l.event) : data.events.find(x => x.order === order);
-      if (e) goToEvent(e.n); else setUndatedOpen(true);
-    }
-  }, [data, goToEvent]);
   // Timeline marks for events the sources tie verses to (the same links the event card lists under "Verses linked to this event").
   const revealed = useMemo(() => {
     const out = new Map<number, 'direct' | 'suggested'>();
@@ -385,6 +372,27 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     return text.summaryKicker;
   }, [steps, events, locale, text]);
   const goBack = useCallback(() => { if (returnTo) goToStep(returnTo.step); setReturnTo(null); }, [returnTo, goToStep]);
+  // A jump from the map, a card or search remembers where the reader was, so the map can offer the way back.
+  const jumpTo = useCallback((n: number) => {
+    const from = activeRef.current, i = events.findIndex(e => e.n === n), there = i >= 0 ? stepOfEvent.get(i) : undefined;
+    if (there !== undefined && there !== from) setReturnTo({ step: from, label: stepLabel(from) });
+    goToEvent(n);
+  }, [events, stepOfEvent, stepLabel, goToEvent]);
+  // Back where they started (by the button or by scrolling): the way back is no longer needed.
+  useEffect(() => { if (returnTo && active === returnTo.step) setReturnTo(null); }, [active, returnTo]);
+  // Opening a search result: an event or a verse goes to its place in the story, a person or place opens its card.
+  const openResult = useCallback((r: SearchResult) => {
+    if (r.kind === 'event') jumpTo(Number(r.id));
+    else if (r.kind === 'person') { const p = data.people.find(x => x.id === r.id); if (p) setPerson(p); }
+    else if (r.kind === 'place') setPlace(r.id);
+    else {
+      const v = data.verses.find(x => x.id === r.id), l = v?.link;
+      if (!l) { setUndatedOpen(true); return; }
+      const order = l.type === 'suggested' ? l.at : l.type === 'stage' ? l.from : null;
+      const e = l.event !== null ? data.byNumber.get(l.event) : data.events.find(x => x.order === order);
+      if (e) jumpTo(e.n); else setUndatedOpen(true);
+    }
+  }, [data, jumpTo]);
   useLayoutEffect(() => {
     // Push the open event card below the answer card (a visual shift only, so scroll tracking is unaffected).
     const page = column.current?.closest<HTMLElement>('.journey-page');
@@ -538,7 +546,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
 
       <div className="scrolly-map">
         <HistoricMap data={data} locale={locale} emphasis={emphasis} selected={step.kind === 'event' ? current.n : null} activeRoutes={activeRoutes}
-          onSelect={goToEvent} reducedMotion={reducedMotion} inset={(quick || walk) && wide ? 430 : 0} insetBottom={timelineH + (wide ? 76 : walk ? walkPanelH + 8 : 0)} focusKey={`${active}-${walk?.stop ?? ''}`} now={now} legend={false}
+          onSelect={jumpTo} reducedMotion={reducedMotion} inset={(quick || walk) && wide ? 430 : 0} insetBottom={timelineH + (wide ? 76 : walk ? walkPanelH + 8 : 0)} focusKey={`${active}-${walk?.stop ?? ''}`} now={now} legend={false}
           overview={step.kind === 'summary' || step.kind === 'chapter' && step.chapter === 1}
           caravans={current.period === 'prologue' || current.period === 'makkah'} scrollPage
           walk={walk && walkStop ? { routeId: walk.route.id, lat: walkStop.lat, lon: walkStop.lon, key: `${walk.route.id}-${walk.stop}`, name: walkStop.name[locale] } : null}
@@ -548,6 +556,8 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
             {step.kind === 'summary' ? <b>{text.summaryKicker}</b> : <><b>{periodName[locale][current.period]}</b><span>{hijri(current.year, locale)}</span></>}
             {reached > 0 && <span className="story-reach"><i /><span>{text.reachedCount(reached)}<small>{text.reachedNote}</small></span></span>}
           </div>
+          {/* After a jump from the map, a card or search: one tap back to where the reader was. */}
+          {returnTo && !answerCard && <div className="map-back" data-map-overlay><BackButton label={returnTo.label} locale={locale} onClick={goBack} /></div>}
 
 
           {wide && !quick && !walk && <AskBar locale={locale} hint={askHint} onAsk={askAbout} onHistory={openHistory} />}
@@ -585,8 +595,8 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     {quick && !wide && <QuickQuiz quick={quick} data={data} locale={locale} chosen={quick.q ? progress.answers[quick.q.id] ?? null : null}
       onAnswer={answerQuick} onNext={() => setQuick(pickQuick(quick.q?.id))} onClose={() => setQuick(null)} />}
     {undatedOpen && <UndatedDialog verses={unplaced} locale={locale} onClose={() => setUndatedOpen(false)} />}
-    {person && <PersonDialog key={person.id} person={person} data={data} locale={locale} onClose={() => setPerson(null)} onEvent={goToEvent} />}
-    {place && <PlaceCard key={place} placeKey={place} data={data} locale={locale} onClose={() => setPlace(null)} onEvent={goToEvent} />}
+    {person && <PersonDialog key={person.id} person={person} data={data} locale={locale} onClose={() => setPerson(null)} onEvent={jumpTo} />}
+    {place && <PlaceCard key={place} placeKey={place} data={data} locale={locale} onClose={() => setPlace(null)} onEvent={jumpTo} />}
     {searchOpen && <Search data={data} locale={locale} onClose={() => setSearchOpen(false)} onPick={openResult} />}
     {historyOpen && <ChatHistory locale={locale} chats={chats} onDelete={deleteChat} mapEvents={mapEvents} onEvent={showAnswerEvent} onClear={clearChats} onClose={() => setHistoryOpen(false)} />}
   </PeopleProvider>;

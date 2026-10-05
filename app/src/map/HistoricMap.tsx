@@ -518,7 +518,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
                 onPointerEnter={ev => { if (ev.pointerType === 'mouse') setNameTip({ key: a.id, x: fx, y: fy - 6 * unit, text: `${a.name[locale]} — ${a.summary[locale]}` }); }}
                 onPointerLeave={ev => { if (ev.pointerType === 'mouse') setNameTip(null); }}
                 onClick={() => setNameTip(t => t?.key === a.id ? null : { key: a.id, x: fx, y: fy - 6 * unit, text: `${a.name[locale]} — ${a.summary[locale]}` })} />
-              {!reducedMotion && <circle className="hmap-arc-runner" r={3 * unit}><animateMotion dur="2.4s" begin={`${i * 0.2}s`} fill="freeze" path={d} /></circle>}
+              {!reducedMotion && <circle className="hmap-arc-runner" r={3 * unit}><animateMotion dur="2.4s" begin={`${0.6 + i * 0.2}s`} fill="freeze" path={d} /></circle>}
             </g>;
           })}
         </g>}
