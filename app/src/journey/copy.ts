@@ -7,7 +7,7 @@ const arCount = (n: number) => n === 1 ? 'حدث واحد' : n === 2 ? 'حدثا
 export const journeyCopy = {
   ar: {
     timeline: 'الخط الزمني للسيرة',
-    prev: 'الحدث السابق', next: 'الحدث التالي', play: 'تشغيل القصة', pause: 'إيقاف', story: 'القصة خطوة بخطوة',
+    prev: 'الحدث السابق', next: 'الحدث التالي', play: 'تشغيل القصة', pause: 'إيقاف', story: 'القصة خطوة بخطوة', paceLabel: 'سرعة القصة', pace: { slow: 'أبطأ', normal: 'عادي', fast: 'أسرع' },
     count: (i: number, n: number) => `${digits(i, 'ar')} من ${digits(n, 'ar')}`,
     loading: 'جارٍ تحميل بيانات السيرة…',
     error: 'تعذّر تحميل ملفات البيانات من مجلد data. تأكد من وجودها ثم أعد تحميل الصفحة.',
@@ -66,7 +66,7 @@ export const journeyCopy = {
   },
   en: {
     timeline: 'Timeline of the Sirah',
-    prev: 'Previous event', next: 'Next event', play: 'Play the story', pause: 'Pause', story: 'Story mode',
+    prev: 'Previous event', next: 'Next event', play: 'Play the story', pause: 'Pause', story: 'Story mode', paceLabel: 'Story speed', pace: { slow: 'Slower', normal: 'Normal', fast: 'Faster' },
     count: (i: number, n: number) => `${i} of ${n}`,
     loading: 'Loading the Sirah data…',
     error: 'The data files could not be loaded from the data folder. Check they are there, then reload the page.',

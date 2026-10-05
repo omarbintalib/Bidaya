@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { quranpediaRefs, type QuranRef } from '../data/quranpedia';
 import { km, pathKm, roundKm } from '../data/geo';
 import { dateLine, digits, eventPlaceName, excerpt, hadithLinks, hijri, periodName, peopleFor, versesFor } from '../data/select';
@@ -18,11 +18,15 @@ function lead(body: string) {
 /** Arabic-only source text keeps its own language and direction inside the English interface. */
 const Ar = ({ children, as: Tag = 'span' }: { children: React.ReactNode; as?: 'span' | 'p' }) => <Tag lang="ar" dir="rtl">{children}</Tag>;
 
-interface CardProps { data: Sirah; event: SirahEvent; locale: Locale; chapter: number; yearEvents: SirahEvent[]; onPick: (n: number) => void; onWalk?: () => void; walkName?: string }
+interface CardProps { data: Sirah; event: SirahEvent; locale: Locale; chapter: number; yearEvents: SirahEvent[]; onPick: (n: number) => void; onWalk?: () => void; walkName?: string;
+  /** Story mode: the whole text is shown, not only its opening. */
+  full?: boolean }
 
-export default function EventCard({ data, event, locale, chapter, yearEvents, onPick, onWalk, walkName }: CardProps) {
+export default function EventCard({ data, event, locale, chapter, yearEvents, onPick, onWalk, walkName, full = false }: CardProps) {
   const text = journeyCopy[locale];
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(full);
+  // Story mode opens the whole text; the reader can still fold it again.
+  useEffect(() => { if (full) setOpen(true); }, [full]);
   const peopleApi = usePeople();
   const verses = versesFor(data, event);
   const people = peopleFor(data, event);
@@ -33,6 +37,10 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
   const bodyLang = body === event.text.ar ? 'ar' : 'en';
   const title = event.title[locale] || event.title.ar;
   const opening = lead(body), rest = body.slice(opening.replace(/…$/, '').length).trim();
+  // Opened, an opening cut mid-sentence ("…") runs on to the end of its sentence, and the rest follows as a paragraph.
+  const cutAt = opening.replace(/…$/, '').length, sentenceEnd = opening.endsWith('…') ? body.slice(cutAt).search(/[.!؟](\s|$)/) : 0;
+  const openLead = sentenceEnd < 0 ? body : body.slice(0, cutAt + sentenceEnd + (opening.endsWith('…') ? 1 : 0)).trim();
+  const openRest = body.slice(openLead.length).trim();
   const at = yearEvents.findIndex(e => e.n === event.n);
 
   return <article className="ecard" key={event.n} aria-labelledby={`ev-${event.n}`}>
@@ -54,8 +62,8 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
 
     {locale === 'en' && !event.text.en && <p className="ecard-flag">{text.noEnglish}</p>}
     <div className="ecard-text" lang={bodyLang} dir={bodyLang === 'ar' ? 'rtl' : 'ltr'}>
-      <p className="ecard-lead"><PeopleText text={opening} lang={bodyLang} /></p>
-      {open && rest && <p><PeopleText text={rest} lang={bodyLang} /></p>}
+      <p className="ecard-lead"><PeopleText text={open && rest ? openLead : opening} lang={bodyLang} /></p>
+      {open && openRest && <p><PeopleText text={openRest} lang={bodyLang} /></p>}
     </div>
     {rest && <button type="button" className="ecard-more" aria-expanded={open} onClick={() => setOpen(v => !v)}>{open ? text.readLess : text.readMore}</button>}
     {onWalk && walkName && <button type="button" className="ecard-walk" onClick={onWalk}>

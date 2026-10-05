@@ -4,6 +4,7 @@ import type { SirahEvent } from '../data/types';
 import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
 import { useActive, type ActiveStore } from './activeStore';
+import type { Pace } from './Story';
 
 interface Props {
   events: SirahEvent[];
@@ -21,9 +22,11 @@ interface Props {
   extra?: React.ReactNode;
   /** Events the sources tie verses to: 'direct' when a hadith names the event, 'suggested' for a proposed place. */
   revealed?: Map<number, 'direct' | 'suggested'>;
+  /** Story mode: how long the current step stays (ms), which step it is, and the reading pace. */
+  story?: { ms: number; step: number; pace: Pace; onPace: (p: Pace) => void };
 }
 
-export default function Timeline({ events, index, store, locale, playing, reducedMotion, onIndex, onStep, onTogglePlay, extra, revealed }: Props) {
+export default function Timeline({ events, index, store, locale, playing, reducedMotion, onIndex, onStep, onTogglePlay, extra, revealed, story }: Props) {
   const text = journeyCopy[locale];
   const track = useRef<HTMLDivElement>(null);
   const current = events[index];
@@ -72,8 +75,14 @@ export default function Timeline({ events, index, store, locale, playing, reduce
         <button type="button" className="tl-btn tl-play" onClick={onTogglePlay} aria-pressed={playing} aria-label={playing ? text.pause : text.play}>
           {playing ? <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4h3v12H6zM11 4h3v12h-3z" fill="currentColor" /></svg> : <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4l10 6-10 6z" fill="currentColor" /></svg>}
           <span>{playing ? text.pause : text.story}</span>
+          {/* Fills over the time the current step stays, so the reader sees when the story moves on. */}
+          {playing && story && <i key={`${story.step}-${story.ms}`} className="tl-play-progress" style={{ animationDuration: `${story.ms}ms` }} aria-hidden="true" />}
         </button>
         <button type="button" className="tl-btn" onClick={() => (onStep ? onStep(1) : onIndex(Math.min(events.length - 1, index + 1)))} disabled={index === events.length - 1} aria-label={text.next}><Chevron /></button>
+        {playing && story && <div className="tl-pace" role="radiogroup" aria-label={text.paceLabel}>
+          {(['slow', 'normal', 'fast'] as Pace[]).map(p => <button key={p} type="button" role="radio" aria-checked={story.pace === p}
+            className={story.pace === p ? 'is-on' : ''} onClick={() => story.onPace(p)}>{text.pace[p]}</button>)}
+        </div>}
       </div>
       <p className="tl-now" aria-live="polite">
         <span className="tl-count">{text.count(index + 1, events.length)}</span>

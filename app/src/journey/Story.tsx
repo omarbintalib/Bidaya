@@ -40,6 +40,11 @@ const QUIZ_ASK = /\bquiz\b|\btest me\b|another question|more questions|اختب�
 
 const STORY_MS = 5200;
 const CHAPTER_MS = 2800;
+/** Story mode's pace: time per word of an event's text (about 140, 200 and 300 words a minute), plus a moment for the map. */
+export type Pace = 'slow' | 'normal' | 'fast';
+const MS_PER_WORD: Record<Pace, number> = { slow: 430, normal: 300, fast: 200 };
+const LOOK_MS = 3000, MIN_EVENT_MS = 5000;
+const PACE_KEY = 'bidaya.storyPace';
 
 function useMedia(query: string) {
   const [match, setMatch] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.(query).matches);
@@ -283,13 +288,23 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
 
   // ── story mode: advance one step at a time ──
   const [playing, setPlaying] = useState(false);
+  const [pace, setPaceState] = useState<Pace>(() => { try { const v = localStorage.getItem(PACE_KEY); return v === 'slow' || v === 'fast' ? v : 'normal'; } catch { return 'normal'; } });
+  const setPace = useCallback((p: Pace) => { setPaceState(p); try { localStorage.setItem(PACE_KEY, p); } catch { /* not saved: fine */ } }, []);
+  // Each event stays as long as its whole text takes to read at the chosen pace, plus a moment to look at the map.
+  const stepMs = useMemo(() => {
+    if (step.kind === 'chapter') return CHAPTER_MS;
+    if (step.kind !== 'event') return STORY_MS;
+    const e = events[step.index], body = (locale === 'en' && e.text.en) || e.text.ar, title = e.title[locale] || e.title.ar;
+    const words = `${title} ${body}`.split(/\s+/).filter(Boolean).length;
+    return Math.max(MIN_EVENT_MS, LOOK_MS + words * MS_PER_WORD[pace]);
+  }, [step, events, locale, pace]);
   useEffect(() => {
     if (!playing) return;
     if (active >= steps.length - 1) { setPlaying(false); return; }
     if (step.kind === 'quiz' && !progress.answers[questionOf(step.period, progress.answers).q.id]) { setPlaying(false); return; } // wait for an answer
-    const id = window.setTimeout(() => goToStep(active + 1), step.kind === 'chapter' ? CHAPTER_MS : STORY_MS);
+    const id = window.setTimeout(() => goToStep(active + 1), stepMs);
     return () => window.clearTimeout(id);
-  }, [playing, active, steps.length, step, progress.answers, goToStep, questionOf]);
+  }, [playing, active, steps.length, step, progress.answers, goToStep, questionOf, stepMs]);
 
   // ── map state ──
   const emphasis = useCallback((e: SirahEvent): Emphasis => {
@@ -573,7 +588,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     {built && <div className="scrolly">
       <div className="scrolly-steps" ref={column}>
         <HoldStill store={stepStore} anchor={anchor} column={column} lockUntil={lockUntil} glide={wide && !reducedMotion} />
-        <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} keepOpen={!wide} />
+        <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} keepOpen={!wide} playing={playing} />
         <section data-step={steps.length - 1} className={`step step-summary${step.kind === 'summary' ? ' is-on' : ''}`}>
           <span>{text.summaryKicker}</span>
           <h2>{text.summaryTitle}</h2>
@@ -634,6 +649,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
           <div className="story-timeline" data-map-overlay ref={timelineBox}>
             <Timeline events={events} index={index} store={eventStore} locale={locale} playing={playing} reducedMotion={reducedMotion}
               onIndex={onTimelineIndex} onStep={stepEvent} onTogglePlay={() => setPlaying(p => !p)} revealed={revealed}
+              story={{ ms: stepMs, step: active, pace, onPace: setPace }}
               extra={unplaced.length > 0 && <button type="button" className="tl-btn tl-undated" aria-haspopup="dialog" onClick={() => setUndatedOpen(true)}>{text.undated(unplaced.length)}</button>} />
           </div>
         </HistoricMap>
@@ -691,15 +707,15 @@ function HoldStill({ store, anchor, column, lockUntil, glide }: { store: ActiveS
 }
 
 /** All steps but the summary; memoised so it re-renders only when the steps, the language or an answer change. */
-const StepList = memo(function StepList({ steps, data, locale, store, goToStep, goToEvent, onWalk, answers, onAnswer, questionOf, nextQuestion, onMore, keepOpen }: {
-  keepOpen: boolean; steps: Step[]; data: Sirah; locale: Locale; store: ActiveStore; goToStep: (i: number) => void; goToEvent: (n: number) => void;
+const StepList = memo(function StepList({ steps, data, locale, store, goToStep, goToEvent, onWalk, answers, onAnswer, questionOf, nextQuestion, onMore, keepOpen, playing }: {
+  keepOpen: boolean; playing: boolean; steps: Step[]; data: Sirah; locale: Locale; store: ActiveStore; goToStep: (i: number) => void; goToEvent: (n: number) => void;
   onWalk: (route: Route) => void; answers: Record<string, string>; onAnswer: (q: QuizQuestion, key: string) => void;
   questionOf: (period: Period, answers: Record<string, string>) => { q: QuizQuestion; at: number; total: number };
   nextQuestion: (period: Period) => number; onMore: (period: Period) => void;
 }) {
   return <>{steps.map((s, i) => {
     if (s.kind === 'chapter') return <ChapterStep key={`c${s.chapter}`} s={s} i={i} store={store} events={data.events} locale={locale} />;
-    if (s.kind === 'event') return <EventStep key={data.events[s.index].n} index={s.index} i={i} store={store} data={data} locale={locale} goToStep={goToStep} goToEvent={goToEvent} onWalk={onWalk} keepOpen={keepOpen} />;
+    if (s.kind === 'event') return <EventStep key={data.events[s.index].n} index={s.index} i={i} store={store} data={data} locale={locale} goToStep={goToStep} goToEvent={goToEvent} onWalk={onWalk} keepOpen={keepOpen} playing={playing} />;
     if (s.kind === 'quiz') {
       const { q, at, total } = questionOf(s.period, answers);
       return <QuizCard key={`q${s.chapter}`} step={i} store={store} q={q} at={at} total={total} hasMore={nextQuestion(s.period) >= 0} chapter={s.chapter} data={data} locale={locale} chosen={answers[q.id] ?? null} onAnswer={onAnswer} onMore={onMore} goToStep={goToStep} />;
@@ -737,10 +753,12 @@ const ChapterStep = memo(function ChapterStep({ s, i, store, events, locale }: {
   </section>;
 });
 
-const EventStep = memo(function EventStep({ index, i, store, data, locale, goToStep, goToEvent, onWalk, keepOpen }: {
+const EventStep = memo(function EventStep({ index, i, store, data, locale, goToStep, goToEvent, onWalk, keepOpen, playing }: {
   index: number; i: number; store: ActiveStore; data: Sirah; locale: Locale; goToStep: (i: number) => void; goToEvent: (n: number) => void; onWalk: (route: Route) => void;
   /** Narrow screens: a card stays open once read, so nothing above the reader folds shut and moves the page mid-scroll. */
   keepOpen: boolean;
+  /** Story mode is playing: the open card shows its whole text. */
+  playing: boolean;
 }) {
   const on = useActive(store, a => a === i);
   const [read, setRead] = useState(false);
@@ -752,7 +770,7 @@ const EventStep = memo(function EventStep({ index, i, store, data, locale, goToS
   return <section data-step={i} className={`step step-event${on ? ' is-on' : ''}${open && !on ? ' is-read' : ''}`} onClick={() => !on && goToStep(i)}>
     {open ? <EventCard data={data} event={e} locale={locale} chapter={PERIOD_ORDER.indexOf(e.period) + 1}
       yearEvents={data.events.filter(x => x.year === e.year && x.period === e.period)} onPick={goToEvent}
-      onWalk={route ? () => onWalk(route) : undefined} walkName={route?.name[locale]} />
+      onWalk={route ? () => onWalk(route) : undefined} walkName={route?.name[locale]} full={on && playing} />
       : <div className="step-peek"><p className="step-date">{hijri(e.year, locale)} · {eventPlaceName(data, e, locale)}</p><h3>{e.title[locale] || e.title.ar}</h3></div>}
   </section>;
 });

@@ -69,6 +69,17 @@
 [dir='rtl'] .chev-fwd, [dir='ltr'] .chev-back { transform: scaleX(-1); }
 .tl-play { padding: 0 16px; background: var(--ink); color: var(--button-ink); border-color: var(--ink); font-size: var(--text-small); }
 .tl-play svg { width: 14px; height: 14px; }
+.tl-play { position: relative; overflow: hidden; }
+/* Story mode: a gold line along the play button fills over the time the current step stays. */
+.tl-play-progress { position: absolute; inset-inline: 0; bottom: 0; height: 3px; background: #e2b45c; transform-origin: left; transform: scaleX(0); animation: tl-progress linear forwards; }
+.tl-play-progress:dir(rtl) { transform-origin: right; }
+@keyframes tl-progress { to { transform: scaleX(1); } }
+.tl-pace { display: inline-flex; border: 1px solid var(--border); background: var(--surface); height: 44px; }
+.tl-pace button { border: 0; background: none; padding: 0 10px; font-size: var(--text-small); color: var(--muted); }
+.tl-pace button + button { border-inline-start: 1px solid var(--border); }
+.tl-pace button:hover { color: var(--ink); }
+.tl-pace button.is-on { color: var(--ink); background: color-mix(in srgb, var(--brass) 18%, transparent); font-weight: 700; }
+.tl-pace button:focus-visible { outline: 2px solid var(--brass); outline-offset: -2px; }
 .tl-now { margin: 0; display: flex; align-items: baseline; gap: 12px; min-width: 0; flex: 1; }
 .tl-now b { font-weight: 500; font-size: var(--text-small); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tl-count { color: var(--muted); font-size: var(--text-small); white-space: nowrap; }
