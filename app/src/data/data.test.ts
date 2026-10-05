@@ -297,3 +297,18 @@ describe('English answers stay in English', () => {
     }
   });
 });
+
+describe('verses with no known event stay off single events', () => {
+  it('shows Hatib\'s letter (60:1) with the Conquest of Makkah and the last ayah (4:176) with the final event', () => {
+    const at = (id: string) => data.events.filter(e => versesFor(data, e).direct.some(v => v.id === id)).map(e => e.n);
+    expect(at('ASB-049')).toEqual([127]);
+    expect(at('ASB-078')).toEqual([145]);
+  });
+  it('shows al-Hadid 57:16 across 9-7 BH, not under one event', () => {
+    for (const e of data.events) {
+      const v = versesFor(data, e);
+      expect(v.direct.some(x => x.id === 'ASB-017'), `event ${e.n}`).toBe(false);
+      expect(v.stage.some(x => x.id === 'ASB-017'), `event ${e.n}`).toBe(e.order >= 15 && e.order <= 20);
+    }
+  });
+});
