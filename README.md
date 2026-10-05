@@ -16,6 +16,10 @@ Nothing was added from memory or from outside sources.
 
 ---
 
+## The backend (`backend/`)
+
+`backend/` is the RAG engine behind "Ask the map": it answers from the approved books (Dorar, al-Raheeq al-Makhtum, Sahih al-Bukhari, al-Wahidi's sahih/hasan reports) and from this package's CSVs (`1_related_surahs.csv`, `3_links_surahs_sirah.csv`, `2_sirah_events.csv`, `6_sahaba.csv`, `7_sahaba_references.csv`), citing a source for every answer and refusing fatwa or unsourced questions. See `backend/README.md`. The backend reads a prebuilt index of these CSVs (`backend/data/chunks`), so after editing one of them the index has to be rebuilt (see the backend README).
+
 ## The app (`app/`)
 
 `app/` is the interactive version (v11), built on the Islamathon design. It reads the CSV files in this folder directly, so editing a CSV here and reloading the page is all it takes to update the app. See `app/README.md` for how to run it (`cd app && npm ci && npm run dev`).

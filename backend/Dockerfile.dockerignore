@@ -1,0 +1,9 @@
+# context = repo root (docker build -f backend/Dockerfile .)
+app
+.git
+*.pptx
+*.html
+backend/.env
+backend/.venv
+backend/data/index
+**/__pycache__

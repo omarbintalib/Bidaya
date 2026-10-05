@@ -9,8 +9,12 @@ import type { Locale } from '../i18n';
  * Every answer names its source; questions asking for a ruling are referred to an official
  * fatwa body; questions with no matching source get an apology.
  *
- * This is retrieval over the CSVs in the browser. To add an LLM, send `retrieve()`'s passages to a
- * server-side model and keep the same rules — never call a model API with a key from the browser.
+ * Two engines, same rules and the same `Answer` shape:
+ * - `askServer()`: the RAG backend (../backend, POST /api/ask) — the books (Dorar, al-Raheeq, Sahih al-Bukhari,
+ *   al-Wahidi's sahih/hasan reports) plus these CSVs, an LLM writing only from the retrieved passages, with checks.
+ *   The model key stays on the server.
+ * - `answer()`: retrieval over the CSVs in the browser. Used when the backend is off or unreachable, and for
+ *   the suggested questions (`suggestFor`), which must be instant.
  */
 
 export interface AnswerSource { label: string; url: string }
@@ -20,6 +24,33 @@ export function sourceLinks(refs: AnswerSource[]): AnswerSource[] {
   });
 }
 export interface Answer { sources?: AnswerSource[]; text: string; event?: number; kind: 'event' | 'person' | 'verse' | 'refusal' | 'none' }
+
+/** The backend's URL: VITE_ASK_API at build time (`off` disables it); dev and preview proxy /api to it. */
+const ASK_API = (import.meta.env.VITE_ASK_API as string | undefined) ?? '/api/ask';
+const ASK_TIMEOUT_MS = 45_000;
+const KINDS = new Set<Answer['kind']>(['event', 'person', 'verse', 'refusal', 'none']);
+
+/** Ask the RAG backend. Resolves to null when it is off, unreachable, slow or returns something unexpected. */
+export async function askServer(question: string, locale: Locale, fetcher: typeof fetch = fetch): Promise<Answer | null> {
+  if (!ASK_API || ASK_API === 'off') return null;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), ASK_TIMEOUT_MS);
+  try {
+    const res = await fetcher(ASK_API, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question, locale }), signal: ctrl.signal,
+    });
+    if (!res.ok) return null;
+    const r = await res.json() as Partial<Answer>;
+    if (typeof r?.text !== 'string' || !r.text.trim() || !KINDS.has(r.kind as Answer['kind'])) return null;
+    const sources = Array.isArray(r.sources) ? sourceLinks(r.sources.filter(s => s && typeof s.label === 'string' && typeof s.url === 'string')) : [];
+    return { kind: r.kind as Answer['kind'], text: r.text.trim(), ...(sources.length ? { sources } : {}), ...(Number.isSafeInteger(r.event) ? { event: r.event } : {}) };
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
 type Doc = { kind: 'event'; item: SirahEvent; fields: Field[] } | { kind: 'person'; item: Person; fields: Field[] } | { kind: 'verse'; item: Verse; fields: Field[] };
 type Field = { weight: number; tokens: Set<string> };
 

@@ -1,0 +1,11 @@
+# Bidayah RAG backend. GPU: install torch for your CUDA first (e.g. RTX 50xx needs a cu128+ build), then this file.
+torch>=2.7
+sentence-transformers>=5.0
+transformers>=4.51
+numpy
+pandas
+python-dotenv
+openai>=1.60
+google-genai            # only if LLM_PROVIDER=gemini
+fastapi
+uvicorn[standard]

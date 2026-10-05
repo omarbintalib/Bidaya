@@ -1,0 +1,100 @@
+{
+ "dorar": {
+  "source": "dorar",
+  "chunks": 371,
+  "words_min": 17,
+  "words_median": 209,
+  "words_p90": 339,
+  "words_max": 380,
+  "warnings": [],
+  "lang": {
+   "ar": 161,
+   "en": 210
+  }
+ },
+ "wahidi": {
+  "source": "wahidi",
+  "chunks": 161,
+  "words_min": 13,
+  "words_median": 95,
+  "words_p90": 175,
+  "words_max": 318,
+  "entries": 465,
+  "narrations": 997,
+  "orphan_marks": 12,
+  "isnad_stripped": 405,
+  "kept_narrations": 161,
+  "excluded_narrations": 836,
+  "inclusion": {
+   "connected_hasan": 27,
+   "connected_sahih": 44,
+   "in_sahihayn": 90,
+   "ungraded": 345,
+   "weak": 93,
+   "tabii_report": 256,
+   "very_weak": 20,
+   "defect_in_verdict": 11,
+   "unclear": 65,
+   "no_own_verdict": 12,
+   "mursal": 31,
+   "mawdu": 3
+  },
+  "lang": {
+   "ar": 161
+  }
+ },
+ "raheeq": {
+  "source": "raheeq",
+  "chunks": 603,
+  "words_min": 19,
+  "words_median": 224,
+  "words_p90": 309,
+  "words_max": 389,
+  "sections": 404,
+  "after_merge": 377,
+  "toc_unmatched": 0,
+  "footnotes_total": 796,
+  "lang": {
+   "ar": 603
+  }
+ },
+ "asbab_curated": {
+  "source": "asbab_curated",
+  "chunks": 94,
+  "words_min": 34,
+  "words_median": 65,
+  "words_p90": 88,
+  "words_max": 118,
+  "lang": {
+   "ar": 94
+  }
+ },
+ "bukhari": {
+  "source": "bukhari",
+  "chunks": 1579,
+  "words_min": 12,
+  "words_median": 61,
+  "words_p90": 165,
+  "words_max": 380,
+  "hadiths": 7556,
+  "max_no": 7563,
+  "duplicates": 0,
+  "missing": 0,
+  "missing_sample": [],
+  "duplicate_sample": [],
+  "lang": {
+   "ar": 1579
+  }
+ },
+ "sahaba": {
+  "source": "sahaba",
+  "chunks": 98,
+  "words_min": 40,
+  "words_median": 93,
+  "words_p90": 210,
+  "words_max": 356,
+  "lang": {
+   "ar": 98
+  }
+ }
+}
