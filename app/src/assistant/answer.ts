@@ -19,7 +19,7 @@ import type { Locale } from '../i18n';
  *   the suggested questions (`suggestFor`), which must be instant.
  */
 
-export { askEarly, askServer, sourceLinks, warmServer, type Answer, type AnswerSource } from './server';
+export { askEarly, askServer, sourceLinks, warmServer, type Answer, type AnswerSource, type Turn } from './server';
 import { sourceLinks, type Answer } from './server';
 
 type Doc = { kind: 'event'; item: SirahEvent; fields: Field[] } | { kind: 'person'; item: Person; fields: Field[] } | { kind: 'verse'; item: Verse; fields: Field[] };
@@ -215,7 +215,9 @@ export function askedPerson(data: Sirah, question: string, reply: Answer): Perso
   const ar = (rest.match(/[\u0621-\u064A]/g)?.length ?? 0) > (rest.match(/[A-Za-z]/g)?.length ?? 0);
   // English names are matched as written in the sources, capitalised: a typed "abu bakr" is capitalised first.
   const text = ar ? rest : rest.replace(/(^|[^A-Za-z‘’'ʿʾ`])([a-z])/g, (_, b: string, c: string) => b + c.toUpperCase());
-  const first = findPeople(data, text, ar ? 'ar' : 'en')[0];
+  // Names are matched with each "'s" blanked out (same length), so "Ali ibn Abi Talib's wife" is seen as all of his
+  // name followed by "'s" — not as "Ali" followed by more words — and turned down: the question is about his wife.
+  const first = findPeople(data, ar ? text : text.replace(/['’]s\b/g, '  '), ar ? 'ar' : 'en')[0];
   if (!first || text.slice(0, first.start).trim() || /^\s*['’]s\b/.test(text.slice(first.end))) return undefined;
   const person = first.person;
   // The answer must be about them: a Companion's summary, or their name in it — in either script, since an English

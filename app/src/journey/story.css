@@ -7,7 +7,7 @@
 .tb-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 44px; min-height: 44px; padding: 6px 14px; border: 1px solid var(--border); border-radius: 5px; background: var(--surface); color: var(--ink); font-size: var(--text-control); white-space: nowrap; }
 .tb-btn svg { width: 16px; height: 16px; flex: none; }
 .tb-btn:hover { border-color: var(--brass); }
-.tb-chapters { list-style: none; margin: 0; padding: 0; display: flex; gap: 4px; min-width: 0; overflow-x: auto; scrollbar-width: none; flex: 1; }
+.tb-chapters { position: relative; list-style: none; margin: 0; padding: 0; display: flex; gap: 4px; min-width: 0; overflow-x: auto; scrollbar-width: none; flex: 1; }
 /* A tab cut off by the buttons beside it fades out, so the strip reads as one that scrolls (when the tabs fit, the
    fade falls on the empty end of the strip). */
 .tb-chapters { padding-inline-end: 24px; mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent); }
@@ -238,7 +238,7 @@
      answer scrolls in the sheet. Asking again (the answer gives way to the question box) brings the full sheet back. */
   .ask-panel.is-beside-map:has(.mo-root[data-phase='answered']) { max-height: max(220px, calc(var(--viewport-height, 100svh) - var(--toolbar-h) - var(--map-h) - 14px)); }
   /* That sheet is short, and the way back comes after the whole answer: it stays at the foot of the sheet meanwhile. */
-  .ask-panel.is-beside-map:has(.mo-root[data-phase='answered']) > .back-btn { position: sticky; bottom: 0; z-index: 2; width: 100%; justify-content: center;
+  .ask-panel.is-beside-map:has(.mo-root[data-phase='answered']) > .back-btn { position: sticky; bottom: 0; z-index: 2; width: 100%; justify-content: center; margin-bottom: 20px;
     box-shadow: 0 20px 0 var(--paper), 0 -12px 14px -6px var(--paper); } /* paper over the sheet's padding beneath it, a fade above */
   /* A phone on its side has no room beneath the map: the sheet stands beside it instead, on the reading side. */
   @media (orientation: landscape) and (max-height: 520px) {

@@ -50,9 +50,15 @@ def load():
         bot = Bidayah()                                           # corpus + bge-m3 + reranker (~30 s)
 
 
+class Turn(BaseModel):
+    question: str = Field(max_length=500)
+    answer: str = Field(default='', max_length=4000)
+
+
 class Ask(BaseModel):
     question: str = Field(min_length=1, max_length=500)
     locale: str = 'ar'
+    history: list[Turn] = Field(default_factory=list, max_length=6)   # the conversation so far, for follow-ups
 
 
 def short(s, n=70):
@@ -86,9 +92,11 @@ def source_link(c, lang):
             return dict(label=f"{name}: {short(e.get('title') or c['title'])}", url=f"https://dorar.net/history/event/{c['dorar_id']}")
         # The English interface: the event's English title and page, whichever copy was cited, so the Arabic and
         # English copies of one event make one link (an Arabic title among English ones read as a different source).
+        # The English page lists several events: the fragment keeps one link per event (links are told apart by URL).
         en = c if c['lang'] == 'en' else dorar_en(c['dorar_id'])
+        url = en.get('source_url')
         return dict(label=f"{name}: {short(en.get('title') or c.get('title_en') or c['title'])}",
-                    url=en.get('source_url') or f"https://dorar.net/history/event/{c['dorar_id']}")
+                    url=f"{url}#event-{c['dorar_id']}" if url else f"https://dorar.net/history/event/{c['dorar_id']}")
     if c['source'] in ('asbab_curated', 'sahaba'):
         title = c['title'] if ar else (c.get('title_en') or c['title'])
         return dict(label=f'{name}: {short(title)}', url=c.get('source_url'))
@@ -104,6 +112,8 @@ def to_frontend(res):
     lang = res['lang']
     status = res['status']
     out = dict(status=status, text=res['answer'])
+    if res.get('asked') and res['asked'] != res['question']:
+        out['asked'] = res['asked']                               # a follow-up, as the question it stands for
     if status in ('fatwa', 'personal'):
         return dict(out, kind='refusal')
     if status != 'answered':
@@ -126,7 +136,8 @@ def to_frontend(res):
 def ask(q: Ask):
     if bot is None:
         raise HTTPException(503, 'loading')
-    return to_frontend(bot.answer(q.question.strip(), lang=q.locale if q.locale in ('ar', 'en') else None))
+    history = [(t.question.strip(), short(t.answer, 600)) for t in q.history[-3:] if t.question.strip()]
+    return to_frontend(bot.answer(q.question.strip(), lang=q.locale if q.locale in ('ar', 'en') else None, history=history))
 
 
 @app.get('/api/health')

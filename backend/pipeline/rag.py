@@ -63,10 +63,15 @@ class Bidayah:
         self.events = {c['dorar_id']: dict(dorar_id=c['dorar_id'], title=c['title'], lat=c['lat'], lng=c['lng'])
                        for c in self.chunks if c['source'] == 'dorar_sirah' and c['lang'] == 'ar'}
 
-    def route(self, question):
-        r = self.llm.complete_json(prompts.ROUTER.replace('{question}', question), model=ROUTER_MODEL)
+    def route(self, question, history=()):
+        """history: the conversation's earlier (question, answer) pairs, the latest last, for follow-up questions."""
+        turns = ''.join(f'Q: {q}\nA: {a}\n' for q, a in history)
+        prompt = prompts.ROUTER.replace('{history}', f'\nThe conversation so far (the latest last):\n{turns}' if turns else '')
+        r = self.llm.complete_json(prompt.replace('{question}', question), model=ROUTER_MODEL)
         lang = r.get('lang') if r.get('lang') in ('ar', 'en') else ('ar' if re.search(r'[؀-ۿ]', question) else 'en')
-        return dict(lang=lang, type=r.get('type', 'unclear'), search_ar=r.get('search_ar') or '', search_en=r.get('search_en') or '')
+        standalone = (r.get('standalone') or '').strip() if history else ''
+        return dict(lang=lang, type=r.get('type', 'unclear'), standalone=standalone or question,
+                    search_ar=r.get('search_ar') or '', search_en=r.get('search_en') or '')
 
     def passages(self, question, route, k=TOP_K):
         variants = [question] + [v for v in (route['search_ar'], route['search_en']) if v and v != question]
@@ -90,18 +95,21 @@ class Bidayah:
             out.append(f"[{n}] ({c['context_header']})\n{c['text']}")
         return '\n\n'.join(out)
 
-    def answer(self, question, lang=None):
-        """lang: 'ar' | 'en' to answer in the interface language; None = the question's language."""
-        route = self.route(question)
+    def answer(self, question, lang=None, history=()):
+        """lang: 'ar' | 'en' to answer in the interface language; None = the question's language.
+        history: earlier (question, answer) pairs of the conversation, so a follow-up ("and after that?") is understood:
+        it is searched for and answered as the standalone question the router makes of it (returned as `asked`)."""
+        route = self.route(question, history)
         lang = lang if lang in ('ar', 'en') else route['lang']
-        base = dict(question=question, lang=lang, sources=[], map=[], debug=dict(route=route))
+        asked = route['standalone']
+        base = dict(question=question, asked=asked, lang=lang, sources=[], map=[], debug=dict(route=route))
         if route['type'] in ('fatwa', 'personal', 'off_topic', 'unclear'):
             return dict(base, status=route['type'], answer=prompts.REFUSAL[route['type']][lang])
 
         with self.search_lock:                      # one GPU search at a time (API serves concurrent requests)
-            hits = self.passages(question, route)
+            hits = self.passages(asked, route)
         base['debug']['retrieved'] = [(c['chunk_id'], round(s, 3)) for c, s in hits]
-        prompt = (prompts.ANSWER.replace('{lang_name}', LANG_NAME[lang]).replace('{question}', question)
+        prompt = (prompts.ANSWER.replace('{lang_name}', LANG_NAME[lang]).replace('{question}', asked)
                   .replace('{passages}', self.format_passages(hits)))
         r = self.llm.complete_json(prompt)
         status = r.get('status', 'insufficient')

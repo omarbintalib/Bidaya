@@ -209,6 +209,10 @@ describe('ask the map (slide 7 test set)', () => {
     // Someone else, no one named, an answer about someone else, or no answer: the event as before.
     expect(who('من هو والد أبي بكر؟', 'أبو قحافة والد أبي بكر.')).toBeUndefined();
     expect(who("Who was Abu Bakr's father?", 'Abu Quhafa was the father of Abu Bakr.')).toBeUndefined();
+    // A full name before "'s", where a shorter name ("Ali", "Umar") would match on its own.
+    expect(who("Who was Ali ibn Abi Talib's wife?", 'Fatimah, the daughter of the Prophet ﷺ, married Ali ibn Abi Talib.')).toBeUndefined();
+    expect(who('who was umar ibn al-khattab’s daughter', 'Hafsah was the daughter of Umar ibn al-Khattab.')).toBeUndefined();
+    expect(who('Who was Ali ibn Abi Talib?', 'Ali ibn Abi Talib was the cousin of the Prophet ﷺ.')).toBe(data.people.find(p => p.name.en.startsWith('Ali ibn Abi Talib'))!.id);
     expect(who('Who was the father of Abu Bakr?', 'Abu Quhafa.')).toBeUndefined();
     expect(who('من هو أول من أسلم؟', 'أبو بكر وخديجة.')).toBeUndefined();
     expect(who('ما الذي حدث في غزوة بدر؟', 'التقى المسلمون بقريش عند بدر وقُتل أبو جهل.')).toBeUndefined();

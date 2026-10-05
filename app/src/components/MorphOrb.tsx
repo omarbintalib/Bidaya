@@ -1220,7 +1220,7 @@ export default function MorphOrb(props: MorphOrbProps) {
         {COPY.reset}
       </button>
       {phase !== "idle" && phase !== "answered" && phase !== "reset" && (
-        <button type="button" className="mo-cancel" onClick={() => rtRef.current?.escape()}>{COPY.cancel}</button>
+        <button type="button" className="mo-cancel" onClick={() => { rtRef.current?.escape(); propsRef.current.onCancel?.(); }}>{COPY.cancel}</button>
       )}
 
       <div className="mo-live" ref={liveRef} role="status" aria-live="polite" />
