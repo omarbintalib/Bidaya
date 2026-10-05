@@ -96,7 +96,6 @@ html[data-contrast='dark'] .region-glow-0 { stop-color: #f0c674; stop-opacity: .
 .lg-glow { width: 16px; height: 16px; border-radius: 50%; display: inline-block; background: radial-gradient(circle, #e2b45cdd, #e2b45c00 70%); }
 
 /* Living map */
-.hmap-mountains { fill: none; stroke: var(--coast); stroke-opacity: .22; stroke-linejoin: round; }
 .hmap-caravan { fill: var(--brass); opacity: .85; }
 .hmap-pulse { fill: none; stroke: #e2b45c; transform-box: fill-box; transform-origin: center; animation: hmap-pulse-out 2.4s ease-out both; }
 @keyframes hmap-pulse-out { from { opacity: .95; transform: scale(.4); } to { opacity: 0; transform: scale(2.6); } }
@@ -196,3 +195,17 @@ html[data-contrast='dark'] .hmap-arc.out-honoured .hmap-arc-name, html[data-cont
 /* A letter's travelling dot stays hidden until its journey starts (before that it would sit at the map's corner). */
 .hmap-arc-runner { opacity: 0; animation: hmap-fade-in .15s linear both; animation-delay: calc(.6s + var(--i) * .2s); }
 html[data-reduced-motion='true'] .hmap-arc-runner { display: none; }
+
+/* Terrain (Natural Earth): baked washes and sea depth, shaded relief, dune crests, lakes and rivers. */
+:root { --relief-opacity: .9; --wash-opacity: 1; --depth-opacity: 1; --river: #7d9a97; }
+html[data-contrast='light'] { --relief-opacity: .5; --wash-opacity: .6; --depth-opacity: .5; }
+html[data-contrast='dark'] { --relief-opacity: .4; --wash-opacity: .45; --depth-opacity: .25; --river: #4f6f6c; }
+.hmap-terrain { pointer-events: none; }
+.hmap-sand-texture { opacity: .6; }
+.hmap-dune { fill: none; stroke: #b08a4e; stroke-linecap: round; opacity: .5; }
+html[data-contrast='dark'] .hmap-dune { stroke: #c2a170; opacity: .35; }
+html[data-contrast='dark'] .hmap-relief { opacity: var(--relief-opacity); }
+.hmap-wash { opacity: var(--wash-opacity); }
+.hmap-depth { opacity: var(--depth-opacity); pointer-events: none; }
+.hmap-lake { fill: var(--sea); stroke: var(--coast); stroke-linejoin: round; stroke-opacity: .6; }
+.hmap-river { fill: none; stroke: var(--river); stroke-linecap: round; stroke-linejoin: round; opacity: .75; }

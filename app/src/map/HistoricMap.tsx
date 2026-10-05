@@ -1,6 +1,7 @@
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { COS, K, LAND } from '../data/land';
+import { LAKES, MAP_IMAGES, RIVERS, SAND } from '../data/terrain';
 import type { MapArc, RouteStop, Sirah, SirahEvent } from '../data/types';
 import type { Locale } from '../i18n';
 import { mapCopy } from './copy';
@@ -51,12 +52,14 @@ interface Props {
 }
 
 // Decorative and approximate: the line of the Sarawat / Hijaz mountains.
-const MOUNTAINS: [number, number][] = [[35.6, 28.0], [36.9, 26.5], [38.3, 25.0], [39.3, 23.5], [40.1, 22.0], [41.3, 20.0], [42.5, 18.3], [43.4, 16.5], [43.9, 15.0]];
 
 
 interface PlaceLabel { key: string; x: number; y: number; name: string; priority: number; strong: boolean }
 
 interface Pin { key: string; x: number; y: number; events: SirahEvent[]; emphasis: Emphasis; precision: SirahEvent['precision']; name: string }
+
+/** A file in public/, wherever the site is served from. */
+const img = (file: string) => `${import.meta.env.BASE_URL}${file}`;
 
 const RANK: Record<Emphasis, number> = { hidden: 0, past: 1, active: 2, selected: 3 };
 
@@ -361,8 +364,14 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
           <pattern id="hmap-hatch" width={6 * unit} height={6 * unit} patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
             <line x1="0" y1="0" x2="0" y2={6 * unit} className="hmap-hatch-line" strokeWidth={unit} />
           </pattern>
+          {/* Sand seas: rows of small dune crests, sized in screen pixels. */}
+          <pattern id="hmap-dunes" width={18 * unit} height={12 * unit} patternUnits="userSpaceOnUse">
+            <path className="hmap-dune" d={`M${2 * unit} ${5 * unit}q${3 * unit} ${-3.2 * unit} ${6 * unit} 0M${11 * unit} ${11 * unit}q${3 * unit} ${-3.2 * unit} ${6 * unit} 0`} strokeWidth={0.9 * unit} />
+          </pattern>
         </defs>
         <rect className="hmap-sea" x={-WIDTH} y={-HEIGHT} width={WIDTH * 3} height={HEIGHT * 3} />
+        {/* The sea's depth, baked (scripts/build-terrain.py): pale shallows along the coast, deeper water offshore. */}
+        <image className="hmap-depth" href={img(MAP_IMAGES.depth)} x={0} y={0} width={MAP_IMAGES.width} height={MAP_IMAGES.height} preserveAspectRatio="none" aria-hidden="true" />
         {/* Water lines: thin rings following the coast, as on engraved maps. Each ring is a wide coast-coloured
             stroke with a slightly narrower sea-coloured stroke on top; the land drawn after covers the inner half. */}
         <g className="hmap-water" aria-hidden="true">
@@ -372,8 +381,15 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
           </g>)}
         </g>
         <path className="hmap-land" d={LAND} strokeWidth={1.1 * unit} />
-        <g className="hmap-terrain" aria-hidden="true">
-          <path className="hmap-mountains" d={mountainPath(unit)} strokeWidth={1.1 * unit} />
+        {/* Terrain from Natural Earth (scripts/build-terrain.py). The soft washes (sand, fertile land, the shade inside the
+            coast) and the shaded relief are images: an SVG is redrawn on every frame of a glide, and an image is cheap to
+            move. Only the crisp details are drawn: dune crests, lakes and rivers. */}
+        <g className="hmap-terrain" aria-hidden="true" clipPath="url(#hmap-land-clip)">
+          <image className="hmap-wash" href={img(MAP_IMAGES.wash)} x={0} y={0} width={MAP_IMAGES.width} height={MAP_IMAGES.height} preserveAspectRatio="none" />
+          <path className="hmap-sand-texture" d={SAND} fill="url(#hmap-dunes)" />
+          <image className="hmap-relief" href={img(MAP_IMAGES.relief)} x={0} y={0} width={MAP_IMAGES.width} height={MAP_IMAGES.height} preserveAspectRatio="none" />
+          <path className="hmap-lake" d={LAKES} strokeWidth={0.8 * unit} />
+          <path className="hmap-river" d={RIVERS} strokeWidth={1.1 * unit} />
         </g>
         {/* Graticule every 5° — orientation only. */}
         <g className="hmap-grid" strokeWidth={0.6 * unit}>
@@ -579,20 +595,6 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
 
 
 /** Small peaks along the mountain line, spaced evenly on screen. */
-function mountainPath(unit: number) {
-  let d = '';
-  const step = Math.max(14, 22 * unit), size = Math.max(4, 6 * unit);
-  for (let i = 0; i < MOUNTAINS.length - 1; i++) {
-    const [ax, ay] = project(...MOUNTAINS[i]), [bx, by] = project(...MOUNTAINS[i + 1]);
-    const len = Math.hypot(bx - ax, by - ay), n = Math.max(1, Math.floor(len / step));
-    for (let j = 0; j < n; j++) {
-      const t = j / n, x = ax + (bx - ax) * t, y = ay + (by - ay) * t;
-      d += `M${(x - size).toFixed(1)} ${(y + size * 0.6).toFixed(1)}L${x.toFixed(1)} ${(y - size * 0.6).toFixed(1)}L${(x + size).toFixed(1)} ${(y + size * 0.6).toFixed(1)}`;
-    }
-  }
-  return d;
-}
-
 /** A gentle curve from one end of a letter or delegation to the other, bowing to the same side each time. */
 function arcPath(a: MapArc) {
   const [x0, y0] = project(a.from.lon, a.from.lat), [x1, y1] = project(a.to.lon, a.to.lat);

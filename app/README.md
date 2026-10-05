@@ -39,7 +39,7 @@ The README of the data package (IslamthonDataandstuff) explains every column.
 
 ## The map
 
-The map is a period map, drawn as SVG: coastlines only (Natural Earth 1:50m, public domain), with the regions, powers and seas of the time from `map_labels.csv`. It draws no modern borders, so no country outline is approximated. Region positions are approximate and labelled for orientation only; a region the sources say Islam reached is named in gold, and only places glow, at their own coordinates. The mountain marks along the Hijaz and Sarawat are decorative and approximate. To regenerate the coastline after changing the map's extent, run `node scripts/build-land.mjs`.
+The map is a period map, drawn as SVG: coastlines only (Natural Earth 1:50m, public domain), with the regions, powers and seas of the time from `map_labels.csv`. It draws no modern borders, so no country outline is approximated. Region positions are approximate and labelled for orientation only; a region the sources say Islam reached is named in gold, and only places glow, at their own coordinates. The terrain is real data, also from Natural Earth (public domain): shaded relief (1:10m), the sand seas (Rub' al-Khali, al-Nafud, Wahiba), the fertile lands (the Nile delta, Mesopotamia, the Levant coast), rivers and natural lakes. Modern canals and reservoirs (Suez, Lake Nasser, Lake Assad...) are left out. The soft layers are baked into images (`public/map/`), so the map stays smooth while it glides. To regenerate the coastline after changing the map's extent, run `node scripts/build-land.mjs`, then `python3 scripts/build-terrain.py <folder with the Natural Earth files>` (the script lists the downloads).
 
 ## Reading the verses
 
