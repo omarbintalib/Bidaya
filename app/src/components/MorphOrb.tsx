@@ -587,9 +587,10 @@ function createRuntime(env: Env): Runtime {
     root.append(probe);
     geo.ch = Math.max(CARD_H, Math.ceil(probe.getBoundingClientRect().height));
     // On a phone the panel is a full-height sheet, so the answer gets most of the screen rather than a small box.
-    const cap = window.matchMedia?.('(max-width: 1000px)').matches ? Math.max(220, Math.round(window.innerHeight * .5)) : 220;
+    // The answer box takes the height of its text, up to about half the screen; "Expand answer" is only for longer ones.
+    const cap = Math.max(220, Math.min(480, Math.round(window.innerHeight * .5)));
     root.dataset.answerOverflow = String(geo.ch > cap);
-    geo.ch = Math.min(root.dataset.expanded === 'true' ? Math.max(cap, Math.min(480, window.innerHeight * .6)) : cap, geo.ch);
+    geo.ch = Math.min(root.dataset.expanded === 'true' ? Math.max(cap, Math.round(window.innerHeight * .75)) : cap, geo.ch);
     probe.remove();
     root.style.setProperty('--answer-height', `${geo.ch}px`);
   };

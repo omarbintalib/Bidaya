@@ -23,7 +23,7 @@
 .ask-panel { position: absolute; top: calc(100% + 8px); inset-inline-start: clamp(24px, 4.8vw, 88px); z-index: 31; width: min(var(--story-w, 440px), calc(100vw - 32px)); max-height: calc(var(--viewport-height, 100svh) - var(--toolbar-h) - 32px); overflow: auto;
   padding: 14px 16px 16px; background: var(--paper); border: 1px solid var(--brass); box-shadow: 0 20px 60px #331b0d33; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .2s, transform .2s, visibility .2s; }
 .ask-panel.is-open { opacity: 1; visibility: visible; transform: none; }
-.answer-card { position: absolute; top: calc(100% + 8px); inset-inline-start: clamp(24px, 4.8vw, 88px); z-index: 31; width: min(var(--story-w, 440px), calc(100vw - 32px)); max-height: min(560px, calc(var(--viewport-height, 100svh) - var(--toolbar-h) - 24px)); overflow: auto;
+.answer-card { position: absolute; top: calc(100% + 8px); inset-inline-start: clamp(24px, 4.8vw, 88px); z-index: 31; width: min(var(--story-w, 440px), calc(100vw - 32px)); max-height: calc(var(--viewport-height, 100svh) - var(--toolbar-h) - 24px); overflow: auto;
   padding: 14px 18px 14px; background: var(--paper); border: 1px solid var(--brass); border-inline-start-width: 3px; box-shadow: 0 14px 40px #331b0d24; transform-origin: top; }
 .answer-kicker { display: flex; align-items: center; gap: 6px; margin: 0; color: var(--brass); font-size: calc(13px * var(--text-scale)); }
 .answer-kicker svg { width: 13px; height: 13px; }
@@ -212,7 +212,7 @@
   .tb-short { display: inline; }
   .tb-chapter { padding: 6px 10px; }
   /* A full-height sheet under the toolbar, with room at the bottom for the accessibility button. */
-  .ask-panel { position: fixed; top: calc(var(--toolbar-h) + 6px); inset-inline: 8px; bottom: 8px; width: auto; max-height: none; padding-bottom: 24px; overscroll-behavior: contain; }
+  .ask-panel { position: fixed; top: auto; inset-inline: 8px; bottom: 8px; width: auto; max-height: calc(var(--viewport-height, 100svh) - var(--toolbar-h) - 14px); padding-bottom: 20px; overscroll-behavior: contain; }
   /* The sheet covers the screen; the accessibility button would sit on its text, so it steps aside until the sheet closes. */
   body:has(.ask-panel.is-open) .accessibility-launcher { visibility: hidden; }
   .scrolly-map { order: -1; position: sticky; top: var(--toolbar-h); z-index: 5; height: 46svh; min-height: 300px; margin-inline: calc(-1 * clamp(24px, 4.8vw, 88px)); }
@@ -273,3 +273,18 @@
 .scrolly-steps { transition: opacity .25s ease; }
 .scrolly-steps.is-rushing { opacity: .35; }
 @keyframes answer-drop { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+
+/* Large screens: the character card and the Quran reader grow with the page (on a 2K monitor they looked small).
+   zoom scales the whole card; its height limit is divided by the same factor so it still fits the screen. */
+@media (min-width: 1680px) {
+  .person-dialog, .quran-reader { zoom: 1.15; }
+  .person-dialog { max-height: min(760px, calc((var(--viewport-height, 100svh) - 48px) / 1.15)); }
+  .quran-reader { height: min(820px, calc((var(--viewport-height, 100svh) - 48px) / 1.15)); }
+  .person-dialog { width: min(620px, calc((100vw - 32px) / 1.15)); }
+}
+@media (min-width: 2200px) {
+  .person-dialog, .quran-reader { zoom: 1.3; }
+  .person-dialog { max-height: min(760px, calc((var(--viewport-height, 100svh) - 48px) / 1.3)); }
+  .quran-reader { height: min(820px, calc((var(--viewport-height, 100svh) - 48px) / 1.3)); }
+  .person-dialog { width: min(660px, calc((100vw - 32px) / 1.3)); }
+}

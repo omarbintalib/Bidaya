@@ -110,3 +110,15 @@ html[data-reduced-motion='true'] .mo-out { display: none; }
 .mo-root[data-docked='true'] .mo-answer { max-height: var(--answer-height); }
 .mo-reading-actions { position: relative; padding: 0 16px 12px; text-align: start; }
 .mo-history[data-tooltip]::after { bottom: calc(100% + 12px); }
+
+/* Compact thinking state: the orb plays at 80% and the box around it shrinks to fit, so no empty space is left
+   under it. The answer card itself is full size (the scale eases back as it unfolds). */
+.mo-mover { transition: scale .45s ease; }
+.mo-root:is([data-phase='assemble'],[data-phase='think'],[data-phase='condense'],[data-phase='resolve']) .mo-mover { scale: .8; }
+.mo-root { --processing-height: calc(176px + 2 * var(--text-control) * var(--reading-line-height)); }
+.mo-status { top: 160px; }
+.mo-cancel { top: calc(170px + var(--text-control) * var(--reading-line-height)); }
+.mo-root[data-docked='true'] { height: 204px !important; }
+.mo-root[data-docked='true'][data-phase='answered'] { height: calc(var(--answer-height) + 48px) !important; }
+/* Once the answer is showing, "Cancel" has nothing to cancel. */
+.mo-root:is([data-phase='unfold'],[data-phase='answered']) .mo-cancel { display: none; }
