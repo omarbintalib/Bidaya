@@ -26,6 +26,7 @@ Two files were added for the period map:
 |------|------------|
 | `map_labels.csv` | Regions, powers and seas shown on the map, with approximate positions for orientation |
 | `map_routes.csv` | The Quraysh caravan routes (winter to Yemen, summer to al-Sham), approximate |
+| `islam_growth.csv` | Figures Dorar states for Muslims at a place (emigrants, the men at al-Aqabah, armies), each quoted word for word. Used only to set the glow's brightness; never shown as numbers |
 | `quran_en.csv` | English for each Quran quotation inside the English reasons (`وجه_الارتباط_EN`): Sahih International, quoted word for word from Quranpedia, with the ayah reference and link (see below) |
 | `map_arcs.csv` | The letters sent from Madinah and the delegations that came to it, drawn as curves while their event is on screen (see below) |
 
@@ -188,8 +189,8 @@ Each place in `4_places.csv` and each region in `map_labels.csv` can carry `حد
   - **Oman, Yemen, Iraq and al-Sham** were regions, not today's states.
   - **The seas** carry their names of the time: al-Qulzum, al-Rum, Faris.
 - - **Names appear gradually.** A place is named on the map from its first event on, so places and mosques do not show before the story reaches them.
-- **Every place Islam had reached glows the same.** The sources count only certain groups (those who emigrated or marched), not how many Muslims lived in a place, so the glow does not try to show numbers.
-- The map's key reads "Gold glow: places Islam had reached (n)", and it is shown on phones too.
+- **The glow brightens where the sources mention more Muslims.** `islam_growth.csv` holds figures Dorar states, quoted word for word: the emigrants to Abyssinia, the men of Yathrib at al-Aqabah, and the armies that marched from Madinah. They only set how bright and wide a place's glow is, on a logarithmic scale. **No number is shown anywhere**, because these figures count certain groups (those who emigrated or marched), not how many Muslims lived in a place. A lit place with no figure glows faintly.
+- The map's key reads "Gold glow: places Islam had reached (n)", with "Brighter where the sources mention more Muslims", and it is shown on phones too.
 
 ### Letters and delegations
 

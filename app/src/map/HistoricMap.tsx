@@ -224,6 +224,12 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
     for (const e of data.events) if (e.place && e.order < (m.get(e.place) ?? Infinity)) m.set(e.place, e.order);
     return m;
   }, [data]);
+  // How many Muslims the sources count at a place by now (islam_growth.csv; a lower bound), 0 when none is given.
+  const countAt = (key: string) => {
+    let c = 0;
+    for (const g of data.growth.get(key) ?? []) if ((data.byNumber.get(g.event)?.order ?? Infinity) <= (now ?? -Infinity)) c = Math.max(c, g.count);
+    return c;
+  };
 
   // Spread of Islam: places and regions whose sourced "Islam reached" event is at or before `now`.
   const reachedBy = (n: number | null) => n !== null && now !== undefined && (data.byNumber.get(n)?.order ?? Infinity) <= now;
@@ -345,7 +351,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
   const labelSize = { l: 15, m: 12.5, s: 11 };
 
   // Layers are memoised so moving through the story only redraws what changed.
-  const reachedKey = glowPlaces.map(p => reachedBy(p.reached) ? 1 : 0).join('') + data.labels.map(l => reachedBy(l.reached) ? 1 : 0).join('');
+  const reachedKey = glowPlaces.map(p => reachedBy(p.reached) ? countAt(p.key) + 1 : 0).join(',') + data.labels.map(l => reachedBy(l.reached) ? 1 : 0).join('');
   const baseLayers = useMemo(() => <>
         <defs>
           <radialGradient id="hmap-glow"><stop offset="0" className="glow-0" /><stop offset=".55" className="glow-1" /><stop offset="1" className="glow-2" /></radialGradient>
@@ -385,7 +391,14 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
           })}
         </g>
         <g className="hmap-glows" aria-hidden="true">
-          {glowPlaces.map(p => { const [x, y] = project(p.lon, p.lat); return <circle key={p.key} className={`hmap-glow-place${reachedBy(p.reached) ? ' is-lit' : ''}`} cx={x} cy={y} r={Math.max(18, 26 * unit)} fill="url(#hmap-glow)" />; })}
+          {glowPlaces.map(p => {
+            // Brighter and wider where the sources count more Muslims: from a faint glow for a place with no count given
+            // up to full strength at 30,000 (the army of Tabuk).
+            const [x, y] = project(p.lon, p.lat), c = countAt(p.key), level = c ? Math.min(1, Math.log10(c) / Math.log10(30000)) : 0;
+            return <g key={p.key} style={{ opacity: 0.45 + 0.55 * level }}>
+              <circle className={`hmap-glow-place${reachedBy(p.reached) ? ' is-lit' : ''}`} cx={x} cy={y} r={Math.max(18, 26 * unit) * (0.85 + 1.1 * level)} fill="url(#hmap-glow)" />
+            </g>;
+          })}
           {pulses.map(k => { const p = data.places.get(k); if (!p) return null; const [x, y] = project(p.lon, p.lat); return <circle key={`pulse-${k}-${now}`} className="hmap-pulse" cx={x} cy={y} r={30 * unit} strokeWidth={2 * unit} />; })}
         </g>
   </>,

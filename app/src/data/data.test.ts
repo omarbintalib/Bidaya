@@ -267,6 +267,14 @@ describe('Quran quotations in English', () => {
 
 describe('names as they were at the time', () => {
   const plain = (s: string) => s.replace(/[ً-ْٰـ]/g, '');
+  it('quotes, word for word, the Dorar figures the glow brightness is based on', () => {
+    expect(data.growth.size).toBeGreaterThan(0);
+    for (const [key, list] of data.growth) for (const g of list) {
+      const e = data.byNumber.get(g.event);
+      expect(e, `${key} ${g.event}`).toBeDefined();
+      expect(plain(e!.text.ar), `${key} ${g.event}`).toContain(plain(g.quote));
+    }
+  });
   it("quotes the earlier name from a Dorar text that uses it", () => {
     for (const p of data.places.values()) if (p.nameBefore) {
       const r = parseCsv(byName.get('4_places.csv')!).find(x => x['رمز_المكان'] === p.key)!;
