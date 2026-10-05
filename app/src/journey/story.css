@@ -38,7 +38,7 @@
 .answer-text { animation: fade-in .35s ease both; }
 .answer-actions .btn-quiet { min-height: 38px; padding: 6px 14px; }
 /* The open event card slides down beneath the answer card. */
-.step.is-on > :first-child, .step-chapter.is-on > * { translate: 0 var(--answer-push, 0px); transition: translate .5s cubic-bezier(.2, .7, .3, 1); }
+.step.is-on > * { translate: 0 var(--answer-push, 0px); transition: translate .5s cubic-bezier(.2, .7, .3, 1); }
 .ask-head { display: flex; align-items: center; justify-content: space-between; }
 .ask-head h2 { margin: 0; font-size: var(--text-control); }
 .ask-panel .ai-note { text-align: center; }

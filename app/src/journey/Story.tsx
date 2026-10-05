@@ -1,3 +1,4 @@
+import AskIcon from '../components/AskIcon';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { answer, suggestFor, warmUp, type Answer } from '../assistant/answer';
 import MorphOrb from '../components/MorphOrb';
@@ -527,7 +528,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
         </button>
         {/* Wide screens ask from the bar on the map; phones (no bar) keep this button. */}
         {!wide && <button type="button" className={`tb-btn tb-ask${askOpen ? ' is-open' : ''}`} aria-expanded={askOpen} aria-controls="ask-panel" onClick={() => setAskOpen(o => !o)}>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor" /></svg>
+          <AskIcon />
           <span className="tb-long">{text.ask}</span><span className="tb-short">{text.askShort}</span>
         </button>}
       </div>
@@ -744,7 +745,7 @@ function AnswerCard({ card, locale, reducedMotion, onAnswer, onClose, onAgain, b
   const respond = useRef(onAnswer);
   const [revealed, setRevealed] = useState(false);
   return <section className="answer-card" aria-label={text.ask}>
-    <p className="answer-kicker"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor" /></svg>{text.yourQuestion}</p>
+    <p className="answer-kicker"><AskIcon />{text.yourQuestion}</p>
     <h3 lang={card.locale} dir="auto">{card.q}</h3>
     <MorphOrb docked request={{ id: card.key, text: card.q }} locale={locale} answerLocale={card.locale}
       reducedMotion={reducedMotion} onSubmit={respond.current} minThinkMs={900} onAnswered={() => setRevealed(true)} onCancel={onClose} answerActions={answerActions} />
@@ -761,7 +762,7 @@ function AskBar({ locale, hint, onAsk, onHistory }: { locale: Locale; hint: stri
   const text = journeyCopy[locale];
   const [q, setQ] = useState('');
   return <form className="ask-bar" data-map-overlay role="search" aria-label={text.ask} onSubmit={e => { e.preventDefault(); const typed = q.trim(); onAsk(typed || hint || undefined, !typed); setQ(''); }}>
-    <button type="button" className="ask-bar-history" data-tooltip={chatCopy[locale].title} onClick={onHistory} aria-label={chatCopy[locale].title} aria-haspopup="dialog"><svg className="ask-bar-spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" fill="currentColor" /></svg></button>
+    <button type="button" className="ask-bar-history" data-tooltip={chatCopy[locale].title} onClick={onHistory} aria-label={chatCopy[locale].title} aria-haspopup="dialog"><AskIcon className="ask-bar-spark" /></button>
     <input value={q} onChange={e => setQ(e.target.value)} placeholder={hint ? text.askTry(hint) : text.askPlaceholder} aria-label={text.ask} enterKeyHint="send" />
     <button type="submit" aria-label={text.askSend}><svg viewBox="0 0 20 20" aria-hidden="true"><path d={locale === 'ar' ? 'M16 10H4m5-5-5 5 5 5' : 'M4 10h12m-5-5 5 5-5 5'} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
   </form>;

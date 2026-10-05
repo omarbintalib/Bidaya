@@ -1,4 +1,5 @@
 // component.tsx
+import AskIcon from './AskIcon';
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { copy, type Locale, type AiCopy } from "../i18n";
 import "./MorphOrb.css";
@@ -1124,10 +1125,7 @@ export default function MorphOrb(props: MorphOrbProps) {
 
           <form className="mo-input" ref={formRef} onSubmit={onFormSubmit} autoComplete="off" hidden={props.docked}>
             <button type="button" className="mo-history" data-tooltip={props.historyLabel ?? (props.locale === 'en' ? 'Previous chats' : 'المحادثات السابقة')} onClick={props.onHistory} aria-haspopup="dialog" aria-label={props.historyLabel ?? (props.locale === 'en' ? 'Previous chats' : 'المحادثات السابقة')} disabled={!props.onHistory}>
-            <svg className="mo-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M10 3.5l1.7 4.8 4.8 1.7-4.8 1.7L10 16.5l-1.7-4.8L3.5 10l4.8-1.7L10 3.5z" />
-              <path d="M18 14.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8z" />
-            </svg>
+            <AskIcon className="mo-spark" />
             </button>
             <input
               ref={inputRef}
