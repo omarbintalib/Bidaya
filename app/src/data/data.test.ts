@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { answer, answerEvent, suggestFor, sourceLinks, warmUp } from '../assistant/answer';
+import { answer, answerEvent, askedPerson, suggestFor, sourceLinks, warmUp } from '../assistant/answer';
 import { parseCsv } from './csv';
 import { loadSirah } from './load';
 import { FILES, trimData } from './files';
@@ -194,6 +194,58 @@ describe('ask the map (slide 7 test set)', () => {
     const migration = 'The Prophet ﷺ migrated from Makkah to Madinah with Abu Bakr, hiding three nights in the cave of Thawr.';
     expect(answerEvent(data, 'What happened at Badr?', { kind: 'event', text: migration, event: hijrah }, 'en')).toBe(hijrah);
     expect(answerEvent(data, 'Tell me more', { kind: 'event', text: about, event: hijrah }, 'en')).toBe(hijrah);
+  });
+  it('opens the card of the person a question asks about, not one event of their life', () => {
+    const who = (q: string, text: string) => askedPerson(data, q, { kind: 'event', text })?.id;
+    const abuBakr = data.people.find(p => p.name.en.startsWith('Abu Bakr'))!.id, khadijah = data.people.find(p => p.name.en.startsWith('Khadijah'))!.id;
+    expect(who('من هو أبو بكر الصديق؟', 'أبو بكر الصديق رضي الله عنه من أول من آمن.')).toBe(abuBakr);
+    expect(who('مَنْ هِيَ خديجة بنت خويلد؟', 'خديجة بنت خويلد زوج النبي ﷺ.')).toBe(khadijah);
+    expect(who('من هي أم المؤمنين خديجة؟', 'خديجة رضي الله عنها أول من آمن.')).toBe(khadijah);
+    expect(who('Who was Abu Bakr?', 'Abu Bakr al-Siddiq was the first free man to believe.')).toBe(abuBakr);
+    expect(who('who was abu bakr', 'Abu Bakr al-Siddiq was among the first to believe.')).toBe(abuBakr);
+    expect(who("Who's Khadijah?", 'Khadijah bint Khuwaylid was the wife of the Prophet ﷺ.')).toBe(khadijah);
+    // The live backend's English answer, with the Arabic honorific in it.
+    expect(who('Who was Khadijah?', 'Khadijah bint Khuwaylid رضي الله عنها was a noble, wealthy businesswoman. She was the first to believe in the Prophet Muhammad ﷺ.')).toBe(khadijah);
+    // Someone else, no one named, an answer about someone else, or no answer: the event as before.
+    expect(who('من هو والد أبي بكر؟', 'أبو قحافة والد أبي بكر.')).toBeUndefined();
+    expect(who("Who was Abu Bakr's father?", 'Abu Quhafa was the father of Abu Bakr.')).toBeUndefined();
+    expect(who('Who was the father of Abu Bakr?', 'Abu Quhafa.')).toBeUndefined();
+    expect(who('من هو أول من أسلم؟', 'أبو بكر وخديجة.')).toBeUndefined();
+    expect(who('ما الذي حدث في غزوة بدر؟', 'التقى المسلمون بقريش عند بدر وقُتل أبو جهل.')).toBeUndefined();
+    expect(who('Who was Abu Bakr?', 'I could not find this in the sources.')).toBeUndefined();
+    expect(askedPerson(data, 'من هو أبو بكر؟', { kind: 'refusal', text: 'أبو بكر' })).toBeUndefined();
+    // A Companion's summary is about them even when it does not repeat the name.
+    expect(askedPerson(data, 'Who was Abu Bakr?', { kind: 'person', text: 'He was the first caliph.' })?.id).toBe(abuBakr);
+  });
+  it('takes "what happened after X" to the later event the answer describes', () => {
+    const uhud = answer(data, 'ماذا حدث في غزوة أحد؟', 'ar').event!;
+    const titled = (word: string) => data.events.find(e => e.title.ar.replace(/[\u064B-\u065F\u0670\u0640]/g, '').includes(word))!.n;
+    const hamra = titled('حمراء الأسد'), khaybar = titled('غزوة خيبر');
+    const hudaybiyah = answer(data, 'ماذا حدث في صلح الحديبية؟', 'ar').event!;
+    // Words from the live backend's answers, which name no event.
+    expect(answerEvent(data, 'ماذا حدث بعد غزوة أحد؟', { kind: 'event', text: 'بعد غزوة أحد بات المسلمون في المدينة يحرسون مداخلها، ثم خرج النبي ﷺ بمن شهد أحدًا في طلب العدو حتى بلغ حمراء الأسد.' }, 'ar')).toBe(hamra);
+    const atKhaybar = answerEvent(data, 'ماذا حدث بعد صلح الحديبية؟', { kind: 'event', text: 'خرج النبي ﷺ إلى خيبر فحاصر حصون اليهود فيها حتى فتحها الله عليه، وقسم أرضها بين المسلمين.' }, 'ar')!;
+    expect(data.byNumber.get(atKhaybar)!.place).toBe(data.byNumber.get(khaybar)!.place);
+    expect(data.byNumber.get(atKhaybar)!.order).toBeGreaterThan(data.byNumber.get(hudaybiyah)!.order);
+    // An answer that mentions the later event only in passing stays with the event asked about.
+    expect(answerEvent(data, 'ماذا حدث بعد صلح الحديبية؟', { kind: 'event', text: 'بعد صلح الحديبية بدأت مرحلة جديدة من الدعوة، وكانت غزوة خيبر أول عمل عسكري بعده.' }, 'ar')).toBe(hudaybiyah);
+    expect(data.byNumber.get(hamra)!.order).toBeGreaterThan(data.byNumber.get(uhud)!.order);
+    // With nothing later in the answer, the event asked about stays.
+    expect(answerEvent(data, 'ماذا حدث بعد صلح الحديبية؟', { kind: 'event', text: 'صلح الحديبية كان صلحًا بين المسلمين وقريش.' }, 'ar')).toBe(hudaybiyah);
+  });
+  it('finds a surah by its English name too, not a Companion whose name sounds alike (Abasa / Abbas, al-Masad / Mas\'ud)', () => {
+    for (const [q, surah] of [['Why was Surah Abasa revealed?', 'عبس'], ['Why was Surah al-Masad revealed?', 'المسد']]) {
+      const a = answer(data, q, 'en'), v = data.verses.find(x => x.surah === surah)!;
+      expect(a.kind, q).toBe('verse');
+      expect(a.event, q).toBe(verseEvent(data, v)?.n);
+    }
+    // Every surah by its English name (al-Qasas / al-Ash'ath ibn Qays, al-Ma'idah / Sa'd ibn Mu'adh…).
+    const names = new Set(data.verses.flatMap(v => v.surahEn!.split(' / ')));
+    for (const name of names) {
+      const q = `Why was Surah ${name} revealed?`, a = answer(data, q, 'en');
+      expect(a.kind, q).toBe('verse');
+      expect(data.verses.filter(v => v.surahEn!.split(' / ').includes(name)).map(v => verseEvent(data, v)?.n), q).toContain(a.event);
+    }
   });
   it('refuses rulings and refers to an official fatwa body', () => {
     expect(answer(data, 'ما حكم صيام يوم السبت؟', 'ar').kind).toBe('refusal');

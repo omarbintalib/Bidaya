@@ -11,7 +11,11 @@ export function sourceLinks(refs: AnswerSource[]): AnswerSource[] {
     try { return !!ref.label && ['https:', 'http:'].includes(new URL(ref.url).protocol) && refs.findIndex(r => r.url === ref.url) === i; } catch { return false; }
   });
 }
-export interface Answer { sources?: AnswerSource[]; text: string; event?: number; kind: 'event' | 'person' | 'verse' | 'refusal' | 'none' }
+export interface Answer {
+  sources?: AnswerSource[]; text: string; event?: number; kind: 'event' | 'person' | 'verse' | 'refusal' | 'none';
+  /** Set in the browser when the question asks who someone is: their card opens instead of an event (askedPerson). */
+  person?: string;
+}
 
 /** The backend's URL: VITE_ASK_API at build time (`off` disables it); dev and preview proxy /api to it. */
 const ASK_API = (import.meta.env.VITE_ASK_API as string | undefined) ?? '/api/ask';

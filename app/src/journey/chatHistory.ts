@@ -2,7 +2,7 @@ import { sourceLinks, type AnswerSource } from '../assistant/answer';
 import { useCallback, useEffect, useState } from 'react';
 import type { Locale } from '../i18n';
 
-export interface ChatEntry { id: number; question: string; answer: string; locale: Locale; createdAt?: number; sources?: AnswerSource[]; event?: number }
+export interface ChatEntry { id: number; question: string; answer: string; locale: Locale; createdAt?: number; sources?: AnswerSource[]; event?: number; person?: string }
 export const CHAT_KEY = 'bidaya.chats.v1';
 const LIMIT = 50;
 export function readChats(): ChatEntry[] {
@@ -15,6 +15,7 @@ export function readChats(): ChatEntry[] {
       && (item.locale === 'ar' || item.locale === 'en')).slice(0, LIMIT).map(item => ({ id: item.id, question: item.question, answer: item.answer, locale: item.locale,
       ...(typeof item.createdAt === 'number' && Number.isFinite(item.createdAt) && item.createdAt > 0 && item.createdAt <= 8640000000000000 ? { createdAt: item.createdAt } : {}),
       ...(Number.isSafeInteger(item.event) ? { event: item.event } : {}),
+      ...(typeof item.person === 'string' && /^[A-Z]{2,4}-\d{1,4}$/.test(item.person) ? { person: item.person } : {}),
       ...(Array.isArray(item.sources) ? { sources: sourceLinks(item.sources.filter(ref => ref && typeof ref.label === 'string' && typeof ref.url === 'string')) } : {}),
     }));
   } catch { return []; }

@@ -1,5 +1,6 @@
 // component.tsx
 import AskIcon from './AskIcon';
+import { bidiRuns } from './bidiRuns';
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { copy, type Locale, type AiCopy } from "../i18n";
 import "./MorphOrb.css";
@@ -726,8 +727,7 @@ function createRuntime(env: Env): Runtime {
       if (sig.aborted) throw ABORT;
 
       setLook("base");
-      const words = body.split(/\s+/).filter(Boolean);
-      const n = Math.max(1, words.length);
+      const n = Math.max(1, bidiRuns(body).length);
 
       if (!env.isReduced()) {
         env.ui.setPhase("resolve");
@@ -1090,7 +1090,7 @@ export default function MorphOrb(props: MorphOrbProps) {
 
   const ready = value.trim().length > 0;
   const displayAnswer = answer && !props.onSubmit ? COPY.answerBody : answer;
-  const words = displayAnswer.split(/\s+/).filter(Boolean);
+  const words = bidiRuns(displayAnswer);
   const translateLabel = (name: string) => {
     if (name === copy.ar.ai.done || name === copy.en.ai.done) return COPY.done;
     const index = Math.max(copy.ar.ai.labels.indexOf(name), copy.en.ai.labels.indexOf(name));
@@ -1189,7 +1189,7 @@ export default function MorphOrb(props: MorphOrbProps) {
             <p className="mo-a-body" ref={bodyRef} lang={props.answerLocale ?? props.locale} dir="auto">
               {words.map((w, i) => (
                 <React.Fragment key={i}>
-                  <span className="mo-w">{w}</span>{" "}
+                  {i > 0 && !w.glued && " "}<span className="mo-w" dir={w.dir}>{w.text}</span>
                 </React.Fragment>
               ))}
             </p>

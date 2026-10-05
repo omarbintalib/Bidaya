@@ -1,6 +1,7 @@
 import { quranpediaRefs } from '../data/quranpedia';
 import { onIdle } from '../idle';
 import { dateLine, digits, eventPlaceName, excerpt, hadithLinks, sourceLabel, verseEvent } from '../data/select';
+import { findPeople } from '../data/people';
 import type { Person, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 
@@ -71,7 +72,7 @@ function* build(data: Sirah): Generator<void, Index> {
   for (const p of data.people) { add({ kind: 'person', item: p, fields: [field(5, p.name.ar, p.name.en, ...p.aliases.flatMap(a => [a.ar, a.en])), field(0.6, p.bio, p.bioEn)] }); yield; }
   for (const v of data.verses) {
     if (v.link?.type === 'placeholder' && !v.reason) continue;
-    add({ kind: 'verse', item: v, fields: [field(4, `سوره ${v.surah}`, v.surah), field(2.5, v.title.ar, v.title.en), field(0.8, v.reason, v.evidence.en)] });
+    add({ kind: 'verse', item: v, fields: [field(4, `سوره ${v.surah}`, v.surah, v.surahEn), field(2.5, v.title.ar, v.title.en), field(0.8, v.reason, v.evidence.en)] });
     yield;
   }
   const idf = new Map([...df].map(([t, n]) => [t, Math.log(1 + docs.length / n)]));
@@ -141,23 +142,71 @@ function docEvent(data: Sirah, doc: Doc): number | undefined {
   return verseEvent(data, doc.item)?.n;
 }
 
+/** "What happened after Uhud?" asks about what came next (or before), not about Uhud itself. */
+const AFTER = /(?:^|[\s،,(])(?:بعد|عقب|إثر|اثر)\s|\b(?:after|following)\b/i;
+const BEFORE = /(?:^|[\s،,(])قبل\s|\bbefore\b/i;
+
 /**
  * The event an answer should take the reader to. The backend names the first Dorar event its answer cites, which is
  * not always the one the answer is about (a passage on Badr cited for context in an answer about Uhud), and names none
  * when it cites only the other books (al-Raheeq, al-Bukhari, al-Wahidi, the Companions), however plainly the answer
  * is about Badr. So the event this engine finds for the question is weighed too: where the two differ, the answer's
- * own words decide, and an event they do not lead to is never chosen.
+ * own words decide, and an event they do not lead to is never chosen. A question about what happened after (or
+ * before) an event goes to the later (or earlier) event the answer's words lead to, when there is one.
  */
 export function answerEvent(data: Sirah, question: string, reply: Answer, locale: Locale): number | undefined {
   const named = reply.event !== undefined && data.byNumber.has(reply.event) ? reply.event : undefined;
   if (reply.kind === 'refusal' || reply.kind === 'none') return named;
-  const asked = answer(data, question, locale).event;
-  if (asked === undefined || asked === named || !data.byNumber.has(asked)) return named;
+  const found = answer(data, question, locale).event;
+  const asked = found !== undefined && data.byNumber.has(found) ? found : undefined;
   // Where each event comes among the sources that best match the answer's words (-1: not among them).
-  const ranked = retrieve(data, reply.text, 8).map(h => docEvent(data, h.doc));
-  const rank = (n: number | undefined) => n === undefined ? -1 : ranked.indexOf(n);
+  let ranked: (number | undefined)[] | null = null;
+  const rankedEvents = () => ranked ??= retrieve(data, reply.text, 8).map(h => docEvent(data, h.doc));
+  const rank = (n: number | undefined) => n === undefined ? -1 : rankedEvents().indexOf(n);
+  const when = AFTER.test(question) ? 1 : BEFORE.test(question) ? -1 : 0;
+  if (when && asked !== undefined) {
+    const from = data.byNumber.get(asked)!.order;
+    const onSide = (n: number | undefined) => n !== undefined && (data.byNumber.get(n)!.order - from) * when > 0;
+    if (onSide(named)) return named;
+    // The later (earlier) event the answer's words lead to most — when they lead there more than to the event asked
+    // about, so an answer that only names the event (and so matches a later one that names it too) stays with it.
+    const next = rankedEvents().find(onSide);
+    if (next !== undefined && (rank(asked) < 0 || rank(next) < rank(asked))) return next;
+  }
+  if (asked === undefined || asked === named) return named;
   if (rank(asked) < 0) return named;
   return named === undefined || rank(named) < 0 || rank(asked) < rank(named) ? asked : named;
+}
+
+// "من هو أبو بكر؟", "who was Khadijah?", "tell me about Bilal": a question about a person, before their name.
+const ASKS_WHO = /^\s*(?:من\s+(?:هو|هي|كان|كانت|يكون|تكون)|(?:حدثني|أخبرني|اخبرني)\s+عن|who(?:\s+(?:is|was|were)|['’]s)|tell\s+me\s+about)\s+/i;
+// Titles a name may come after: "من هي أم المؤمنين خديجة؟", "who was the Companion Bilal?"
+const TITLED = /^(?:(?:الصحابي|الصحابية|سيدنا|سيدتنا|السيدة|أم المؤمنين|ام المؤمنين|the\s+companion|companion|lady)\s+)+/i;
+
+/**
+ * The person a question asks about, when the answer is about them too: such an answer opens the person's card (their
+ * cited summary and every event they are in) rather than taking the reader to one event of their life — which the
+ * backend chose from whatever it cited first (Khadijah's answer went to her death). Only a question that asks who
+ * someone is and starts with their name counts: "who was Abu Bakr's father?" and "من هو والد أبي بكر؟" are about
+ * someone else.
+ */
+export function askedPerson(data: Sirah, question: string, reply: Answer): Person | undefined {
+  if (reply.kind === 'refusal' || reply.kind === 'none') return undefined;
+  const q = question.replace(/[\u064B-\u065F\u0670\u0640]/g, '');
+  const lead = q.match(ASKS_WHO);
+  if (!lead) return undefined;
+  const rest = q.slice(lead[0].length).replace(TITLED, '');
+  // Arabic or English by the letters most of it is written in (an English question may carry ﷺ).
+  const ar = (rest.match(/[\u0621-\u064A]/g)?.length ?? 0) > (rest.match(/[A-Za-z]/g)?.length ?? 0);
+  // English names are matched as written in the sources, capitalised: a typed "abu bakr" is capitalised first.
+  const text = ar ? rest : rest.replace(/(^|[^A-Za-z‘’'ʿʾ`])([a-z])/g, (_, b: string, c: string) => b + c.toUpperCase());
+  const first = findPeople(data, text, ar ? 'ar' : 'en')[0];
+  if (!first || text.slice(0, first.start).trim() || /^\s*['’]s\b/.test(text.slice(first.end))) return undefined;
+  const person = first.person;
+  // The answer must be about them: a Companion's summary, or their name in it — in either script, since an English
+  // answer often carries Arabic too ("Khadijah bint Khuwaylid رضي الله عنها").
+  const inReply = (['ar', 'en'] as const).some(lang => findPeople(data, reply.text, lang).some(s => s.person === person));
+  return reply.kind === 'person' || inReply ? person : undefined;
 }
 
 export function answer(data: Sirah, question: string, locale: Locale): Answer {

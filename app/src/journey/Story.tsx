@@ -1,6 +1,6 @@
 import AskIcon from '../components/AskIcon';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { answer, answerEvent, askServer, suggestFor, warmUp, type Answer } from '../assistant/answer';
+import { answer, answerEvent, askedPerson, askServer, suggestFor, warmUp, type Answer } from '../assistant/answer';
 import MorphOrb from '../components/MorphOrb';
 import { quizPools } from '../data/quiz';
 import { digits, eventPlaceName, hijri, PERIOD_ORDER, periodName, unplacedVerses, verseEvent, versesFor } from '../data/select';
@@ -571,10 +571,13 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     if (step.kind !== 'event' || intro) return;
     return onIdle(() => setAskHint(suggestFor(data, current, locale, 1)[0] ?? null), 1500);
   }, [step.kind, current, data, locale, intro]);
+  // A person's card waits for their answer to be shown (MorphOrb's onAnswered), so it does not cover the answer as it comes.
+  const cardAfterAnswer = useRef<Person | null>(null);
+  const answerShown = useCallback(() => { const p = cardAfterAnswer.current; cardAfterAnswer.current = null; if (p) setPerson(p); }, []);
   const onAsk = useCallback((question: string, acceptMetadata?: (metadata: Answer | null) => void): string | Promise<string> => {
     const record = (reply: string, metadata?: Answer) => {
       if (acceptMetadata) acceptMetadata(metadata ?? null); else setReplyMeta(metadata ?? null);
-      remember({ id: ++chatSequence.current, question, answer: reply, locale, createdAt: Date.now(), sources: metadata?.sources, event: metadata?.event });
+      remember({ id: ++chatSequence.current, question, answer: reply, locale, createdAt: Date.now(), sources: metadata?.sources, event: metadata?.event, person: metadata?.person });
       return reply;
     };
     if (QUIZ_ASK.test(question)) {
@@ -588,9 +591,17 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     const keep = stay.current;
     stay.current = false;
     setBesideMap(false);
+    cardAfterAnswer.current = null;
     // The RAG backend first; the in-browser answer when it is off or unreachable.
     return askServer(question, locale).then(fromServer => {
       const reply = fromServer ?? answer(data, question, locale);
+      // "Who was Khadijah?": the answer opens her card (her cited summary and every event she is in) once it is
+      // shown, and the story stays where it is — rather than taking the reader to one event of her life.
+      const person = askedPerson(data, question, reply);
+      if (person) {
+        cardAfterAnswer.current = person;
+        return record(reply.text, { ...reply, event: undefined, person: person.id });
+      }
       // The event the answer is about, even when the backend named none (see answerEvent).
       const event = answerEvent(data, question, reply, locale);
       const result: Answer = { ...reply, event };
@@ -605,13 +616,16 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     });
   }, [data, locale, goToEvent, pickQuick, text, events, stepOfEvent, stepLabel, remember, wide]);
 
+  const personOf = useCallback((id?: string) => id === undefined ? undefined : data.people.find(p => p.id === id), [data]);
+  const showAnswerPerson = useCallback((p: Person) => { setHistoryOpen(false); setPerson(p); }, []);
   const showAnswerEvent = (n: number) => {
     if (!mapEvents.has(n)) return;
     const from = activeRef.current;
     setReturnTo(r => r ?? { step: from, label: stepLabel(from) });
     setHistoryOpen(false); setAskOpen(false); goToEvent(n);
   };
-  const answerActions = <AnswerActions sources={replyMeta?.sources} event={replyMeta?.event !== undefined && mapEvents.has(replyMeta.event) ? replyMeta.event : undefined} locale={locale} onEvent={showAnswerEvent} />;
+  const answerActions = <AnswerActions sources={replyMeta?.sources} event={replyMeta?.event !== undefined && mapEvents.has(replyMeta.event) ? replyMeta.event : undefined} locale={locale} onEvent={showAnswerEvent}
+    person={personOf(replyMeta?.person)} onPerson={showAnswerPerson} />;
   const focusAskBar = () => document.querySelector<HTMLInputElement>('.ask-bar input')?.focus();
   const askAbout = useCallback((question?: string, keepPlace = false) => {
     setQuick(null);
@@ -672,9 +686,10 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
           <span className="tb-long">{text.ask}</span><span className="tb-short">{text.askShort}</span>
         </button>}
       </div>
-      <AskPanel open={askOpen} besideMap={besideMap} onClose={closeAsk} locale={locale} reducedMotion={reducedMotion} onAsk={onAsk} ask={ask} onSuggest={suggest} back={returnTo} onBack={goBack} onHistory={openHistory} answerActions={answerActions} />
+      <AskPanel open={askOpen} besideMap={besideMap} onAnswered={answerShown} onClose={closeAsk} locale={locale} reducedMotion={reducedMotion} onAsk={onAsk} ask={ask} onSuggest={suggest} back={returnTo} onBack={goBack} onHistory={openHistory} answerActions={answerActions} />
       {answerCard && <AnswerCard key={answerCard.key} card={answerCard} locale={locale} back={returnTo} onBack={goBack}
-        reducedMotion={reducedMotion} answerActions={<AnswerActions sources={answerCard.metadata?.sources} event={answerCard.metadata?.event !== undefined && mapEvents.has(answerCard.metadata.event) ? answerCard.metadata.event : undefined} locale={locale} onEvent={showAnswerEvent}
+        reducedMotion={reducedMotion} onShown={answerShown} answerActions={<AnswerActions sources={answerCard.metadata?.sources} event={answerCard.metadata?.event !== undefined && mapEvents.has(answerCard.metadata.event) ? answerCard.metadata.event : undefined} locale={locale} onEvent={showAnswerEvent}
+          person={personOf(answerCard.metadata?.person)} onPerson={showAnswerPerson}
           extra={returnTo ? <BackButton label={returnTo.label} locale={locale} onClick={goBack} /> : undefined} />} onAnswer={question => {
           stay.current = answerCard.keepPlace;
           return Promise.resolve(onAsk(question, metadata => setAnswerCard(card => card?.key === answerCard.key ? { ...card, metadata } : card)))
@@ -763,7 +778,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     {person && <PersonDialog key={person.id} person={person} data={data} locale={locale} onClose={() => setPerson(null)} onEvent={jumpTo} />}
     {place && <PlaceCard key={place} placeKey={place} data={data} locale={locale} onClose={() => setPlace(null)} onEvent={jumpTo} />}
     {searchOpen && <Search data={data} locale={locale} onClose={() => setSearchOpen(false)} onPick={openResult} />}
-    {historyOpen && <ChatHistory locale={locale} chats={chats} onDelete={deleteChat} mapEvents={mapEvents} onEvent={showAnswerEvent} onClear={clearChats} onClose={() => setHistoryOpen(false)} />}
+    {historyOpen && <ChatHistory locale={locale} chats={chats} onDelete={deleteChat} mapEvents={mapEvents} onEvent={showAnswerEvent} personOf={personOf} onPerson={showAnswerPerson} onClear={clearChats} onClose={() => setHistoryOpen(false)} />}
   </PeopleProvider>;
 }
 
@@ -827,8 +842,8 @@ const StepList = memo(function StepList({ steps, data, locale, store, goToStep, 
 });
 
 /** The "Ask the map" panel; memoised so moving through the story leaves the orb untouched. */
-const AskPanel = memo(function AskPanel({ open, besideMap, onClose, locale, reducedMotion, onAsk, ask, onSuggest, back, onBack, onHistory, answerActions }: {
-  open: boolean; besideMap: boolean; onClose: () => void; locale: Locale; reducedMotion: boolean; onAsk: (q: string) => string | Promise<string>; ask: { text: string; key: number } | null; onSuggest: (q: string) => void;
+const AskPanel = memo(function AskPanel({ open, besideMap, onAnswered, onClose, locale, reducedMotion, onAsk, ask, onSuggest, back, onBack, onHistory, answerActions }: {
+  open: boolean; besideMap: boolean; onAnswered: () => void; onClose: () => void; locale: Locale; reducedMotion: boolean; onAsk: (q: string) => string | Promise<string>; ask: { text: string; key: number } | null; onSuggest: (q: string) => void;
   back: { label: string } | null; onBack: () => void;
   onHistory: () => void; answerActions: React.ReactNode;
 }) {
@@ -839,7 +854,7 @@ const AskPanel = memo(function AskPanel({ open, besideMap, onClose, locale, redu
   if (open && !used) setUsed(true);
   return <section id="ask-panel" className={`ask-panel${open ? ' is-open' : ''}${besideMap ? ' is-beside-map' : ''}`} aria-label={text.ask} inert={!open}>
     <div className="ask-head"><h2>{text.ask}</h2><button type="button" className="qr-close" onClick={onClose} aria-label={text.close}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" /></svg></button></div>
-    {used && <MorphOrb locale={locale} reducedMotion={reducedMotion} onSubmit={onAsk} minThinkMs={900} ask={ask} onHistory={onHistory} historyLabel={chatCopy[locale].title} answerActions={answerActions} />}
+    {used && <MorphOrb locale={locale} reducedMotion={reducedMotion} onSubmit={onAsk} minThinkMs={900} ask={ask} onHistory={onHistory} historyLabel={chatCopy[locale].title} answerActions={answerActions} onAnswered={onAnswered} />}
     {back && <BackButton label={back.label} locale={locale} onClick={() => { onBack(); onClose(); }} />}
     <p className="ai-note">{text.askNote}</p>
     <ul className="ai-suggest" aria-label={text.tryAsking}>
@@ -891,7 +906,7 @@ function BackButton({ label, locale, onClick }: { label: string; locale: Locale;
   </button>;
 }
 
-function AnswerCard({ card, locale, reducedMotion, onAnswer, onClose, onAgain, back, onBack, answerActions }: { answerActions: React.ReactNode; card: { q: string; a: string | null; key: number; locale: Locale }; locale: Locale; reducedMotion: boolean; onAnswer: (question: string) => string | Promise<string>; onClose: () => void; onAgain: () => void; back: { label: string } | null; onBack: () => void }) {
+function AnswerCard({ card, locale, reducedMotion, onAnswer, onClose, onAgain, back, onBack, answerActions, onShown }: { answerActions: React.ReactNode; onShown: () => void; card: { q: string; a: string | null; key: number; locale: Locale }; locale: Locale; reducedMotion: boolean; onAnswer: (question: string) => string | Promise<string>; onClose: () => void; onAgain: () => void; back: { label: string } | null; onBack: () => void }) {
   const text = journeyCopy[locale];
   const respond = useRef(onAnswer);
   const [revealed, setRevealed] = useState(false);
@@ -899,7 +914,7 @@ function AnswerCard({ card, locale, reducedMotion, onAnswer, onClose, onAgain, b
     <p className="answer-kicker"><AskIcon />{text.yourQuestion}</p>
     <h3 lang={card.locale} dir="auto">{card.q}</h3>
     <MorphOrb docked request={{ id: card.key, text: card.q }} locale={locale} answerLocale={card.locale}
-      reducedMotion={reducedMotion} onSubmit={respond.current} minThinkMs={900} onAnswered={() => setRevealed(true)} onCancel={onClose} answerActions={answerActions} />
+      reducedMotion={reducedMotion} onSubmit={respond.current} minThinkMs={900} onAnswered={() => { setRevealed(true); onShown(); }} onCancel={onClose} answerActions={answerActions} />
     {/* "Ask another" sits in the header beside the close button, so the card ends where the answer ends. */}
     {revealed && <button type="button" className="answer-again" onClick={onAgain}>
       <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M15.5 8A6 6 0 1 0 16 11M15.5 3.5V8H11" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>{text.askAgain}
