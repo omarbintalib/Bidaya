@@ -197,10 +197,10 @@ html[data-contrast='dark'] .hmap-arc.out-honoured .hmap-arc-name, html[data-cont
 html[data-reduced-motion='true'] .hmap-arc-runner { display: none; }
 
 /* Terrain (Natural Earth): shaded relief as soft shadows, lakes and rivers. Land and sea keep their own colours. */
-:root { --relief-opacity: .8; --river: #7d9a97; }
-html[data-contrast='light'] { --relief-opacity: .5; }
+:root { --relief-opacity: .42; --river: #7d9a97; }
+html[data-contrast='light'] { --relief-opacity: .3; }
 html[data-contrast='dark'] { --relief-opacity: .4; --river: #4f6f6c; }
 .hmap-terrain { pointer-events: none; }
-html[data-contrast='dark'] html[data-contrast='dark'] .hmap-relief { opacity: var(--relief-opacity); }
+.hmap-relief { opacity: var(--relief-opacity); }
 .hmap-lake { fill: var(--sea); stroke: var(--coast); stroke-linejoin: round; stroke-opacity: .6; }
 .hmap-river { fill: none; stroke: var(--river); stroke-linecap: round; stroke-linejoin: round; opacity: .75; }
