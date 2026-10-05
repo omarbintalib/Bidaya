@@ -50,10 +50,15 @@ export const peopleFor = (data: Sirah, e: SirahEvent): Person[] => data.people.f
 export const unplacedVerses = (data: Sirah) => data.verses.filter(v => !v.link || v.link.type === 'placeholder');
 
 export const hadithLinks = (v: Verse) => [
-  ...v.bukhari.map(n => ({ book: 'bukhari' as const, n, url: `https://sunnah.com/bukhari:${n.replace(/\D+$/, '')}` })),
-  ...v.muslim.map(n => ({ book: 'muslim' as const, n, url: `https://sunnah.com/muslim:${n.replace(/\D+$/, '')}` })),
+  // Only hadith numbers become links; a remark in the column ("وتعليقًا عن أنس قبله") is explained in the evidence.
+  ...v.bukhari.filter(n => /^\d/.test(n)).map(n => ({ book: 'bukhari' as const, n, url: `https://sunnah.com/bukhari:${n.replace(/\D+$/, '')}` })),
+  ...v.muslim.filter(n => /^\d/.test(n)).map(n => ({ book: 'muslim' as const, n, url: `https://sunnah.com/muslim:${n.replace(/\D+$/, '')}` })),
 ];
 
+
+/** A source reference in the reader's language: "صحيح البخاري 4566" → "Sahih al-Bukhari 4566". */
+export const sourceLabel = (s: string, locale: Locale) => locale === 'ar' ? s : s.replace(/^الدرر السنية · حدث\s*/, 'Dorar · event ').replace(/صحيح البخاري/g, 'Sahih al-Bukhari').replace(/صحيح مسلم/g, 'Sahih Muslim')
+  .replace(/الدرر السنية/g, 'Dorar').replace(/حدث/g, 'event').replace(/؛\s*/g, '; ').replace(/،\s*/g, ', ').replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)));
 
 /** First sentences of a text, cut at a sentence boundary near `max` characters. */
 export function excerpt(text: string, max = 280) {

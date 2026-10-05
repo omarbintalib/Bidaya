@@ -58,7 +58,8 @@ export async function loadSirah(): Promise<Sirah> {
     const lat = num(r.lat), lon = num(r.lon);
     if (lat === null || lon === null) { warn(`4_places.csv: "${r['رمز_المكان']}" has no coordinates`); continue; }
     places.set(r['رمز_المكان'], { key: r['رمز_المكان'], name: { ar: r['الاسم'], en: r.Name_EN || r['الاسم'] }, lat, lon, kind: r['النوع'], confirmed: r['دقة_الإحداثيات'] === 'مؤكد', events: num(r['عدد_الأحداث']) ?? 0, reached: num(r['حدث_بلوغ_الإسلام']),
-      nameBefore: r['الاسم_قبل'] ? { ar: r['الاسم_قبل'], en: r.Name_Before_EN || r['الاسم_قبل'] } : null, renamedAt: num(r['حدث_الاسم']) });
+      nameBefore: r['الاسم_قبل'] ? { ar: r['الاسم_قبل'], en: r.Name_Before_EN || r['الاسم_قبل'] } : null, renamedAt: num(r['حدث_الاسم']),
+      nameNote: r['ملاحظة_الاسم'] ? { ar: r['ملاحظة_الاسم'], en: r.Name_Note_EN || r['ملاحظة_الاسم'] } : null });
   }
 
   const texts = new Map(parseCsv(raw.texts).map(r => [num(r.dorar_event_number), r]));
@@ -177,7 +178,7 @@ export async function loadSirah(): Promise<Sirah> {
   for (const r of parseCsv(raw.labels)) {
     const lat = num(r.lat), lon = num(r.lon), kind = LABEL_KINDS[r['النوع']];
     if (lat === null || lon === null || !kind) { warn(`map_labels.csv: "${r['المعرف']}" needs lat, lon and النوع (إقليم / قوة / بحر)`); continue; }
-    labels.push({ id: r['المعرف'], kind, name: { ar: r['الاسم'], en: r.Name_EN || r['الاسم'] }, lat, lon, size: SIZES[r['الحجم']] ?? 'm', rotate: num(r['الدوران']) ?? 0, note: r['ملاحظة'], reached: num(r['حدث_بلوغ_الإسلام']), reachNote: r['ملاحظة_بلوغ_الإسلام'] ?? '' });
+    labels.push({ id: r['المعرف'], kind, name: { ar: r['الاسم'], en: r.Name_EN || r['الاسم'] }, lat, lon, size: SIZES[r['الحجم']] ?? 'm', rotate: num(r['الدوران']) ?? 0, note: { ar: r['ملاحظة'], en: r.Note_EN || r['ملاحظة'] }, reached: num(r['حدث_بلوغ_الإسلام']), reachNote: { ar: r['ملاحظة_بلوغ_الإسلام'] ?? '', en: r.Reach_Note_EN || r['ملاحظة_بلوغ_الإسلام'] || '' } });
   }
 
   const stops = new Map<string, RouteStop[]>();

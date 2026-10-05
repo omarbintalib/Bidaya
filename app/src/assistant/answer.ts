@@ -1,5 +1,5 @@
 import { quranpediaRefs } from '../data/quranpedia';
-import { dateLine, digits, eventPlaceName, excerpt, hadithLinks } from '../data/select';
+import { dateLine, digits, eventPlaceName, excerpt, hadithLinks, sourceLabel } from '../data/select';
 import type { Person, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 
@@ -135,8 +135,8 @@ export function answer(data: Sirah, question: string, locale: Locale): Answer {
   }
   if (doc.kind === 'person') {
     const p = doc.item, first = p.events.find(n => data.byNumber.has(n) && data.byNumber.get(n)!.lat !== null && data.byNumber.get(n)!.lon !== null);
-    const name = ar ? p.name.ar : `${p.name.en} (${p.name.ar})`;
-    return { kind: 'person', event: first, sources: sourceLinks(p.facts.filter(f => f.url).map(f => ({ label: f.source, url: f.url! }))), text: `${name}: ${excerpt(!ar && p.bioEn ? p.bioEn : p.bio, 190)} ${SOURCE[locale].sahaba}` };
+    const name = ar ? p.name.ar : p.name.en;
+    return { kind: 'person', event: first, sources: sourceLinks(p.facts.filter(f => f.url).map(f => ({ label: sourceLabel(f.source, locale), url: f.url! }))), text: `${name}: ${excerpt(!ar && p.bioEn ? p.bioEn : p.bio, 190)} ${SOURCE[locale].sahaba}` };
   }
   const v = doc.item, ev = v.link?.event ?? undefined;
   const refs = hadithLinks(v).map(h => `${h.book === 'bukhari' ? (ar ? 'البخاري' : 'Bukhari') : (ar ? 'مسلم' : 'Muslim')} ${h.n}`).join(ar ? '، ' : ', ');

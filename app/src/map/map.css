@@ -157,3 +157,9 @@ html[data-contrast='dark'] .hmap-arc.out-honoured .hmap-arc-line, html[data-cont
   html:not([data-reduced-motion='true']) .hmap-route-end > * { animation: hmap-fade-in .5s ease-out 1.8s both; }
 }
 @keyframes hmap-fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* A name shown as it was then (Yathrib): marked as explainable, and its explanation box. */
+.hmap-name.is-renamed { pointer-events: auto; cursor: help; text-decoration: underline dotted; text-underline-offset: 3px; }
+.hmap-name-tip { position: absolute; z-index: 6; transform: translate(-50%, calc(-100% - 8px)); width: min(300px, calc(100% - 24px)); padding: 10px 12px; background: var(--surface); border: 1px solid var(--brass); box-shadow: 0 10px 30px #331b0d26; font-size: var(--text-small); line-height: 1.6; color: var(--ink); }
+.hmap-name-tip.is-below { transform: translate(-50%, 34px); } /* no room above the name: open beneath it */
+.hmap-name-tip.is-sheet { position: fixed; z-index: 120; inset-inline: 10px; bottom: 12px; top: auto; left: auto; width: auto; transform: none; }

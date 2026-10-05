@@ -29,6 +29,8 @@ export interface Place {
   key: string; name: Text; lat: number; lon: number; kind: string; confirmed: boolean; events: number; reached: number | null;
   /** The name used before `renamedAt` (a Dorar event), e.g. Yathrib before the Hijrah; null when the name never changed. */
   nameBefore: Text | null; renamedAt: number | null;
+  /** Why the earlier name is shown, with its sources; shown when the earlier name is pointed at. */
+  nameNote: Text | null;
 }
 
 /** A count of Muslims at a place, as a Dorar event gives it (islam_growth.csv): a lower bound, with what it counts. */
@@ -98,7 +100,7 @@ export interface PersonFact { text: string; textEn: string | null; quote: string
 
 export interface Route { id: string; kind: 'sirah' | 'trade'; name: Text; events: number[]; note: Text; coords: [number, number][] }
 
-export interface MapLabel { id: string; kind: 'region' | 'power' | 'sea'; name: Text; lat: number; lon: number; size: 'l' | 'm' | 's'; rotate: number; note: string; reached: number | null; reachNote: string }
+export interface MapLabel { id: string; kind: 'region' | 'power' | 'sea'; name: Text; lat: number; lon: number; size: 'l' | 'm' | 's'; rotate: number; note: Text; reached: number | null; reachNote: Text }
 
 /** A stop on a route walk (route_stops.csv): where the map pauses, with the Dorar line for it. */
 export interface RouteStop { name: Text; lat: number; lon: number; event: number; quote: string; url: string }

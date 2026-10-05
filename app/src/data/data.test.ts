@@ -287,3 +287,13 @@ describe('names and numbers as they were at the time', () => {
     expect(eventPlaceName(data, after, 'en')).toBe('al-Madinah');
   });
 });
+
+describe('English answers stay in English', () => {
+  it('names people and their sources in English', () => {
+    for (const q of ['Who was Abu Bakr?', 'Who was Khadijah?', 'Who was Umar ibn al-Khattab?']) {
+      const a = answer(data, q, 'en');
+      for (const s of a.sources ?? []) expect(s.label, q).not.toMatch(/[\u0600-\u06FF]/);
+      expect(a.text.split(':')[0], q).not.toMatch(/[\u0600-\u06FF]/);
+    }
+  });
+});

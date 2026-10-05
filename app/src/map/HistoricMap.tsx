@@ -1,4 +1,5 @@
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { COS, K, LAND } from '../data/land';
 import type { MapArc, Sirah, SirahEvent } from '../data/types';
 import type { Locale } from '../i18n';
@@ -71,6 +72,8 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
   useLayoutEffect(() => { viewRef.current = view; }, [view]); // a glide updates the ref directly between renders
   const anim = useRef(0);
   const [showTrade, setShowTrade] = useState(true);
+  const [nameTip, setNameTip] = useState<{ key: string; x: number; y: number; text: string } | null>(null);
+  useEffect(() => setNameTip(null), [now, locale]); // the story moved on: the name may have changed
 
   useLayoutEffect(() => {
     const el = frame.current;
@@ -402,7 +405,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
           const [x, y] = project(l.lon, l.lat);
           // A region the sources say Islam had reached is named in gold; its places glow at their own coordinates.
           return <text key={l.id} className={`hmap-label hmap-label-${l.kind}${reachedBy(l.reached) ? ' is-reached' : ''}`} x={x} y={y} fontSize={labelSize[l.size] * unit} transform={l.rotate ? `rotate(${l.rotate} ${x} ${y})` : undefined}>
-            <title>{reachedBy(l.reached) && l.reachNote ? `${l.note} — ${l.reachNote}` : l.note}</title>{l.name[locale]}
+            <title>{reachedBy(l.reached) && l.reachNote[locale] ? `${l.note[locale]} — ${l.reachNote[locale]}` : l.note[locale]}</title>{l.name[locale]}
           </text>;
         })}
   </>,
@@ -410,11 +413,20 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
     [reachedKey, locale, unit, data]);
   const nameLayer = useMemo(() => <>
         <g className="hmap-names" aria-hidden="true">
-          {!quiz && placed.map(l => <text key={l.key} className={`hmap-name${l.priority >= 1000 ? ' is-selected' : l.strong ? ' is-strong' : ''}`} x={l.x} y={l.y - 7 * unit} fontSize={l.size}>{l.name}</text>)}
+          {!quiz && placed.map(l => {
+            // A name shown as it was then (Yathrib) explains itself when pointed at or tapped.
+            const note = placeNameAt(data, l.key, now, locale) ? data.places.get(l.key)?.nameNote?.[locale] : undefined;
+            return <text key={l.key} className={`hmap-name${l.priority >= 1000 ? ' is-selected' : l.strong ? ' is-strong' : ''}${note ? ' is-renamed' : ''}`} x={l.x} y={l.y - 7 * unit} fontSize={l.size}
+              onPointerEnter={note ? ev => { if (ev.pointerType === 'mouse') setNameTip({ key: l.key, x: l.x, y: l.y - 7 * unit - l.size, text: note }); } : undefined}
+              onPointerLeave={note ? ev => { if (ev.pointerType === 'mouse') setNameTip(null); } : undefined}
+              onClick={note ? () => setNameTip(t => t?.key === l.key ? null : { key: l.key, x: l.x, y: l.y - 7 * unit - l.size, text: note }) : undefined}>{l.name}</text>;
+          })}
         </g>
   </>,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [placed, !!quiz]);
+    [placed, !!quiz, now, locale]);
+  // Where the explanation box sits on screen: the SVG point mapped through the view ("slice" centres the overflow).
+  const tipAt = nameTip && { left: Math.min(Math.max((nameTip.x - view.x) / unit + (size.w - view.w / unit) / 2, 160), size.w - 160), top: (nameTip.y - view.y) / unit + (size.h - view.h / unit) / 2 };
   const selectRef = useRef(select);
   selectRef.current = select;
   const pickPin = useCallback((key: string) => { const pin = pins.find(p => p.key === key); if (pin) selectRef.current(pin); },
@@ -495,6 +507,10 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
         {nameLayer}
       </svg>
       <div className="hmap-grain" aria-hidden="true" />
+      {nameTip && tipAt && (size.w < 600
+        // A small map (phones) cannot hold the box: it opens as a sheet at the bottom of the screen instead.
+        ? createPortal(<div className="hmap-name-tip is-sheet" role="note" dir={locale === 'ar' ? 'rtl' : 'ltr'} onClick={() => setNameTip(null)}>{nameTip.text}</div>, document.body)
+        : <div className={`hmap-name-tip${tipAt.top < size.h * 0.45 ? ' is-below' : ''}`} role="note" data-map-overlay style={{ left: tipAt.left, top: tipAt.top }} onClick={() => setNameTip(null)}>{nameTip.text}</div>)}
       {children}
 
       <div className="hmap-controls">

@@ -9,7 +9,7 @@ import { parseCsv } from './csv';
 // It applies to English the team writes. Word-for-word quotes keep the source's own spelling (Dorar writes "Aboo Bakr").
 const files = import.meta.glob<string>('../../../*.csv', { query: '?raw', import: 'default', eager: true });
 const byName = new Map(Object.entries(files).map(([path, text]) => [path.split('/').pop()!, text]));
-const QUOTED = new Set(['نص_الحديث_EN', 'رابط_نص_الحديث_EN', 'الشاهد_من_المصدر_EN', 'الشاهد_EN', 'Translation_EN', 'Ayah_EN', 'title_en_dorar', 'text_en_dorar', 'title_en_display', 'رابط_الدرر_الإنجليزي', 'مصدر_الترجمة_EN', 'Aliases_EN']);
+const QUOTED = new Set(['نص_الحديث_EN', 'رابط_نص_الحديث_EN', 'الشاهد_من_المصدر_EN', 'الشاهد_EN', 'Translation_EN', 'Ayah_EN', 'Name_Note_EN', 'title_en_dorar', 'text_en_dorar', 'title_en_display', 'رابط_الدرر_الإنجليزي', 'مصدر_الترجمة_EN', 'Aliases_EN']);
 
 const glossary = parseCsv(byName.get('glossary.csv')!);
 const avoid = glossary.flatMap(r => r['لا_تستخدم'].split('؛').map(s => s.trim()).filter(Boolean));
