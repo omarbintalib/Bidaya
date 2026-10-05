@@ -590,8 +590,14 @@ function createRuntime(env: Env): Runtime {
     probe.removeAttribute('tabindex'); probe.setAttribute('aria-hidden', 'true');
     probe.classList.add('mo-measure');
     Object.assign(probe.style, { width: `${geo.cw}px`, height: 'auto', inset: 'auto', position: 'absolute', visibility: 'hidden', pointerEvents: 'none', maxHeight: 'none', overflow: 'visible' });
+    // The same word boxes as the answer shown, which wraps differently from plain text (never at a hyphen inside a word).
     const text = probe.querySelector('.mo-a-body');
-    if (text) text.textContent = body;
+    text?.replaceChildren(...bidiRuns(body).flatMap((t, i) => {
+      const w = document.createElement('span');
+      w.className = 'mo-w'; w.textContent = t.text;
+      if (t.dir) w.dir = t.dir;
+      return i > 0 && !t.glued ? [' ', w] : [w];
+    }));
     root.append(probe);
     // A little slack, so a last line that wraps differently in the live box (a scrollbar, a late font) never spills.
     geo.ch = Math.max(76, Math.ceil(probe.getBoundingClientRect().height) + 14); // a two-line answer gets a two-line box
