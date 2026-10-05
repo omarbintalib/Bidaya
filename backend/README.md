@@ -171,3 +171,45 @@ current one is saturated at hit@5 ~ 1.0), and a review pass over al-Raheeq / Dor
 paraphrase nitpicks, so check failures by hand. gpt-6-luna accepts no `temperature=0`, so two runs can cite
 different passages (`consistent`).
 
+
+## Progress (2026-10-06)
+
+**Live (Modal):** the backend of `bidaya-v11` at 9b05862 (follow-up questions, map-event choice, prompt rules 1-9).
+The two newer prompt commits (7495238 and the rule 10 below) are **not deployed yet**: see "Before the next deploy".
+
+### Harder test sets (toolkit `exp/`, run in parallel: 50 questions x 2 runs in ~4 min)
+
+- **50 hard questions** in 9 groups (multi-event, disputed facts, similar names, verses, why/how, false premises,
+  follow-ups, refuse/redirect, messy language). A question passes when it cites a correct passage AND an LLM judge finds
+  the group's key point (e.g. "gives both 13 and 10 years", "says the two Abu Sufyans are different men"). Follow-ups
+  are asked inside the conversation, as the site does. Every rubric fact comes from a corpus passage (ids noted).
+- **15 premise questions**: 7 contradicted by the sources (must be corrected), 4 the sources are silent on (must be
+  refused, never denied), 4 true premises (must NOT be corrected: the over-correction guard).
+
+| Prompt (deployed corpus, 2,905 chunks) | 50 questions | Faithful | Contradicted corrected | Silent refused | True premises kept |
+|---|---|---|---|---|---|
+| Live prompt (rules 1-9) | 87/100 | 66% | 6/14 | 8/8 | 7/8 |
+| + rule 10 with safeguards | 87/100 | 79% | 9/14 | 8/8 | 7/8 |
+| + 7495238 (rule 1 tweak, rule 11) + rule 10 with safeguards (= this commit) | 83/100 | 73% | 11/14 | 8/8 | 7/8 |
+
+**Rule 10** (false premises): correct a premise only when a passage states the opposite, in one neutral cited
+sentence, then answer; if the sources are merely silent, never say it did not happen; never correct wording, never say
+the user is wrong, never correct a premise the sources support. It replaces 7495238's shorter rule 10, which had none
+of these safeguards. Example: "لماذا خسر المسلمون في غزوة بدر؟" -> "لم يخسر المسلمون في غزوة بدر؛ بل حققوا فيها نصرًا كبيرًا…".
+
+**More Bukhari (not adopted):** adding al-Jihad wa al-Siyar, al-Shurut, al-Hajj, Fard al-Khumus, al-Jizya and the
+hadiths our records cite (+716 hadiths, corpus 3,633) gave 85/100 vs 87/100 with either prompt, a lower rubric score,
+and with the live prompt far more refusals of contradicted premises (1/14). Kept in `exp/plus` for a narrower retry
+(only the ~45 cited hadiths).
+
+### Before the next deploy
+
+1. **Rule 1 tweak in 7495238** ("insufficient only when the passages say nothing relevant") makes the model answer
+   "Was the Prophet's ﷺ marriage to Aisha moral by today's standards?" with facts (2/2 runs) instead of referring it
+   (refused 2/2 without the tweak). Decide: keep the tweak and route moral-judgment questions to a refusal in the
+   router, or revert the tweak. Re-run the two test sets, then `cd backend && modal deploy modal_app.py`.
+2. Still failing in every version: "years between the two migrations" (an interval to compute), Aisha's age without
+   the consummation age, the year-8 list without Mu'tah and Taif, "married Aisha before Khadijah" not corrected,
+   Arabic in Latin letters ("shu sar b ghazwat badr?") refused in about half the runs.
+3. The LLM judge is strict on wording (e.g. "the 10th year of prophethood" vs "3 years before the Hijra"): read the
+   failures before trusting small differences.
