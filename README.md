@@ -209,6 +209,21 @@ The English reasons (`وجه_الارتباط_EN`) quote the Quran in Arabic bet
 - A quotation that is part of an ayah shows the translation of the **whole ayah**, and the note under the reason says so. There is one exception: where a reason quotes two parts of one ayah and its point depends on the part (ASB-030 «غَيْرُ أُولِي الضَّرَرِ», ASB-031), `Translation_EN` holds the matching words of the same translation and `Ayah_EN` holds the full ayah. A test checks that the part is word for word inside the ayah.
 - Footnote numbers from Quranpedia, such as [1788], are removed; the words are unchanged.
 
+### Search, place cards and distances
+
+- **Search** (the بحث / Search button, or `/` or Ctrl/⌘+K): events, people, places and verses together. It ignores diacritics, finds places by their earlier names (يثرب finds al-Madinah), and matches English spellings that differ only in vowels (Medina finds al-Madinah). Choosing an event or verse goes to it in the story; a person or place opens its card.
+- **Place cards** (tap a place's name in an event card, or a place in search):
+  - the place's name now and its name at the time, with the note on why;
+  - when Islam reached it, with the source's words;
+  - the counts of Muslims there from `islam_growth.csv`, each marked as a lower bound;
+  - every event there, each a link to that event.
+- **Distances** are computed from the map's own coordinates (great-circle, rounded) and always called approximate:
+  - each journey on its event card, e.g. "about 870 km along an approximate route" (the Isra' line is symbolic, so it gives the straight distance between the two mosques);
+  - each walk stop, how far it is from the start out of the whole route;
+  - each letter, its straight-line distance from Madinah.
+
+  No travel times are shown, since the sources rarely give them.
+
 ### Revelation marks on the timeline
 
 A small green diamond above a timeline tick marks an event that the sources tie verses to, the same verses the event card lists under "Verses linked to this event" (آيات متصلة بهذا الحدث). It is solid when a hadith names the event (`مباشر`, `بعد الحدث`) and hollow when the place is only suggested (`موضع مقترح`).

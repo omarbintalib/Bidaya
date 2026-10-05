@@ -17,6 +17,10 @@ import ChatHistory, { chatCopy } from './ChatHistoryPanel';
 import { useChatHistory } from './chatHistory';
 import { loadProgress, freshProgress, PROGRESS_KEY } from './progress';
 import AnswerActions from './AnswerActions';
+import PlaceCard from './PlaceCard';
+import Search from './Search';
+import type { SearchResult } from '../data/search';
+import { pathKm, roundKm } from '../data/geo';
 
 /**
  * The Journey as a scroll-driven story: a column of steps (chapter openings, events, a question at the
@@ -319,8 +323,32 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
 
   // ── people, undated verses, ask ──
   const [person, setPerson] = useState<Person | null>(null);
-  const peopleApi = useMemo(() => ({ data, open: setPerson }), [data]);
+  const [place, setPlace] = useState<string | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const peopleApi = useMemo(() => ({ data, open: setPerson, openPlace: setPlace }), [data]);
+  // "/" or Ctrl/⌘+K opens search, unless the reader is typing somewhere.
+  useEffect(() => {
+    const onKey = (ev: KeyboardEvent) => {
+      const typing = (ev.target as HTMLElement | null)?.closest?.('input, textarea, [contenteditable="true"]');
+      if ((ev.key === '/' && !typing) || ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 'k')) { ev.preventDefault(); setSearchOpen(true); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
   const unplaced = useMemo(() => unplacedVerses(data), [data]);
+  // Opening a search result: an event or a verse goes to its place in the story, a person or place opens its card.
+  const openResult = useCallback((r: SearchResult) => {
+    if (r.kind === 'event') goToEvent(Number(r.id));
+    else if (r.kind === 'person') { const p = data.people.find(x => x.id === r.id); if (p) setPerson(p); }
+    else if (r.kind === 'place') setPlace(r.id);
+    else {
+      const v = data.verses.find(x => x.id === r.id), l = v?.link;
+      if (!l) { setUndatedOpen(true); return; }
+      const order = l.type === 'suggested' ? l.at : l.type === 'stage' ? l.from : null;
+      const e = l.event !== null ? data.byNumber.get(l.event) : data.events.find(x => x.order === order);
+      if (e) goToEvent(e.n); else setUndatedOpen(true);
+    }
+  }, [data, goToEvent]);
   // Timeline marks for events the sources tie verses to (the same links the event card lists under "Verses linked to this event").
   const revealed = useMemo(() => {
     const out = new Map<number, 'direct' | 'suggested'>();
@@ -462,6 +490,10 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
         </li>] : [])}
       </ol>
       <div className="tb-end">
+        <button type="button" className="tb-btn tb-search" aria-haspopup="dialog" aria-label={text.searchTitle} title={`${text.searchTitle} ( / )`} onClick={() => setSearchOpen(true)}>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" strokeWidth="1.5" /><path d="m13 13 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+          <span className="tb-long">{text.search}</span>
+        </button>
         <button type="button" className={`tb-btn tb-quiz${quick ? ' is-open' : ''}`} aria-pressed={!!quick} aria-label={text.quizMe} onClick={() => (quick ? setQuick(null) : openQuick())}>
           <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" strokeWidth="1.4" /><path d="M7.8 8a2.3 2.3 0 1 1 3.2 2.1c-.7.3-1 .8-1 1.5v.4" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /><circle cx="10" cy="14.3" r=".9" fill="currentColor" /></svg>
           <span className="tb-long">{text.quizMe}</span>
@@ -525,6 +557,11 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
 
           {walk && walkStop && <div className="walk-panel" ref={walkPanel} data-map-overlay role="group" aria-label={walk.route.name[locale]}>
             <p className="walk-kicker">{walk.route.name[locale]} · {text.stopOf(walk.stop + 1, walkStops.length)}</p>
+            {(() => { // How far along the (approximate) route this stop is.
+              const c = walk.route.coords, near = c.reduce((b, p, i) => ((p[0] - walkStop.lon) ** 2 + (p[1] - walkStop.lat) ** 2 < (c[b][0] - walkStop.lon) ** 2 + (c[b][1] - walkStop.lat) ** 2 ? i : b), 0);
+              const fmt = (d: number) => digits(roundKm(d).toLocaleString('en'), locale);
+              return <p className="walk-distance">{text.distanceSoFar(fmt(pathKm(c, near)), fmt(pathKm(c)))}</p>;
+            })()}
             <h3>{walkStop.name[locale]}</h3>
             <p className="walk-quote" lang="ar" dir="rtl">«{walkStop.quote}»</p>
             <a className="walk-source" href={walkStop.url} target="_blank" rel="noreferrer">{text.dorar} · {locale === 'ar' ? 'حدث' : 'event'} {walkStop.event}</a>
@@ -549,6 +586,8 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
       onAnswer={answerQuick} onNext={() => setQuick(pickQuick(quick.q?.id))} onClose={() => setQuick(null)} />}
     {undatedOpen && <UndatedDialog verses={unplaced} locale={locale} onClose={() => setUndatedOpen(false)} />}
     {person && <PersonDialog key={person.id} person={person} data={data} locale={locale} onClose={() => setPerson(null)} onEvent={goToEvent} />}
+    {place && <PlaceCard key={place} placeKey={place} data={data} locale={locale} onClose={() => setPlace(null)} onEvent={goToEvent} />}
+    {searchOpen && <Search data={data} locale={locale} onClose={() => setSearchOpen(false)} onPick={openResult} />}
     {historyOpen && <ChatHistory locale={locale} chats={chats} onDelete={deleteChat} mapEvents={mapEvents} onEvent={showAnswerEvent} onClear={clearChats} onClose={() => setHistoryOpen(false)} />}
   </PeopleProvider>;
 }

@@ -6,6 +6,8 @@ import { findPeople, mentionIn } from './people';
 import { quranpediaRefs } from './quranpedia';
 import { quizPools } from './quiz';
 import { eventPlaceName, versesFor } from './select';
+import { search } from './search';
+import { pathKm } from './geo';
 import type { Sirah } from './types';
 
 // Load the real files at the repository root — these tests also catch broken CSV edits.
@@ -309,6 +311,31 @@ describe('verses with no known event stay off single events', () => {
       const v = versesFor(data, e);
       expect(v.direct.some(x => x.id === 'ASB-017'), `event ${e.n}`).toBe(false);
       expect(v.stage.some(x => x.id === 'ASB-017'), `event ${e.n}`).toBe(e.order >= 15 && e.order <= 20);
+    }
+  });
+});
+
+describe('search', () => {
+  const top = (q: string, locale: 'ar' | 'en' = 'ar') => search(data, q, locale)[0];
+  it('finds places in either language, by their earlier name, and with other English spellings', () => {
+    expect(top('بدر')).toMatchObject({ kind: 'place', id: 'badr' });
+    expect(top('Badr', 'en')).toMatchObject({ kind: 'place', id: 'badr' });
+    expect(top('يثرب')).toMatchObject({ kind: 'place', id: 'medina' });
+    expect(top('Medina', 'en')).toMatchObject({ kind: 'place', id: 'medina' });
+  });
+  it('finds people and events, ignoring diacritics', () => {
+    expect(search(data, 'أبو بكر', 'ar').some(r => r.kind === 'person')).toBe(true);
+    expect(search(data, 'غَزوةُ بَدر', 'ar').some(r => r.kind === 'event')).toBe(true);
+    expect(search(data, 'Khadijah', 'en').some(r => r.kind === 'person')).toBe(true);
+  });
+  it('returns nothing for one letter', () => { expect(search(data, 'ب', 'ar')).toEqual([]); });
+});
+
+describe('route lengths', () => {
+  it('gives every journey a plausible length', () => {
+    for (const r of data.routes.filter(x => x.kind === 'sirah')) {
+      const d = pathKm(r.coords);
+      expect(d, r.id).toBeGreaterThan(50); expect(d, r.id).toBeLessThan(3500);
     }
   });
 });

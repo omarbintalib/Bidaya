@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { quranpediaRefs, type QuranRef } from '../data/quranpedia';
-import { dateLine, eventPlaceName, excerpt, hadithLinks, hijri, periodName, peopleFor, versesFor } from '../data/select';
+import { km, pathKm, roundKm } from '../data/geo';
+import { dateLine, digits, eventPlaceName, excerpt, hadithLinks, hijri, periodName, peopleFor, versesFor } from '../data/select';
 import type { MapArc, QuranEn, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
@@ -25,6 +26,8 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
   const verses = versesFor(data, event);
   const people = peopleFor(data, event);
   const arcs = data.arcs.filter(a => a.event === event.n);
+  // The journeys drawn for this event, with their length along the (approximate) route line.
+  const routes = data.routes.filter(r => r.kind === 'sirah' && r.events.includes(event.n));
   const body = (locale === 'en' && event.text.en) || event.text.ar;
   const bodyLang = body === event.text.ar ? 'ar' : 'en';
   const title = event.title[locale] || event.title.ar;
@@ -41,7 +44,9 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
     <p className="ecard-meta">
       <span>{dateLine(event, locale) || '—'}</span>
       <span aria-hidden="true">·</span>
-      <span>{eventPlaceName(data, event, locale) || '—'}</span>
+      {event.place && data.places.has(event.place) && peopleApi?.openPlace
+        ? <button type="button" className="ecard-place" aria-haspopup="dialog" onClick={() => peopleApi.openPlace!(event.place!)}>{eventPlaceName(data, event, locale)}</button>
+        : <span>{eventPlaceName(data, event, locale) || '—'}</span>}
       {event.precision !== 'exact' && <span className={`prec prec-${event.precision}`}>{text.precision[event.precision]}</span>}
     </p>
     {event.inferred && <p className="ecard-flag">{text.inferred}</p>}
@@ -56,6 +61,11 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18c3-6 6 2 9-4s5-6 7-8" fill="none" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 2.5" /><circle cx="4" cy="18" r="2" fill="currentColor" /><circle cx="20" cy="6" r="2" fill="currentColor" /></svg>
       {text.walk(walkName)}
     </button>}
+    {routes.map(r => <p key={r.id} className="ecard-distance">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18c3-6 6 2 9-4s5-6 7-8" fill="none" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 2.5" /><circle cx="4" cy="18" r="2" fill="currentColor" /><circle cx="20" cy="6" r="2" fill="currentColor" /></svg>
+      <span>{r.name[locale]} · {/* A symbolic line (the Isra': «مسار رمزي بين المسجدين») is a distance between two places, not a road. */}
+        {(r.note.ar.includes('رمزي') ? text.distanceArc : text.distanceRoute)(digits(roundKm(pathKm(r.coords)).toLocaleString('en'), locale))}</span>
+    </p>)}
     <p className="ecard-source">{text.source}: <a href={locale === 'en' && event.urlEn ? event.urlEn : event.url} target="_blank" rel="noreferrer">{text.dorar} · {locale === 'ar' ? 'حدث' : 'event'} {event.n}</a></p>
 
     {people.length > 0 && <section className="ecard-section">
@@ -91,6 +101,7 @@ function ArcItem({ a, locale }: { a: MapArc; locale: Locale }) {
     {!en ? <p className="ecard-arc-quote">«{a.quote}»</p>
       : a.quoteEn ? <q className="ecard-arc-quote" lang="en">{a.quoteEn}</q>
       : <><small className="no-translation-note">{text.inArabicQuote}</small><p className="ecard-arc-quote" lang="ar" dir="rtl">«{a.quote}»</p></>}
+    <p className="ecard-arc-note">{text.distanceArc(digits(roundKm(km(a.from, a.to)).toLocaleString('en'), locale))}</p>
     {a.note[locale] && <p className="ecard-arc-note">{a.note[locale]}</p>}
     <a className="ecard-arc-source" href={a.url} target="_blank" rel="noreferrer">{en ? refEn(a.source) : a.source}</a>
   </li>;

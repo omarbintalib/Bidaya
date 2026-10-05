@@ -5,7 +5,7 @@ import type { Person, Sirah } from '../data/types';
 import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
 
-interface PeopleApi { data: Sirah; open: (person: Person) => void }
+interface PeopleApi { data: Sirah; open: (person: Person) => void; openPlace?: (key: string) => void }
 const PeopleContext = createContext<PeopleApi | null>(null);
 export const PeopleProvider = PeopleContext.Provider;
 export const usePeople = () => useContext(PeopleContext);

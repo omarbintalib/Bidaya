@@ -31,6 +31,8 @@ export interface Place {
   nameBefore: Text | null; renamedAt: number | null;
   /** Why the earlier name is shown, with its sources; shown when the earlier name is pointed at. */
   nameNote: Text | null;
+  /** The source's words for when Islam reached the place (شاهد_بلوغ_الإسلام). */
+  reachQuote: string | null;
 }
 
 /** A count of Muslims at a place, as a Dorar event gives it (islam_growth.csv): a lower bound, with what it counts. */
