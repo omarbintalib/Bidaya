@@ -44,6 +44,18 @@ export function versesFor(data: Sirah, e: SirahEvent): EventVerses {
   return { direct, context, stage };
 }
 
+/**
+ * The event a verse record sits at in the story: the event it names, or for one placed by position (a suggested
+ * place, or a stage) the event at that position — where search and "Ask the map" take the reader.
+ */
+export function verseEvent(data: Sirah, v: Verse): SirahEvent | undefined {
+  const l = v.link;
+  if (!l) return undefined;
+  if (l.event !== null) return data.byNumber.get(l.event);
+  const order = l.type === 'suggested' ? l.at : l.type === 'stage' ? l.from : null;
+  return order === null ? undefined : data.events.find(e => e.order === order);
+}
+
 export const peopleFor = (data: Sirah, e: SirahEvent): Person[] => data.people.filter(p => p.events.includes(e.n));
 
 /** Verses the sources link to no event — shown in their own panel, never on the timeline. */

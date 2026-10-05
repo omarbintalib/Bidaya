@@ -35,6 +35,8 @@ interface Props {
   inset?: number;
   /** Height (px) of controls laid over the bottom of the map; the focus keeps places above them. */
   insetBottom?: number;
+  /** Height (px) of what lies over the top of the map (the period banner, a back button); the focus keeps places below it. */
+  insetTop?: number;
   /** Content drawn over the map (e.g. the story card). */
   children?: ReactNode;
   /** Hide the legend under the map. */
@@ -63,7 +65,7 @@ const img = (file: string) => `${import.meta.env.BASE_URL}${file}`;
 
 const RANK: Record<Emphasis, number> = { hidden: 0, past: 1, active: 2, selected: 3 };
 
-export default function HistoricMap({ data, locale, emphasis, selected, activeRoutes = [], onSelect, reducedMotion, focusKey, caption, now, inset = 0, insetBottom = 0, children, legend = true, quiz = null, walk = null, overview = false, caravans = false, scrollPage = false }: Props) {
+export default function HistoricMap({ data, locale, emphasis, selected, activeRoutes = [], onSelect, reducedMotion, focusKey, caption, now, inset = 0, insetBottom = 0, insetTop = 0, children, legend = true, quiz = null, walk = null, overview = false, caravans = false, scrollPage = false }: Props) {
   const text = mapCopy[locale];
   const frame = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -148,7 +150,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
         // Fit the choices into the part of the map left uncovered by a side panel and the bottom controls.
         const W = frame.current?.clientWidth || size.w, H = frame.current?.clientHeight || size.h;
         const cover = Math.min(inset, W * 0.6), coverB = Math.min(insetBottom, H * 0.5);
-        const coverT = quiz ? 0 : 64; // the period badge over the top of the map
+        const coverT = quiz ? 0 : Math.max(64, Math.min(insetTop, H * 0.35)); // the period badge (and a back button) over the top
         const v = fit(Math.min(...lons), Math.max(...lons), Math.min(...lats), Math.max(...lats), (W - cover) / (H - coverB - coverT), quiz ? 0.3 : 0.1);
         const s = v.w / (W - cover);
         const fv = clampView({ x: locale === 'ar' ? v.x : v.x - cover * s, y: v.y - coverT * s, w: W * s, h: H * s });
@@ -169,19 +171,20 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
     const W = el?.clientWidth || 800, H = el?.clientHeight || 600, u = v.w / W, rtl = locale === 'ar';
     const cover = Math.min(inset, W * 0.6) * u;           // map units hidden under the overlay
     const coverB = Math.min(insetBottom, H * 0.5);        // px hidden under the bottom controls
+    const coverT = Math.min(insetTop, H * 0.35);          // px hidden under the period banner and a back button
     const left = rtl ? v.x : v.x + cover, right = rtl ? v.x + v.w - cover : v.x + v.w;
-    const bottom = v.y + v.h - coverB * u;
-    const mx = (right - left) * 0.15, my = (bottom - v.y) * 0.15;
-    const inside = x > left + mx && x < right - mx && y > v.y + my && y < bottom - my;
+    const top = v.y + coverT * u, bottom = v.y + v.h - coverB * u;
+    const mx = (right - left) * 0.15, my = (bottom - top) * 0.15;
+    const inside = x > left + mx && x < right - mx && y > top + my && y < bottom - my;
     // Fly closer when the whole peninsula is in view, so the story moves place to place.
     const w = walk ? 230 : quizCenter ? 330 : v.w > 480 ? 400 : v.w;
     if (!inside || w !== v.w) {
       const next = centerOn(v, target.lon, target.lat, w), tu = next.w / W;
-      // Centre the place in the visible part: beside a side panel, above the bottom controls.
-      animateTo(clampView({ ...next, x: next.x + (rtl ? 1 : -1) * Math.min(inset, W * 0.6) / 2 * tu, y: next.y + coverB / 2 * tu }));
+      // Centre the place in the visible part: beside a side panel, between what covers the top and the bottom controls.
+      animateTo(clampView({ ...next, x: next.x + (rtl ? 1 : -1) * Math.min(inset, W * 0.6) / 2 * tu, y: next.y + (coverB - coverT) / 2 * tu }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focusKey, selected, data, animateTo, inset, insetBottom, locale, overview, walk?.key, quiz?.options.join(), fitPoints]);
+  }, [focusKey, selected, data, animateTo, inset, insetBottom, insetTop, locale, overview, walk?.key, quiz?.options.join(), fitPoints]);
 
   // A place that lights up while you watch sends out one pulse.
   const [pulses, setPulses] = useState<string[]>([]);

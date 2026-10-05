@@ -213,9 +213,17 @@
   .tb-chapter { padding: 6px 10px; }
   /* A full-height sheet under the toolbar, with room at the bottom for the accessibility button. */
   .ask-panel { position: fixed; top: auto; inset-inline: 8px; bottom: 8px; width: auto; max-height: calc(var(--viewport-height, 100svh) - var(--toolbar-h) - 14px); padding-bottom: 20px; overscroll-behavior: contain; }
+  /* Once an answer has moved the map, the sheet sits beneath the map, so the place it moved to stays in view; the
+     answer scrolls in the sheet. Asking again (the answer gives way to the question box) brings the full sheet back. */
+  .ask-panel.is-beside-map:has(.mo-root[data-phase='answered']) { max-height: max(220px, calc(var(--viewport-height, 100svh) - var(--toolbar-h) - var(--map-h) - 14px)); }
+  /* A phone on its side has no room beneath the map: the sheet stands beside it instead, on the reading side. */
+  @media (orientation: landscape) and (max-height: 520px) {
+    .ask-panel.is-beside-map:has(.mo-root[data-phase='answered']) { top: calc(var(--toolbar-h) + 6px); inset-inline-end: auto; width: min(420px, 48vw); max-height: calc(var(--viewport-height, 100svh) - var(--toolbar-h) - 14px); }
+  }
   /* The sheet covers the screen; the accessibility button would sit on its text, so it steps aside until the sheet closes. */
   body:has(.ask-panel.is-open) .accessibility-launcher { visibility: hidden; }
   .scrolly-map { order: -1; position: sticky; top: var(--toolbar-h); z-index: 5; height: 46svh; min-height: 300px; margin-inline: calc(-1 * clamp(24px, 4.8vw, 88px)); }
+  .journey-page { --map-h: max(46svh, 300px); } /* the height of the map just above, for the Ask sheet beneath it */
   .scrolly-steps { padding-block: 4vh 30vh; }
   .step { padding-block: 5vh; scroll-margin-top: calc(var(--toolbar-h) + 48svh); }
   .step-chapter, .step-quiz { min-height: 40vh; }

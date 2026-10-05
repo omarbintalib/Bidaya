@@ -44,6 +44,27 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const fmt = (v: number) => String(Math.round(v * 1e4) / 1e4);
 const TAU = Math.PI * 2;
 
+/** The scrolling card or sheet an element sits in, if any. */
+function scrollBox(el: HTMLElement): HTMLElement | null {
+  for (let p = el.parentElement; p; p = p.parentElement) if (/(auto|scroll)/.test(getComputedStyle(p).overflowY)) return p;
+  return null;
+}
+/**
+ * How tall the answer box can be with the answer and the buttons under it all in view: the most the card or sheet
+ * around it shows (its max-height; it scrolls beyond that), or else the screen, less what sits above the answer and
+ * the space and buttons under it.
+ */
+function answerRoom(root: HTMLElement) {
+  const next = root.nextElementSibling;
+  const actions = next instanceof HTMLElement && next.classList.contains('mo-reading-actions') ? next.offsetHeight : 110;
+  const under = (root.dataset.docked === 'true' ? 28 : 100) + actions;
+  const box = scrollBox(root), max = box ? parseFloat(getComputedStyle(box).maxHeight) : NaN;
+  if (!box || !Number.isFinite(max)) return (window.visualViewport?.height ?? window.innerHeight) - Math.max(0, root.getBoundingClientRect().top) - under - 16;
+  const style = getComputedStyle(box);
+  const above = root.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop;
+  return max - above - under - parseFloat(style.paddingBottom) - parseFloat(style.borderBottomWidth);
+}
+
 function mulberry32(a: number) {
   return function () {
     a |= 0;
@@ -573,11 +594,14 @@ function createRuntime(env: Env): Runtime {
     root.append(probe);
     // A little slack, so a last line that wraps differently in the live box (a scrollbar, a late font) never spills.
     geo.ch = Math.max(76, Math.ceil(probe.getBoundingClientRect().height) + 14); // a two-line answer gets a two-line box
-    // On a phone the panel is a full-height sheet, so the answer gets most of the screen rather than a small box.
-    // The answer box takes the height of its text, up to about half the screen; "Expand answer" is only for longer ones.
-    const cap = Math.max(220, Math.min(480, Math.round(window.innerHeight * .5)));
+    // The answer box takes the height of its text, as far as the card or sheet around it can show it with the buttons
+    // under it (a fixed half-screen cap scrolled a slightly long answer inside a box with free space all around it).
+    // Only a longer answer scrolls, and "Expand answer" shows it whole. Where the room is too small to read in, the
+    // answer is shown whole and the card or sheet scrolls instead, rather than a small box scrolling inside it.
+    const room = Math.round(answerRoom(root));
+    const cap = room >= 220 ? room : scrollBox(root) ? Infinity : 220;
     root.dataset.answerOverflow = String(geo.ch > cap);
-    geo.ch = Math.min(root.dataset.expanded === 'true' ? Math.max(cap, Math.round(window.innerHeight * .75)) : cap, geo.ch);
+    if (root.dataset.expanded !== 'true') geo.ch = Math.min(cap, geo.ch);
     probe.remove();
     root.style.setProperty('--answer-height', `${geo.ch}px`);
   };
@@ -1089,9 +1113,22 @@ export default function MorphOrb(props: MorphOrbProps) {
   useLayoutEffect(() => {
     if (phase !== 'answered') { setExpanded(false); return; }
     rtRef.current?.home();
-    const check = () => setCanExpand(rootRef.current?.dataset.answerOverflow === 'true');
+    const root = rootRef.current;
+    const check = () => setCanExpand(root?.dataset.answerOverflow === 'true');
     check();
-    const ro = new ResizeObserver(check); if (rootRef.current) ro.observe(rootRef.current);
+    if (!root) return;
+    // Fit the answer again when the room around it changes: the sheet resized, a button added under the answer.
+    let room = answerRoom(root);
+    const refit = () => {
+      const next = answerRoom(root);
+      if (Math.abs(next - room) > 2) { room = next; rtRef.current?.home(); }
+      check();
+    };
+    const ro = new ResizeObserver(refit);
+    ro.observe(root);
+    const box = scrollBox(root), actions = root.nextElementSibling;
+    if (box) ro.observe(box);
+    if (actions) ro.observe(actions);
     return () => ro.disconnect();
   }, [phase, answer, expanded]);
 

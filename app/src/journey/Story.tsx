@@ -1,9 +1,9 @@
 import AskIcon from '../components/AskIcon';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { answer, askServer, suggestFor, warmUp, type Answer } from '../assistant/answer';
+import { answer, answerEvent, askServer, suggestFor, warmUp, type Answer } from '../assistant/answer';
 import MorphOrb from '../components/MorphOrb';
 import { quizPools } from '../data/quiz';
-import { digits, eventPlaceName, hijri, PERIOD_ORDER, periodName, unplacedVerses, versesFor } from '../data/select';
+import { digits, eventPlaceName, hijri, PERIOD_ORDER, periodName, unplacedVerses, verseEvent, versesFor } from '../data/select';
 import type { Person, Period, QuizQuestion, Route, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 import HistoricMap, { type Emphasis } from '../map/HistoricMap';
@@ -393,6 +393,27 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
   const [askOpen, setAskOpen] = useState(false);
   const [ask, setAsk] = useState<{ text: string; key: number } | null>(null);
   const closeAsk = useCallback(() => setAskOpen(false), []);
+  // Phones: once an answer has moved the map, the Ask sheet sits beneath the map so the place stays in view. Opening or
+  // closing the sheet starts it afresh, full height.
+  const [besideMap, setBesideMap] = useState(false);
+  useEffect(() => setBesideMap(false), [askOpen]);
+  // How much of the map the sheet still covers there: a strip at the bottom where it cannot fit wholly beneath the
+  // map, or one side where it stands beside it (a phone on its side). The map keeps the place in the rest.
+  const [sheetCover, setSheetCover] = useState({ bottom: 0, side: 0 });
+  useLayoutEffect(() => {
+    const panel = document.getElementById('ask-panel'), map = column.current?.parentElement?.querySelector('.hmap-frame');
+    const none = { bottom: 0, side: 0 };
+    if (wide || !besideMap || !panel || !map) { setSheetCover(none); return; }
+    const measure = () => {
+      const p = panel.getBoundingClientRect(), m = map.getBoundingClientRect();
+      if (p.height === 0 || p.top >= m.bottom) { setSheetCover(none); return; }
+      const beside = p.top <= m.top + 12; // as tall as the map: it stands at the reading-side edge
+      setSheetCover(beside ? { bottom: 0, side: Math.round(locale === 'ar' ? m.right - p.left : p.right - m.left) } : { bottom: Math.round(m.bottom - p.top), side: 0 });
+    };
+    measure();
+    const ro = new ResizeObserver(measure); ro.observe(panel);
+    return () => ro.disconnect();
+  }, [wide, besideMap, locale]);
   const suggest = useCallback((q: string) => setAsk({ text: q, key: Date.now() }), []);
   // The ask bar's suggested question is about the current event, so its answer keeps the reader in place;
   // a typed question moves the story to the event it is about, like any other.
@@ -427,29 +448,36 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     // Keep the first place left, so browsing several ticks still leads back to where the reader was.
     if (between > 0) setReturnTo(r => r ?? { step: from, label: stepLabel(from) });
   };
+  // The back button shows on the map, unless the answer card (wide screens) or the Ask sheet (phones) has its own.
+  const showMapBack = !!returnTo && !answerCard && !askOpen;
   // The back button sits just under the period banner, whose height changes with the screen and the text.
-  const banner = useRef<HTMLDivElement>(null);
-  const [bannerBottom, setBannerBottom] = useState(0);
+  const banner = useRef<HTMLDivElement>(null), mapBack = useRef<HTMLDivElement>(null);
+  const [bannerBottom, setBannerBottom] = useState(0), [backH, setBackH] = useState(0);
   useLayoutEffect(() => {
-    const el = banner.current;
-    if (!el || !returnTo) return;
-    const measure = () => setBannerBottom(el.offsetTop + el.offsetHeight);
+    const el = banner.current, back = mapBack.current;
+    if (!el) return;
+    const measure = () => { setBannerBottom(el.offsetTop + el.offsetHeight); setBackH(back?.offsetHeight ?? 0); };
     measure();
-    const ro = new ResizeObserver(measure); ro.observe(el);
+    const ro = new ResizeObserver(measure); ro.observe(el); if (back) ro.observe(back);
     return () => ro.disconnect();
-  }, [returnTo]);
-  // Back where they started (by the button or by scrolling): the way back is no longer needed.
-  useEffect(() => { if (returnTo && active === returnTo.step) setReturnTo(null); }, [active, returnTo]);
+  }, [built, showMapBack]);
+  // What covers the top of the map, kept clear when it moves to a place: the period banner, and the back button under it.
+  const topCover = showMapBack && backH ? bannerBottom + 8 + backH : bannerBottom;
+  // Back where they started (by the button or by scrolling): the way back is no longer needed. Only once they have
+  // left it, though: an answer offers the way back a moment before it moves the story, and that moment is no return.
+  const leftReturn = useRef(false);
+  useEffect(() => {
+    if (!returnTo) { leftReturn.current = false; return; }
+    if (active !== returnTo.step) leftReturn.current = true;
+    else if (leftReturn.current) { leftReturn.current = false; setReturnTo(null); }
+  }, [active, returnTo]);
   // Opening a search result: an event or a verse goes to its place in the story, a person or place opens its card.
   const openResult = useCallback((r: SearchResult) => {
     if (r.kind === 'event') jumpTo(Number(r.id));
     else if (r.kind === 'person') { const p = data.people.find(x => x.id === r.id); if (p) setPerson(p); }
     else if (r.kind === 'place') setPlace(r.id);
     else {
-      const v = data.verses.find(x => x.id === r.id), l = v?.link;
-      if (!l) { setUndatedOpen(true); return; }
-      const order = l.type === 'suggested' ? l.at : l.type === 'stage' ? l.from : null;
-      const e = l.event !== null ? data.byNumber.get(l.event) : data.events.find(x => x.order === order);
+      const v = data.verses.find(x => x.id === r.id), e = v && verseEvent(data, v);
       if (e) jumpTo(e.n); else setUndatedOpen(true);
     }
   }, [data, jumpTo]);
@@ -504,18 +532,23 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     }
     const keep = stay.current;
     stay.current = false;
+    setBesideMap(false);
     // The RAG backend first; the in-browser answer when it is off or unreachable.
     return askServer(question, locale).then(fromServer => {
-      const result = fromServer ?? answer(data, question, locale);
-      if (result.event !== undefined && !keep) {
+      const reply = fromServer ?? answer(data, question, locale);
+      // The event the answer is about, even when the backend named none (see answerEvent).
+      const event = answerEvent(data, question, reply, locale);
+      const result: Answer = { ...reply, event };
+      if (event !== undefined && !keep) window.setTimeout(() => {
         // Remember where the reader was, so they can come back after the answer has taken them elsewhere.
-        const from = activeRef.current, there = stepOfEvent.get(events.findIndex(e => e.n === result.event));
+        const from = activeRef.current, there = stepOfEvent.get(events.findIndex(e => e.n === event));
         if (there !== undefined && there !== from) setReturnTo(r => r ?? { step: from, label: stepLabel(from) });
-        window.setTimeout(() => goToEvent(result.event!), 400);
-      }
+        if (!wide) setBesideMap(true);
+        goToEvent(event);
+      }, 400);
       return record(result.text, result);
     });
-  }, [data, locale, goToEvent, pickQuick, text, events, stepOfEvent, stepLabel, remember]);
+  }, [data, locale, goToEvent, pickQuick, text, events, stepOfEvent, stepLabel, remember, wide]);
 
   const showAnswerEvent = (n: number) => {
     if (!mapEvents.has(n)) return;
@@ -575,7 +608,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
           <span className="tb-long">{text.ask}</span><span className="tb-short">{text.askShort}</span>
         </button>}
       </div>
-      <AskPanel open={askOpen} onClose={closeAsk} locale={locale} reducedMotion={reducedMotion} onAsk={onAsk} ask={ask} onSuggest={suggest} back={returnTo} onBack={goBack} onHistory={openHistory} answerActions={answerActions} />
+      <AskPanel open={askOpen} besideMap={besideMap} onClose={closeAsk} locale={locale} reducedMotion={reducedMotion} onAsk={onAsk} ask={ask} onSuggest={suggest} back={returnTo} onBack={goBack} onHistory={openHistory} answerActions={answerActions} />
       {answerCard && <AnswerCard key={answerCard.key} card={answerCard} locale={locale} back={returnTo} onBack={goBack}
         reducedMotion={reducedMotion} answerActions={<AnswerActions sources={answerCard.metadata?.sources} event={answerCard.metadata?.event !== undefined && mapEvents.has(answerCard.metadata.event) ? answerCard.metadata.event : undefined} locale={locale} onEvent={showAnswerEvent}
           extra={returnTo ? <BackButton label={returnTo.label} locale={locale} onClick={goBack} /> : undefined} />} onAnswer={question => {
@@ -583,7 +616,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
           return Promise.resolve(onAsk(question, metadata => setAnswerCard(card => card?.key === answerCard.key ? { ...card, metadata } : card)))
             .then(reply => { setAnswerCard(card => card?.key === answerCard.key ? { ...card, a: reply } : card); return reply; });
         }}
-        onClose={() => { setAnswerCard(null); setReturnTo(null); }} onAgain={() => { setAnswerCard(null); focusAskBar(); }} />}
+        onClose={() => setAnswerCard(null)} onAgain={() => { setAnswerCard(null); focusAskBar(); }} />}
     </nav>
     {built && <div className="scrolly">
       <div className="scrolly-steps" ref={column}>
@@ -608,7 +641,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
 
       <div className="scrolly-map">
         <HistoricMap data={data} locale={locale} emphasis={emphasis} selected={step.kind === 'event' ? current.n : null} activeRoutes={activeRoutes}
-          onSelect={jumpTo} reducedMotion={reducedMotion} inset={(quick || walk) && wide ? 430 : 0} insetBottom={timelineH + (wide ? 76 : walk ? walkPanelH + 8 : 0)} focusKey={`${active}-${walk?.stop ?? ''}`} now={now} legend={false}
+          onSelect={jumpTo} reducedMotion={reducedMotion} inset={(quick || walk) && wide ? 430 : sheetCover.side} insetTop={topCover} insetBottom={Math.max(timelineH + (wide ? 76 : walk ? walkPanelH + 8 : 0), sheetCover.bottom)} focusKey={`${active}-${walk?.stop ?? ''}`} now={now} legend={false}
           overview={step.kind === 'summary' || step.kind === 'chapter' && step.chapter === 1}
           caravans={current.period === 'prologue' || current.period === 'makkah'} scrollPage
           walk={walk && walkStop ? { routeId: walk.route.id, lat: walkStop.lat, lon: walkStop.lon, key: `${walk.route.id}-${walk.stop}`, name: walkStop.name[locale] } : null}
@@ -618,8 +651,9 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
             {step.kind === 'summary' ? <b>{text.summaryKicker}</b> : <><b>{periodName[locale][current.period]}</b><span>{hijri(current.year, locale)}</span></>}
             {reached > 0 && <span className="story-reach"><i /><span>{text.reachedCount(reached)}<small>{text.reachedNote}</small></span></span>}
           </div>
-          {/* After a jump from the map, a card or search: one tap back to where the reader was. */}
-          {returnTo && !answerCard && <div className="map-back" style={bannerBottom ? { top: bannerBottom + 8 } : undefined} data-map-overlay><BackButton label={returnTo.label} locale={locale} onClick={goBack} /></div>}
+          {/* After a jump from the map, a card, search or an answer: one tap back to where the reader was (inside the
+              answer card while that is open). */}
+          {showMapBack && <div className="map-back" ref={mapBack} style={bannerBottom ? { top: bannerBottom + 8 } : undefined} data-map-overlay><BackButton label={returnTo.label} locale={locale} onClick={goBack} /></div>}
 
 
           {wide && !quick && !walk && <AskBar locale={locale} hint={askHint} onAsk={askAbout} onHistory={openHistory} />}
@@ -725,13 +759,13 @@ const StepList = memo(function StepList({ steps, data, locale, store, goToStep, 
 });
 
 /** The "Ask the map" panel; memoised so moving through the story leaves the orb untouched. */
-const AskPanel = memo(function AskPanel({ open, onClose, locale, reducedMotion, onAsk, ask, onSuggest, back, onBack, onHistory, answerActions }: {
-  open: boolean; onClose: () => void; locale: Locale; reducedMotion: boolean; onAsk: (q: string) => string | Promise<string>; ask: { text: string; key: number } | null; onSuggest: (q: string) => void;
+const AskPanel = memo(function AskPanel({ open, besideMap, onClose, locale, reducedMotion, onAsk, ask, onSuggest, back, onBack, onHistory, answerActions }: {
+  open: boolean; besideMap: boolean; onClose: () => void; locale: Locale; reducedMotion: boolean; onAsk: (q: string) => string | Promise<string>; ask: { text: string; key: number } | null; onSuggest: (q: string) => void;
   back: { label: string } | null; onBack: () => void;
   onHistory: () => void; answerActions: React.ReactNode;
 }) {
   const text = journeyCopy[locale];
-  return <section id="ask-panel" className={`ask-panel${open ? ' is-open' : ''}`} aria-label={text.ask} inert={!open}>
+  return <section id="ask-panel" className={`ask-panel${open ? ' is-open' : ''}${besideMap ? ' is-beside-map' : ''}`} aria-label={text.ask} inert={!open}>
     <div className="ask-head"><h2>{text.ask}</h2><button type="button" className="qr-close" onClick={onClose} aria-label={text.close}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" /></svg></button></div>
     <MorphOrb locale={locale} reducedMotion={reducedMotion} onSubmit={onAsk} minThinkMs={900} ask={ask} onHistory={onHistory} historyLabel={chatCopy[locale].title} answerActions={answerActions} />
     {back && <BackButton label={back.label} locale={locale} onClick={() => { onBack(); onClose(); }} />}

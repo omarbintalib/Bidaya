@@ -132,7 +132,7 @@ it('preserves a pending question when motion and typography change, and measures
   const onSubmit = vi.fn(() => new Promise<string>(resolve => { finish = resolve; }));
   const original = HTMLElement.prototype.getBoundingClientRect;
   vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function(this: HTMLElement) {
-    if (this.classList.contains('mo-measure')) return { x: 0, y: 0, top: 0, left: 0, right: 360, bottom: 600, width: 360, height: 600, toJSON() {} };
+    if (this.classList.contains('mo-measure')) return { x: 0, y: 0, top: 0, left: 0, right: 360, bottom: 900, width: 360, height: 900, toJSON() {} };
     return original.call(this);
   });
   await act(async () => root.render(<MorphOrb locale="en" onSubmit={onSubmit} minThinkMs={0} speed={2} reducedMotion={false} />));
@@ -148,17 +148,32 @@ it('preserves a pending question when motion and typography change, and measures
   await act(async () => finish('An answer that needs more room.'));
   await advance(1800);
   expect(phase()).toBe('answered');
-  // A long answer fills its box up to half the screen (768px in jsdom → 384px) and offers "Expand answer".
-  expect(host.querySelector<HTMLElement>('.mo-root')?.style.getPropertyValue('--answer-height')).toBe('384px');
-  expect(host.querySelector<HTMLElement>('.mo-actor')?.style.getPropertyValue('--h')).toBe('384px');
+  // A long answer (900px) fills the room on screen below it — jsdom's 768px, less the space under the answer
+  // (100px) and a margin (16px): 652px — and offers "Expand answer", which shows it whole (plus 14px of slack).
+  expect(host.querySelector<HTMLElement>('.mo-root')?.style.getPropertyValue('--answer-height')).toBe('652px');
+  expect(host.querySelector<HTMLElement>('.mo-actor')?.style.getPropertyValue('--h')).toBe('652px');
   expect(onSubmit).toHaveBeenCalledTimes(1);
   const expand = [...host.querySelectorAll('button')].find(button => button.textContent === 'Expand answer')!;
   expect(expand).toBeTruthy();
   await act(async () => expand.click());
-  expect(host.querySelector<HTMLElement>('.mo-actor')?.style.getPropertyValue('--h')).toBe('576px');
+  expect(host.querySelector<HTMLElement>('.mo-actor')?.style.getPropertyValue('--h')).toBe('914px');
   expect(expand.textContent).toBe('Collapse answer');
   await act(async () => expand.click());
-  expect(host.querySelector<HTMLElement>('.mo-actor')?.style.getPropertyValue('--h')).toBe('384px');
+  expect(host.querySelector<HTMLElement>('.mo-actor')?.style.getPropertyValue('--h')).toBe('652px');
+});
+
+it('shows an answer that fits on screen whole, without a scrolling box or "Expand answer"', async () => {
+  const original = HTMLElement.prototype.getBoundingClientRect;
+  // 500px of answer: more than the old half-screen cap (384px here), well within the room on screen.
+  vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function(this: HTMLElement) {
+    if (this.classList.contains('mo-measure')) return { x: 0, y: 0, top: 0, left: 0, right: 360, bottom: 500, width: 360, height: 500, toJSON() {} };
+    return original.call(this);
+  });
+  await act(async () => root.render(<MorphOrb locale="en" onSubmit={() => 'An answer of a fair length.'} minThinkMs={0} speed={2} reducedMotion />));
+  await input('A question'); await submit(); await advance(3000);
+  expect(phase()).toBe('answered');
+  expect(host.querySelector<HTMLElement>('.mo-root')?.style.getPropertyValue('--answer-height')).toBe('514px');
+  expect([...host.querySelectorAll('button')].some(button => button.textContent === 'Expand answer')).toBe(false);
 });
 
 it('keeps resize measurements from snapping the card during the globe-to-answer morph', async () => {

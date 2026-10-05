@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { warmServer } from './assistant/answer';
+import { warmServer } from './assistant/server';
 import './index.css';
 
 warmServer(); // start waking the "Ask the map" backend while the visitor reads the start page

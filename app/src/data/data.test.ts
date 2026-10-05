@@ -1,15 +1,15 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { answer, suggestFor, sourceLinks, warmUp } from '../assistant/answer';
+import { answer, answerEvent, suggestFor, sourceLinks, warmUp } from '../assistant/answer';
 import { parseCsv } from './csv';
 import { loadSirah } from './load';
 import { FILES, trimData } from './files';
 import { findPeople, mentionIn } from './people';
 import { quranpediaRefs } from './quranpedia';
 import { quizPools } from './quiz';
-import { eventPlaceName, versesFor } from './select';
+import { eventPlaceName, verseEvent, versesFor } from './select';
 import { search } from './search';
 import { pathKm } from './geo';
-import type { Sirah } from './types';
+import type { Sirah, Verse } from './types';
 
 // Load the real files at the repository root — these tests also catch broken CSV edits.
 const files = import.meta.glob<string>(['../../../*.csv', '../../../*.geojson'], { query: '?raw', import: 'default', eager: true });
@@ -133,6 +133,35 @@ describe('ask the map (slide 7 test set)', () => {
     const a = answer(data, 'Why did the Prophet migrate to Madinah?', 'en');
     expect(a.kind).toBe('event');
     expect(a.text).toMatch(/Source: Dorar/);
+  });
+  it('takes a verse placed by position (a suggested place or a stage) to the event at that position', () => {
+    const at = (v: Verse) => v.link?.type === 'suggested' ? v.link.at : v.link?.type === 'stage' ? v.link.from : null;
+    const placed = data.verses.filter(v => v.link?.event === null && at(v) !== null);
+    expect(placed.length).toBeGreaterThan(0);
+    for (const v of placed) expect(verseEvent(data, v)?.order, v.id).toBe(at(v));
+    // Asked about, such a verse now moves the map like any other answer.
+    const v = placed.find(x => answer(data, `${x.surah} ${x.title.ar}`, 'ar').kind === 'verse')!;
+    expect(answer(data, `${v.surah} ${v.title.ar}`, 'ar').event).toBe(verseEvent(data, v)!.n);
+  });
+  it('finds the event of a backend answer that names none, only when the answer is about it', () => {
+    const badr = answer(data, 'What happened at Badr?', 'en').event!;
+    const about = 'The Muslims went out to intercept the caravan of Quraysh led by Abu Sufyan; the two sides met at the wells of Badr and Abu Jahl was killed.';
+    expect(answerEvent(data, 'What happened at Badr?', { kind: 'event', text: about }, 'en')).toBe(badr);
+    expect(answerEvent(data, 'ماذا حدث في غزوة بدر؟', { kind: 'event', text: 'التقى المسلمون وقريش عند ماء بدر، ونصر الله المسلمين وقتل أبو جهل.' }, 'ar')).toBe(badr);
+    // An answer about something else, a refusal or no answer: the map stays where it is.
+    expect(answerEvent(data, 'What happened at Badr?', { kind: 'event', text: 'Fasting in Ramadan was made obligatory, and the direction of prayer was changed to the Kaaba.' }, 'en')).toBeUndefined();
+    expect(answerEvent(data, 'Is it halal?', { kind: 'refusal', text: 'I cannot give a ruling.' }, 'en')).toBeUndefined();
+    expect(answerEvent(data, 'What happened at Badr?', { kind: 'none', text: 'Nothing found.' }, 'en')).toBeUndefined();
+    // The event the backend names stands when the answer is about it; one that is not in the story counts as none.
+    expect(answerEvent(data, 'What happened at Badr?', { kind: 'event', text: about, event: badr }, 'en')).toBe(badr);
+    expect(answerEvent(data, 'What happened at Badr?', { kind: 'event', text: about, event: 99999 }, 'en')).toBe(badr);
+    // A cited event the answer is not about (the Hijrah, in an answer on Badr) gives way to the one it is about...
+    const hijrah = answer(data, 'Why did the Prophet migrate to Madinah?', 'en').event!;
+    expect(answerEvent(data, 'What happened at Badr?', { kind: 'event', text: about, event: hijrah }, 'en')).toBe(badr);
+    // ...but stands when the answer is about it, or when the question points nowhere.
+    const migration = 'The Prophet ﷺ migrated from Makkah to Madinah with Abu Bakr, hiding three nights in the cave of Thawr.';
+    expect(answerEvent(data, 'What happened at Badr?', { kind: 'event', text: migration, event: hijrah }, 'en')).toBe(hijrah);
+    expect(answerEvent(data, 'Tell me more', { kind: 'event', text: about, event: hijrah }, 'en')).toBe(hijrah);
   });
   it('refuses rulings and refers to an official fatwa body', () => {
     expect(answer(data, 'ما حكم صيام يوم السبت؟', 'ar').kind).toBe('refusal');

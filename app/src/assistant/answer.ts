@@ -1,6 +1,6 @@
 import { quranpediaRefs } from '../data/quranpedia';
 import { onIdle } from '../idle';
-import { dateLine, digits, eventPlaceName, excerpt, hadithLinks, sourceLabel } from '../data/select';
+import { dateLine, digits, eventPlaceName, excerpt, hadithLinks, sourceLabel, verseEvent } from '../data/select';
 import type { Person, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 
@@ -11,56 +11,16 @@ import type { Locale } from '../i18n';
  * fatwa body; questions with no matching source get an apology.
  *
  * Two engines, same rules and the same `Answer` shape:
- * - `askServer()`: the RAG backend (../backend, POST /api/ask) — the books (Dorar, al-Raheeq, Sahih al-Bukhari,
+ * - `askServer()` (server.ts): the RAG backend (../backend, POST /api/ask) — the books (Dorar, al-Raheeq, Sahih al-Bukhari,
  *   al-Wahidi's sahih/hasan reports) plus these CSVs, an LLM writing only from the retrieved passages, with checks.
  *   The model key stays on the server.
  * - `answer()`: retrieval over the CSVs in the browser. Used when the backend is off or unreachable, and for
  *   the suggested questions (`suggestFor`), which must be instant.
  */
 
-export interface AnswerSource { label: string; url: string }
-export function sourceLinks(refs: AnswerSource[]): AnswerSource[] {
-  return refs.filter((ref, i) => {
-    try { return !!ref.label && ['https:', 'http:'].includes(new URL(ref.url).protocol) && refs.findIndex(r => r.url === ref.url) === i; } catch { return false; }
-  });
-}
-export interface Answer { sources?: AnswerSource[]; text: string; event?: number; kind: 'event' | 'person' | 'verse' | 'refusal' | 'none' }
+export { askServer, sourceLinks, warmServer, type Answer, type AnswerSource } from './server';
+import { sourceLinks, type Answer } from './server';
 
-/** The backend's URL: VITE_ASK_API at build time (`off` disables it); dev and preview proxy /api to it. */
-const ASK_API = (import.meta.env.VITE_ASK_API as string | undefined) ?? '/api/ask';
-const ASK_TIMEOUT_MS = 90_000;   // long enough for a serverless cold start (Modal: models load in ~20-60 s)
-const KINDS = new Set<Answer['kind']>(['event', 'person', 'verse', 'refusal', 'none']);
-
-/**
- * Wake the backend when the page opens (fire and forget). A serverless backend sleeps when nobody uses it;
- * this starts it while the visitor reads the start page, so their first question rarely waits for it.
- */
-export function warmServer(fetcher: typeof fetch = fetch) {
-  if (!ASK_API || ASK_API === 'off') return;
-  try { fetcher(ASK_API.replace(/\/ask$/, '/health'), { method: 'GET' }).catch(() => { /* offline: the browser answers */ }); } catch { /* no fetch */ }
-}
-
-/** Ask the RAG backend. Resolves to null when it is off, unreachable, slow or returns something unexpected. */
-export async function askServer(question: string, locale: Locale, fetcher: typeof fetch = fetch): Promise<Answer | null> {
-  if (!ASK_API || ASK_API === 'off') return null;
-  const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), ASK_TIMEOUT_MS);
-  try {
-    const res = await fetcher(ASK_API, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question, locale }), signal: ctrl.signal,
-    });
-    if (!res.ok) return null;
-    const r = await res.json() as Partial<Answer>;
-    if (typeof r?.text !== 'string' || !r.text.trim() || !KINDS.has(r.kind as Answer['kind'])) return null;
-    const sources = Array.isArray(r.sources) ? sourceLinks(r.sources.filter(s => s && typeof s.label === 'string' && typeof s.url === 'string')) : [];
-    return { kind: r.kind as Answer['kind'], text: r.text.trim(), ...(sources.length ? { sources } : {}), ...(Number.isSafeInteger(r.event) ? { event: r.event } : {}) };
-  } catch {
-    return null;
-  } finally {
-    clearTimeout(timer);
-  }
-}
 type Doc = { kind: 'event'; item: SirahEvent; fields: Field[] } | { kind: 'person'; item: Person; fields: Field[] } | { kind: 'verse'; item: Verse; fields: Field[] };
 type Field = { weight: number; tokens: Set<string> };
 
@@ -171,6 +131,35 @@ const SOURCE = {
   en: { dorar: (n: number) => `Source: Dorar Historical Encyclopedia, event ${n}.`, sahaba: "Source: a cited summary from the project's sources (Dorar and the Sahihayn)." },
 };
 
+/**
+ * Where a result sits in the story: an event itself; a person's first event on the map; a verse record's event,
+ * including one placed by position (a suggested place or a stage), as search does.
+ */
+function docEvent(data: Sirah, doc: Doc): number | undefined {
+  if (doc.kind === 'event') return doc.item.n;
+  if (doc.kind === 'person') return doc.item.events.find(n => data.byNumber.has(n) && data.byNumber.get(n)!.lat !== null && data.byNumber.get(n)!.lon !== null);
+  return verseEvent(data, doc.item)?.n;
+}
+
+/**
+ * The event an answer should take the reader to. The backend names the first Dorar event its answer cites, which is
+ * not always the one the answer is about (a passage on Badr cited for context in an answer about Uhud), and names none
+ * when it cites only the other books (al-Raheeq, al-Bukhari, al-Wahidi, the Companions), however plainly the answer
+ * is about Badr. So the event this engine finds for the question is weighed too: where the two differ, the answer's
+ * own words decide, and an event they do not lead to is never chosen.
+ */
+export function answerEvent(data: Sirah, question: string, reply: Answer, locale: Locale): number | undefined {
+  const named = reply.event !== undefined && data.byNumber.has(reply.event) ? reply.event : undefined;
+  if (reply.kind === 'refusal' || reply.kind === 'none') return named;
+  const asked = answer(data, question, locale).event;
+  if (asked === undefined || asked === named || !data.byNumber.has(asked)) return named;
+  // Where each event comes among the sources that best match the answer's words (-1: not among them).
+  const ranked = retrieve(data, reply.text, 8).map(h => docEvent(data, h.doc));
+  const rank = (n: number | undefined) => n === undefined ? -1 : ranked.indexOf(n);
+  if (rank(asked) < 0) return named;
+  return named === undefined || rank(named) < 0 || rank(asked) < rank(named) ? asked : named;
+}
+
 export function answer(data: Sirah, question: string, locale: Locale): Answer {
   const ar = locale === 'ar';
   if (RULING.test(normalize(question))) return {
@@ -199,15 +188,15 @@ export function answer(data: Sirah, question: string, locale: Locale): Answer {
     return { kind: 'event', event: e.n, sources: sourceLinks([{ label: 'Dorar', url: (!ar && e.urlEn) || e.url }]), text: `${title}${facts}. ${lead} ${excerpt(body, 170)} ${SOURCE[locale].dorar(e.n)}`.replace(/\s+/g, ' ').trim() };
   }
   if (doc.kind === 'person') {
-    const p = doc.item, first = p.events.find(n => data.byNumber.has(n) && data.byNumber.get(n)!.lat !== null && data.byNumber.get(n)!.lon !== null);
+    const p = doc.item, first = docEvent(data, doc);
     const name = ar ? p.name.ar : p.name.en;
     return { kind: 'person', event: first, sources: sourceLinks(p.facts.filter(f => f.url).map(f => ({ label: sourceLabel(f.source, locale), url: f.url! }))), text: `${name}: ${excerpt(!ar && p.bioEn ? p.bioEn : p.bio, 190)} ${SOURCE[locale].sahaba}` };
   }
-  const v = doc.item, ev = v.link?.event ?? undefined;
+  const v = doc.item, ev = docEvent(data, doc);
   const refs = hadithLinks(v).map(h => `${h.book === 'bukhari' ? (ar ? 'البخاري' : 'Bukhari') : (ar ? 'مسلم' : 'Muslim')} ${h.n}`).join(ar ? '، ' : ', ');
   const src = refs ? (ar ? `المصدر: صحيح ${refs}.` : `Source: Sahih ${refs}.`) : (ar ? 'المصدر: موسوعة التفسير – الدرر السنية.' : 'Source: Dorar Tafsir Encyclopedia.');
   const surah = ar ? `سورة ${v.surah} (${v.whole ? 'السورة كاملة' : v.ref})` : `Surah ${v.surahEn ?? v.surah} (${v.whole ? 'whole surah' : v.ref})`;
-  return { kind: 'verse', event: ev ?? undefined, sources: sourceLinks([...hadithLinks(v).map(h => ({ label: ar ? `${h.book === 'bukhari' ? 'صحيح البخاري' : 'صحيح مسلم'} ${h.n}` : `${h.book === 'bukhari' ? 'Sahih al-Bukhari' : 'Sahih Muslim'} ${h.n}`, url: h.url })), ...v.tafseer.map(url => ({ label: ar ? 'موسوعة التفسير' : 'Tafsir Encyclopedia', url })), ...quranpediaRefs(v.ref, v.whole, locale).map(r => ({ label: `${ar ? 'الموسوعة القرآنية' : 'Quranpedia'} ${r.label}`, url: r.url }))]), text: `${surah}: ${v.phrase[locale]} — ${v.title[locale]}. ${src}` };
+  return { kind: 'verse', event: ev, sources: sourceLinks([...hadithLinks(v).map(h => ({ label: ar ? `${h.book === 'bukhari' ? 'صحيح البخاري' : 'صحيح مسلم'} ${h.n}` : `${h.book === 'bukhari' ? 'Sahih al-Bukhari' : 'Sahih Muslim'} ${h.n}`, url: h.url })), ...v.tafseer.map(url => ({ label: ar ? 'موسوعة التفسير' : 'Tafsir Encyclopedia', url })), ...quranpediaRefs(v.ref, v.whole, locale).map(r => ({ label: `${ar ? 'الموسوعة القرآنية' : 'Quranpedia'} ${r.label}`, url: r.url }))]), text: `${surah}: ${v.phrase[locale]} — ${v.title[locale]}. ${src}` };
 }
 
 /**
