@@ -69,14 +69,20 @@ describe('data package', () => {
     }
   });
   it('justifies every event sound with the source\'s own words', () => {
-    expect(data.sounds.size).toBeGreaterThan(70);
+    expect(data.sounds.size).toBeGreaterThan(60);
     for (const [n, s] of data.sounds) {
       const e = data.byNumber.get(n)!;
       expect(e.text.ar.includes(s.quote) || e.title.ar.includes(s.quote), `event ${n}: «${s.quote}»`).toBe(true);
+      if (s.horses) expect(e.text.ar.includes(s.horses), `event ${n} horses: «${s.horses}»`).toBe(true);
     }
     // Swords are heard only where the text says there was fighting, never on an expedition that ended without it.
     expect(data.sounds.get(59)?.kind).toBe('battle');
     expect(data.sounds.get(49)?.kind).toBe('march');
+    // Horses only where the text has them; the wind of al-Khandaq; nothing for killings in Madinah or a massacre.
+    expect(data.sounds.get(78)?.horses).toBeTruthy();
+    expect(data.sounds.get(59)?.horses).toBeNull();
+    expect(data.sounds.get(84)?.kind).toBe('wind');
+    expect(data.sounds.has(58) || data.sounds.has(75)).toBe(false);
     // A sound the text does not state outright says so.
     expect(data.sounds.get(17)?.note?.ar).toContain('تقديري');
   });

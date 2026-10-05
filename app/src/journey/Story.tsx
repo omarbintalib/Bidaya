@@ -329,8 +329,9 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     document.addEventListener('visibilitychange', onVisible);
     return () => { document.removeEventListener('visibilitychange', onVisible); ambience.disable(); };
   }, [ambience]);
-  const scene: Scene = step.kind === 'event' ? data.sounds.get(events[step.index].n)?.kind ?? 'calm' : 'calm';
-  useEffect(() => { ambience.setScene(scene); }, [ambience, scene]);
+  const eventSound = step.kind === 'event' ? data.sounds.get(events[step.index].n) : undefined;
+  const scene: Scene = eventSound?.kind ?? 'calm', horses = !!eventSound?.horses;
+  useEffect(() => { ambience.setScene(scene, horses); }, [ambience, scene, horses, active]);
 
   useEffect(() => {
     if (!playing) return;

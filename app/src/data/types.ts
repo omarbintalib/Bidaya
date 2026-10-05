@@ -122,9 +122,12 @@ export interface MapArc {
 export interface QuizQuestion { id: string; period: Period; question: Text; answer: string; options: string[]; explanation: Text; event: number; quote: string; url: string }
 
 /** An event's background sound (event_sounds.csv), with the source's words that justify it. */
-export type SoundKind = 'battle' | 'march' | 'caravan' | 'walk' | 'sea' | 'march+sea';
-/** `note`: what the sound rests on beyond the quote, e.g. a crossing the text does not mention but the route requires. */
-export interface EventSound { kind: SoundKind; quote: string; note: Text | null }
+export type SoundKind = 'battle' | 'march' | 'caravan' | 'walk' | 'sea' | 'march+sea' | 'wind';
+/**
+ * `horses`: the source's words when the text mentions horses (only then are horses heard; most expeditions rode camels).
+ * `note`: what the sound rests on beyond the quote, e.g. a crossing the text does not mention but the route requires.
+ */
+export interface EventSound { kind: SoundKind; quote: string; horses: string | null; note: Text | null }
 
 /** A recording the reader can play on an event's card (event_audio.csv), e.g. the adhan on the event of its legislation. */
 export interface EventAudio { file: string; label: Text; description: Text }

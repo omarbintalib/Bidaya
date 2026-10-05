@@ -13,16 +13,21 @@ type Shot = 'camel' | 'horses';
 const FILES: (Loop | Shot)[] = ['wind', 'steps', 'sea', 'swords', 'camel', 'horses'];
 
 /** Each scene's loops (with their volume) and its occasional sound (every `every` seconds, give or take). */
-const SCENES: Record<Scene, { loops: Partial<Record<Loop, number>>; shot?: { name: Shot; gain: number; every: [number, number] } }> = {
+type ShotSpec = { name: Shot; gain: number; every: [number, number] };
+const SCENES: Record<Scene, { loops: Partial<Record<Loop, number>>; shot?: ShotSpec }> = {
   // An event with no sound of its own is quiet: wind is not always blowing, so it is heard only on the road.
   calm: { loops: {} },
-  walk: { loops: { wind: .14, steps: .5 } },
-  caravan: { loops: { wind: .14, steps: .38 }, shot: { name: 'camel', gain: .22, every: [16, 28] } },
+  walk: { loops: { wind: .12, steps: .5 } },
+  caravan: { loops: { wind: .12, steps: .38 }, shot: { name: 'camel', gain: .22, every: [16, 28] } },
+  // Most expeditions rode camels ("في ثلاثين راكبًا"), so a march is footsteps and camels; horses only where the text has them.
+  march: { loops: { wind: .12, steps: .32 }, shot: { name: 'camel', gain: .18, every: [22, 36] } },
   sea: { loops: { sea: .7 } },
-  march: { loops: { wind: .14 }, shot: { name: 'horses', gain: .3, every: [14, 24] } },
-  'march+sea': { loops: { sea: .55 }, shot: { name: 'horses', gain: .28, every: [16, 26] } },
-  battle: { loops: { swords: .16 }, shot: { name: 'horses', gain: .3, every: [12, 20] } },
+  'march+sea': { loops: { sea: .55, steps: .22 } },
+  battle: { loops: { swords: .16 } },
+  // al-Khandaq: «بسبب الريح التي أكفأت قدورهم وخيامهم».
+  wind: { loops: { wind: .6 } },
 };
+const HORSES: ShotSpec = { name: 'horses', gain: .3, every: [14, 24] };
 const FADE = 1; // seconds
 /**
  * The slider's position (0–1) as a gain. Hearing is logarithmic, so the gain follows the square of the position (the
@@ -39,6 +44,7 @@ export class Ambience {
   /** One-off sounds still playing (a gallop lasts 15 s): faded out when the reader moves on. */
   private shots = new Set<{ src: AudioBufferSourceNode; gain: GainNode }>();
   private scene: Scene = 'calm';
+  private horses = false;
   private shotTimer = 0;
   private on = false;
   private loading: Promise<void> | null = null;
@@ -81,9 +87,11 @@ export class Ambience {
   }
 
   /** Move to another scene; its layers fade in as the last scene's fade out. */
-  setScene(scene: Scene) {
+  /** `horses`: the event's text mentions horses, so they are heard now and then. */
+  setScene(scene: Scene, horses = false) {
     // Every move to another step silences what is still sounding from the last one, even within the same scene.
     this.fadeShots();
+    this.horses = horses;
     if (scene === this.scene) { if (this.on) this.scheduleShot(true); return; }
     this.scene = scene;
     if (this.on && this.buffers.size) this.apply();
@@ -157,8 +165,10 @@ export class Ambience {
 
   private scheduleShot(soon = false) {
     window.clearTimeout(this.shotTimer);
-    const shot = SCENES[this.scene].shot;
-    if (!shot || !this.on) return;
+    // The scene's own occasional sound and, where the text has them, horses: one of them each time.
+    const choices = [SCENES[this.scene].shot, this.horses ? HORSES : undefined].filter((x): x is ShotSpec => !!x);
+    if (!choices.length || !this.on) return;
+    const shot = choices[Math.floor(Math.random() * choices.length)];
     const [lo, hi] = shot.every, wait = soon ? 2 + Math.random() * 4 : lo + Math.random() * (hi - lo);
     this.shotTimer = window.setTimeout(() => { this.playShot(shot.name, shot.gain); this.scheduleShot(); }, wait * 1000);
   }
