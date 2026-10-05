@@ -226,12 +226,6 @@ html[data-contrast='dark'] .tl-revealed.is-suggested { background: transparent; 
 .place-approx { color: var(--muted); }
 .place-note { display: block; margin-top: 6px; color: var(--muted); font-size: var(--text-small); line-height: 1.6; }
 .place-link { border: 0; background: none; padding: 0; color: var(--ink); text-decoration: underline; text-decoration-color: var(--brass); text-underline-offset: .2em; cursor: pointer; text-align: start; font: inherit; }
-.place-counts { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-.place-counts li { display: grid; grid-template-columns: auto 1fr auto; gap: 2px 12px; align-items: baseline; padding: 10px 12px; border: 1px solid var(--border); background: var(--surface); }
-.place-counts b { font-family: var(--display); font-size: calc(22px * var(--text-scale)); color: var(--brass); }
-.place-counts small { color: var(--muted); font-size: var(--text-small); }
-.place-counts .pd-quote { grid-column: 1 / -1; margin-top: 4px; }
-.place-counts .at-least { display: block; font-family: inherit; font-size: calc(11.5px * var(--text-scale)); color: var(--muted); font-weight: 500; }
 .ecard-place { border: 0; background: none; padding: 0; font: inherit; color: inherit; cursor: pointer; text-decoration: underline dotted; text-decoration-color: var(--brass); text-underline-offset: .25em; }
 .ecard-place:hover { color: var(--brass); }
 .ecard-distance { margin: 10px 0 0; font-size: var(--text-small); color: var(--muted); display: flex; align-items: center; gap: 6px; }
