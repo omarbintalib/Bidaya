@@ -128,6 +128,16 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
   const rush = useRef(0);
   // The map keeps the place in focus above the bottom controls (timeline and Ask bar), whatever their height.
   const timelineBox = useRef<HTMLDivElement>(null);
+  // On phones the walk panel spans the bottom of the map: the map keeps the route above it.
+  const walkPanel = useRef<HTMLDivElement>(null);
+  const [walkPanelH, setWalkPanelH] = useState(0);
+  useLayoutEffect(() => {
+    const el = walkPanel.current;
+    if (!el) { setWalkPanelH(0); return; }
+    const ro = new ResizeObserver(() => setWalkPanelH(Math.round(el.getBoundingClientRect().height)));
+    ro.observe(el);
+    return () => ro.disconnect();
+  });
   const [timelineH, setTimelineH] = useState(0);
   useLayoutEffect(() => {
     const el = timelineBox.current;
@@ -496,10 +506,10 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
 
       <div className="scrolly-map">
         <HistoricMap data={data} locale={locale} emphasis={emphasis} selected={step.kind === 'event' ? current.n : null} activeRoutes={activeRoutes}
-          onSelect={goToEvent} reducedMotion={reducedMotion} inset={quick && wide ? 430 : 0} insetBottom={timelineH + (wide ? 76 : 0)} focusKey={`${active}-${walk?.stop ?? ''}`} now={now} legend={false}
+          onSelect={goToEvent} reducedMotion={reducedMotion} inset={(quick || walk) && wide ? 430 : 0} insetBottom={timelineH + (wide ? 76 : walk ? walkPanelH + 8 : 0)} focusKey={`${active}-${walk?.stop ?? ''}`} now={now} legend={false}
           overview={step.kind === 'summary' || step.kind === 'chapter' && step.chapter === 1}
           caravans={current.period === 'prologue' || current.period === 'makkah'} scrollPage
-          walk={walk && walkStop ? { routeId: walk.route.id, lat: walkStop.lat, lon: walkStop.lon, key: `${walk.route.id}-${walk.stop}` } : null}
+          walk={walk && walkStop ? { routeId: walk.route.id, lat: walkStop.lat, lon: walkStop.lon, key: `${walk.route.id}-${walk.stop}`, name: walkStop.name[locale] } : null}
           quiz={quick?.q ? { options: quick.q.options, answer: quick.q.answer, chosen: progress.answers[quick.q.id] ?? null, onPick: k => answerQuick(quick.q!, k) }
             : quizNow ? { options: quizNow.options, answer: quizNow.answer, chosen: progress.answers[quizNow.id] ?? null, onPick: k => answerQuiz(quizNow, k) } : null}>
           <div className="story-banner" data-map-overlay aria-hidden="true">
@@ -513,7 +523,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
           {quick && wide && <QuickQuiz quick={quick} data={data} locale={locale} chosen={quick.q ? progress.answers[quick.q.id] ?? null : null}
             onAnswer={answerQuick} onNext={() => setQuick(pickQuick(quick.q?.id))} onClose={() => setQuick(null)} />}
 
-          {walk && walkStop && <div className="walk-panel" data-map-overlay role="group" aria-label={walk.route.name[locale]}>
+          {walk && walkStop && <div className="walk-panel" ref={walkPanel} data-map-overlay role="group" aria-label={walk.route.name[locale]}>
             <p className="walk-kicker">{walk.route.name[locale]} · {text.stopOf(walk.stop + 1, walkStops.length)}</p>
             <h3>{walkStop.name[locale]}</h3>
             <p className="walk-quote" lang="ar" dir="rtl">«{walkStop.quote}»</p>

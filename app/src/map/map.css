@@ -170,3 +170,8 @@ html[data-contrast='dark'] .hmap-arc.out-honoured .hmap-arc-line, html[data-cont
 .hmap-name-tip.is-sheet { position: fixed; z-index: 120; inset-inline: 10px; bottom: 12px; top: auto; left: auto; width: auto; transform: none; }
 .hmap-label.is-explained { cursor: help; }
 .hmap-label.is-explained:hover { text-decoration: underline dotted; text-underline-offset: 3px; }
+
+/* The current stop of a walk, on the whole route. */
+.hmap-walk-stop circle { fill: color-mix(in srgb, var(--brass) 18%, transparent); stroke: var(--brass); }
+.hmap-walk-stop .hmap-walk-dot { fill: var(--brass); stroke: none; }
+.hmap-walk-stop text { text-anchor: middle; font-family: var(--display); font-weight: 700; fill: var(--map-ink); paint-order: stroke; stroke: var(--land); stroke-width: 3px; stroke-linejoin: round; }

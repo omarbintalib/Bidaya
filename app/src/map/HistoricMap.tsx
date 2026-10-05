@@ -41,7 +41,7 @@ interface Props {
   /** Chapter question: these places become large tap targets; after an answer, the right one is marked. */
   quiz?: { options: string[]; answer: string; chosen: string | null; onPick: (key: string) => void } | null;
   /** Route walk: draw the route up to this stop and fly to it. */
-  walk?: { routeId: string; lat: number; lon: number; key: string } | null;
+  walk?: { routeId: string; lat: number; lon: number; key: string; name?: string } | null;
   /** A place to fly to instead of the selected event (e.g. the whole map for the summary). */
   overview?: boolean;
   /** Caravans moving along the trade routes (the Makkan chapters). */
@@ -123,17 +123,20 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
   // Everything to keep in view for the selected event: both ends of its letters or delegations, and its routes,
   // so a journey is seen whole rather than only the place where it is told.
   const activeKey = activeRoutes.join();
-  const fitPoints = useMemo(() => [
+  // During a walk the whole route stays in view and the current stop is highlighted on it, rather than the map
+  // zooming in on each stop and losing the rest of the journey.
+  const walkRoute = walk?.routeId;
+  const fitPoints = useMemo(() => walkRoute ? (data.routes.find(r => r.id === walkRoute)?.coords ?? []).map(([lon, lat]) => ({ lon, lat })) : [
     ...arcsHere.flatMap(a => [a.from, a.to]),
     ...data.routes.filter(r => r.kind === 'sirah' && activeRoutes.includes(r.id)).flatMap(r => r.coords.map(([lon, lat]) => ({ lon, lat }))),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  ], [arcsHere, data, activeKey]);
+  ], [arcsHere, data, activeKey, walkRoute]);
 
   // Follow the selected event when the caller asks.
   useEffect(() => {
     if (focusKey === undefined) return;
     if (overview) { animateTo(homeView(size.w / size.h)); return; }
-    if (quiz || (fitPoints.length > 1 && !walk)) {
+    if (quiz || fitPoints.length > 1) {
       // Fit every answer choice, or the event's routes and letters, in view.
       const pts = quiz ? quiz.options.map(k => data.places.get(k)).filter(p => p !== undefined) : fitPoints;
       if (pts.length) {
@@ -459,6 +462,10 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
             return <g key={r.id}>
               <path className="hmap-route" d={routeD(r.coords)} strokeWidth={1.4 * unit} strokeDasharray={`${6 * unit} ${4 * unit}`} />
               <path key={walk.key} className="hmap-route is-on is-drawing" d={routeD(r.coords.slice(0, cut + 1))} strokeWidth={3 * unit} pathLength={1} />
+              {(() => { const [sx, sy] = project(walk.lon, walk.lat); return <g className="hmap-walk-stop" transform={`translate(${sx} ${sy})`}>
+                <circle r={9 * unit} strokeWidth={1.6 * unit} /><circle className="hmap-walk-dot" r={4 * unit} />
+                {walk.name && <text y={-15 * unit} fontSize={14 * unit}>{walk.name}</text>}
+              </g>; })()}
             </g>;
           }
           if (on) {
