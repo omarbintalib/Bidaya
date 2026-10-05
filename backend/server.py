@@ -60,6 +60,20 @@ def short(s, n=70):
     return s if len(s) <= n else s[:n - 1].rstrip() + '…'
 
 
+_dorar_en = None
+
+
+def dorar_en(dorar_id):
+    """The English copy of a Dorar event (its first part): its English title and the English page that holds it."""
+    global _dorar_en
+    if _dorar_en is None:
+        _dorar_en = {}
+        for c in bot.chunks:
+            if c['source'] == 'dorar_sirah' and c['lang'] == 'en':
+                _dorar_en.setdefault(str(c['dorar_id']), c)
+    return _dorar_en.get(str(dorar_id)) or {}
+
+
 def source_link(c, lang):
     """A cited chunk -> {label, url} for the answer card's "View source" buttons."""
     ar = lang == 'ar'
@@ -67,15 +81,20 @@ def source_link(c, lang):
     if c['source'] == 'bukhari':
         return dict(label=f"{name} {c['hadith_no']}", url=f"https://sunnah.com/bukhari:{c['hadith_no']}")
     if c['source'] == 'dorar_sirah':
-        e = bot.events.get(c['dorar_id']) or {}                 # the Arabic event (title) for the Arabic interface
-        title = (e.get('title') or c['title']) if ar else (c['title'] if c['lang'] == 'en' else c.get('title_en') or c['title'])
-        url = f"https://dorar.net/history/event/{c['dorar_id']}" if ar or c['lang'] == 'ar' else c.get('source_url')
-        return dict(label=f'{name}: {short(title)}', url=url)
+        if ar:                                                    # the Arabic event (title) for the Arabic interface
+            e = bot.events.get(c['dorar_id']) or {}
+            return dict(label=f"{name}: {short(e.get('title') or c['title'])}", url=f"https://dorar.net/history/event/{c['dorar_id']}")
+        # The English interface: the event's English title and page, whichever copy was cited, so the Arabic and
+        # English copies of one event make one link (an Arabic title among English ones read as a different source).
+        en = c if c['lang'] == 'en' else dorar_en(c['dorar_id'])
+        return dict(label=f"{name}: {short(en.get('title') or c.get('title_en') or c['title'])}",
+                    url=en.get('source_url') or f"https://dorar.net/history/event/{c['dorar_id']}")
     if c['source'] in ('asbab_curated', 'sahaba'):
         title = c['title'] if ar else (c.get('title_en') or c['title'])
         return dict(label=f'{name}: {short(title)}', url=c.get('source_url'))
     if c['source'] == 'wahidi_asbab':
-        title = f"سورة {c['surah_name']} {c['ayah_from']}" if ar else f"Surah {c['surah_no']}:{c['ayah_from']}"
+        ayah = c.get('ayah_from') not in (None, '', 'None')               # 2 entries are about a whole passage
+        title = f"سورة {c['surah_name']}" + (f" {c['ayah_from']}" if ayah else '') if ar else f"Surah {c['surah_no']}" + (f":{c['ayah_from']}" if ayah else '')
     else:
         title = c.get('section') or c.get('title') or ''
     return dict(label=f'{name}: {short(title)}' if title else name, url=source_url(c))
