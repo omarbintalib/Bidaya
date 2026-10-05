@@ -338,7 +338,11 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
   // ── the Sirah in one minute (SummaryFilm) ──
   const [filmOpen, setFilmOpen] = useState(false);
   const [filmEvent, setFilmEvent] = useState<number | null>(null);
-  const openFilm = useCallback(() => { setPlaying(false); setFilmOpen(true); }, []);
+  // The moment the film opens at, and the one to come back to after "Read the whole event" took the reader to the story.
+  const [filmFrom, setFilmFrom] = useState(0);
+  const [filmBack, setFilmBack] = useState<number | null>(null);
+  const openFilm = useCallback(() => { setPlaying(false); setFilmFrom(0); setFilmBack(null); setFilmOpen(true); }, []);
+  const backToFilm = useCallback(() => { if (filmBack === null) return; setPlaying(false); setFilmFrom(filmBack); setFilmBack(null); setFilmOpen(true); }, [filmBack]);
   const closeFilm = useCallback(() => setFilmOpen(false), []);
   const eventSound = filmEvent !== null ? data.sounds.get(filmEvent) : step.kind === 'event' ? data.sounds.get(events[step.index].n) : undefined;
   const scene: Scene = eventSound?.kind ?? 'calm', horses = !!eventSound?.horses;
@@ -744,7 +748,10 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
           </div>
           {/* After a jump from the map, a card, search or an answer: one tap back to where the reader was (inside the
               answer card while that is open). */}
-          {showMapBack && <div className="map-back" ref={mapBack} style={bannerBottom ? { top: bannerBottom + 8 } : undefined} data-map-overlay><BackButton label={returnTo.label} locale={locale} onClick={goBack} /></div>}
+          {(showMapBack || (filmBack !== null && !answerCard && !askOpen)) && <div className="map-back" ref={mapBack} style={bannerBottom ? { top: bannerBottom + 8 } : undefined} data-map-overlay>
+            {showMapBack && <BackButton label={returnTo.label} locale={locale} onClick={goBack} />}
+            {filmBack !== null && <BackButton label={text.film} locale={locale} onClick={backToFilm} />}
+          </div>}
 
 
           {wide && !quick && !walk && <AskBar locale={locale} hint={askHint} onAsk={askAbout} onHistory={openHistory} />}
@@ -784,7 +791,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
       onAnswer={answerQuick} onNext={() => setQuick(pickQuick(quick.q?.id))} onClose={() => setQuick(null)} />}
     {undatedOpen && <UndatedDialog verses={unplaced} locale={locale} onClose={() => setUndatedOpen(false)} />}
     {filmOpen && <SummaryFilm data={data} locale={locale} reducedMotion={reducedMotion} onClose={closeFilm} onBeat={setFilmEvent}
-      onJump={n => { setFilmOpen(false); jumpTo(n); }} />}
+      start={filmFrom} onJump={(n, at) => { setFilmOpen(false); setFilmBack(at); setReturnTo(null); goToEvent(n); }} />}
     {person && <PersonDialog key={person.id} person={person} data={data} locale={locale} onClose={() => setPerson(null)} onEvent={jumpTo} />}
     {place && <PlaceCard key={place} placeKey={place} data={data} locale={locale} onClose={() => setPlace(null)} onEvent={jumpTo} />}
     {searchOpen && <Search data={data} locale={locale} onClose={() => setSearchOpen(false)} onPick={openResult} />}

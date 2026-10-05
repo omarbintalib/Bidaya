@@ -13,16 +13,19 @@ import SummaryAsk from './SummaryAsk';
  * sources tie to it (as references); the map draws its route or letters and lights every place the sources say Islam had
  * reached by then. Each moment stays as long as its words take to read, and the reader can pause or jump.
  */
-export default function SummaryFilm({ data, locale, reducedMotion, onClose, onJump, onBeat }: {
-  data: Sirah; locale: Locale; reducedMotion: boolean; onClose: () => void;
-  /** Leave the film for this event in the story. */
-  onJump: (n: number) => void;
+export default function SummaryFilm({ data, locale, reducedMotion, start = 0, onClose, onJump, onBeat }: {
+  data: Sirah; locale: Locale; reducedMotion: boolean;
+  /** The moment to begin at (coming back to the film after reading one of its events in the story). */
+  start?: number;
+  onClose: () => void;
+  /** Leave the film for this event in the story; `at` is the moment the reader was on, to come back to. */
+  onJump: (n: number, at: number) => void;
   /** The event now on screen (for the background sound), or null when the film closes. */
   onBeat: (n: number | null) => void;
 }) {
   const text = journeyCopy[locale];
   const moments = data.summary;
-  const [i, setI] = useState(0);
+  const [i, setI] = useState(() => Math.max(0, Math.min(data.summary.length - 1, start)));
   const [playing, setPlaying] = useState(true);
   const moment = moments[i], ev = data.byNumber.get(moment.n)!;
   const last = i === moments.length - 1;
@@ -128,8 +131,8 @@ export default function SummaryFilm({ data, locale, reducedMotion, onClose, onJu
             <span>{say.direct ? text.verses : text.contextVerses}:</span>
             {say.verses.map(v => <b key={v.id}>{locale === 'en' ? `Surah ${v.surahEn ?? v.surah}` : `سورة ${v.surah}`} {v.whole ? text.wholeSurah : digits(quranpediaRefs(v.ref, false, locale).map(r => r.label.split(':')[1]).join(locale === 'ar' ? '، ' : ', '), locale)}</b>)}
           </p>}
-          <p className="film-source">{text.filmSource} · <button type="button" className="film-read" onClick={() => onJump(ev.n)}>{text.filmRead}</button></p>
-          <SummaryAsk key={ev.n} data={data} locale={locale} event={ev} quotes={say.quotes} onActive={onAsking} onOpenEvent={onJump} />
+          <p className="film-source">{text.filmSource} · <button type="button" className="film-read" onClick={() => onJump(ev.n, i)}>{text.filmRead}</button></p>
+          <SummaryAsk key={ev.n} data={data} locale={locale} event={ev} quotes={say.quotes} onActive={onAsking} onOpenEvent={n => onJump(n, i)} />
         </div>
         {listOpen && <ol className="film-list" aria-label={text.filmMoments}>
           {moments.map((m, k) => { const e = data.byNumber.get(m.n)!; return <li key={m.n}>
