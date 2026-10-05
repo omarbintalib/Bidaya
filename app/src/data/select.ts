@@ -37,6 +37,9 @@ export function versesFor(data: Sirah, e: SirahEvent): EventVerses {
     else if (l.type === 'suggested' && l.at === e.order) direct.push(v);
     else if (l.type === 'context' && l.event === e.n) context.push(v);
     else if (l.type === 'stage' && l.from !== null && l.to !== null && e.order >= l.from && e.order <= l.to) stage.push(v);
+    // A stage record with no span of events (its date within the stage is not known) sits at its place in the story,
+    // where 3_links_surahs_sirah.csv puts it, with its own label saying so.
+    else if (l.type === 'stage' && (l.from === null || l.to === null) && l.at === e.order) stage.push(v);
   }
   // Verses a hadith ties to the event come first; those placed here only by estimate ('suggested') go last.
   const rank = (v: Verse) => (v.link?.type === 'suggested' ? 1 : 0);
@@ -46,13 +49,14 @@ export function versesFor(data: Sirah, e: SirahEvent): EventVerses {
 
 /**
  * The event a verse record sits at in the story: the event it names, or for one placed by position (a suggested
- * place, or a stage) the event at that position — where search and "Ask the map" take the reader.
+ * place; a stage, from its first event, or where it sits when it has no span) the event at that position — where
+ * search and "Ask the map" take the reader.
  */
 export function verseEvent(data: Sirah, v: Verse): SirahEvent | undefined {
   const l = v.link;
   if (!l) return undefined;
   if (l.event !== null) return data.byNumber.get(l.event);
-  const order = l.type === 'suggested' ? l.at : l.type === 'stage' ? l.from : null;
+  const order = l.type === 'suggested' ? l.at : l.type === 'stage' ? l.from ?? l.at : null;
   return order === null ? undefined : data.events.find(e => e.order === order);
 }
 

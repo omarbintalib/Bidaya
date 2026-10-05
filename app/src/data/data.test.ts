@@ -6,7 +6,7 @@ import { FILES, trimData } from './files';
 import { findPeople, mentionIn } from './people';
 import { quranpediaRefs } from './quranpedia';
 import { quizPools } from './quiz';
-import { eventPlaceName, verseEvent, versesFor } from './select';
+import { eventPlaceName, unplacedVerses, verseEvent, versesFor } from './select';
 import { search } from './search';
 import { pathKm } from './geo';
 import type { Sirah, Verse } from './types';
@@ -158,7 +158,7 @@ describe('ask the map (slide 7 test set)', () => {
     expect(a.text).toMatch(/Source: Dorar/);
   });
   it('takes a verse placed by position (a suggested place or a stage) to the event at that position', () => {
-    const at = (v: Verse) => v.link?.type === 'suggested' ? v.link.at : v.link?.type === 'stage' ? v.link.from : null;
+    const at = (v: Verse) => v.link?.type === 'suggested' ? v.link.at : v.link?.type === 'stage' ? v.link.from ?? v.link.at : null;
     const placed = data.verses.filter(v => v.link?.event === null && at(v) !== null);
     expect(placed.length).toBeGreaterThan(0);
     for (const v of placed) expect(verseEvent(data, v)?.order, v.id).toBe(at(v));
@@ -381,6 +381,25 @@ describe('English answers stay in English', () => {
       const a = answer(data, q, 'en');
       for (const s of a.sources ?? []) expect(s.label, q).not.toMatch(/[\u0600-\u06FF]/);
       expect(a.text.split(':')[0], q).not.toMatch(/[\u0600-\u06FF]/);
+    }
+  });
+});
+
+describe('every verse record is shown somewhere', () => {
+  it('shows each record on an event card or in the undated list', () => {
+    const shown = new Set(unplacedVerses(data).map(v => v.id));
+    for (const e of data.events) { const v = versesFor(data, e); [...v.direct, ...v.context, ...v.stage].forEach(x => shown.add(x.id)); }
+    expect(data.verses.filter(v => !shown.has(v.id)).map(v => v.id)).toEqual([]);
+  });
+  it('shows a stage record with no span once, at its place in the story, with its label', () => {
+    const spanless = data.verses.filter(v => v.link?.type === 'stage' && (v.link.from === null || v.link.to === null));
+    expect(spanless.length).toBeGreaterThan(0);
+    for (const v of spanless) {
+      const on = data.events.filter(e => versesFor(data, e).stage.some(x => x.id === v.id));
+      expect(on.map(e => e.order), v.id).toEqual([v.link!.at]);
+      expect(versesFor(data, on[0]).direct.some(x => x.id === v.id), v.id).toBe(false);
+      expect(v.link!.label, v.id).toBeTruthy();
+      expect(verseEvent(data, v)?.order, v.id).toBe(v.link!.at);
     }
   });
 });
