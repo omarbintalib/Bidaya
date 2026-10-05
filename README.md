@@ -130,7 +130,7 @@ Each record has exactly one link type:
 | سياق (context) | 8 | Under "آيات في موضوع هذا الحدث" (Verses on this event's subject) in the card. **It is not the event itself.** |
 | موضع مقترح (suggested position) | 10 | On the timeline after the named event, labelled as an estimate. The reason is in `سبب_الموضع`. |
 | بعد الحدث (after the event) | 2 | On the event's card with the tag "نزلت بعد هذا الحدث" |
-| مرحلة (period) | 16 | In a "verses revealed in this stage" section at the end of the stage |
+| مرحلة (period) | 17 | Under "آيات نزلت في هذه السنوات" (Verses revealed in these years), folded, in every event of its span of years |
 | عنصر نائب (placeholder) | 0 | None left. The 22 records the sources could not place in time (ASB-016, 019, 059, 060, 062–069, 071–077, 079, 081, 085) were removed; they are in the git history if a source later dates them. |
 
 - **`الموضع_في_الخط_الزمني`**: matches `ترتيب_العرض` in file 2. It is blank for placeholders.
