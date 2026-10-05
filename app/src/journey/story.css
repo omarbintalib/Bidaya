@@ -187,7 +187,6 @@
 .quick-result { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
 .quick-result .quiz-verdict { margin: 0 0 6px; }
 .quick-empty { margin: 8px 28px 4px 0; font-size: var(--text-body); line-height: var(--reading-line-height); }
-.tb-quiz.is-open { border-color: var(--brass); background: #e2b45c33; }
 
 /* Opening scene */
 .intro-scene { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 45%, var(--surface), var(--paper) 70%); overflow: hidden; }
@@ -260,6 +259,8 @@
   .scrolly-map.has-side-sheet .hmap-controls { inset-inline-start: calc(var(--sheet-side) + 14px); }
   .scrolly-map.has-side-sheet .story-banner { inset-inline-start: calc(var(--sheet-side) + 62px); }
   .scrolly-map.has-side-sheet .story-timeline { padding-inline-start: calc(var(--sheet-side) + 10px); }
+  /* A phone zooms the map by pinching: no zoom buttons over it. */
+  @media (pointer: coarse) { .scrolly-map .hmap-controls { display: none; } }
   /* A narrow phone: the toolbar's buttons fit side by side, rather than pushing the page wider than the screen. */
   @media (max-width: 420px) { .tb-end { gap: 4px; } }
   @media (max-width: 350px) {
@@ -350,8 +351,7 @@
 @media (max-width: 1000px) { .map-back { top: 58px; inset-inline-end: 10px; max-width: calc(100% - 70px); } }
 
 /* Sound menu: on/off and volume, under the toolbar button. */
-.sound-menu { position: relative; }
-.sound-panel { position: fixed; z-index: 40; padding: 14px 16px 12px; background: var(--paper); border: 1px solid var(--brass); border-radius: 6px; box-shadow: 0 14px 40px #331b0d26; display: grid; gap: 12px; }
+.accessibility-sound { display: grid; gap: 12px; padding-top: 14px; border-top: 1px solid var(--border); }
 .sound-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: var(--text-small); color: var(--ink); }
 .sound-volume { flex-direction: column; align-items: stretch; gap: 6px; }
 .sound-volume.is-off { opacity: .45; }
@@ -362,7 +362,6 @@
 .sound-switch:focus-visible, .sound-volume input:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
 .sound-volume input { width: 100%; accent-color: var(--brass); }
 .sound-note { margin: 0; color: var(--muted); font-size: calc(12.5px * var(--text-scale)); line-height: 1.7; }
-@media all { html:not([data-reduced-motion='true']) .sound-panel { animation: rise-in .2s ease both; } }
 
 /* The Sirah summary: the map full screen, a year counter above, the moment's title, text and verses below. */
 .film { position: fixed; inset: 0; z-index: 120; background: var(--sea); display: flex; }

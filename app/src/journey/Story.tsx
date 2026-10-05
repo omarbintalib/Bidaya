@@ -11,7 +11,7 @@ import { onIdle } from '../idle';
 import { journeyCopy } from './copy';
 import EventCard, { VerseItem } from './EventCard';
 import { Ambience, type Scene } from '../sound/ambience';
-import SoundMenu from './SoundMenu';
+import { publishSound } from '../sound/soundControls';
 import SummaryFilm from './SummaryFilm';
 import Intro from './Intro';
 import { createActiveStore, useActive, type ActiveStore } from './activeStore';
@@ -315,6 +315,11 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     if (next) void ambience.enable(); else ambience.disable();
     try { localStorage.setItem(SOUND_KEY, next ? '1' : '0'); } catch { /* not saved: fine */ }
   }, [soundOn, ambience]);
+  // The sound's switch and volume are in the settings panel (the round button), offered while the Journey is open.
+  useEffect(() => {
+    publishSound({ on: soundOn, volume, toggle: toggleSound, setVolume, labels: { title: text.soundTitle, on: text.soundOn, volume: text.soundVolume, note: text.soundNote } });
+  }, [soundOn, volume, toggleSound, setVolume, text]);
+  useEffect(() => () => publishSound(null), []);
   useEffect(() => {
     // Sound was on last time: browsers only allow it to start after a click or key press, so wait for the first one.
     let saved = false;
@@ -402,7 +407,6 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     const ready = open.filter(q => orderOf(q) <= upTo).sort((a, b) => orderOf(b) - orderOf(a));
     return ready.length ? { q: ready[0] } : { q: null, empty: open.length ? 'later' as const : 'done' as const };
   }, [step.kind, current, pools, data, progress.answers]);
-  const openQuick = useCallback(() => { setWalk(null); setQuick(pickQuick()); }, [pickQuick]);
   const answerQuick = useCallback((q: QuizQuestion, key: string) => setProgress(p => (p.answers[q.id] ? p : { ...p, answers: { ...p.answers, [q.id]: key } })), []);
 
   // ── people, undated verses, ask ──
@@ -683,14 +687,9 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
         </li>] : [])}
       </ol>
       <div className="tb-end">
-        <SoundMenu locale={locale} on={soundOn} volume={volume} onToggle={toggleSound} onVolume={setVolume} />
         <button type="button" className="tb-btn tb-search" aria-haspopup="dialog" aria-label={text.searchTitle} title={`${text.searchTitle} ( / )`} onClick={() => setSearchOpen(true)}>
           <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" strokeWidth="1.5" /><path d="m13 13 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
           <span className="tb-long">{text.search}</span>
-        </button>
-        <button type="button" className={`tb-btn tb-quiz${quick ? ' is-open' : ''}`} aria-pressed={!!quick} aria-label={text.quizMe} onClick={() => (quick ? setQuick(null) : openQuick())}>
-          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" strokeWidth="1.4" /><path d="M7.8 8a2.3 2.3 0 1 1 3.2 2.1c-.7.3-1 .8-1 1.5v.4" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /><circle cx="10" cy="14.3" r=".9" fill="currentColor" /></svg>
-          <span className="tb-long">{text.quizMe}</span>
         </button>
         {/* Wide screens ask from the bar on the map; phones (no bar) keep this button. */}
         {!wide && <button type="button" className={`tb-btn tb-ask${askOpen ? ' is-open' : ''}`} aria-expanded={askOpen} aria-controls="ask-panel" onClick={() => setAskOpen(o => !o)}>

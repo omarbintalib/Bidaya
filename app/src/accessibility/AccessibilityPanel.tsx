@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, type ReactNode, type RefObject } fr
 import type { Locale } from '../i18n';
 import { useAccessibility, type Preferences } from './AccessibilityProvider';
 import PreferenceSelect from './PreferenceSelect';
+import { useSoundControls } from '../sound/soundControls';
 
 export const accessCopy = {
   ar: { title: 'إمكانية الوصول', open: 'فتح إعدادات إمكانية الوصول', close: 'إغلاق إعدادات إمكانية الوصول', intro: 'اضبط القراءة بما يناسبك.', textSize: 'حجم النص', lineSpacing: 'تباعد الأسطر', characterSpacing: 'تباعد الكلمات', contrast: 'ألوان العرض', font: 'خط القراءة', motion: 'الحركة', standard: 'قياسي', spacious: 'واسع', brand: 'ألوان الموقع', light: 'تباين عالٍ — فاتح', dark: 'تباين عالٍ — داكن', saudi: 'الخط السعودي', plex: 'IBM Plex — واضح للقراءة', system: 'اتباع إعداد الجهاز', reduced: 'تقليل الحركة', full: 'تشغيل الحركة دائمًا', links: 'تمييز الروابط', focus: 'تقوية مؤشر التركيز', reset: 'إعادة الإعدادات الافتراضية', saved: 'تُحفظ تفضيلاتك في هذا المتصفح.', resetDone: 'أُعيدت الإعدادات الافتراضية.' },
@@ -55,6 +56,7 @@ export function AccessibilityLauncher({ locale, open, buttonRef, onClick }: { lo
 
 export default function AccessibilityPanel({ locale, onClose, launcher, trigger, busy }: { locale: Locale; onClose: () => void; launcher: ReactNode; trigger: RefObject<HTMLButtonElement | null>; busy: boolean }) {
   const { preferences, update, reset } = useAccessibility();
+  const sound = useSoundControls();
   const dialog = useRef<HTMLDivElement>(null);
   const restore = useRef(!busy); restore.current = !busy;
   const text = accessCopy[locale];
@@ -85,6 +87,15 @@ export default function AccessibilityPanel({ locale, onClose, launcher, trigger,
         {select('motion', text.motion, [['system',text.system],['reduced',text.reduced],['full',text.full]])}
         <label className="accessibility-toggle"><input type="checkbox" checked={preferences.highlightLinks} onChange={event => update('highlightLinks', event.target.checked)} /><span>{text.links}</span></label>
         <label className="accessibility-toggle"><input type="checkbox" checked={preferences.strongFocus} onChange={event => update('strongFocus', event.target.checked)} /><span>{text.focus}</span></label>
+        {sound && <div className="accessibility-sound" role="group" aria-label={sound.labels.title}>
+          <label className="sound-row"><span>{sound.labels.on}</span><input type="checkbox" role="switch" className="sound-switch" checked={sound.on} onChange={sound.toggle} /></label>
+          <label className={`sound-row sound-volume${sound.on ? '' : ' is-off'}`}>
+            <span>{sound.labels.volume}</span>
+            <input type="range" min={0} max={100} step={5} value={Math.round(sound.volume * 100)} disabled={!sound.on} aria-valuetext={`${Math.round(sound.volume * 100)}%`}
+              onChange={event => sound.setVolume(Number(event.target.value) / 100)} />
+          </label>
+          <p className="sound-note">{sound.labels.note}</p>
+        </div>}
       </div>
       <button className="accessibility-reset" onClick={() => { reset(); const status = dialog.current?.querySelector('[role="status"]'); if (status) status.textContent = text.resetDone; }}>{text.reset}</button>
       <p className="accessibility-notice" role="status" aria-live="polite">{text.saved}</p>
