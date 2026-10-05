@@ -1,6 +1,6 @@
 import { parseCsv } from './csv';
 import { FILES } from './files';
-import type { EventSound, Growth, LinkType, MapArc, MapLabel, Period, Person, Place, Precision, QuizQuestion, Route, RouteStop, Sirah, SirahEvent, SoundKind, Verse, VerseLink } from './types';
+import type { EventAudio, EventSound, Growth, LinkType, MapArc, MapLabel, Period, Person, Place, Precision, QuizQuestion, Route, RouteStop, Sirah, SirahEvent, SoundKind, Verse, VerseLink } from './types';
 
 /**
  * Everything the interface shows is read at runtime from the CSVs at the repository root (served at /data/).
@@ -210,7 +210,13 @@ export async function loadSirah(): Promise<Sirah> {
     if (n === null || !byNumber.has(n) || !SOUNDS.includes(kind) || !quote) { warn(`event_sounds.csv: row for event "${r['رقم_حدث_الدرر']}" needs a known event, a Sound (${SOUNDS.join(', ')}) and الشاهد`); continue; }
     sounds.set(n, { kind, quote, note: r['ملاحظة'] ? { ar: r['ملاحظة'], en: r.Note_EN || r['ملاحظة'] } : null });
   }
-  return { events, byNumber, places, verses, people, routes, labels, stops, quiz, arcs, growth, sounds };
+  const audio = new Map<number, EventAudio>();
+  for (const r of parseCsv(raw.audio)) {
+    const n = num(r['رقم_حدث_الدرر']), file = (r['الملف'] ?? '').trim();
+    if (n === null || !byNumber.has(n) || !/^[\w.-]+\.(mp3|m4a|ogg)$/.test(file)) { warn(`event_audio.csv: row for event "${r['رقم_حدث_الدرر']}" needs a known event and a sound file in public/sounds/`); continue; }
+    audio.set(n, { file, label: { ar: r['التسمية'], en: r.Label_EN || r['التسمية'] }, description: { ar: r['الوصف'], en: r.Description_EN || r['الوصف'] } });
+  }
+  return { events, byNumber, places, verses, people, routes, labels, stops, quiz, arcs, growth, sounds, audio };
 }
 
 let cache: Promise<Sirah> | null = null;

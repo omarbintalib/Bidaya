@@ -112,6 +112,7 @@ Two files were added for the period map:
 | `quran_en.csv` | English for each Quran quotation inside the English reasons (`وجه_الارتباط_EN`): Sahih International, quoted word for word from Quranpedia, with the ayah reference and link (see below) |
 | `map_arcs.csv` | The letters sent from Madinah and the delegations that came to it, drawn as curves while their event is on screen (see below) |
 | `event_sounds.csv` | The background sound for each event (battle, march, caravan, walking, sea), with the words of the event's own Dorar text that justify it, and a note (ملاحظة) where the sound rests on more than the text, as for the sea crossing to Abyssinia, an estimate. Swords are heard only where the text says there was fighting; events with no sound of their own are silent. Field recordings only, no music (`app/public/sounds/CREDITS.md`) |
+| `event_audio.csv` | Recordings the reader can play on an event's card: the adhan, from al-Masjid an-Nabawi, on the event of its legislation (مشروعية الأذان). The file is in `app/public/sounds/` |
 
 Columns added for the app (filled only where the Dorar texts state it, each with its quote):
 

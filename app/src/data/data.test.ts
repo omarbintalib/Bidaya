@@ -80,6 +80,11 @@ describe('data package', () => {
     // A sound the text does not state outright says so.
     expect(data.sounds.get(17)?.note?.ar).toContain('تقديري');
   });
+  it('offers the adhan on the event of its legislation, from a file that exists', () => {
+    expect(data.audio.get(39)?.file).toBe('adhan.mp3');
+    const files = Object.keys(import.meta.glob('../../public/sounds/*')).map(p => p.split('/').pop());
+    for (const a of data.audio.values()) expect(files).toContain(a.file);
+  });
   it('builds more chapter questions from sourced event places', () => {
     const pools = quizPools(data);
     for (const period of ['prologue', 'makkah', 'hijrah', 'madinah'] as const) expect(pools.get(period)!.length).toBeGreaterThan(0);

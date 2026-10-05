@@ -126,6 +126,9 @@ export type SoundKind = 'battle' | 'march' | 'caravan' | 'walk' | 'sea' | 'march
 /** `note`: what the sound rests on beyond the quote, e.g. a crossing the text does not mention but the route requires. */
 export interface EventSound { kind: SoundKind; quote: string; note: Text | null }
 
+/** A recording the reader can play on an event's card (event_audio.csv), e.g. the adhan on the event of its legislation. */
+export interface EventAudio { file: string; label: Text; description: Text }
+
 export interface Sirah {
   events: SirahEvent[];
   byNumber: Map<number, SirahEvent>;
@@ -139,5 +142,7 @@ export interface Sirah {
   arcs: MapArc[];
   /** Background sound per Dorar event number; events not listed get the quiet desert wind only. */
   sounds: Map<number, EventSound>;
+  /** Recordings to play on an event's card, by Dorar event number. */
+  audio: Map<number, EventAudio>;
   growth: Map<string, Growth[]>;
 }

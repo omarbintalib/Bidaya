@@ -839,7 +839,7 @@ const EventStep = memo(function EventStep({ index, i, store, data, locale, goToS
   return <section data-step={i} className={`step step-event${on ? ' is-on' : ''}${open && !on ? ' is-read' : ''}`} onClick={() => !on && goToStep(i)}>
     {open ? <EventCard data={data} event={e} locale={locale} chapter={PERIOD_ORDER.indexOf(e.period) + 1}
       yearEvents={data.events.filter(x => x.year === e.year && x.period === e.period)} onPick={goToEvent}
-      onWalk={route ? () => onWalk(route) : undefined} walkName={route?.name[locale]} full={on && playing} />
+      onWalk={route ? () => onWalk(route) : undefined} walkName={route?.name[locale]} full={on && playing} current={on} />
       : <div className="step-peek"><p className="step-date">{hijri(e.year, locale)} · {eventPlaceName(data, e, locale)}</p><h3>{e.title[locale] || e.title.ar}</h3></div>}
   </section>;
 });

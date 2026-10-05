@@ -18,6 +18,7 @@ export const FILES = {
   quranEn: 'quran_en.csv',
   growth: 'islam_growth.csv',
   sounds: 'event_sounds.csv',
+  audio: 'event_audio.csv',
 } as const;
 
 /**

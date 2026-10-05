@@ -8,6 +8,7 @@ import { journeyCopy } from './copy';
 import QuranReader from './QuranReader';
 import { PeopleText, usePeople } from './People';
 import Fold from './Fold';
+import EventAudio from './EventAudio';
 
 /** The opening of an event's text: its first sentence when that is a readable length, else about two lines. */
 function lead(body: string) {
@@ -20,9 +21,11 @@ const Ar = ({ children, as: Tag = 'span' }: { children: React.ReactNode; as?: 's
 
 interface CardProps { data: Sirah; event: SirahEvent; locale: Locale; chapter: number; yearEvents: SirahEvent[]; onPick: (n: number) => void; onWalk?: () => void; walkName?: string;
   /** Story mode: the whole text is shown, not only its opening. */
-  full?: boolean }
+  full?: boolean;
+  /** Whether this is the step the reader is on (a card can stay open after it, on phones). */
+  current?: boolean }
 
-export default function EventCard({ data, event, locale, chapter, yearEvents, onPick, onWalk, walkName, full = false }: CardProps) {
+export default function EventCard({ data, event, locale, chapter, yearEvents, onPick, onWalk, walkName, full = false, current = true }: CardProps) {
   const text = journeyCopy[locale];
   const [open, setOpen] = useState(full);
   // Story mode opens the whole text; the reader can still fold it again.
@@ -66,6 +69,7 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
       {open && openRest && <p><PeopleText text={openRest} lang={bodyLang} /></p>}
     </div>
     {rest && <button type="button" className="ecard-more" aria-expanded={open} onClick={() => setOpen(v => !v)}>{open ? text.readLess : text.readMore}</button>}
+    {data.audio.get(event.n) && <EventAudio key={event.n} audio={data.audio.get(event.n)!} locale={locale} current={current} />}
     {onWalk && walkName && <button type="button" className="ecard-walk" onClick={onWalk}>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18c3-6 6 2 9-4s5-6 7-8" fill="none" stroke="currentColor" strokeWidth="1.6" strokeDasharray="3 2.5" /><circle cx="4" cy="18" r="2" fill="currentColor" /><circle cx="20" cy="6" r="2" fill="currentColor" /></svg>
       {text.walk(walkName)}

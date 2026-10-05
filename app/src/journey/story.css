@@ -110,6 +110,16 @@
 .ecard-walk { margin-top: 16px; display: flex; width: fit-content; align-items: center; gap: 10px; min-height: 44px; padding: 8px 16px; border: 1px solid var(--brass); background: #e2b45c1f; color: var(--ink); font-size: var(--text-small); font-weight: 600; }
 .ecard-walk svg { width: 22px; height: 22px; color: var(--brass); }
 .ecard-walk:hover { background: #e2b45c3a; }
+/* A recording on the card (the adhan): a play button, what it is, and how far it has played. */
+.ecard-audio { margin-top: 16px; display: grid; gap: 6px; }
+.ecard-audio-btn { display: flex; width: fit-content; align-items: center; gap: 10px; min-height: 44px; padding: 8px 18px; border: 1px solid var(--brass); border-radius: 999px; background: #e2b45c1f; color: var(--ink); font-size: var(--text-small); font-weight: 600; }
+.ecard-audio-btn svg { width: 16px; height: 16px; color: var(--brass); }
+.ecard-audio-btn:hover, .ecard-audio.is-playing .ecard-audio-btn { background: #e2b45c3a; }
+.ecard-audio-note { margin: 0; color: var(--muted); font-size: calc(13px * var(--text-scale)); }
+.ecard-audio-time { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: calc(12.5px * var(--text-scale)); font-variant-numeric: tabular-nums; }
+.ecard-audio-bar { flex: 1; max-width: 260px; height: 3px; background: var(--border); overflow: hidden; }
+.ecard-audio-bar i { display: block; height: 100%; background: var(--brass); transform-origin: left; transition: transform .25s linear; }
+.ecard-audio-bar i:dir(rtl) { transform-origin: right; }
 
 /* Map overlays */
 .scrolly-map .story-banner { position: absolute; top: 14px; inset-inline-end: 16px; max-width: calc(100% - 90px); display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 4px 12px; pointer-events: none; z-index: 2;
