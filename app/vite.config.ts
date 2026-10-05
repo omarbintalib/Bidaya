@@ -37,4 +37,7 @@ function sirahData(): Plugin {
   };
 }
 
-export default defineConfig({ plugins: [react(), sirahData()] });
+/** "Ask the map" calls /api/ask; dev and preview forward it to the RAG backend (../backend, `uvicorn server:app`). */
+const api = { '/api': { target: process.env.BIDAYAH_API ?? 'http://127.0.0.1:8000', changeOrigin: true } };
+
+export default defineConfig({ plugins: [react(), sirahData()], server: { proxy: api }, preview: { proxy: api } });

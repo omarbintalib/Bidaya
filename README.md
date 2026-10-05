@@ -1,6 +1,84 @@
 # Bidaya (بداية) – Data Package 
 
+> **Live demo:** LIVE_DEMO_URL
+>
+> **Please note (first question may be slow):** the "Ask the map" assistant runs on a serverless GPU that
+> sleeps when nobody is using it, so the demo costs nothing while idle. Opening the site wakes it in the
+> background; if you ask a question within the first ~30-60 seconds of opening the site, the first answer may
+> take up to a minute while the models load. Every answer after that takes about 4-6 seconds. If the assistant
+> is unreachable, the map still answers from its own data (shorter answers without the books).
+
 Data for the interactive Seerah map: Seerah events, the surahs and verses related to each event or stage, places, and Companions, plus the links between them.
+
+## Run the project locally
+
+Use this if the live demo is down, or to inspect the system on your own machine. You need an OpenAI API key for
+the assistant's answers; without the backend the map still works and answers from its own data.
+
+**Requirements:** Git, [Python 3.12 or 3.13](https://www.python.org/downloads/), [Node.js 24](https://nodejs.org/),
+~8 GB of free RAM and ~6 GB of disk (the two AI models). An NVIDIA GPU is optional (faster answers).
+
+### 1. Get the code
+
+```sh
+git clone https://github.com/omarbintalib/Bidaya.git
+cd Bidaya
+```
+
+### 2. Start the backend (terminal 1)
+
+Windows (PowerShell):
+
+```powershell
+cd backend
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+# NVIDIA GPU:  pip install torch --index-url https://download.pytorch.org/whl/cu128
+# no GPU:      pip install torch --index-url https://download.pytorch.org/whl/cpu
+pip install -r requirements.txt
+copy .env.example .env          # then open .env and set OPENAI_API_KEY=sk-...
+python -m uvicorn server:app --port 8000
+```
+
+macOS / Linux:
+
+```sh
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install torch               # Linux without a GPU: add --index-url https://download.pytorch.org/whl/cpu
+pip install -r requirements.txt
+cp .env.example .env            # then edit .env and set OPENAI_API_KEY=sk-...
+python -m uvicorn server:app --port 8000
+```
+
+The first start downloads the two models (~4.5 GB, once) and takes a few minutes; later starts take ~30 s. It is
+ready when <http://127.0.0.1:8000/api/health> shows `"ok": true`.
+
+### 3. Start the website (terminal 2)
+
+```sh
+cd app
+npm ci
+npm run dev
+```
+
+Open <http://127.0.0.1:5173>. The website forwards "Ask the map" questions to the backend on port 8000.
+
+### Troubleshooting
+
+| Problem | Fix |
+|---|---|
+| Answers are short and have no book sources | The backend is not running or not reachable: check terminal 1 and `/api/health` |
+| `OPENAI_API_KEY` / authentication error in terminal 1 | Set the key in `backend/.env` and restart the backend |
+| Answers are slow on a computer without a GPU | Expected (~10-20 s). Set `BIDAYAH_RERANK=0` in `backend/.env` for faster, slightly less accurate search |
+| `torch` cannot use an RTX 50-series GPU | Install the CUDA 12.8+ build (`--index-url https://download.pytorch.org/whl/cu128`) |
+| `npm ci` fails | Check `node --version` is 24.x |
+| Port 8000 is busy | Start the backend with `--port 8010`, then run the website with `BIDAYAH_API=http://127.0.0.1:8010 npm run dev` (PowerShell: `$env:BIDAYAH_API="http://127.0.0.1:8010"; npm run dev`) |
+
+More detail (API, architecture, deployment, methodology and evaluation): `backend/README.md`.
+
+---
 
 **Sources.** Every record traces back to one of two approved sources:
 
@@ -15,6 +93,10 @@ Nothing was added from memory or from outside sources.
 ---
 
 ---
+
+## The backend (`backend/`)
+
+`backend/` is the RAG engine behind "Ask the map": it answers from the approved books (Dorar, al-Raheeq al-Makhtum, Sahih al-Bukhari, al-Wahidi's sahih/hasan reports) and from this package's CSVs (`1_related_surahs.csv`, `3_links_surahs_sirah.csv`, `2_sirah_events.csv`, `6_sahaba.csv`, `7_sahaba_references.csv`), citing a source for every answer and refusing fatwa or unsourced questions. See `backend/README.md`. The backend reads a prebuilt index of these CSVs (`backend/data/chunks`), so after editing one of them the index has to be rebuilt (see the backend README).
 
 ## The app (`app/`)
 

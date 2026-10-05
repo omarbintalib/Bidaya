@@ -51,7 +51,14 @@ Names of the Companions in `6_sahaba.csv` are linked where they appear in the ev
 
 ## Ask the map
 
-`src/assistant/answer.ts` answers from the sources only: Dorar event texts, the Companions' synopses and the verse records. Each answer names its source and moves the map to the event. Questions asking for a ruling are referred to an official fatwa body, and questions with no matching source get an apology (deck slides 5–7). It runs in the browser, with no API key. To add an LLM later, send the passages from `retrieve()` to a server-side model and keep these rules.
+Two engines answer, with the same rules and the same answer card (`src/assistant/answer.ts`):
+
+- **The RAG backend** (`../backend`, see its README): `askServer()` posts the question to `/api/ask`. The backend searches the books (Dorar, al-Raheeq al-Makhtum, Sahih al-Bukhari, al-Wahidi's sahih/hasan reports) and these CSVs, and an LLM writes the answer only from the passages it found, with checks. It returns the same `Answer` shape: text, source links, and the Dorar event to move the map to. The model key stays on the server.
+- **In the browser**: `answer()` searches the CSVs (Dorar event texts, the Companions' synopses, the verse records). It is used when the backend is off, unreachable or slower than 90 s, and for the suggested questions. `warmServer()` (called once in `main.tsx`) pings `/api/health` when the page opens, to wake a serverless backend early.
+
+Each answer names its source and moves the map to the event. Questions asking for a ruling are referred to an official fatwa body, and questions with no matching source get an apology (deck slides 5–7).
+
+`npm run dev` and `npm run preview` forward `/api` to `http://127.0.0.1:8000` (set `BIDAYAH_API` to change it). For a static host, build with `VITE_ASK_API=https://your-api.example/api/ask` (or `off` to use only the in-browser answers).
 
 ![Arabic navigation preview](qa/navigation-desktop-arabic.jpg)
 
@@ -85,7 +92,7 @@ Names of the Companions in `6_sahaba.csv` are linked where they appear in the ev
 - Git for cloning the repository.
 - A modern browser.
 
-No database, API key, environment file, or backend service is required to run the prototype.
+No database, API key or environment file is required to run the prototype. The RAG backend (`../backend`) is optional: without it, Ask the map answers in the browser.
 
 ### Install and run
 
@@ -167,7 +174,7 @@ Tests live alongside the relevant components and navigation modules. The supplie
 
 Validated reading settings are saved in the browser's `localStorage` under `islamathon.accessibility.v1`. If storage is unavailable, settings continue to work in memory. Use the reset control in the settings dialog to restore defaults.
 
-Questions and answers remain in component memory. The default AI demo does not send them to a backend.
+Questions are sent to the RAG backend when it is running (`/api/ask`); answers are kept in this browser's chat history.
 
 ### Connecting an AI service
 
@@ -201,7 +208,7 @@ Configure your hosting service with:
 | Build command | `npm run build` |
 | Output directory | `dist` |
 | Node version | `24.x` |
-| Runtime environment variables | None for the current prototype |
+| Build-time environment variables | `VITE_ASK_API`: URL of the backend's `/api/ask` (optional; `off` = in-browser answers only) |
 
 **Configure an SPA fallback:** requests to `/spread` and `/journey` must serve `index.html` when no static file matches. Without that rewrite, refreshing an inner page may return a 404. Existing assets must continue to be served normally.
 
@@ -235,7 +242,7 @@ Journey progress also saves the stable Dorar event ID under `bidaya.journey.v1`.
 | Installation fails or reports an unsupported engine | Check `node --version`; use Node 24.x, then run `npm ci` |
 | The default development port is unavailable | Use the alternate URL printed by Vite, or run `npm run dev -- --port 5174` |
 | A refreshed inner page returns 404 after deployment | Configure the host's SPA fallback to `index.html` |
-| Ask the map apologises for a question | No source text matched it well enough; try the event, place or Companion name |
+| Ask the map apologises for a question | No source text matched it well enough; try the event, place or Companion name. If the backend is not running, only the CSVs are searched: start it (`../backend/README.md`) |
 | The Journey page says the data could not be loaded | Check that the CSV files are at the repository root (or in `dist/data/` on a host) |
 | Settings disappear after a reload | Browser storage may be unavailable or disabled; settings then last only for the session |
 | Animations are reduced | Check the operating system motion setting and the in-app reading preferences |

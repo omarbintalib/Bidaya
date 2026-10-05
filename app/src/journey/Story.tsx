@@ -1,6 +1,6 @@
 import AskIcon from '../components/AskIcon';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { answer, suggestFor, warmUp, type Answer } from '../assistant/answer';
+import { answer, askServer, suggestFor, warmUp, type Answer } from '../assistant/answer';
 import MorphOrb from '../components/MorphOrb';
 import { quizPools } from '../data/quiz';
 import { digits, eventPlaceName, hijri, PERIOD_ORDER, periodName, unplacedVerses, versesFor } from '../data/select';
@@ -473,7 +473,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     if (step.kind !== 'event' || intro) return;
     return onIdle(() => setAskHint(suggestFor(data, current, locale, 1)[0] ?? null), 1500);
   }, [step.kind, current, data, locale, intro]);
-  const onAsk = useCallback((question: string, acceptMetadata?: (metadata: Answer | null) => void) => {
+  const onAsk = useCallback((question: string, acceptMetadata?: (metadata: Answer | null) => void): string | Promise<string> => {
     const record = (reply: string, metadata?: Answer) => {
       if (acceptMetadata) acceptMetadata(metadata ?? null); else setReplyMeta(metadata ?? null);
       remember({ id: ++chatSequence.current, question, answer: reply, locale, createdAt: Date.now(), sources: metadata?.sources, event: metadata?.event });
@@ -487,16 +487,19 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
       if (next.q) window.setTimeout(() => setAskOpen(false), 1600);
       return record(next.q ? text.quizFromAsk : next.empty === 'later' ? text.quizLater : text.quizNoneLeft);
     }
-    const result = answer(data, question, locale);
     const keep = stay.current;
     stay.current = false;
-    if (result.event !== undefined && !keep) {
-      // Remember where the reader was, so they can come back after the answer has taken them elsewhere.
-      const from = activeRef.current, there = stepOfEvent.get(events.findIndex(e => e.n === result.event));
-      if (there !== undefined && there !== from) setReturnTo(r => r ?? { step: from, label: stepLabel(from) });
-      window.setTimeout(() => goToEvent(result.event!), 400);
-    }
-    return record(result.text, result);
+    // The RAG backend first; the in-browser answer when it is off or unreachable.
+    return askServer(question, locale).then(fromServer => {
+      const result = fromServer ?? answer(data, question, locale);
+      if (result.event !== undefined && !keep) {
+        // Remember where the reader was, so they can come back after the answer has taken them elsewhere.
+        const from = activeRef.current, there = stepOfEvent.get(events.findIndex(e => e.n === result.event));
+        if (there !== undefined && there !== from) setReturnTo(r => r ?? { step: from, label: stepLabel(from) });
+        window.setTimeout(() => goToEvent(result.event!), 400);
+      }
+      return record(result.text, result);
+    });
   }, [data, locale, goToEvent, pickQuick, text, events, stepOfEvent, stepLabel, remember]);
 
   const showAnswerEvent = (n: number) => {
@@ -562,9 +565,8 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
         reducedMotion={reducedMotion} answerActions={<AnswerActions sources={answerCard.metadata?.sources} event={answerCard.metadata?.event !== undefined && mapEvents.has(answerCard.metadata.event) ? answerCard.metadata.event : undefined} locale={locale} onEvent={showAnswerEvent}
           extra={returnTo ? <BackButton label={returnTo.label} locale={locale} onClick={goBack} /> : undefined} />} onAnswer={question => {
           stay.current = answerCard.keepPlace;
-          const reply = onAsk(question, metadata => setAnswerCard(card => card?.key === answerCard.key ? { ...card, metadata } : card));
-          setAnswerCard(card => card?.key === answerCard.key ? { ...card, a: reply } : card);
-          return reply;
+          return Promise.resolve(onAsk(question, metadata => setAnswerCard(card => card?.key === answerCard.key ? { ...card, metadata } : card)))
+            .then(reply => { setAnswerCard(card => card?.key === answerCard.key ? { ...card, a: reply } : card); return reply; });
         }}
         onClose={() => { setAnswerCard(null); setReturnTo(null); }} onAgain={() => { setAnswerCard(null); focusAskBar(); }} />}
     </nav>
@@ -708,7 +710,7 @@ const StepList = memo(function StepList({ steps, data, locale, store, goToStep, 
 
 /** The "Ask the map" panel; memoised so moving through the story leaves the orb untouched. */
 const AskPanel = memo(function AskPanel({ open, onClose, locale, reducedMotion, onAsk, ask, onSuggest, back, onBack, onHistory, answerActions }: {
-  open: boolean; onClose: () => void; locale: Locale; reducedMotion: boolean; onAsk: (q: string) => string; ask: { text: string; key: number } | null; onSuggest: (q: string) => void;
+  open: boolean; onClose: () => void; locale: Locale; reducedMotion: boolean; onAsk: (q: string) => string | Promise<string>; ask: { text: string; key: number } | null; onSuggest: (q: string) => void;
   back: { label: string } | null; onBack: () => void;
   onHistory: () => void; answerActions: React.ReactNode;
 }) {
@@ -765,7 +767,7 @@ function BackButton({ label, locale, onClick }: { label: string; locale: Locale;
   </button>;
 }
 
-function AnswerCard({ card, locale, reducedMotion, onAnswer, onClose, onAgain, back, onBack, answerActions }: { answerActions: React.ReactNode; card: { q: string; a: string | null; key: number; locale: Locale }; locale: Locale; reducedMotion: boolean; onAnswer: (question: string) => string; onClose: () => void; onAgain: () => void; back: { label: string } | null; onBack: () => void }) {
+function AnswerCard({ card, locale, reducedMotion, onAnswer, onClose, onAgain, back, onBack, answerActions }: { answerActions: React.ReactNode; card: { q: string; a: string | null; key: number; locale: Locale }; locale: Locale; reducedMotion: boolean; onAnswer: (question: string) => string | Promise<string>; onClose: () => void; onAgain: () => void; back: { label: string } | null; onBack: () => void }) {
   const text = journeyCopy[locale];
   const respond = useRef(onAnswer);
   const [revealed, setRevealed] = useState(false);
