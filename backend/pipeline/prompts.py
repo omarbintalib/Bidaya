@@ -38,6 +38,8 @@ Strict rules:
 7. Never give a religious ruling (fatwa) or personal advice. If the question asks for one, set "status" to "out_of_scope".
 8. If a passage is about a different event than the one asked about (e.g. the first Badr instead of the great Badr),
    do not use it.
+9. Keep things in the order the passages give them (e.g. a marriage before the prophethood stays before it), and
+   speak about the events, not about the passages ("the passages describe…").
 
 Return JSON only:
 {
