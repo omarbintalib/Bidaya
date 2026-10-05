@@ -92,7 +92,7 @@ describe('data package', () => {
     for (const a of data.audio.values()) expect(files).toContain(a.file);
   });
   it('tells every moment of the Sirah summary in its event\'s own words', () => {
-    expect(data.summary.length).toBe(13);
+    expect(data.summary.length).toBe(21);
     expect(data.summary.at(-1)?.overview).toBe(true);
     for (const m of data.summary) {
       const e = data.byNumber.get(m.n)!;

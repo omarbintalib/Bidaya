@@ -8,7 +8,7 @@ import { journeyCopy } from './copy';
 
 /**
  * A summary of the Sirah, played on the map (summary_film.csv): moments from the birth to the year of the Prophet's
- * death ﷺ. Each is a Dorar event, told in a few sentences quoted word for word from its own text, with the verses the
+ * death ﷺ. Each is a Dorar event, told in whole passages quoted word for word from its own text, with the verses the
  * sources tie to it (as references); the map draws its route or letters and lights every place the sources say Islam had
  * reached by then. Each moment stays as long as its words take to read, and the reader can pause or jump.
  */
@@ -26,12 +26,12 @@ export default function SummaryFilm({ data, locale, reducedMotion, onClose, onJu
   const moment = moments[i], ev = data.byNumber.get(moment.n)!;
   const last = i === moments.length - 1;
 
-  // What each moment shows, and for how long: time to read its quotes (about 200 words a minute) and to watch the map.
+  // What each moment shows, and for how long: time to read its passages (about 230 words a minute) and to watch the map.
   const told = useMemo(() => moments.map(m => {
     const e = data.byNumber.get(m.n)!, quotes = m.quotes[locale];
     const { direct, context } = versesFor(data, e);
     const words = `${e.title[locale] || e.title.ar} ${quotes.join(' ')}`.split(/\s+/).length;
-    return { quotes, verses: (direct.length ? direct : context).slice(0, 3), direct: direct.length > 0, ms: Math.min(22000, Math.max(7000, 3500 + words * 300)) + (m.overview ? 2500 : 0) };
+    return { quotes, verses: (direct.length ? direct : context).slice(0, 3), direct: direct.length > 0, ms: Math.min(32000, Math.max(8000, 3000 + words * 260)) + (m.overview ? 2500 : 0) };
   }), [moments, data, locale]);
   const say = told[i];
 
@@ -96,10 +96,10 @@ export default function SummaryFilm({ data, locale, reducedMotion, onClose, onJu
         <div className="film-caption" key={ev.n}>
           <p className="film-period">{periodName[locale][ev.period]} · {eventPlaceName(data, ev, locale)}</p>
           <h2 lang={title === ev.title.ar ? 'ar' : undefined}>{title}</h2>
-          {/* The source's own sentences, word for word; «…» marks what is left out between them. */}
-          <p className="film-text" lang={quoteLang} dir={quoteLang === 'ar' ? 'rtl' : 'ltr'}>
-            {say.quotes.map((q, k) => <span key={k}>{k > 0 && <span className="film-gap" aria-hidden="true"> … </span>}{q}</span>)}
-          </p>
+          {/* The source's own passages, word for word, each whole; «…» opens a passage that follows a part left out. */}
+          <div className="film-text" lang={quoteLang} dir={quoteLang === 'ar' ? 'rtl' : 'ltr'}>
+            {say.quotes.map((q, k) => <p key={k}>{k > 0 && <span className="film-gap" aria-hidden="true">… </span>}{q}</p>)}
+          </div>
           {say.verses.length > 0 && <p className="film-verses">
             <span>{say.direct ? text.verses : text.contextVerses}:</span>
             {say.verses.map(v => <b key={v.id}>{locale === 'en' ? `Surah ${v.surahEn ?? v.surah}` : `سورة ${v.surah}`} {v.whole ? text.wholeSurah : digits(quranpediaRefs(v.ref, false, locale).map(r => r.label.split(':')[1]).join(locale === 'ar' ? '، ' : ', '), locale)}</b>)}
