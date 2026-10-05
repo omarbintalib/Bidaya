@@ -50,8 +50,8 @@ New files for the story (each line quotes its Dorar event; the app's tests check
 | 3 | `3_links_surahs_sirah.csv` | 94 | **The only file that connects surahs/verses to events.** One row per record |
 | 4 | `4_places.csv` | 68 | List of places with coordinates |
 | 5 | `5_sirah_map.geojson` | 144 | Map layer: 139 event pins and 5 routes |
-| 6 | `6_sahaba.csv` | 74 | Companions, with cited synopses |
-| 7 | `7_sahaba_references.csv` | 136 | One row per fact about a Companion, with the source quote and link |
+| 6 | `6_sahaba.csv` | 98 | People (74 Companions and 24 other figures), with cited synopses |
+| 7 | `7_sahaba_references.csv` | 211 | One row per fact about a person, with the source quote and link |
 | 9 | `9_dorar_tafseer_review.csv` | 762 | Decision and reason for every candidate from the Dorar Tafsir Encyclopedia crawl |
 | 11 | `11_dorar_titles_ar_en.csv` | 142 | Every Sirah event's title as Dorar gives it, in Arabic and English, with both Dorar links |
 | 12 | `12_dorar_titles_and_texts_ar_en.csv` | 142 | The same titles plus the full Dorar text of each event, in Arabic and English |
@@ -102,7 +102,7 @@ Fields to know:
 - **`نوع_الارتباط`**: what kind of connection the hadith describes. There are 12 types, for example سبب نزول صريح (explicit reason), استشهاد بالآية (the Prophet ﷺ recited the verse), تفسير صحابي (a Companion's interpretation).
 - **`صيغة_العرض`**: the wording the card should use for that type, e.g. "نزلت في هذا الموقف" or "تلاها النبي ﷺ في هذا الموقف". **Use this instead of always writing "نزلت"**, so the app never claims more than the source says.
 - **`التعديلات`**: what was corrected from the original file and why.
-- **`حالة_المراجعة`**: 80 rows are marked "معدّل – يحتاج مراجعة" (edited, needs review) and 5 are "معتمد" (approved).
+- **`حالة_المراجعة`**: 5 rows are "معتمد" (approved by the content lead). The others were reviewed on 5 October (Claude, at the team's request) and are marked "رُوجع … بانتظار اعتماد مسؤول المحتوى": checked against the sources the project holds (verse quotes against the Tanzil Quran text, hadith numbers and narrators against sunnah.com, years against the linked Dorar event). For the 32 TAF rows the hadith gradings (التخريج والدرجة) could not be checked and are flagged for the content lead.
 
 > **ASB-035 (Bi'r Ma'unah, abrogated recitation) was removed**, since it is not a surah or verse in the Mushaf.
 
@@ -123,9 +123,9 @@ Each record has exactly one link type:
 
 | `نوع_الربط` | Count | How to display |
 |---|---|---|
-| مباشر (direct) | 60 | On the event's card |
+| مباشر (direct) | 58 | On the event's card |
 | سياق (context) | 8 | As a "من سياق هذه المرحلة" link from the card. **It is not the event itself.** |
-| موضع مقترح (suggested position) | 8 | On the timeline after the named event, labelled as an estimate. The reason is in `سبب_الموضع`. |
+| موضع مقترح (suggested position) | 10 | On the timeline after the named event, labelled as an estimate. The reason is in `سبب_الموضع`. |
 | بعد الحدث (after the event) | 2 | On the event's card with the tag "نزلت بعد هذا الحدث" |
 | مرحلة (period) | 16 | In a "verses revealed in this stage" section at the end of the stage |
 | عنصر نائب (placeholder) | 0 | None left. The 22 records the sources could not place in time (ASB-016, 019, 059, 060, 062–069, 071–077, 079, 081, 085) were removed; they are in the git history if a source later dates them. |
@@ -169,17 +169,21 @@ The file loads directly into Leaflet or Mapbox.
 - **English texts:** all 142 events, from dorar.net/en/history. The 131 events in the v9 prototype came through its data. The 11 events before the first revelation (1–11) were copied by the team from the Dorar site, matched to their events by Dorar's exact English title and Hijri date. They are kept word for word, including Dorar's own typos, with paragraph breaks as on the site.
 - **English titles:** all 142 events, taken exactly from dorar.net/en/history (`title_en_dorar`), including Dorar's own spellings and typos. `title_en_display` shows the same words in normal title case, since Dorar writes them in capitals; this is what the prototype shows. Each title was matched to its event by content (names and places checked against the event's English text), because Dorar's English numbering differs from the Arabic one in places and contains duplicate entries where the Arabic list skips numbers (64, 81, 82).
 
+## English glossary (`glossary.csv`)
+
+One approved English spelling per recurring term, with the spellings not to use. It applies to English the team writes: the `_EN` columns and the app's interface text. Word-for-word quotes keep their source's spelling (Dorar writes "Aboo Bakr", sunnah.com writes "Gabriel"). The rule for names: no apostrophe at the start of a name (Umar, Ali, Abd al-Muttalib), kept inside one (Sa'd, Ka'b, Mas'ud). `app/src/data/glossary.test.ts` fails if a spelling to avoid appears.
+
 ## Open items
 
 | Item | Owner |
 |---|---|
-| Review the edited ASB rows and the 32 new TAF rows. All 223 hadith numbers were checked against the hadith texts (file 8); spot-check a sample using the links | Hassan |
+| Approve the reviewed rows (files 1 and 6), and check the hadith gradings in the 32 TAF rows. All 223 hadith numbers were checked against the hadith texts (file 8) | Hassan |
 | Check the approximate coordinates and the 17 inferred locations | Hassan |
-| Review the 9 suggested timeline positions | Hassan |
+| Review the 10 suggested timeline positions (ASB-041 and ASB-049 were moved here: their hadith do not name the event) | Hassan |
 | Decide whether the 11 pre-prophethood events are a prologue or are removed, and update the deck's scope line to match | Team |
 | Flag events resting on disputed reports (e.g. Dorar events 58 and 61: Asma' bint Marwan, Abu 'Afak), and decide how to frame sensitive events for a beginner audience | Hassan |
 | Fetch the Quran text and an approved English translation by `مرجع_الآيات` | Omar / Elyas |
-| English versions of titles, summaries and labels; build the approved glossary | Omar + Hassan |
+| English versions of titles, summaries and labels (the glossary is in `glossary.csv`) | Omar + Hassan |
 | Short card summaries and a "who took part" field for events | Omar + Hassan |
 | Split `النص` into source-tagged chunks for retrieval, and write the slide-7 test question set | Omar |
 

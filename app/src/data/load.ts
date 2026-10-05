@@ -27,7 +27,7 @@ const PRECISION: Record<string, Precision> = { 'دقيق': 'exact', 'تقريب�
 const LINK_TYPES: Record<string, LinkType> = { 'مباشر': 'direct', 'سياق': 'context', 'موضع مقترح': 'suggested', 'بعد الحدث': 'after', 'مرحلة': 'stage', 'عنصر نائب': 'placeholder' };
 const LABEL_KINDS: Record<string, MapLabel['kind']> = { 'إقليم': 'region', 'قوة': 'power', 'بحر': 'sea' };
 const SIZES: Record<string, MapLabel['size']> = { 'كبير': 'l', 'متوسط': 'm', 'صغير': 's' };
-const ROUTE_EN: Record<string, string> = { 'الهجرة النبوية': 'The Hijrah', 'الإسراء': "The Isra'", 'الخروج إلى الطائف': 'The journey to Taif', 'غزوة تبوك': 'The expedition to Tabuk', 'حجة الوداع': 'The Farewell Hajj' };
+const ROUTE_EN: Record<string, string> = { 'الهجرة النبوية': 'The Hijrah', 'الإسراء': "The Isra'", 'الخروج إلى الطائف': "The journey to Ta'if", 'غزوة تبوك': 'The expedition to Tabuk', 'حجة الوداع': 'The Farewell Hajj' };
 
 const num = (v: string | undefined) => { const s = (v ?? '').trim(); if (!s) return null; const n = Number(s); return Number.isFinite(n) ? n : null; };
 const list = (v: string | undefined) => (v ?? '').split(/[،,|]/).map(s => s.trim()).filter(s => s && s !== '—');
