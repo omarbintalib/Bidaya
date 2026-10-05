@@ -313,3 +313,18 @@
 .map-back .back-btn { box-shadow: 0 8px 24px #331b0d33; }
 @media all { html:not([data-reduced-motion='true']) .map-back { animation: rise-in .3s ease both; } }
 @media (max-width: 1000px) { .map-back { top: 58px; inset-inline-end: 10px; max-width: calc(100% - 70px); } }
+
+/* Sound menu: on/off and volume, under the toolbar button. */
+.sound-menu { position: relative; }
+.sound-panel { position: fixed; z-index: 40; padding: 14px 16px 12px; background: var(--paper); border: 1px solid var(--brass); border-radius: 6px; box-shadow: 0 14px 40px #331b0d26; display: grid; gap: 12px; }
+.sound-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: var(--text-small); color: var(--ink); }
+.sound-volume { flex-direction: column; align-items: stretch; gap: 6px; }
+.sound-volume.is-off { opacity: .45; }
+.sound-switch { appearance: none; width: 40px; height: 22px; border-radius: 99px; background: var(--border); position: relative; cursor: pointer; flex: none; transition: background .2s; }
+.sound-switch::after { content: ''; position: absolute; top: 3px; inset-inline-start: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); box-shadow: 0 1px 3px #0003; transition: inset-inline-start .2s; }
+.sound-switch:checked { background: var(--brass); }
+.sound-switch:checked::after { inset-inline-start: 21px; }
+.sound-switch:focus-visible, .sound-volume input:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.sound-volume input { width: 100%; accent-color: var(--brass); }
+.sound-note { margin: 0; color: var(--muted); font-size: calc(12.5px * var(--text-scale)); line-height: 1.7; }
+@media all { html:not([data-reduced-motion='true']) .sound-panel { animation: rise-in .2s ease both; } }

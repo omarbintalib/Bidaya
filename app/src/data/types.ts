@@ -121,6 +121,10 @@ export interface MapArc {
 /** A chapter question (quiz.csv), answered by choosing a place. */
 export interface QuizQuestion { id: string; period: Period; question: Text; answer: string; options: string[]; explanation: Text; event: number; quote: string; url: string }
 
+/** An event's background sound (event_sounds.csv), with the source's words that justify it. */
+export type SoundKind = 'battle' | 'march' | 'caravan' | 'walk' | 'sea' | 'march+sea';
+export interface EventSound { kind: SoundKind; quote: string }
+
 export interface Sirah {
   events: SirahEvent[];
   byNumber: Map<number, SirahEvent>;
@@ -132,5 +136,7 @@ export interface Sirah {
   stops: Map<string, RouteStop[]>;
   quiz: QuizQuestion[];
   arcs: MapArc[];
+  /** Background sound per Dorar event number; events not listed get the quiet desert wind only. */
+  sounds: Map<number, EventSound>;
   growth: Map<string, Growth[]>;
 }

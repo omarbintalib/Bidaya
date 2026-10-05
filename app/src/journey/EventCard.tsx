@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { quranpediaRefs, type QuranRef } from '../data/quranpedia';
 import { km, pathKm, roundKm } from '../data/geo';
 import { dateLine, digits, eventPlaceName, excerpt, hadithLinks, hijri, periodName, peopleFor, versesFor } from '../data/select';
-import type { MapArc, QuranEn, Sirah, SirahEvent, Verse } from '../data/types';
+import type { EventSound, MapArc, QuranEn, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
 import QuranReader from './QuranReader';
@@ -20,9 +20,11 @@ const Ar = ({ children, as: Tag = 'span' }: { children: React.ReactNode; as?: 's
 
 interface CardProps { data: Sirah; event: SirahEvent; locale: Locale; chapter: number; yearEvents: SirahEvent[]; onPick: (n: number) => void; onWalk?: () => void; walkName?: string;
   /** Story mode: the whole text is shown, not only its opening. */
-  full?: boolean }
+  full?: boolean;
+  /** The background sound playing for this event, shown with the source's words that justify it. */
+  sound?: EventSound }
 
-export default function EventCard({ data, event, locale, chapter, yearEvents, onPick, onWalk, walkName, full = false }: CardProps) {
+export default function EventCard({ data, event, locale, chapter, yearEvents, onPick, onWalk, walkName, full = false, sound }: CardProps) {
   const text = journeyCopy[locale];
   const [open, setOpen] = useState(full);
   // Story mode opens the whole text; the reader can still fold it again.
@@ -75,6 +77,8 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
       <span>{r.name[locale]} · {/* A symbolic line (the Isra': «مسار رمزي بين المسجدين») is a distance between two places, not a road. */}
         {(r.note.ar.includes('رمزي') ? text.distanceArc : text.distanceRoute)(digits(roundKm(pathKm(r.coords)).toLocaleString('en'), locale))}</span>
     </p>)}
+    {sound && <p className="ecard-sound"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 7.5h3l4-3.5v12l-4-3.5h-3z" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /><path d="M13.5 7a4 4 0 0 1 0 6" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>
+      <span>{text.soundKind[sound.kind]}{' — '}<q lang="ar" dir="rtl">{sound.quote}</q></span></p>}
     <p className="ecard-source">{text.source}: <a href={locale === 'en' && event.urlEn ? event.urlEn : event.url} target="_blank" rel="noreferrer">{text.dorar} · {locale === 'ar' ? 'حدث' : 'event'} {event.n}</a></p>
 
     {people.length > 0 && <section className="ecard-section">

@@ -68,6 +68,16 @@ describe('data package', () => {
       expect(e.text.ar.includes(item.quote) || e.title.ar.includes(item.quote.replace(/\s*\.\s*$/, ''))).toBe(true);
     }
   });
+  it('justifies every event sound with the source\'s own words', () => {
+    expect(data.sounds.size).toBeGreaterThan(70);
+    for (const [n, s] of data.sounds) {
+      const e = data.byNumber.get(n)!;
+      expect(e.text.ar.includes(s.quote) || e.title.ar.includes(s.quote), `event ${n}: «${s.quote}»`).toBe(true);
+    }
+    // Swords are heard only where the text says there was fighting, never on an expedition that ended without it.
+    expect(data.sounds.get(59)?.kind).toBe('battle');
+    expect(data.sounds.get(49)?.kind).toBe('march');
+  });
   it('builds more chapter questions from sourced event places', () => {
     const pools = quizPools(data);
     for (const period of ['prologue', 'makkah', 'hijrah', 'madinah'] as const) expect(pools.get(period)!.length).toBeGreaterThan(0);

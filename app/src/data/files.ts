@@ -17,6 +17,7 @@ export const FILES = {
   arcs: 'map_arcs.csv',
   quranEn: 'quran_en.csv',
   growth: 'islam_growth.csv',
+  sounds: 'event_sounds.csv',
 } as const;
 
 /**

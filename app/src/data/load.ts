@@ -1,6 +1,6 @@
 import { parseCsv } from './csv';
 import { FILES } from './files';
-import type { Growth, LinkType, MapArc, MapLabel, Period, Person, Place, Precision, QuizQuestion, Route, RouteStop, Sirah, SirahEvent, Verse, VerseLink } from './types';
+import type { EventSound, Growth, LinkType, MapArc, MapLabel, Period, Person, Place, Precision, QuizQuestion, Route, RouteStop, Sirah, SirahEvent, SoundKind, Verse, VerseLink } from './types';
 
 /**
  * Everything the interface shows is read at runtime from the CSVs at the repository root (served at /data/).
@@ -202,7 +202,15 @@ export async function loadSirah(): Promise<Sirah> {
     growth.set(r['رمز_المكان'], list);
   }
 
-  return { events, byNumber, places, verses, people, routes, labels, stops, quiz, arcs, growth };
+  // Background sounds: only kinds the player knows, only for events that exist, each with its source's words.
+  const SOUNDS: SoundKind[] = ['battle', 'march', 'caravan', 'walk', 'sea', 'march+sea'];
+  const sounds = new Map<number, EventSound>();
+  for (const r of parseCsv(raw.sounds)) {
+    const n = num(r['رقم_حدث_الدرر']), kind = r.Sound as SoundKind, quote = (r['الشاهد'] ?? '').trim();
+    if (n === null || !byNumber.has(n) || !SOUNDS.includes(kind) || !quote) { warn(`event_sounds.csv: row for event "${r['رقم_حدث_الدرر']}" needs a known event, a Sound (${SOUNDS.join(', ')}) and الشاهد`); continue; }
+    sounds.set(n, { kind, quote });
+  }
+  return { events, byNumber, places, verses, people, routes, labels, stops, quiz, arcs, growth, sounds };
 }
 
 let cache: Promise<Sirah> | null = null;

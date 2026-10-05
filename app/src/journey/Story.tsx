@@ -10,6 +10,8 @@ import HistoricMap, { type Emphasis } from '../map/HistoricMap';
 import { onIdle } from '../idle';
 import { journeyCopy } from './copy';
 import EventCard, { VerseItem } from './EventCard';
+import { Ambience, type Scene } from '../sound/ambience';
+import SoundMenu from './SoundMenu';
 import Intro from './Intro';
 import { createActiveStore, useActive, type ActiveStore } from './activeStore';
 import { PeopleProvider, PersonDialog } from './People';
@@ -45,6 +47,7 @@ export type Pace = 'slow' | 'normal' | 'fast';
 const MS_PER_WORD: Record<Pace, number> = { slow: 430, normal: 300, fast: 200 };
 const LOOK_MS = 3000, MIN_EVENT_MS = 5000;
 const PACE_KEY = 'bidaya.storyPace';
+const SOUND_KEY = 'bidaya.sound', VOLUME_KEY = 'bidaya.soundVolume', DEFAULT_VOLUME = 0.35;
 
 function useMedia(query: string) {
   const [match, setMatch] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.(query).matches);
@@ -298,6 +301,37 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     const words = `${title} ${body}`.split(/\s+/).filter(Boolean).length;
     return Math.max(MIN_EVENT_MS, LOOK_MS + words * MS_PER_WORD[pace]);
   }, [step, events, locale, pace]);
+  // ── background sound: field recordings per event (event_sounds.csv), off until the reader turns it on ──
+  const ambience = useMemo(() => new Ambience(import.meta.env.BASE_URL), []);
+  const [soundOn, setSoundOn] = useState(false);
+  // Quiet by default: the sounds sit in the background, under the reading.
+  const [volume, setVolumeState] = useState(() => { try { const v = Number(localStorage.getItem(VOLUME_KEY)); return localStorage.getItem(VOLUME_KEY) !== null && v >= 0 && v <= 1 ? v : DEFAULT_VOLUME; } catch { return DEFAULT_VOLUME; } });
+  useEffect(() => { ambience.setVolume(volume); }, [ambience, volume]);
+  const setVolume = useCallback((v: number) => { setVolumeState(v); try { localStorage.setItem(VOLUME_KEY, String(v)); } catch { /* not saved: fine */ } }, []);
+  const toggleSound = useCallback(() => {
+    const next = !soundOn;
+    setSoundOn(next);
+    if (next) void ambience.enable(); else ambience.disable();
+    try { localStorage.setItem(SOUND_KEY, next ? '1' : '0'); } catch { /* not saved: fine */ }
+  }, [soundOn, ambience]);
+  useEffect(() => {
+    // Sound was on last time: browsers only allow it to start after a click or key press, so wait for the first one.
+    let saved = false;
+    try { saved = localStorage.getItem(SOUND_KEY) === '1'; } catch { /* no storage */ }
+    if (!saved) return;
+    const start = () => { setSoundOn(true); void ambience.enable(); };
+    window.addEventListener('pointerdown', start, { once: true });
+    window.addEventListener('keydown', start, { once: true });
+    return () => { window.removeEventListener('pointerdown', start); window.removeEventListener('keydown', start); };
+  }, [ambience]);
+  useEffect(() => {
+    const onVisible = () => ambience.setHidden(document.hidden);
+    document.addEventListener('visibilitychange', onVisible);
+    return () => { document.removeEventListener('visibilitychange', onVisible); ambience.disable(); };
+  }, [ambience]);
+  const scene: Scene = step.kind === 'event' ? data.sounds.get(events[step.index].n)?.kind ?? 'calm' : 'calm';
+  useEffect(() => { ambience.setScene(scene); }, [ambience, scene]);
+
   useEffect(() => {
     if (!playing) return;
     if (active >= steps.length - 1) { setPlaying(false); return; }
@@ -594,6 +628,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
         </li>] : [])}
       </ol>
       <div className="tb-end">
+        <SoundMenu locale={locale} on={soundOn} volume={volume} onToggle={toggleSound} onVolume={setVolume} />
         <button type="button" className="tb-btn tb-search" aria-haspopup="dialog" aria-label={text.searchTitle} title={`${text.searchTitle} ( / )`} onClick={() => setSearchOpen(true)}>
           <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" strokeWidth="1.5" /><path d="m13 13 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
           <span className="tb-long">{text.search}</span>
@@ -621,7 +656,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     {built && <div className="scrolly">
       <div className="scrolly-steps" ref={column}>
         <HoldStill store={stepStore} anchor={anchor} column={column} lockUntil={lockUntil} glide={wide && !reducedMotion} />
-        <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} keepOpen={!wide} playing={playing} />
+        <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} keepOpen={!wide} playing={playing} soundOn={soundOn} />
         <section data-step={steps.length - 1} className={`step step-summary${step.kind === 'summary' ? ' is-on' : ''}`}>
           <span>{text.summaryKicker}</span>
           <h2>{text.summaryTitle}</h2>
@@ -741,15 +776,15 @@ function HoldStill({ store, anchor, column, lockUntil, glide }: { store: ActiveS
 }
 
 /** All steps but the summary; memoised so it re-renders only when the steps, the language or an answer change. */
-const StepList = memo(function StepList({ steps, data, locale, store, goToStep, goToEvent, onWalk, answers, onAnswer, questionOf, nextQuestion, onMore, keepOpen, playing }: {
-  keepOpen: boolean; playing: boolean; steps: Step[]; data: Sirah; locale: Locale; store: ActiveStore; goToStep: (i: number) => void; goToEvent: (n: number) => void;
+const StepList = memo(function StepList({ steps, data, locale, store, goToStep, goToEvent, onWalk, answers, onAnswer, questionOf, nextQuestion, onMore, keepOpen, playing, soundOn }: {
+  keepOpen: boolean; playing: boolean; soundOn: boolean; steps: Step[]; data: Sirah; locale: Locale; store: ActiveStore; goToStep: (i: number) => void; goToEvent: (n: number) => void;
   onWalk: (route: Route) => void; answers: Record<string, string>; onAnswer: (q: QuizQuestion, key: string) => void;
   questionOf: (period: Period, answers: Record<string, string>) => { q: QuizQuestion; at: number; total: number };
   nextQuestion: (period: Period) => number; onMore: (period: Period) => void;
 }) {
   return <>{steps.map((s, i) => {
     if (s.kind === 'chapter') return <ChapterStep key={`c${s.chapter}`} s={s} i={i} store={store} events={data.events} locale={locale} />;
-    if (s.kind === 'event') return <EventStep key={data.events[s.index].n} index={s.index} i={i} store={store} data={data} locale={locale} goToStep={goToStep} goToEvent={goToEvent} onWalk={onWalk} keepOpen={keepOpen} playing={playing} />;
+    if (s.kind === 'event') return <EventStep key={data.events[s.index].n} index={s.index} i={i} store={store} data={data} locale={locale} goToStep={goToStep} goToEvent={goToEvent} onWalk={onWalk} keepOpen={keepOpen} playing={playing} soundOn={soundOn} />;
     if (s.kind === 'quiz') {
       const { q, at, total } = questionOf(s.period, answers);
       return <QuizCard key={`q${s.chapter}`} step={i} store={store} q={q} at={at} total={total} hasMore={nextQuestion(s.period) >= 0} chapter={s.chapter} data={data} locale={locale} chosen={answers[q.id] ?? null} onAnswer={onAnswer} onMore={onMore} goToStep={goToStep} />;
@@ -787,12 +822,14 @@ const ChapterStep = memo(function ChapterStep({ s, i, store, events, locale }: {
   </section>;
 });
 
-const EventStep = memo(function EventStep({ index, i, store, data, locale, goToStep, goToEvent, onWalk, keepOpen, playing }: {
+const EventStep = memo(function EventStep({ index, i, store, data, locale, goToStep, goToEvent, onWalk, keepOpen, playing, soundOn }: {
   index: number; i: number; store: ActiveStore; data: Sirah; locale: Locale; goToStep: (i: number) => void; goToEvent: (n: number) => void; onWalk: (route: Route) => void;
   /** Narrow screens: a card stays open once read, so nothing above the reader folds shut and moves the page mid-scroll. */
   keepOpen: boolean;
   /** Story mode is playing: the open card shows its whole text. */
   playing: boolean;
+  /** Background sound is on: the open card says what is heard, and why. */
+  soundOn: boolean;
 }) {
   const on = useActive(store, a => a === i);
   const [read, setRead] = useState(false);
@@ -804,7 +841,7 @@ const EventStep = memo(function EventStep({ index, i, store, data, locale, goToS
   return <section data-step={i} className={`step step-event${on ? ' is-on' : ''}${open && !on ? ' is-read' : ''}`} onClick={() => !on && goToStep(i)}>
     {open ? <EventCard data={data} event={e} locale={locale} chapter={PERIOD_ORDER.indexOf(e.period) + 1}
       yearEvents={data.events.filter(x => x.year === e.year && x.period === e.period)} onPick={goToEvent}
-      onWalk={route ? () => onWalk(route) : undefined} walkName={route?.name[locale]} full={on && playing} />
+      onWalk={route ? () => onWalk(route) : undefined} walkName={route?.name[locale]} full={on && playing} sound={on && soundOn ? data.sounds.get(e.n) : undefined} />
       : <div className="step-peek"><p className="step-date">{hijri(e.year, locale)} · {eventPlaceName(data, e, locale)}</p><h3>{e.title[locale] || e.title.ar}</h3></div>}
   </section>;
 });
