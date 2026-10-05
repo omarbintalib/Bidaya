@@ -1,4 +1,5 @@
 import { parseCsv } from './csv';
+import { FILES } from './files';
 import type { Growth, LinkType, MapArc, MapLabel, Period, Person, Place, Precision, QuizQuestion, Route, RouteStop, Sirah, SirahEvent, Verse, VerseLink } from './types';
 
 /**
@@ -6,24 +7,6 @@ import type { Growth, LinkType, MapArc, MapLabel, Period, Person, Place, Precisi
  * Edit a CSV (Excel is fine — keep UTF-8 and the header row), save, and reload the page.
  */
 export const DATA_DIR = `${import.meta.env.BASE_URL}data/`;
-
-const FILES = {
-  events: '2_sirah_events.csv',
-  texts: '12_dorar_titles_and_texts_ar_en.csv',
-  places: '4_places.csv',
-  verses: '1_related_surahs.csv',
-  links: '3_links_surahs_sirah.csv',
-  people: '6_sahaba.csv',
-  routes: '5_sirah_map.geojson',
-  labels: 'map_labels.csv',
-  trade: 'map_routes.csv',
-  stops: 'route_stops.csv',
-  quiz: 'quiz.csv',
-  facts: '7_sahaba_references.csv',
-  arcs: 'map_arcs.csv',
-  quranEn: 'quran_en.csv',
-  growth: 'islam_growth.csv',
-} as const;
 
 const PERIODS: Record<string, Period> = { 'قبل البعثة': 'prologue', 'العهد المكي': 'makkah', 'الهجرة': 'hijrah', 'العهد المدني': 'madinah' };
 const PRECISION: Record<string, Precision> = { 'دقيق': 'exact', 'تقريبي': 'approx', 'منطقة': 'region', 'غير محدد': 'none' };

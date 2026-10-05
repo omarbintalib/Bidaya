@@ -6,11 +6,11 @@ An Arabic-first, bilingual web experience for exploring the Sirah in place and t
 
 ## Editing the data
 
-Every piece of content comes from the CSV files at the **root of this repository** (one folder up). Nothing is written into the code or the HTML. The dev and preview servers serve them at `/data/`, and `npm run build` copies them into `dist/data/`.
+Every piece of content comes from the CSV files at the **root of this repository** (one folder up). Nothing is written into the code or the HTML. The dev and preview servers serve them at `/data/`, and `npm run build` copies the ones the app reads into `dist/data/`, keeping only the columns it reads (listed in `src/data/files.ts`; about a third less to download). If `npm test` reports that the trimmed files load differently, add the new column to that list.
 
 1. Open the CSV in Excel (or any spreadsheet app). Keep the header row and column names unchanged.
 2. Edit, then save as **CSV UTF-8**.
-3. Reload the page. While `npm run dev` is running, changes show on reload; on a deployed site, replace the file on the host. No rebuild is needed.
+3. Reload the page. While `npm run dev` is running, changes show on reload; on a deployed site, replace the file on the host (the full file works as well as the trimmed one). No rebuild is needed.
 4. Run `npm test` to check the data. It loads every file and reports broken references (for example an event whose `رمز_المكان` is missing from `4_places.csv`). The browser console shows the same warnings with a `[data]` prefix.
 
 | File | What it controls |
@@ -256,6 +256,6 @@ The map carries an Ask bar (on wide screens it is the only way in; phones keep t
 
 ## Deploying to Vercel
 
-`vercel.json` at the repository root tells Vercel to install and build the app from `app/` (the data files at the root are copied into `app/dist/data/` during the build) and to serve `app/dist`. Its rewrite sends every page path (such as `/journey`) to `index.html`, so opening or refreshing a page never gives a 404; real files (`/assets/…`, `/data/…`) are served as they are. If the Vercel project's Root Directory is set to `app` instead, `app/vercel.json` does the same.
+`vercel.json` at the repository root tells Vercel to install and build the app from `app/` (the data files the app reads are copied, trimmed, into `app/dist/data/` during the build) and to serve `app/dist`. Its rewrite sends every page path (such as `/journey`) to `index.html`, so opening or refreshing a page never gives a 404; real files (`/assets/…`, `/data/…`) are served as they are. If the Vercel project's Root Directory is set to `app` instead, `app/vercel.json` does the same.
 
 A person's card shows their cited summary, one line of its sources (Dorar events and Sahihayn hadith, from `7_sahaba_references.csv`), the sources' own words in a section that opens on request, then the events they appear in, each with the sentence of Dorar's text that names them.

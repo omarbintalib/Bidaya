@@ -1,7 +1,8 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
-import { answer, suggestFor, sourceLinks } from '../assistant/answer';
+import { answer, suggestFor, sourceLinks, warmUp } from '../assistant/answer';
 import { parseCsv } from './csv';
 import { loadSirah } from './load';
+import { FILES, trimData } from './files';
 import { findPeople, mentionIn } from './people';
 import { quranpediaRefs } from './quranpedia';
 import { quizPools } from './quiz';
@@ -14,16 +15,33 @@ import type { Sirah } from './types';
 const files = import.meta.glob<string>(['../../../*.csv', '../../../*.geojson'], { query: '?raw', import: 'default', eager: true });
 const byName = new Map(Object.entries(files).map(([path, text]) => [path.split('/').pop()!, text]));
 let data: Sirah;
+const serve = async (url: string) => {
+  const name = decodeURIComponent(url.split('/').pop()!);
+  const text = byName.get(name);
+  return text === undefined ? new Response('', { status: 404 }) : new Response(text);
+};
 const warnings: string[] = [];
 
 beforeAll(async () => {
-  vi.stubGlobal('fetch', async (url: string) => {
-    const name = decodeURIComponent(url.split('/').pop()!);
-    const text = byName.get(name);
-    return text === undefined ? new Response('', { status: 404 }) : new Response(text);
-  });
+  vi.stubGlobal('fetch', serve);
   vi.spyOn(console, 'warn').mockImplementation((msg: string) => { warnings.push(msg); });
   data = await loadSirah();
+});
+
+describe('published data', () => {
+  it('loads exactly the same from the trimmed copies that npm run build publishes', async () => {
+    const full = await loadSirah();
+    vi.stubGlobal('fetch', async (url: string) => {
+      const name = decodeURIComponent(url.split('/').pop()!);
+      const text = byName.get(name);
+      return text === undefined ? new Response('', { status: 404 }) : new Response(trimData(name, text));
+    });
+    try {
+      // If this fails after load.ts starts reading a new column, add that column to COLUMNS in files.ts.
+      expect(await loadSirah()).toEqual(full);
+    } finally { vi.stubGlobal('fetch', serve); }
+    for (const name of Object.values(FILES)) expect(trimData(name, byName.get(name)!).length, name).toBeLessThanOrEqual(byName.get(name)!.length);
+  });
 });
 
 describe('csv parser', () => {
@@ -78,6 +96,21 @@ describe('data package', () => {
 });
 
 describe('ask the map (slide 7 test set)', () => {
+  it('answers the same when the index was built in idle-time slices, and stops when cancelled', async () => {
+    const questions = ['متى كانت غزوة بدر؟', 'Who was Abu Bakr?', 'سورة الأنفال', 'Hijrah to Madinah'];
+    const sliced = await loadSirah();
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    const global = globalThis as { window?: object };
+    global.window = {}; // No requestIdleCallback here: onIdle falls back to timers.
+    try {
+      const stop = warmUp(sliced, 0, 0); // A zero budget builds one document per slice.
+      await vi.advanceTimersByTimeAsync(1000); // Four slices: the index is only partly built.
+      expect(vi.getTimerCount()).toBe(1);
+      stop();
+      expect(vi.getTimerCount()).toBe(0);
+      for (const q of questions) for (const locale of ['ar', 'en'] as const) expect(answer(sliced, q, locale)).toEqual(answer(data, q, locale));
+    } finally { delete global.window; vi.useRealTimers(); }
+  });
   it('answers an event question with its source and map position', () => {
     const a = answer(data, 'متى كانت غزوة بدر؟', 'ar');
     expect(a.kind).toBe('event');

@@ -40,9 +40,10 @@ function seeded(n: number) {
   return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 2 ** 32; };
 }
 
+/** `candidates` must be sorted by key (byKey), so the shuffle does not depend on the order they were found in. */
 function options(answer: Place, candidates: Place[], n: number): string[] | null {
   const rand = seeded(n);
-  const pool = [...candidates].sort((a, b) => a.key.localeCompare(b.key)).map(p => [rand(), p] as const).sort((a, b) => a[0] - b[0]).map(([, p]) => p);
+  const pool = candidates.map(p => [rand(), p] as const).sort((a, b) => a[0] - b[0]).map(([, p]) => p);
   const picked: Place[] = [];
   for (const p of pool) {
     if (picked.length === 2) break;
@@ -61,8 +62,15 @@ export function quizPools(data: Sirah): Map<Period, QuizQuestion[]> {
   for (const q of data.quiz) pools.set(q.period, [...(pools.get(q.period) ?? []), q]);
   const used = new Set(data.quiz.map(q => q.event));
   const events = [...data.events].sort((a, b) => a.order - b.order);
-  const placesOf = (period: Period) => [...new Set(events.filter(e => e.period === period && e.place).map(e => e.place!))].map(k => data.places.get(k)).filter((p): p is Place => !!p);
-  const everywhere = [...data.places.values()].filter(p => p.events > 0);
+  // The candidate places are the same for every event of a chapter: gather and sort them once, not per event.
+  const byKey = (places: Place[]) => places.sort((a, b) => a.key.localeCompare(b.key));
+  const chapterPlaces = new Map<Period, Place[]>();
+  const placesOf = (period: Period) => {
+    let list = chapterPlaces.get(period);
+    if (!list) chapterPlaces.set(period, list = byKey([...new Set(events.filter(e => e.period === period && e.place).map(e => e.place!))].map(k => data.places.get(k)).filter((p): p is Place => !!p)));
+    return list;
+  };
+  const everywhere = byKey([...data.places.values()].filter(p => p.events > 0));
   const named = placeWords(data);
   const answers = new Map<string, number>(); // period + place → questions so far, so one city does not answer them all
 

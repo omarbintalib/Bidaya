@@ -459,9 +459,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
 
         {showTrade && data.routes.filter(r => r.kind === 'trade').map(r => <g key={r.id}>
           <path className="hmap-trade" d={routeD(r.coords)} strokeWidth={1.3 * unit} strokeDasharray={`${1 * unit} ${4 * unit}`}><title>{`${r.name[locale]} — ${r.note[locale]}`}</title></path>
-          {caravans && !reducedMotion && [0, 1].map(i => <circle key={i} className="hmap-caravan" r={2.6 * unit}>
-            <animateMotion dur="22s" begin={`${-i * 11}s`} repeatCount="indefinite" path={routeD(r.coords)} />
-          </circle>)}
+          {caravans && !reducedMotion && [0, 1].map(i => <Caravan key={i} coords={r.coords} delay={-i * 11000} r={2.6 * unit} />)}
         </g>)}
         {data.routes.filter(r => r.kind === 'sirah').map(r => {
           const on = activeRoutes.includes(r.id);
@@ -629,6 +627,27 @@ function nearestIndex(coords: [number, number][], lon: number, lat: number) {
   let best = 0, dist = Infinity;
   coords.forEach(([x, y], i) => { const d = (x - lon) ** 2 + (y - lat) ** 2; if (d < dist) { dist = d; best = i; } });
   return best;
+}
+
+/**
+ * A caravan moving along a trade route. It is animated with a transform (Web Animations), which the browser runs off
+ * the main thread; moving it with <animateMotion> repainted the whole map on every frame for as long as it was shown.
+ */
+function Caravan({ coords, delay, r }: { coords: [number, number][]; delay: number; r: number }) {
+  const ref = useRef<SVGCircleElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (!el.animate || coords.length < 2) { el.style.display = 'none'; return; } // Unanimated, it would sit in the map's corner.
+    // Keyframes spaced by distance, so the caravan keeps one pace along the route (as animateMotion's "paced" mode did).
+    const points = coords.map(([lon, lat]) => project(lon, lat));
+    const along = points.map((p, i) => i ? Math.hypot(p[0] - points[i - 1][0], p[1] - points[i - 1][1]) : 0);
+    for (let i = 1; i < along.length; i++) along[i] += along[i - 1];
+    const total = along[along.length - 1] || 1;
+    const animation = el.animate(points.map(([x, y], i) => ({ offset: along[i] / total, transform: `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)` })), { duration: 22000, delay, iterations: Infinity });
+    return () => animation.cancel();
+  }, [coords, delay]);
+  return <circle ref={ref} className="hmap-caravan" r={r} />;
 }
 
 /** One event pin; redraws only when its own state, place or the zoom changes. */

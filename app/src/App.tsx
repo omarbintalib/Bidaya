@@ -54,6 +54,8 @@ function Workspace() {
     const cancel = onIdle(() => preloadJourney(false), 3000);
     return () => { cancel(); kinds.forEach(kind => document.removeEventListener(kind, intent)); };
   }, []);
+  // Opening the Journey (directly, or with Back/Forward): fetch the data alongside its code, not after it has loaded.
+  useEffect(() => { if (navigation.page === 'journey') preloadJourney(); }, [navigation.page]);
 
   useEffect(() => {
     const viewport = window.visualViewport;

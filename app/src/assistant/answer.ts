@@ -1,4 +1,5 @@
 import { quranpediaRefs } from '../data/quranpedia';
+import { onIdle } from '../idle';
 import { dateLine, digits, eventPlaceName, excerpt, hadithLinks, sourceLabel } from '../data/select';
 import type { Person, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
@@ -26,12 +27,13 @@ type Field = { weight: number; tokens: Set<string> };
 const STOP_WORDS = ['من', 'في', 'على', 'الى', 'الي', 'عن', 'ما', 'ماذا', 'لماذا', 'متى', 'اين', 'كيف', 'هل', 'هو', 'هي', 'كان', 'كانت', 'التي', 'الذي', 'ذلك', 'هذا', 'هذه', 'او', 'ثم', 'مع', 'لم', 'قد', 'بن', 'بنت', 'ابن', 'رضي', 'الله', 'عنه', 'عنها', 'صلي', 'عليه', 'وسلم', 'النبي', 'رسول', 'اخبرني', 'حدثني', 'قصه', 'حدث', 'سوره', 'نزلت', 'نبي', 'كم', 'عدد', 'اذكر', 'اشرح', 'عرفني', 'معني', 'سبب', 'لما',
   'the', 'a', 'an', 'of', 'in', 'on', 'to', 'and', 'or', 'is', 'was', 'were', 'did', 'do', 'does', 'what', 'when', 'where', 'why', 'how', 'who', 'which', 'tell', 'me', 'about', 'with', 'for', 'at', 'by', 'from', 'prophet', 'messenger', 'allah', 'his', 'he', 'she', 'her', 'it', 'that', 'this', 'surah', 'revealed', 'story', 'event', 'al', 'el', 'ibn', 'bin', 'peace', 'upon', 'him', 'be', 'pleased', 'may', 'there', 'they', 'their', 'happen', 'happened'];
 
+// One pass per kind of change (this runs over every text when the index is built): drop diacritics, tatweel and
+// apostrophes; fold letter variants (and ﷺ into a space); turn the remaining punctuation into spaces.
+const FOLD: Record<string, string> = { 'أ': 'ا', 'إ': 'ا', 'آ': 'ا', 'ٱ': 'ا', 'ى': 'ي', 'ة': 'ه', 'ؤ': 'و', 'ئ': 'ي', 'ﷺ': ' ' };
 export function normalize(s: string) {
   return s.toLowerCase()
-    .replace(/[ً-ٰٟـ]/g, '')
-    .replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/ؤ/g, 'و').replace(/ئ/g, 'ي')
-    .replace(/[ﷺ]/g, ' ')
-    .replace(/[‘’ʿʾ'`´]/g, '')
+    .replace(/[ً-ٰٟـ‘’ʿʾ'`´]/g, '')
+    .replace(/[أإآٱىةؤئﷺ]/g, c => FOLD[c])
     .replace(/[^\p{L}\p{N}\s]/gu, ' ');
 }
 
@@ -48,27 +50,50 @@ function stem(t: string) {
 }
 
 const STOP = new Set(STOP_WORDS.map(w => normalize(w).trim()));
-export const tokens = (s: string) => normalize(s).split(/\s+/).filter(t => t.length > 1 && !STOP.has(t)).map(stem).filter(t => t.length > 1 && !STOP.has(t));
+// The same words recur across the texts: stem each one once.
+const stems = new Map<string, string>();
+const stemmed = (t: string) => { let r = stems.get(t); if (r === undefined) { r = stem(t); stems.set(t, r); } return r; };
+export const tokens = (s: string) => normalize(s).split(/\s+/).filter(t => t.length > 1 && !STOP.has(t)).map(stemmed).filter(t => t.length > 1 && !STOP.has(t));
 const field = (weight: number, ...texts: (string | null | undefined)[]): Field => ({ weight, tokens: new Set(tokens(texts.filter(Boolean).join(' '))) });
 
-const indexes = new WeakMap<Sirah, { docs: Doc[]; idf: Map<string, number>; weight: Map<SirahEvent, number> }>();
-function indexFor(data: Sirah) {
-  let index = indexes.get(data);
-  if (index) return index;
-  const docs: Doc[] = [
-    ...data.events.map(e => ({ kind: 'event' as const, item: e, fields: [field(4, e.title.ar, e.title.en), field(2, e.placeName.ar, e.placeName.en), field(1, e.text.ar, e.text.en)] })),
-    ...data.people.map(p => ({ kind: 'person' as const, item: p, fields: [field(5, p.name.ar, p.name.en, ...p.aliases.flatMap(a => [a.ar, a.en])), field(0.6, p.bio, p.bioEn)] })),
-    ...data.verses.filter(v => v.link?.type !== 'placeholder' || v.reason).map(v => ({ kind: 'verse' as const, item: v, fields: [field(4, `سوره ${v.surah}`, v.surah), field(2.5, v.title.ar, v.title.en), field(0.8, v.reason, v.evidence.en)] })),
-  ];
-  const df = new Map<string, number>();
-  for (const d of docs) for (const t of new Set(d.fields.flatMap(f => [...f.tokens]))) df.set(t, (df.get(t) ?? 0) + 1);
+type Index = { docs: Doc[]; idf: Map<string, number>; weight: Map<SirahEvent, number> };
+const indexes = new WeakMap<Sirah, Index>();
+const building = new WeakMap<Sirah, Generator<void, Index>>();
+
+/** Builds the index one document at a time, pausing after each so the work can be spread over idle moments (see warmUp). */
+function* build(data: Sirah): Generator<void, Index> {
+  const docs: Doc[] = [], df = new Map<string, number>();
+  const add = (doc: Doc) => {
+    docs.push(doc);
+    for (const t of new Set(doc.fields.flatMap(f => [...f.tokens]))) df.set(t, (df.get(t) ?? 0) + 1);
+  };
+  for (const e of data.events) { add({ kind: 'event', item: e, fields: [field(4, e.title.ar, e.title.en), field(2, e.placeName.ar, e.placeName.en), field(1, e.text.ar, e.text.en)] }); yield; }
+  for (const p of data.people) { add({ kind: 'person', item: p, fields: [field(5, p.name.ar, p.name.en, ...p.aliases.flatMap(a => [a.ar, a.en])), field(0.6, p.bio, p.bioEn)] }); yield; }
+  for (const v of data.verses) {
+    if (v.link?.type === 'placeholder' && !v.reason) continue;
+    add({ kind: 'verse', item: v, fields: [field(4, `سوره ${v.surah}`, v.surah), field(2.5, v.title.ar, v.title.en), field(0.8, v.reason, v.evidence.en)] });
+    yield;
+  }
   const idf = new Map([...df].map(([t, n]) => [t, Math.log(1 + docs.length / n)]));
   // Tie-break between events with the same name (e.g. the three Badrs): prefer the one the sources say most about.
   const weight = new Map(data.events.map(e => [e, data.verses.filter(v => v.link?.event === e.n).length + data.people.filter(p => p.events.includes(e.n)).length]));
-  index = { docs, idf, weight };
-  indexes.set(data, index);
-  return index;
+  return { docs, idf, weight };
 }
+
+/** Builds more of the index while `more()` allows. Returns the index once it is complete, otherwise null. */
+function advance(data: Sirah, more: () => boolean): Index | null {
+  const ready = indexes.get(data);
+  if (ready) return ready;
+  let steps = building.get(data);
+  if (!steps) { steps = build(data); building.set(data, steps); }
+  for (;;) {
+    const next = steps.next();
+    if (next.done) { indexes.set(data, next.value); building.delete(data); return next.value; }
+    if (!more()) return null;
+  }
+}
+/** The index, finishing it now if the idle-time build has not. */
+const indexFor = (data: Sirah) => advance(data, () => true)!;
 
 const RULING = /(حكم|حلال|حرام|يجوز|تجوز|جائز|فتوي|افتني|مكروه|واجب علي|هل علي|is it (halal|haram|allowed|permissible|forbidden)|\bruling\b|\bfatwa\b|\bhalal\b|\bharam\b|am i allowed|can i (pray|fast|eat|drink|marry))/i;
 
@@ -150,7 +175,19 @@ export function answer(data: Sirah, question: string, locale: Locale): Answer {
  * this event (a person in it, or a verse the sources link to it), so a suggestion never leads to "no answer".
  */
 /** Builds the search index ahead of time (it is cached per data set), so the first question is instant. */
-export function warmUp(data: Sirah) { indexFor(data); }
+/**
+ * Builds the Ask index in idle time, a few milliseconds at a time, so it never holds up scrolling or a tap
+ * (built at once it was one long task). Asking before it is done simply finishes it. Returns a cancel function.
+ */
+export function warmUp(data: Sirah, firstWithin = 4000, sliceMs = 8): () => void {
+  let cancel = () => {};
+  const slice = () => {
+    const until = performance.now() + sliceMs;
+    if (!advance(data, () => performance.now() < until)) cancel = onIdle(slice, 1000);
+  };
+  cancel = onIdle(slice, firstWithin);
+  return () => cancel();
+}
 
 export function suggestFor(data: Sirah, e: SirahEvent, locale: Locale, max = 3): string[] {
   const ar = locale === 'ar';
