@@ -108,6 +108,20 @@ def source_link(c, lang):
     return dict(label=f'{name}: {short(title)}' if title else name, url=source_url(c))
 
 
+_EN_HONORIFIC = {'عنهما': 'them', 'عنها': 'her', 'عنه': 'him'}
+_AR_HONORIFIC = re.compile(r'رضي الله (عنهما|عنها|عنه)')
+_DOUBLED = re.compile(r'\(?\s*may Allah be pleased with (?:him|her|them)\s*\)?\s*رضي الله (?:عنهما|عنها|عنه)'
+                      r'|رضي الله (?:عنهما|عنها|عنه)\s*(?=\(\s*may Allah be pleased)', re.I)
+
+
+def english_honorific(text):
+    """An English answer says "(may Allah be pleased with him)", never the Arabic phrase: the model sometimes writes
+    the Arabic, or both ("Aisha رضي الله عنها (may Allah be pleased with her)")."""
+    text = _DOUBLED.sub(lambda m: m.group(0)[:m.group(0).find('رضي')].rstrip() if m.group(0).lstrip().startswith('(') else '', text)
+    text = _AR_HONORIFIC.sub(lambda m: f'(may Allah be pleased with {_EN_HONORIFIC[m.group(1)]})', text)
+    return re.sub(r'[ \t]{2,}', ' ', text)
+
+
 def to_frontend(res):
     lang = res['lang']
     status = res['status']
@@ -127,6 +141,8 @@ def to_frontend(res):
             seen.add(link['url']); links.append(link)
     text = re.sub(r'\s*(\[\d+\])+', '', res['answer'])
     text = re.sub(r'\s+([.،,؛;:!?؟])', r'\1', text).strip()
+    if lang == 'en':
+        text = english_honorific(text)
     event = next((int(e['dorar_id']) for e in res['map']), None)
     return dict(out, kind=KIND.get(cited[0]['source'], 'event'), text=text, sources=links,
                 **({'event': event} if event is not None else {}))
