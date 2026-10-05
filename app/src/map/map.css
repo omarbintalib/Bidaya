@@ -32,7 +32,10 @@ html[data-contrast='dark'] .hmap-label-sea { fill: #8fa19b; }
 .hmap-pin.is-selected .hmap-dot { fill: var(--brass); stroke: var(--land); }
 .hmap-halo { fill: none; stroke: var(--brass); opacity: .7; }
 .hmap-approx { fill: none; stroke: var(--map-ink); opacity: .55; }
-.hmap-region { fill: var(--brass); fill-opacity: .08; stroke: var(--brass); stroke-opacity: .5; }
+.hmap-region { fill: var(--brass); fill-opacity: .05; stroke: var(--brass); stroke-opacity: .35; }
+.hmap-region.is-on { fill-opacity: .1; stroke-opacity: .6; }
+/* Approximate places and areas get a hollow dot: the point is a best guess, not a known spot. */
+.hmap-pin.prec-approx:not(.is-past):not(.is-selected) .hmap-dot, .hmap-pin.prec-region:not(.is-past):not(.is-selected) .hmap-dot { fill: var(--land); stroke: var(--map-ink); }
 
 .hmap-hit { fill: transparent; }
 .hmap-pin:hover .hmap-dot { fill: var(--brass); }
@@ -127,7 +130,9 @@ html[data-contrast='dark'] { --grain-opacity: .25; --vignette: #00000059; }
   background-size: 100% 100%, 220px 220px; opacity: var(--grain-opacity); }
 
 /* During a glide, names and pins are rescaled by --k (set each frame) so they keep their on-screen size. */
-.hmap-pin, .hmap-name, .hmap-label, .hmap-quiz-target { scale: var(--k, 1); transform-box: fill-box; transform-origin: center; }
+/* Keep marks their size on screen during a glide. The scale goes on elements without a transform attribute: on a
+   translated group it would scale around the map's corner, so pins slid toward it and snapped back when the glide ended. */
+.hmap-pin > *, .hmap-name, .hmap-label, .hmap-quiz-target > * { scale: var(--k, 1); transform-box: fill-box; transform-origin: center; }
 
 /* Letters from Madinah and delegations to it: one curve each, coloured by what the source says came of it. */
 .hmap-arc-line { fill: none; stroke-linecap: round; stroke: var(--map-ink); opacity: .6; stroke-dasharray: 1; stroke-dashoffset: 0; }

@@ -404,7 +404,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
         {data.labels.map(l => {
           const [x, y] = project(l.lon, l.lat);
           // A region the sources say Islam had reached is named in gold; its places glow at their own coordinates.
-          return <text key={l.id} className={`hmap-label hmap-label-${l.kind}${reachedBy(l.reached) ? ' is-reached' : ''}`} x={x} y={y} fontSize={labelSize[l.size] * unit} transform={l.rotate ? `rotate(${l.rotate} ${x} ${y})` : undefined}>
+          return <text key={l.id} className={`hmap-label hmap-label-${l.kind}${reachedBy(l.reached) ? ' is-reached' : ''}`} x={x} y={y} fontSize={labelSize[l.size] * unit} style={l.rotate ? { rotate: `${l.rotate}deg` } : undefined}>
             <title>{reachedBy(l.reached) && l.reachNote[locale] ? `${l.note[locale]} — ${l.reachNote[locale]}` : l.note[locale]}</title>{l.name[locale]}
           </text>;
         })}
@@ -581,7 +581,8 @@ function nearestIndex(coords: [number, number][], lon: number, lat: number) {
 const PinMark = memo(function PinMark({ id, x, y, emphasis, precision, unit, onPick }: { id: string; x: number; y: number; emphasis: Emphasis; precision: SirahEvent['precision']; unit: number; onPick: (key: string) => void }) {
   const r = (emphasis === 'selected' ? 7 : emphasis === 'active' ? 5 : 3.2) * unit;
   return <g className={`hmap-pin is-${emphasis} prec-${precision}`} transform={`translate(${x} ${y})`}>
-    {precision === 'region' && emphasis === 'selected' && <circle className="hmap-region" r={0.8 * 40} strokeWidth={unit} strokeDasharray={`${3 * unit} ${3 * unit}`} />}
+    {/* An event the sources place only in an area ("Najd", "the lands of Banu Asad") is drawn as that area, not a point. */}
+    {precision === 'region' && emphasis !== 'past' && <circle className={`hmap-region${emphasis === 'selected' ? ' is-on' : ''}`} r={0.8 * 40} strokeWidth={unit} strokeDasharray={`${3 * unit} ${3 * unit}`} />}
     {precision === 'approx' && emphasis !== 'past' && <circle className="hmap-approx" r={r + 5 * unit} strokeWidth={unit} strokeDasharray={`${2 * unit} ${2 * unit}`} />}
     <circle className="hmap-dot" r={r} strokeWidth={1.4 * unit} />
     {emphasis === 'selected' && <circle className="hmap-halo" r={r + 7 * unit} strokeWidth={unit} />}
