@@ -503,7 +503,11 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
           {arcsHere.map((a, i) => {
             const d = arcPath(a), far = a.kind === 'letter' ? a.to : a.from, [fx, fy] = project(far.lon, far.lat);
             return <g key={a.id} className={`hmap-arc is-${a.kind} out-${a.outcome}`} style={{ ['--i' as string]: i }}>
-              <path className="hmap-arc-line" d={d} strokeWidth={2 * unit} pathLength={1}><title>{`${a.name[locale]} — ${a.summary[locale]}`}</title></path>
+              {/* A dashed line cannot draw itself with its own dashes, so it is revealed through a mask that does. */}
+              {a.outcome === 'declined' && <mask id={`arc-reveal-${a.id}`} maskUnits="userSpaceOnUse" x={-WIDTH} y={-HEIGHT} width={WIDTH * 3} height={HEIGHT * 3}>
+                <path className="hmap-arc-reveal" d={d} stroke="#fff" strokeWidth={8 * unit} fill="none" pathLength={1} />
+              </mask>}
+              <path className="hmap-arc-line" d={d} strokeWidth={2 * unit} pathLength={1} mask={a.outcome === 'declined' ? `url(#arc-reveal-${a.id})` : undefined}><title>{`${a.name[locale]} — ${a.summary[locale]}`}</title></path>
               <circle className="hmap-arc-end" cx={fx} cy={fy} r={4.5 * unit} strokeWidth={1.4 * unit} />
               {/* The far end is named (the king, or the people), and pointing at it or tapping it says what came of it. */}
               <text className="hmap-arc-name" x={Math.min(Math.max(fx, (a.end[locale].length * 3.6 + 8) * unit), WIDTH - (a.end[locale].length * 3.6 + 8) * unit)} y={fy + 16 * unit} fontSize={12.5 * unit}

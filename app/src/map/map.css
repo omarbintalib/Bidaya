@@ -184,3 +184,11 @@ html[data-contrast='dark'] .hmap-arc.out-accepted .hmap-arc-name { fill: #f0c674
 html[data-contrast='dark'] .hmap-arc.out-honoured .hmap-arc-name, html[data-contrast='dark'] .hmap-arc.out-treaty .hmap-arc-name { fill: #7fb3aa; }
 .hmap-arc-hit { fill: transparent; cursor: help; }
 @media all { html:not([data-reduced-motion='true']) .hmap-arc-name { animation: hmap-fade-in .5s ease-out both; animation-delay: calc(2.2s + var(--i) * .2s); } }
+
+/* Dashed (declined) letters: drawn out through a mask like the others, then their dashes flow slowly outward. */
+.hmap-arc-reveal { stroke-dasharray: 1; stroke-dashoffset: 0; }
+@media all { /* motion on unless html[data-reduced-motion='true'] */
+  html:not([data-reduced-motion='true']) .hmap-arc-reveal { animation: hmap-draw 2.4s ease-in-out both; animation-delay: calc(var(--i) * .2s); }
+  html:not([data-reduced-motion='true']) .hmap-arc.out-declined .hmap-arc-line { animation: hmap-dash-flow 1.8s linear infinite; }
+}
+@keyframes hmap-dash-flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -.035; } }
