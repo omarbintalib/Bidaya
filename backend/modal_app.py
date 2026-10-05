@@ -6,8 +6,8 @@ Deploy the backend to Modal (serverless GPU, scales to zero: no visitors = no co
     cd backend && modal deploy modal_app.py                       # prints https://<workspace>--bidayah-api-serve.modal.run
 
 The image bakes in both models (bge-m3, bge-reranker-v2-m3) and the corpus embeddings (data/index, rebuilt on
-a GPU at deploy time only if the chunks changed), so a cold start only loads them: roughly 20-60 s for the first question after the app has been
-idle, then ~4 s per answer. The frontend pings /api/health when the page opens, so the backend is usually awake
+a GPU at deploy time only if the chunks changed), so a cold start only loads them and warms the GPU (~30-40 s) after the app has been
+idle, then ~5 s per answer. The frontend pings /api/health when the page opens, so the backend is usually awake
 by the time a visitor asks.
 """
 from pathlib import Path
@@ -64,4 +64,8 @@ def serve():
     sys.path.insert(0, '/app')
     import server
     server.load()                  # load corpus + models before the first request is routed
+    # One dummy search + rerank: the GPU's first pass is slow (~15 s of one-time setup). Doing it here puts it
+    # in the cold start, which the page's wake-up ping triggers, instead of in the visitor's first question.
+    bot = server.bot
+    bot.passages('متى كانت غزوة بدر؟', dict(search_ar='غزوة بدر', search_en='Battle of Badr'))
     return server.app
