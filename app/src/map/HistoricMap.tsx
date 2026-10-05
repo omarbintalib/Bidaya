@@ -116,14 +116,22 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
 
   // Letters sent from Madinah and delegations that came to it, drawn while their event is selected.
   const arcsHere = useMemo(() => selected === null ? [] : data.arcs.filter(a => a.event === selected), [data, selected]);
+  // Everything to keep in view for the selected event: both ends of its letters or delegations, and its routes,
+  // so a journey is seen whole rather than only the place where it is told.
+  const activeKey = activeRoutes.join();
+  const fitPoints = useMemo(() => [
+    ...arcsHere.flatMap(a => [a.from, a.to]),
+    ...data.routes.filter(r => r.kind === 'sirah' && activeRoutes.includes(r.id)).flatMap(r => r.coords.map(([lon, lat]) => ({ lon, lat }))),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  ], [arcsHere, data, activeKey]);
 
   // Follow the selected event when the caller asks.
   useEffect(() => {
     if (focusKey === undefined) return;
     if (overview) { animateTo(homeView(size.w / size.h)); return; }
-    if (quiz || (arcsHere.length && !walk)) {
-      // Fit every answer choice, or both ends of every letter or delegation, in view.
-      const pts = quiz ? quiz.options.map(k => data.places.get(k)).filter(p => p !== undefined) : arcsHere.flatMap(a => [a.from, a.to]);
+    if (quiz || (fitPoints.length > 1 && !walk)) {
+      // Fit every answer choice, or the event's routes and letters, in view.
+      const pts = quiz ? quiz.options.map(k => data.places.get(k)).filter(p => p !== undefined) : fitPoints;
       if (pts.length) {
         const lons = pts.map(p => p.lon), lats = pts.map(p => p.lat);
         // Fit the choices into the part of the map left uncovered by a side panel and the bottom controls.
@@ -162,7 +170,7 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
       animateTo(clampView({ ...next, x: next.x + (rtl ? 1 : -1) * Math.min(inset, W * 0.6) / 2 * tu, y: next.y + coverB / 2 * tu }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focusKey, selected, data, animateTo, inset, insetBottom, locale, overview, walk?.key, quiz?.options.join(), arcsHere]);
+  }, [focusKey, selected, data, animateTo, inset, insetBottom, locale, overview, walk?.key, quiz?.options.join(), fitPoints]);
 
   // A place that lights up while you watch sends out one pulse.
   const [pulses, setPulses] = useState<string[]>([]);

@@ -247,3 +247,18 @@ describe('letters and delegations on the map', () => {
     for (const a of data.arcs.filter(x => x.source.startsWith('صحيح البخاري'))) expect(a.url, a.id).toBe(`https://sunnah.com/bukhari:${a.source.replace(/\D+/g, '')}`);
   });
 });
+
+describe('Quran quotations in English', () => {
+  it('gives every Quran quotation in the English reasons a Quranpedia translation', () => {
+    const missing = data.verses.flatMap(v => [...(v.reasonEn ?? '').matchAll(/﴿([^﴾]*)﴾/g)].filter(m => !v.quranEn.some(q => q.quote === m[1])).map(() => v.id));
+    expect(missing).toEqual([]);
+  });
+  it('links each translation to its Quranpedia page and names the translator', () => {
+    for (const v of data.verses) for (const q of v.quranEn) {
+      expect(q.url, v.id).toMatch(/^https:\/\/quranpedia\.net\/embed\?surah=\d+&ayah=[\d-]+&type=translations$/);
+      expect(q.translator, v.id).toBe('Sahih International');
+      expect(q.text.length, v.id).toBeGreaterThan(5);
+      expect(q.ayah, v.id).toContain(q.text); // a part is the translation's own words, never reworded
+    }
+  });
+});

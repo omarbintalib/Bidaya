@@ -64,7 +64,13 @@ export interface Verse {
   evidence: Text;
   tafseer: string[];
   link: VerseLink | null;
+  /** English for each Quran quotation in reasonEn (quran_en.csv): a published translation of the whole ayah(s),
+   * quoted word for word from Quranpedia, never our own wording. */
+  quranEn: QuranEn[];
 }
+
+/** `part`: the quotation is part of the ayah, and `text` is the matching words of the translation (`ayah` is all of it). */
+export interface QuranEn { quote: string; ref: string; text: string; ayah: string; part: boolean; translator: string; url: string }
 
 export interface Person {
   id: string; name: Text; kind: string; kindEn: string | null; category: string; bio: string;

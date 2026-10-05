@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { quranpediaRefs, type QuranRef } from '../data/quranpedia';
 import { dateLine, excerpt, hadithLinks, hijri, periodName, peopleFor, versesFor } from '../data/select';
-import type { MapArc, Sirah, SirahEvent, Verse } from '../data/types';
+import type { MapArc, QuranEn, Sirah, SirahEvent, Verse } from '../data/types';
 import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
 import QuranReader from './QuranReader';
@@ -103,11 +103,15 @@ function VerseList({ title, verses, locale, compact = false }: { title: string; 
   </section>;
 }
 
-/** English text with each Quran quotation (﴿…﴾) kept in Arabic, in its own direction. */
-function WithQuran({ text }: { text: string }) {
-  return <>{text.split(/(﴿[^﴾]*﴾)/).map((part, i) => part.startsWith('﴿')
-    ? <span key={i} className="quran-quote" lang="ar" dir="rtl">{part}</span>
-    : <PeopleText key={i} text={part} lang="en" />)}</>;
+/** English text with each Quran quotation (﴿…﴾) shown in a published English translation of its ayah (Quranpedia),
+ * with the reference; the Arabic is kept in the tooltip. A quotation with no translation on file stays in Arabic. */
+function WithQuran({ text, quran }: { text: string; quran: QuranEn[] }) {
+  return <>{text.split(/(﴿[^﴾]*﴾)/).map((part, i) => {
+    if (!part.startsWith('﴿')) return <PeopleText key={i} text={part} lang="en" />;
+    const t = quran.find(q => q.quote === part.slice(1, -1));
+    if (!t) return <span key={i} className="quran-quote" lang="ar" dir="rtl">{part}</span>;
+    return <span key={i} className="quran-en"><q lang="en">{t.text}</q>{' '}<a href={t.url} target="_blank" rel="noreferrer" title={t.part ? `${part} — ${t.ayah}` : part}>(Quran {t.ref}{t.part ? ', part' : ''})</a></span>;
+  })}</>;
 }
 
 /** Arabic shown in the English interface because there is no English for it yet. */
@@ -143,7 +147,8 @@ export function VerseItem({ v, locale, compact = false }: { v: Verse; locale: Lo
       <button type="button" className="verse-toggle" aria-expanded={open} onClick={() => setOpen(o => !o)}>{text.reason}</button>
       {open && <div className="verse-detail">
         {v.reason && (!en ? <Ar as="p"><PeopleText text={v.reason} lang="ar" /></Ar>
-          : v.reasonEn ? <p><WithQuran text={v.reasonEn} /></p>
+          : v.reasonEn ? <><p><WithQuran text={v.reasonEn} quran={v.quranEn} /></p>
+            {v.quranEn.length > 0 && v.reasonEn.includes('﴿') && <p className="quran-credit">{text.quranCredit(v.quranEn[0].translator, v.quranEn.every(q => q.part))}</p>}</>
           : <ArabicOnly text={v.reason} people />)}
         {en && v.hadithEn && <blockquote className="verse-hadith">
           <p className="verse-hadith-label">{text.hadithText}</p>

@@ -26,6 +26,7 @@ Two files were added for the period map:
 |------|------------|
 | `map_labels.csv` | Regions, powers and seas shown on the map, with approximate positions for orientation |
 | `map_routes.csv` | The Quraysh caravan routes (winter to Yemen, summer to al-Sham), approximate |
+| `quran_en.csv` | English for each Quran quotation inside the English reasons (`وجه_الارتباط_EN`): Sahih International, quoted word for word from Quranpedia, with the ayah reference and link (see below) |
 | `map_arcs.csv` | The letters sent from Madinah and the delegations that came to it, drawn as curves while their event is on screen (see below) |
 
 Columns added for the app (filled only where the Dorar texts state it, each with its quote):
@@ -144,7 +145,7 @@ Each record has exactly one link type:
 The file loads directly into Leaflet or Mapbox.
 
 - **Event points** (`kind: event`) have these properties: `title`, `hijri_year`, `period`, `precision`, `dorar_url`, `asbab` (IDs of the records linked directly to the event), and `order`.
-- **Routes** (`kind: route`): the line is drawn while its Dorar event (`ref`, e.g. `event_17+19`) is on screen, and a route with stops in `route_stops.csv` can be walked stop by stop. All lines are approximate, and each `note` says why; the stops are the places the Dorar text names.
+- **Routes** (`kind: route`): the line is drawn while its Dorar event (`ref`, e.g. `event_17+19`) is on screen, and a route with at least two stops in `route_stops.csv` can be walked stop by stop. The Walk button appears on the event the stops quote; the second Hijrah to Abyssinia draws the shared line but has no Walk button, since both stops quote the first. While a route or letter is on screen, the map zooms out to show all of it. All lines are approximate, and each `note` says why; the stops are the places the Dorar text names.
 
 | Route | Dorar events | Stops (named in the text) |
 |---|---|---|
@@ -181,6 +182,14 @@ Each place in `4_places.csv` and each region in `map_labels.csv` can carry `حد
 - **The delegations** come from the chapters of Sahih al-Bukhari's Book of Military Expeditions and from Dorar: the people of Yemen (al-Bukhari 4386) and Banu Hanifah with Musaylimah (4373, with 4375 for al-Yamamah) are shown with the Year of Delegations (event 135), and each note says the hadith gives no year. The Christians of Najran come from Dorar event 141 (10 AH), with al-Bukhari 4380.
 - **Left out on purpose:** Banu Tamim, because the hadith does not say where they came from; Abd al-Qays, because their hadith places them before the Conquest, while Mudar still stood between them and Madinah; Daws and the Ash'aris, who came at Khaybar (the Ash'aris already have their own route).
 - Tests check that every Dorar quote is in the event's text and that each hadith links to its sunnah.com page.
+
+### Quran quotations in English
+
+The English reasons (`وجه_الارتباط_EN`) quote the Quran in Arabic between ﴿ ﴾. In English the app now shows each quotation in **Sahih International's translation, copied word for word from Quranpedia** (the translation Quranpedia shows by default), followed by its reference, e.g. *(Quran 74:1)*, which links to that ayah on Quranpedia. The Arabic stays in the link's tooltip. Nothing is translated by the team or by machine.
+
+- Each quotation was matched to its ayah against the reference in `مرجع_الآيات`. All 66 matched exactly one ayah.
+- A quotation that is part of an ayah shows the translation of the **whole ayah**, and the note under the reason says so. There is one exception: where a reason quotes two parts of one ayah and its point depends on the part (ASB-030 «غَيْرُ أُولِي الضَّرَرِ», ASB-031), `Translation_EN` holds the matching words of the same translation and `Ayah_EN` holds the full ayah. A test checks that the part is word for word inside the ayah.
+- Footnote numbers from Quranpedia, such as [1788], are removed; the words are unchanged.
 
 ### Revelation marks on the timeline
 

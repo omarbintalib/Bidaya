@@ -617,7 +617,8 @@ const EventStep = memo(function EventStep({ index, i, store, data, locale, goToS
   if (on && !read) setRead(true);
   const open = on || (keepOpen && read);
   const e = data.events[index];
-  const route = on ? data.routes.find(r => r.kind === 'sirah' && r.events.includes(e.n) && (data.stops.get(r.id)?.length ?? 0) > 0) ?? null : null;
+  const route = on ? data.routes.find(r => r.kind === 'sirah' && r.events.includes(e.n) && (data.stops.get(r.id)?.length ?? 0) > 1 && data.stops.get(r.id)!.some(st => st.event === e.n)) ?? null : null;
+  // A walk needs at least two stops, and is offered on the event its stops quote (not on a later event that shares the line).
   return <section data-step={i} className={`step step-event${on ? ' is-on' : ''}${open && !on ? ' is-read' : ''}`} onClick={() => !on && goToStep(i)}>
     {open ? <EventCard data={data} event={e} locale={locale} chapter={PERIOD_ORDER.indexOf(e.period) + 1}
       yearEvents={data.events.filter(x => x.year === e.year && x.period === e.period)} onPick={goToEvent}

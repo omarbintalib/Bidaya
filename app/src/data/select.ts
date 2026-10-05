@@ -38,6 +38,9 @@ export function versesFor(data: Sirah, e: SirahEvent): EventVerses {
     else if (l.type === 'context' && l.event === e.n) context.push(v);
     else if (l.type === 'stage' && l.from !== null && l.to !== null && e.order >= l.from && e.order <= l.to) stage.push(v);
   }
+  // Verses a hadith ties to the event come first; those placed here only by estimate ('suggested') go last.
+  const rank = (v: Verse) => (v.link?.type === 'suggested' ? 1 : 0);
+  direct.sort((a, b) => rank(a) - rank(b));
   return { direct, context, stage };
 }
 

@@ -204,3 +204,8 @@ html[data-contrast='dark'] .tl-revealed { background: #7fb3aa; border-color: #7f
 html[data-contrast='dark'] .tl-revealed.is-suggested { background: transparent; }
 .tl-key { display: inline-flex; align-items: center; gap: 8px; font-size: var(--text-small); color: var(--muted); white-space: nowrap; }
 .tl-revealed.is-key { position: static; translate: none; display: inline-block; }
+
+/* A Quran quotation in English: the published translation, then its reference (Arabic in the tooltip). */
+.quran-en q { font-style: italic; }
+.quran-en a { white-space: nowrap; font-size: var(--text-small); color: var(--muted); }
+.quran-credit { margin: 6px 0 0; font-size: var(--text-small); color: var(--muted); }

@@ -21,6 +21,7 @@ const FILES = {
   quiz: 'quiz.csv',
   facts: '7_sahaba_references.csv',
   arcs: 'map_arcs.csv',
+  quranEn: 'quran_en.csv',
 } as const;
 
 const PERIODS: Record<string, Period> = { 'قبل البعثة': 'prologue', 'العهد المكي': 'makkah', 'الهجرة': 'hijrah', 'العهد المدني': 'madinah' };
@@ -100,6 +101,12 @@ export async function loadSirah(): Promise<Sirah> {
   // ﷺ is a right-to-left character: in English, a number or dash after it would be pulled into right-to-left order
   // ("ﷺ — 13 BH" shows as "13 — ﷺ BH"). A left-to-right mark after it keeps the English in order.
   const en = (s: string | undefined) => s ? s.replace(/ﷺ(?!\u200E)/g, 'ﷺ\u200E') : null;
+  const quranEn = new Map<string, Verse['quranEn']>();
+  for (const r of parseCsv(raw.quranEn)) {
+    const list = quranEn.get(r['المعرف']) ?? [];
+    list.push({ quote: r['الاقتباس'], ref: r['الآيات'], text: r['Translation_EN'], ayah: r['Ayah_EN'] || r['Translation_EN'], part: !!r['الجزء'], translator: r['المترجم'], url: r['الرابط'] });
+    quranEn.set(r['المعرف'], list);
+  }
   const verses: Verse[] = parseCsv(raw.verses).map(r => ({
     id: r['المعرف'],
     title: { ar: r['الحدث'], en: r['العنوان_EN'] || r['الحدث'] },
@@ -114,6 +121,7 @@ export async function loadSirah(): Promise<Sirah> {
     evidence: { ar: r['الدليل'], en: r['الدليل_EN'] },
     tafseer: list(r['روابط_موسوعة_التفسير']),
     link: links.get(r['المعرف']) ?? null,
+    quranEn: quranEn.get(r['المعرف']) ?? [],
   }));
 
   const stated = (v: string | undefined) => v && !/غير مذكور/.test(v) ? v : null;
