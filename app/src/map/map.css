@@ -148,3 +148,12 @@ html[data-contrast='dark'] .hmap-arc.out-honoured .hmap-arc-line, html[data-cont
 .lg-arc { width: 22px; border-top: 2px solid #c08a2c; display: inline-block; }
 .lg-arc.out-declined { border-top: 2px dashed var(--map-ink); opacity: .6; }
 .lg-arc.out-honoured { border-top-color: #4f7f78; }
+
+/* The ends of the route being told, and the far end's name. */
+.hmap-route-end circle { fill: var(--land); stroke: var(--brass); }
+.hmap-route-end text { text-anchor: middle; font-family: var(--display); font-weight: 700; fill: var(--map-ink); paint-order: stroke; stroke: var(--land); stroke-width: 3px; stroke-linejoin: round; }
+@media all {
+  /* Animate the parts, not the group: a CSS transform on the group would replace its translate() and move it. */
+  html:not([data-reduced-motion='true']) .hmap-route-end > * { animation: hmap-fade-in .5s ease-out 1.8s both; }
+}
+@keyframes hmap-fade-in { from { opacity: 0; } to { opacity: 1; } }

@@ -417,7 +417,21 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
               <path key={walk.key} className="hmap-route is-on is-drawing" d={routeD(r.coords.slice(0, cut + 1))} strokeWidth={3 * unit} pathLength={1} />
             </g>;
           }
-          if (on) return <path key={`${r.id}-${focusKey}`} className="hmap-route is-on is-drawing" d={routeD(r.coords)} strokeWidth={2.6 * unit} pathLength={1}><title>{`${r.name[locale]} — ${r.note[locale]}`}</title></path>;
+          if (on) {
+            // The route being told: drawn, both ends marked and named, and a dot that travels it so its direction reads.
+            const d = routeD(r.coords), ends = [r.coords[0], r.coords[r.coords.length - 1]];
+            return <g key={`${r.id}-${focusKey}`} className="hmap-route-on">
+              <path className="hmap-route is-on is-drawing" d={d} strokeWidth={2.6 * unit} pathLength={1}><title>{`${r.name[locale]} — ${r.note[locale]}`}</title></path>
+              {ends.map(([lon, lat], i) => {
+                const [x, y] = project(lon, lat), place = nearestPlace(data, lon, lat);
+                return <g key={i} className="hmap-route-end" transform={`translate(${x} ${y})`}>
+                  <circle r={5 * unit} strokeWidth={1.6 * unit} />
+                  {place && i === 1 && <text y={-10 * unit} fontSize={13 * unit}>{place.name[locale]}</text>}
+                </g>;
+              })}
+              {!reducedMotion && <circle className="hmap-arc-runner" r={3.2 * unit}><animateMotion dur="2.6s" fill="freeze" path={d} /></circle>}
+            </g>;
+          }
           return <path key={r.id} className="hmap-route" d={routeD(r.coords)} strokeWidth={1.1 * unit} strokeDasharray={`${6 * unit} ${4 * unit}`}><title>{`${r.name[locale]} — ${r.note[locale]}`}</title></path>;
         })}
 
@@ -503,6 +517,13 @@ function arcPath(a: MapArc) {
   const [x0, y0] = project(a.from.lon, a.from.lat), [x1, y1] = project(a.to.lon, a.to.lat);
   const mx = (x0 + x1) / 2, my = (y0 + y1) / 2, k = 0.18;
   return `M${x0.toFixed(1)} ${y0.toFixed(1)}Q${(mx - (y1 - y0) * k).toFixed(1)} ${(my + (x1 - x0) * k).toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`;
+}
+
+/** The named place at a route's end, if one lies within about 25 km of it. */
+function nearestPlace(data: Sirah, lon: number, lat: number) {
+  let best = null as ReturnType<typeof data.places.get> | null, dist = 0.06;
+  for (const p of data.places.values()) { const d = (p.lon - lon) ** 2 + (p.lat - lat) ** 2; if (d < dist) { dist = d; best = p; } }
+  return best;
 }
 
 /** Index of the route point nearest to a place. */
