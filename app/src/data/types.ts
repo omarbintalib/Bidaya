@@ -112,6 +112,8 @@ export interface MapArc {
   from: { lat: number; lon: number }; to: { lat: number; lon: number };
   name: Text; outcome: 'accepted' | 'declined' | 'honoured' | 'treaty';
   summary: Text; quote: string; quoteEn: string | null; source: string; url: string; note: Text;
+  /** Short name shown at the far end on the map: the king a letter went to, or where a delegation came from. */
+  end: Text;
 }
 
 /** A chapter question (quiz.csv), answered by choosing a place. */

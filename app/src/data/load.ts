@@ -207,7 +207,7 @@ export async function loadSirah(): Promise<Sirah> {
     const [fLat, fLon, tLat, tLon] = [r['من_lat'], r['من_lon'], r['إلى_lat'], r['إلى_lon']].map(num);
     if (!kind || !outcome || event === null || fLat === null || fLon === null || tLat === null || tLon === null) { warn(`map_arcs.csv: "${r['المعرف']}" needs النوع (رسالة / وفد), النتيجة, رقم_حدث_الدرر and both ends`); continue; }
     arcs.push({ id: r['المعرف'], kind, event, from: { lat: fLat, lon: fLon }, to: { lat: tLat, lon: tLon }, name: { ar: r['الاسم'], en: r.Name_EN || r['الاسم'] }, outcome,
-      summary: { ar: r['الخلاصة'], en: r.Summary_EN || r['الخلاصة'] }, quote: r['الشاهد'], quoteEn: r['الشاهد_EN'] || null, source: r['المصدر'], url: r['الرابط'], note: { ar: r['ملاحظة'], en: r.Note_EN || r['ملاحظة'] } });
+      summary: { ar: r['الخلاصة'], en: r.Summary_EN || r['الخلاصة'] }, quote: r['الشاهد'], quoteEn: r['الشاهد_EN'] || null, source: r['المصدر'], url: r['الرابط'], note: { ar: r['ملاحظة'], en: r.Note_EN || r['ملاحظة'] }, end: { ar: r['اسم_الطرف'] || r['الاسم'], en: r.End_EN || r.Name_EN || r['الاسم'] } });
   }
 
   const growth = new Map<string, Growth[]>();

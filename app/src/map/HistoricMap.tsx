@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { COS, K, LAND } from '../data/land';
-import type { MapArc, Sirah, SirahEvent } from '../data/types';
+import type { MapArc, RouteStop, Sirah, SirahEvent } from '../data/types';
 import type { Locale } from '../i18n';
 import { mapCopy } from './copy';
 import { eventPlaceName, placeNameAt } from '../data/select';
@@ -127,7 +127,8 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
   // zooming in on each stop and losing the rest of the journey.
   const walkRoute = walk?.routeId;
   const fitPoints = useMemo(() => walkRoute ? (data.routes.find(r => r.id === walkRoute)?.coords ?? []).map(([lon, lat]) => ({ lon, lat })) : [
-    ...arcsHere.flatMap(a => [a.from, a.to]),
+    // Each end's name is drawn under its dot and centred on it: leave room for it to either side and below.
+    ...arcsHere.flatMap(a => [a.from, a.to, ...[a.kind === 'letter' ? a.to : a.from].flatMap(p => [{ lon: p.lon - 1.4, lat: p.lat - 0.9 }, { lon: p.lon + 1.4, lat: p.lat - 0.9 }])]),
     ...data.routes.filter(r => r.kind === 'sirah' && activeRoutes.includes(r.id)).flatMap(r => r.coords.map(([lon, lat]) => ({ lon, lat }))),
     // eslint-disable-next-line react-hooks/exhaustive-deps
   ], [arcsHere, data, activeKey, walkRoute]);
@@ -436,6 +437,15 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
   const tipAt = nameTip && { left: Math.min(Math.max((nameTip.x - view.x) / unit + (size.w - view.w / unit) / 2, 160), size.w - 160), top: (nameTip.y - view.y) / unit + (size.h - view.h / unit) / 2 };
   const selectRef = useRef(select);
   selectRef.current = select;
+  // Pointing at a dot names the place (as it was then) and what happened there.
+  const hoverPin = useCallback((key: string | null) => {
+    if (!key) { setNameTip(t => (t?.key.startsWith('pin-') ? null : t)); return; }
+    const pin = pins.find(p => p.key === key);
+    if (!pin) return;
+    const name = (placeNameAt(data, key, now, locale) ?? data.places.get(key)?.name[locale]) || pin.name;
+    const titles = pin.events.map(e => e.title[locale] || e.title.ar), more = titles.length > 2 ? ` (+${titles.length - 2})` : '';
+    setNameTip({ key: `pin-${key}`, x: pin.x, y: pin.y - 10 * unit, text: `${name} — ${titles.slice(0, 2).join(locale === 'ar' ? '؛ ' : '; ')}${more}` });
+  }, [pins, data, now, locale, unit]);
   const pickPin = useCallback((key: string) => { const pin = pins.find(p => p.key === key); if (pin) selectRef.current(pin); },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [pins]);
@@ -469,15 +479,18 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
             </g>;
           }
           if (on) {
-            // The route being told: drawn, both ends marked and named, and a dot that travels it so its direction reads.
-            const d = routeD(r.coords), ends = [r.coords[0], r.coords[r.coords.length - 1]];
+            // The route being told: drawn, its start, end and farthest point (the turn of a round trip) marked and
+            // named as they were then, and a dot that travels it so its direction reads. A name the map already shows
+            // there is not repeated.
+            const d = routeD(r.coords), shown = new Set(placed.map(l => l.key));
             return <g key={`${r.id}-${focusKey}`} className="hmap-route-on">
               <path className="hmap-route is-on is-drawing" d={d} strokeWidth={2.6 * unit} pathLength={1}><title>{`${r.name[locale]} — ${r.note[locale]}`}</title></path>
-              {ends.map(([lon, lat], i) => {
+              {routeMarks(r).map(([lon, lat], i) => {
                 const [x, y] = project(lon, lat), place = nearestPlace(data, lon, lat);
+                const name = place ? (shown.has(place.key) ? null : placeNameAt(data, place.key, now, locale) ?? place.name[locale]) : nearestStop(data.stops.get(r.id), lon, lat)?.name[locale] ?? null;
                 return <g key={i} className="hmap-route-end" transform={`translate(${x} ${y})`}>
                   <circle r={5 * unit} strokeWidth={1.6 * unit} />
-                  {place && i === 1 && <text y={-10 * unit} fontSize={13 * unit}>{placeNameAt(data, place.key, now, locale) ?? place.name[locale]}</text>}
+                  {name && <text y={-10 * unit} fontSize={13 * unit}>{name}</text>}
                 </g>;
               })}
               {!reducedMotion && <circle className="hmap-arc-runner" r={3.2 * unit}><animateMotion dur="2.6s" fill="freeze" path={d} /></circle>}
@@ -491,13 +504,22 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
             const d = arcPath(a), far = a.kind === 'letter' ? a.to : a.from, [fx, fy] = project(far.lon, far.lat);
             return <g key={a.id} className={`hmap-arc is-${a.kind} out-${a.outcome}`} style={{ ['--i' as string]: i }}>
               <path className="hmap-arc-line" d={d} strokeWidth={2 * unit} pathLength={1}><title>{`${a.name[locale]} — ${a.summary[locale]}`}</title></path>
-              <circle className="hmap-arc-end" cx={fx} cy={fy} r={4.5 * unit} strokeWidth={1.4 * unit}><title>{`${a.name[locale]} — ${a.summary[locale]}`}</title></circle>
+              <circle className="hmap-arc-end" cx={fx} cy={fy} r={4.5 * unit} strokeWidth={1.4 * unit} />
+              {/* The far end is named (the king, or the people), and pointing at it or tapping it says what came of it. */}
+              <text className="hmap-arc-name" x={Math.min(Math.max(fx, (a.end[locale].length * 3.6 + 8) * unit), WIDTH - (a.end[locale].length * 3.6 + 8) * unit)} y={fy + 16 * unit} fontSize={12.5 * unit}
+                onPointerEnter={ev => { if (ev.pointerType === 'mouse') setNameTip({ key: a.id, x: fx, y: fy - 6 * unit, text: `${a.name[locale]} — ${a.summary[locale]}` }); }}
+                onPointerLeave={ev => { if (ev.pointerType === 'mouse') setNameTip(null); }}
+                onClick={() => setNameTip(t => t?.key === a.id ? null : { key: a.id, x: fx, y: fy - 6 * unit, text: `${a.name[locale]} — ${a.summary[locale]}` })}>{a.end[locale]}</text>
+              <circle className="hmap-arc-hit" cx={fx} cy={fy} r={14 * unit}
+                onPointerEnter={ev => { if (ev.pointerType === 'mouse') setNameTip({ key: a.id, x: fx, y: fy - 6 * unit, text: `${a.name[locale]} — ${a.summary[locale]}` }); }}
+                onPointerLeave={ev => { if (ev.pointerType === 'mouse') setNameTip(null); }}
+                onClick={() => setNameTip(t => t?.key === a.id ? null : { key: a.id, x: fx, y: fy - 6 * unit, text: `${a.name[locale]} — ${a.summary[locale]}` })} />
               {!reducedMotion && <circle className="hmap-arc-runner" r={3 * unit}><animateMotion dur="2.4s" begin={`${i * 0.2}s`} fill="freeze" path={d} /></circle>}
             </g>;
           })}
         </g>}
 
-        {pins.map(pin => <PinMark key={pin.key} id={pin.key} x={pin.x} y={pin.y} emphasis={pin.emphasis} precision={pin.precision} unit={unit} onPick={pickPin} />)}
+        {pins.map(pin => <PinMark key={pin.key} id={pin.key} x={pin.x} y={pin.y} emphasis={pin.emphasis} precision={pin.precision} unit={unit} onPick={pickPin} onHover={hoverPin} />)}
 
         {quiz && <g className="hmap-quiz">
           {quiz.options.map(k => {
@@ -574,6 +596,23 @@ function arcPath(a: MapArc) {
   return `M${x0.toFixed(1)} ${y0.toFixed(1)}Q${(mx - (y1 - y0) * k).toFixed(1)} ${(my + (x1 - x0) * k).toFixed(1)} ${x1.toFixed(1)} ${y1.toFixed(1)}`;
 }
 
+/** The points of a route worth naming: its start, its end, and its farthest point from the start (so a round trip
+ * such as Makkah → al-Ta'if → Makkah names al-Ta'if). Points within about 20 km of one another count once. */
+function routeMarks(r: { coords: [number, number][] }) {
+  const c = r.coords, first = c[0], last = c[c.length - 1];
+  const far = c.reduce((best, p) => ((p[0] - first[0]) ** 2 + (p[1] - first[1]) ** 2 > (best[0] - first[0]) ** 2 + (best[1] - first[1]) ** 2 ? p : best), first);
+  const out: [number, number][] = [];
+  for (const p of [first, far, last]) if (!out.some(q => (q[0] - p[0]) ** 2 + (q[1] - p[1]) ** 2 < 0.04)) out.push(p);
+  return out;
+}
+
+/** The route stop nearest a point, within about 60 km (for route ends with no place on file, such as Yemen). */
+function nearestStop(stops: RouteStop[] | undefined, lon: number, lat: number) {
+  let best: RouteStop | null = null, dist = 0.3;
+  for (const s of stops ?? []) { const d = (s.lon - lon) ** 2 + (s.lat - lat) ** 2; if (d < dist) { dist = d; best = s; } }
+  return best;
+}
+
 /** The named place at a route's end, if one lies within about 25 km of it. */
 function nearestPlace(data: Sirah, lon: number, lat: number) {
   let best = null as ReturnType<typeof data.places.get> | null, dist = 0.06;
@@ -589,7 +628,7 @@ function nearestIndex(coords: [number, number][], lon: number, lat: number) {
 }
 
 /** One event pin; redraws only when its own state, place or the zoom changes. */
-const PinMark = memo(function PinMark({ id, x, y, emphasis, precision, unit, onPick }: { id: string; x: number; y: number; emphasis: Emphasis; precision: SirahEvent['precision']; unit: number; onPick: (key: string) => void }) {
+const PinMark = memo(function PinMark({ id, x, y, emphasis, precision, unit, onPick, onHover }: { id: string; x: number; y: number; emphasis: Emphasis; precision: SirahEvent['precision']; unit: number; onPick: (key: string) => void; onHover: (key: string | null) => void }) {
   const r = (emphasis === 'selected' ? 7 : emphasis === 'active' ? 5 : 3.2) * unit;
   return <g className={`hmap-pin is-${emphasis} prec-${precision}`} transform={`translate(${x} ${y})`}>
     {/* An event the sources place only in an area ("Najd", "the lands of Banu Asad") is drawn as that area, not a point. */}
@@ -597,6 +636,7 @@ const PinMark = memo(function PinMark({ id, x, y, emphasis, precision, unit, onP
     {precision === 'approx' && emphasis !== 'past' && <circle className="hmap-approx" r={r + 5 * unit} strokeWidth={unit} strokeDasharray={`${2 * unit} ${2 * unit}`} />}
     <circle className="hmap-dot" r={r} strokeWidth={1.4 * unit} />
     {emphasis === 'selected' && <circle className="hmap-halo" r={r + 7 * unit} strokeWidth={unit} />}
-    <circle className="hmap-hit" r={Math.max(r, 14 * unit)} onClick={() => onPick(id)} />
+    <circle className="hmap-hit" r={Math.max(r, 14 * unit)} onClick={() => onPick(id)}
+      onPointerEnter={ev => { if (ev.pointerType === 'mouse') onHover(id); }} onPointerLeave={ev => { if (ev.pointerType === 'mouse') onHover(null); }} />
   </g>;
 });
