@@ -174,8 +174,10 @@ different passages (`consistent`).
 
 ## Progress (2026-10-06)
 
-**Live (Modal):** the backend of `bidaya-v11` at 9b05862 (follow-up questions, map-event choice, prompt rules 1-9).
-The two newer prompt commits (7495238 and the rule 10 below) are **not deployed yet**: see "Before the next deploy".
+**Live (Modal v4):** the backend of `bidaya-v11` with prompt rules 1-9 as tested since 9b05862 plus **rule 10**
+(false premises, with safeguards). The other prompt edits of 7495238 (the rule 1 tweak and rule 11 on ambiguous names)
+were removed: the rule 1 tweak made "Was the Prophet's ﷺ marriage to Aisha moral by today's standards?" get answered
+instead of referred. 7495238's English-honorific fix in `server.py` is kept.
 
 ### Harder test sets (toolkit `exp/`, run in parallel: 50 questions x 2 runs in ~4 min)
 
@@ -186,30 +188,28 @@ The two newer prompt commits (7495238 and the rule 10 below) are **not deployed 
 - **15 premise questions**: 7 contradicted by the sources (must be corrected), 4 the sources are silent on (must be
   refused, never denied), 4 true premises (must NOT be corrected: the over-correction guard).
 
-| Prompt (deployed corpus, 2,905 chunks) | 50 questions | Faithful | Contradicted corrected | Silent refused | True premises kept |
-|---|---|---|---|---|---|
-| Live prompt (rules 1-9) | 87/100 | 66% | 6/14 | 8/8 | 7/8 |
-| + rule 10 with safeguards | 87/100 | 79% | 9/14 | 8/8 | 7/8 |
-| + 7495238 (rule 1 tweak, rule 11) + rule 10 with safeguards (= this commit) | 83/100 | 73% | 11/14 | 8/8 | 7/8 |
+| Prompt (deployed corpus, 2,905 chunks), 2 runs | 50 questions | Contradicted corrected | Silent refused | True premises kept |
+|---|---|---|---|---|
+| Rules 1-9 (live until v4) | 87/100 | 6/14 | 8/8 | 7/8 |
+| **Rules 1-9 + rule 10 (live, v4)** | 85-87/100 | 8-9/14 | 8/8 | 7-8/8, no new over-correction |
+| 7495238 prompt + rule 10 (not used) | 83/100 | 11/14 | 8/8 | 7/8, but answers the moral question |
 
-**Rule 10** (false premises): correct a premise only when a passage states the opposite, in one neutral cited
-sentence, then answer; if the sources are merely silent, never say it did not happen; never correct wording, never say
-the user is wrong, never correct a premise the sources support. It replaces 7495238's shorter rule 10, which had none
-of these safeguards. Example: "لماذا خسر المسلمون في غزوة بدر؟" -> "لم يخسر المسلمون في غزوة بدر؛ بل حققوا فيها نصرًا كبيرًا…".
+**Rule 10**: correct a premise only when a passage states the opposite, in one neutral cited sentence, then answer;
+if the sources are merely silent, never say it did not happen; never correct wording, never say the user is wrong,
+never correct a premise the sources support. Example: "لماذا خسر المسلمون في غزوة بدر؟" ->
+"لم يخسر المسلمون في غزوة بدر؛ بل حققوا فيها نصرًا كبيرًا…".
 
 **More Bukhari (not adopted):** adding al-Jihad wa al-Siyar, al-Shurut, al-Hajj, Fard al-Khumus, al-Jizya and the
 hadiths our records cite (+716 hadiths, corpus 3,633) gave 85/100 vs 87/100 with either prompt, a lower rubric score,
-and with the live prompt far more refusals of contradicted premises (1/14). Kept in `exp/plus` for a narrower retry
+and with the old prompt far more refusals of contradicted premises (1/14). Kept in `exp/plus` for a narrower retry
 (only the ~45 cited hadiths).
 
-### Before the next deploy
+### Open issues
 
-1. **Rule 1 tweak in 7495238** ("insufficient only when the passages say nothing relevant") makes the model answer
-   "Was the Prophet's ﷺ marriage to Aisha moral by today's standards?" with facts (2/2 runs) instead of referring it
-   (refused 2/2 without the tweak). Decide: keep the tweak and route moral-judgment questions to a refusal in the
-   router, or revert the tweak. Re-run the two test sets, then `cd backend && modal deploy modal_app.py`.
-2. Still failing in every version: "years between the two migrations" (an interval to compute), Aisha's age without
-   the consummation age, the year-8 list without Mu'tah and Taif, "married Aisha before Khadijah" not corrected,
-   Arabic in Latin letters ("shu sar b ghazwat badr?") refused in about half the runs.
-3. The LLM judge is strict on wording (e.g. "the 10th year of prophethood" vs "3 years before the Hijra"): read the
-   failures before trusting small differences.
+1. Failing in every version: "years between the two migrations" (an interval to compute), Aisha's age without the
+   consummation age, the year-8 list without Mu'tah and Taif, "married Aisha before Khadijah" not corrected, Arabic in
+   Latin letters ("shu sar b ghazwat badr?") refused in about half the runs.
+2. If fewer needless refusals are wanted (7495238's rule 1 tweak), first make the router refuse moral-judgment
+   questions, then re-test.
+3. The LLM judge is strict on wording (e.g. "died of al-'adasa" vs "died in Makkah"): read failures before trusting
+   small differences.
