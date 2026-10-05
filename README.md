@@ -1,4 +1,4 @@
-# Bidaya (بداية) – Data Package 
+# Bidaya (بداية) – Data Package  
 
 > **Live demo:** LIVE_DEMO_URL
 >
