@@ -355,6 +355,8 @@
 .sound-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: var(--text-small); color: var(--ink); }
 .sound-volume { flex-direction: column; align-items: stretch; gap: 6px; }
 .sound-volume.is-off { opacity: .45; }
+.sound-volume-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.sound-volume-head output { font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600; }
 .sound-switch { appearance: none; width: 40px; height: 22px; border-radius: 99px; background: var(--border); position: relative; cursor: pointer; flex: none; transition: background .2s; }
 .sound-switch::after { content: ''; position: absolute; top: 3px; inset-inline-start: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); box-shadow: 0 1px 3px #0003; transition: inset-inline-start .2s; }
 .sound-switch:checked { background: var(--brass); }

@@ -57,6 +57,8 @@ export function AccessibilityLauncher({ locale, open, buttonRef, onClick }: { lo
 export default function AccessibilityPanel({ locale, onClose, launcher, trigger, busy }: { locale: Locale; onClose: () => void; launcher: ReactNode; trigger: RefObject<HTMLButtonElement | null>; busy: boolean }) {
   const { preferences, update, reset } = useAccessibility();
   const sound = useSoundControls();
+  // The volume as a number beside its slider: "40%", or "٤٠٪" in Arabic.
+  const volumeText = sound ? (locale === 'ar' ? `${String(Math.round(sound.volume * 100)).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d])}٪` : `${Math.round(sound.volume * 100)}%`) : '';
   const dialog = useRef<HTMLDivElement>(null);
   const restore = useRef(!busy); restore.current = !busy;
   const text = accessCopy[locale];
@@ -90,8 +92,8 @@ export default function AccessibilityPanel({ locale, onClose, launcher, trigger,
         {sound && <div className="accessibility-sound" role="group" aria-label={sound.labels.title}>
           <label className="sound-row"><span>{sound.labels.on}</span><input type="checkbox" role="switch" className="sound-switch" checked={sound.on} onChange={sound.toggle} /></label>
           <label className={`sound-row sound-volume${sound.on ? '' : ' is-off'}`}>
-            <span>{sound.labels.volume}</span>
-            <input type="range" min={0} max={100} step={5} value={Math.round(sound.volume * 100)} disabled={!sound.on} aria-valuetext={`${Math.round(sound.volume * 100)}%`}
+            <span className="sound-volume-head"><span>{sound.labels.volume}</span><output aria-hidden="true">{volumeText}</output></span>
+            <input type="range" min={0} max={100} step={5} value={Math.round(sound.volume * 100)} disabled={!sound.on} aria-valuetext={volumeText}
               onChange={event => sound.setVolume(Number(event.target.value) / 100)} />
           </label>
           <p className="sound-note">{sound.labels.note}</p>
