@@ -544,7 +544,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     </nav>
     {built && <div className="scrolly">
       <div className="scrolly-steps" ref={column}>
-        <HoldStill store={stepStore} anchor={anchor} column={column} />
+        <HoldStill store={stepStore} anchor={anchor} column={column} lockUntil={lockUntil} glide={wide && !reducedMotion} />
         <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} keepOpen={!wide} />
         <section data-step={steps.length - 1} className={`step step-summary${step.kind === 'summary' ? ' is-on' : ''}`}>
           <span>{text.summaryKicker}</span>
@@ -626,16 +626,39 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
  * reading line would land a step or two further on. This runs after those cards re-render and scrolls by the
  * shift, so the step the reader reached stays exactly where it was.
  */
-function HoldStill({ store, anchor, column }: { store: ActiveStore; anchor: React.RefObject<{ step: number; top: number } | null>; column: React.RefObject<HTMLDivElement | null> }) {
+function HoldStill({ store, anchor, column, lockUntil, glide }: { store: ActiveStore; anchor: React.RefObject<{ step: number; top: number } | null>; column: React.RefObject<HTMLDivElement | null>; lockUntil: React.RefObject<number>; glide: boolean }) {
   const active = useActive(store, a => a);
+  const last = useRef(active);
   useLayoutEffect(() => {
-    const held = anchor.current;
+    const held = anchor.current, down = active > last.current;
+    last.current = active;
     anchor.current = null;
     if (!held || held.step !== active) return;
     const el = column.current?.querySelector<HTMLElement>(`[data-step="${active}"]`);
     const shift = el ? el.getBoundingClientRect().top - held.top : 0;
     if (Math.abs(shift) > 1) window.scrollBy({ top: shift, behavior: 'instant' });
-  }, [active, anchor, column]);
+    if (!el || !down || !glide) return;
+    // Scrolling down opens the next card at the reading line, mostly below the screen. Once the reader pauses,
+    // bring it up to the middle (or to the top, when it is taller than the screen).
+    let timer = 0;
+    const settle = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        cleanup();
+        if (performance.now() < lockUntil.current || !el.classList.contains('is-on')) return;
+        const box = el.getBoundingClientRect(), margin = parseFloat(getComputedStyle(el).scrollMarginTop) || 0;
+        const want = Math.max(margin, (window.innerHeight - box.height) / 2), by = box.top - want;
+        if (by < 24) return;
+        lockUntil.current = performance.now() + 1200;
+        window.addEventListener('scrollend', () => { lockUntil.current = performance.now() + 50; }, { once: true });
+        window.scrollBy({ top: by, behavior: 'smooth' });
+      }, 160);
+    };
+    const cleanup = () => { window.clearTimeout(timer); window.removeEventListener('scroll', settle); };
+    window.addEventListener('scroll', settle, { passive: true });
+    settle();
+    return cleanup;
+  }, [active, anchor, column, lockUntil, glide]);
   return null;
 }
 

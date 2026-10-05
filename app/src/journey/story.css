@@ -38,7 +38,7 @@
 .answer-text { animation: fade-in .35s ease both; }
 .answer-actions .btn-quiet { min-height: 38px; padding: 6px 14px; }
 /* The open event card slides down beneath the answer card. */
-.step.is-on > :first-child { translate: 0 var(--answer-push, 0px); transition: translate .5s cubic-bezier(.2, .7, .3, 1); }
+.step.is-on > :first-child, .step-chapter.is-on > * { translate: 0 var(--answer-push, 0px); transition: translate .5s cubic-bezier(.2, .7, .3, 1); }
 .ask-head { display: flex; align-items: center; justify-content: space-between; }
 .ask-head h2 { margin: 0; font-size: var(--text-control); }
 .ask-panel .ai-note { text-align: center; }
@@ -129,7 +129,7 @@
 .story-timeline .tl-tick { height: 44px; }
 .story-timeline .tl-year { top: 26px; }
 
-.walk-panel { position: absolute; z-index: 3; inset-inline-start: 16px; bottom: 136px; width: min(400px, calc(100% - 32px)); padding: 18px 20px 16px; background: var(--paper); border: 1px solid var(--brass); box-shadow: 0 16px 50px #331b0d2a; cursor: auto; }
+.walk-panel { position: absolute; z-index: 3; inset-inline-start: 16px; bottom: calc(var(--timeline-h, 130px) + 16px); width: min(400px, calc(100% - 32px)); padding: 18px 20px 16px; background: var(--paper); border: 1px solid var(--brass); box-shadow: 0 16px 50px #331b0d2a; cursor: auto; }
 .walk-kicker { margin: 0; color: var(--brass); font-size: calc(14px * var(--text-scale)); }
 .walk-panel h3 { margin: 4px 0 8px; font-size: calc(22px * var(--text-scale)); }
 .walk-quote { margin: 0 0 8px; font-size: var(--text-body); line-height: calc(var(--reading-line-height) + .2); }
@@ -158,7 +158,7 @@
 .chat-history-list h3 { margin: 0 0 12px; color: var(--brass); font-size: var(--text-body); overflow-wrap: anywhere; }
 .chat-history-list p, .chat-history-empty { margin: 0; font-size: var(--text-body); line-height: var(--reading-line-height); white-space: pre-wrap; overflow-wrap: anywhere; }
 .chat-history-empty { padding-block: 24px; }
-.quick-quiz { max-height: calc(100% - 180px); overflow-y: auto; overscroll-behavior: contain; }
+.quick-quiz { max-height: calc(100% - var(--timeline-h, 130px) - 100px); overflow-y: auto; overscroll-behavior: contain; }
 .quick-quiz h3 { padding-inline-end: 28px; font-size: calc(19px * var(--text-scale)); line-height: 1.5; }
 .quick-quiz .quiz-hint { margin-bottom: 10px; }
 .quiz-options.is-compact { display: flex; flex-wrap: wrap; gap: 6px; }
