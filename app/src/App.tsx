@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import BrandLogo from './components/BrandLogo';
-import JourneyPage from './pages/JourneyPage';
+import JourneyPage, { preloadJourney } from './pages/JourneyPage';
+import { onIdle } from './idle';
 import TitlePage from './pages/TitlePage';
 import NotFoundPage from './pages/NotFoundPage';
 import { PageBoundary } from './components/Recovery';
@@ -43,6 +44,16 @@ function Workspace() {
     document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
     document.title = `${route[locale].title} · ${text.title}`;
   }, [locale, route, text.title]);
+
+  // Fetch the Journey ahead of time: its code once the browser is idle, its data as soon as a visitor heads for it
+  // (pointing at, focusing or touching a Journey link), so both download during the page transition, not after it.
+  useEffect(() => {
+    const intent = (event: Event) => { if (event.target instanceof Element && event.target.closest('a[href="/journey"]')) preloadJourney(); };
+    const kinds = ['pointerover', 'focusin', 'touchstart'] as const;
+    kinds.forEach(kind => document.addEventListener(kind, intent, { passive: true }));
+    const cancel = onIdle(() => preloadJourney(false), 3000);
+    return () => { cancel(); kinds.forEach(kind => document.removeEventListener(kind, intent)); };
+  }, []);
 
   useEffect(() => {
     const viewport = window.visualViewport;
