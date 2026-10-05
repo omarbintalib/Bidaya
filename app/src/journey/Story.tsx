@@ -200,6 +200,31 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     window.addEventListener('resize', onScroll);
     return () => { cancelAnimationFrame(frame); window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); };
   }, [steps, wide, built, resume, intro]);
+  useEffect(() => {
+    // Zooming or resizing the window reflows every card, so the step under the reading line would change by
+    // itself. Hold the current step instead: no picking while the size changes, and the step kept in place.
+    let size = { w: window.innerWidth, dpr: window.devicePixelRatio }, hold = 0, settle = 0;
+    const keep = () => {
+      hold = 0;
+      const el = column.current?.querySelector<HTMLElement>(`[data-step="${activeRef.current}"]`);
+      el?.scrollIntoView({ block: 'start', behavior: 'instant' });
+    };
+    const onResize = () => {
+      const next = { w: window.innerWidth, dpr: window.devicePixelRatio };
+      // On a touch screen a change of height alone is the address bar or the keyboard: nothing reflows, so the
+      // page is left where it is. Anywhere else (a window dragged taller, a zoom) the cards reflow.
+      const reflow = next.w !== size.w || next.dpr !== size.dpr || !window.matchMedia('(pointer: coarse)').matches;
+      size = next;
+      lockUntil.current = Math.max(lockUntil.current, performance.now() + 400);
+      if (!reflow) return;
+      cancelAnimationFrame(rush.current); column.current?.classList.remove('is-rushing');
+      if (!hold) hold = requestAnimationFrame(keep);
+      window.clearTimeout(settle);
+      settle = window.setTimeout(() => { keep(); lockUntil.current = performance.now() + 150; }, 300);
+    };
+    window.addEventListener('resize', onResize);
+    return () => { cancelAnimationFrame(hold); window.clearTimeout(settle); window.removeEventListener('resize', onResize); };
+  }, []);
 
   const goToStep = useCallback((i: number, smooth = true) => {
     const target = Math.max(0, Math.min(steps.length - 1, i));
