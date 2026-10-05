@@ -30,8 +30,10 @@ export default function SoundMenu({ locale, on, volume, onToggle, onVolume }: {
       setPlace({ top: b.bottom + 8, left, width: w });
     };
     fit();
+    // The toolbar is sticky: follow the button while the page scrolls, as well as when the window changes size.
     window.addEventListener('resize', fit);
-    return () => window.removeEventListener('resize', fit);
+    window.addEventListener('scroll', fit, { passive: true });
+    return () => { window.removeEventListener('resize', fit); window.removeEventListener('scroll', fit); };
   }, [open]);
   const pct = Math.round(volume * 100);
   return <div className="sound-menu" ref={root}>

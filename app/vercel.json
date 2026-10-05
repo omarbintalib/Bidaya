@@ -18,7 +18,7 @@
       ]
     },
     {
-      "source": "/(fonts|images|map)/(.*)",
+      "source": "/(fonts|images|map|sounds)/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
