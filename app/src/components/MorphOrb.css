@@ -29,6 +29,8 @@
 .mo-orb { position: absolute; width: 220px; height: 220px; left: 50%; top: 50%; transform: translate(-50%, -50%); }
 .mo-trail { position: absolute; width: 100px; height: 100px; border-radius: 50%; background: radial-gradient(circle, #aa874452, #aa874400 67%); opacity: 0; pointer-events: none; }
 .mo-pulse { position: absolute; inset: -5px; border: 1px solid #b6965f; border-radius: 50%; opacity: 0; }
+/* Unseen once the answer is shown: their boxes (the orb is 220px tall, the ring scaled up) made the card scroll. */
+.mo-root[data-phase='answered'] :is(.mo-orb, .mo-pulse) { display: none; }
 .mo-answer { position: absolute; inset: 0; padding: 17px 21px; direction: ltr; visibility: hidden; outline: none; }
 [dir='rtl'] .mo-answer { direction: rtl; }
 .mo-root[data-phase='unfold'] .mo-answer, .mo-root[data-phase='answered'] .mo-answer { visibility: visible; }

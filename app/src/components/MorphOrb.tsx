@@ -566,7 +566,7 @@ function createRuntime(env: Env): Runtime {
   CH.anchorY = (v) => { mover.style.top = `${fmt(v)}px`; };
   CH.trail = (v) => { trailVis = v; renderTrail(); };
   CH.pulse = (v) => {
-    if (v < 0) { pulse.style.opacity = "0"; return; }
+    if (v < 0) { pulse.style.opacity = "0"; pulse.style.transform = ""; return; } // a scaled ring, even unseen, overflows
     pulse.style.opacity = fmt(0.5 * (1 - v));
     pulse.style.transform = `scale(${fmt(1 + v)})`;
   };
