@@ -196,13 +196,11 @@ html[data-contrast='dark'] .hmap-arc.out-honoured .hmap-arc-name, html[data-cont
 .hmap-arc-runner { opacity: 0; animation: hmap-fade-in .15s linear both; animation-delay: calc(.6s + var(--i) * .2s); }
 html[data-reduced-motion='true'] .hmap-arc-runner { display: none; }
 
-/* Terrain (Natural Earth): baked washes and sea depth, shaded relief, lakes and rivers. */
-:root { --relief-opacity: .8; --wash-opacity: 1; --depth-opacity: 1; --river: #7d9a97; }
-html[data-contrast='light'] { --relief-opacity: .5; --wash-opacity: .6; --depth-opacity: .5; }
-html[data-contrast='dark'] { --relief-opacity: .4; --wash-opacity: .45; --depth-opacity: .25; --river: #4f6f6c; }
+/* Terrain (Natural Earth): shaded relief as soft shadows, lakes and rivers. Land and sea keep their own colours. */
+:root { --relief-opacity: .8; --river: #7d9a97; }
+html[data-contrast='light'] { --relief-opacity: .5; }
+html[data-contrast='dark'] { --relief-opacity: .4; --river: #4f6f6c; }
 .hmap-terrain { pointer-events: none; }
 html[data-contrast='dark'] html[data-contrast='dark'] .hmap-relief { opacity: var(--relief-opacity); }
-.hmap-wash { opacity: var(--wash-opacity); }
-.hmap-depth { opacity: var(--depth-opacity); pointer-events: none; }
 .hmap-lake { fill: var(--sea); stroke: var(--coast); stroke-linejoin: round; stroke-opacity: .6; }
 .hmap-river { fill: none; stroke: var(--river); stroke-linecap: round; stroke-linejoin: round; opacity: .75; }

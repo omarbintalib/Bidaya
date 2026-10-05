@@ -366,8 +366,6 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
           </pattern>
         </defs>
         <rect className="hmap-sea" x={-WIDTH} y={-HEIGHT} width={WIDTH * 3} height={HEIGHT * 3} />
-        {/* The sea's depth, baked (scripts/build-terrain.py): pale shallows along the coast, deeper water offshore. */}
-        <image className="hmap-depth" href={img(MAP_IMAGES.depth)} x={0} y={0} width={MAP_IMAGES.width} height={MAP_IMAGES.height} preserveAspectRatio="none" aria-hidden="true" />
         {/* Water lines: thin rings following the coast, as on engraved maps. Each ring is a wide coast-coloured
             stroke with a slightly narrower sea-coloured stroke on top; the land drawn after covers the inner half. */}
         <g className="hmap-water" aria-hidden="true">
@@ -377,10 +375,9 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
           </g>)}
         </g>
         <path className="hmap-land" d={LAND} strokeWidth={1.1 * unit} />
-        {/* Terrain from Natural Earth (scripts/build-terrain.py). The soft washes (fertile land, the shade inside the coast) and the shaded relief are images: an SVG is redrawn on every frame of a glide, and an image is cheap to
-            move. Only the crisp details are drawn: lakes and rivers. */}
+        {/* Terrain from Natural Earth (scripts/build-terrain.py): the shaded relief as soft shadows only, so the land and sea
+            keep their own colours, then lakes and rivers. The relief is an image: cheap to move while the map glides. */}
         <g className="hmap-terrain" aria-hidden="true" clipPath="url(#hmap-land-clip)">
-          <image className="hmap-wash" href={img(MAP_IMAGES.wash)} x={0} y={0} width={MAP_IMAGES.width} height={MAP_IMAGES.height} preserveAspectRatio="none" />
           <image className="hmap-relief" href={img(MAP_IMAGES.relief)} x={0} y={0} width={MAP_IMAGES.width} height={MAP_IMAGES.height} preserveAspectRatio="none" />
           <path className="hmap-lake" d={LAKES} strokeWidth={0.8 * unit} />
           <path className="hmap-river" d={RIVERS} strokeWidth={1.1 * unit} />
