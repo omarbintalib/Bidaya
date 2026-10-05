@@ -7,6 +7,7 @@ import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
 import QuranReader from './QuranReader';
 import { PeopleText, usePeople } from './People';
+import Fold from './Fold';
 
 /** The opening of an event's text: its first sentence when that is a readable length, else about two lines. */
 function lead(body: string) {
@@ -75,17 +76,14 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
       </ul>
     </section>}
 
-    {arcs.length > 0 && <section className="ecard-section">
-      <h3>{arcs.every(a => a.kind === 'letter') ? text.letters : text.delegations}</h3>
+    {arcs.length > 0 && <Fold title={arcs.every(a => a.kind === 'letter') ? text.letters : text.delegations} count={digits(arcs.length, locale)}
+      preview={arcs.map(a => a.name[locale]).join(locale === 'ar' ? '، ' : ', ')}>
       <ul className="ecard-arcs">{arcs.map(a => <ArcItem key={a.id} a={a} locale={locale} />)}</ul>
-    </section>}
+    </Fold>}
 
     {verses.direct.length > 0 && <VerseList title={text.verses} verses={verses.direct} locale={locale} />}
     {verses.context.length > 0 && <VerseList title={text.contextVerses} verses={verses.context} locale={locale} />}
-    {verses.stage.length > 0 && <details className="ecard-section ecard-more-verses">
-      <summary><h3>{text.stageVerses}</h3><span className="count">{verses.stage.length}</span></summary>
-      <ul className="verses is-compact">{verses.stage.map(v => <VerseItem key={v.id} v={v} locale={locale} compact />)}</ul>
-    </details>}
+    {verses.stage.length > 0 && <VerseList title={text.stageVerses} verses={verses.stage} locale={locale} compact />}
 
   </article>;
 }
@@ -108,10 +106,19 @@ function ArcItem({ a, locale }: { a: MapArc; locale: Locale }) {
 }
 
 function VerseList({ title, verses, locale, compact = false }: { title: string; verses: Verse[]; locale: Locale; compact?: boolean }) {
-  return <section className="ecard-section">
-    <h3>{title}</h3>
+  return <Fold title={title} count={digits(verses.length, locale)} preview={versePreview(verses, locale)}>
     <ul className={`verses${compact ? ' is-compact' : ''}`}>{verses.map(v => <VerseItem key={v.id} v={v} locale={locale} compact={compact} />)}</ul>
-  </section>;
+  </Fold>;
+}
+
+/** What a shut verse list holds, in one line: "العلق ١–٥ · المدثر ١–٥". */
+function versePreview(verses: Verse[], locale: Locale) {
+  const en = locale === 'en', text = journeyCopy[locale];
+  return verses.map(v => {
+    const surah = en ? v.surahEn ?? v.surah : v.surah;
+    const ayat = v.whole ? text.wholeSurah : quranpediaRefs(v.ref, false, locale).map(r => r.label.split(':')[1]).join(en ? ', ' : '، ');
+    return `${surah} ${digits(ayat, locale)}`;
+  }).join(' · ');
 }
 
 /** English text with each Quran quotation (﴿…﴾) shown in a published English translation of its ayah (Quranpedia),
@@ -155,8 +162,10 @@ export function VerseItem({ v, locale, compact = false }: { v: Verse; locale: Lo
     <p className="verse-phrase">{v.phrase[locale]}</p>
     {label && v.link?.type !== 'direct' && <p className="verse-label">{en && v.link?.labelEn ? v.link.labelEn : <Ar>{label}</Ar>}</p>}
     {!compact && <>
-      <button type="button" className="verse-toggle" aria-expanded={open} onClick={() => setOpen(o => !o)}>{text.reason}</button>
-      {open && <div className="verse-detail">
+      <button type="button" className="verse-toggle" aria-expanded={open} onClick={() => setOpen(o => !o)}>{text.reason}
+        <svg className="fold-chev" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+      </button>
+      <div className={`fold-body verse-fold${open ? ' is-open' : ''}`} inert={!open}><div className="fold-inner"><div className="verse-detail">
         {v.reason && (!en ? <Ar as="p"><PeopleText text={v.reason} lang="ar" /></Ar>
           : v.reasonEn ? <><p><WithQuran text={v.reasonEn} quran={v.quranEn} /></p>
             {v.quranEn.length > 0 && v.reasonEn.includes('﴿') && <p className="quran-credit">{text.quranCredit(v.quranEn[0].translator, v.quranEn.every(q => q.part))}</p>}</>
@@ -172,7 +181,7 @@ export function VerseItem({ v, locale, compact = false }: { v: Verse; locale: Lo
           {v.tafseer.slice(0, 1).map(u => <a key={u} href={u} target="_blank" rel="noreferrer">{text.tafseer}</a>)}
         </p>
         {v.narrator && <p className="verse-narrator">{text.narrator}: {en && v.narratorEn ? v.narratorEn : <Ar>{v.narrator}</Ar>}</p>}
-      </div>}
+      </div></div></div>
     </>}
   </li>;
 }

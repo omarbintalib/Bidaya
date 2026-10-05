@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useRef, type ReactNode } from 'react';
+import Fold from './Fold';
 import { findPeople, mentionIn } from '../data/people';
-import { hijri } from '../data/select';
+import { digits, hijri } from '../data/select';
 import type { Person, Sirah } from '../data/types';
 import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
@@ -96,16 +97,15 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
         {dorar.length > 0 && <span>Dorar: {dorar.map((f, i) => <span key={f.source}>{i > 0 && ', '}<a href={f.url!} target="_blank" rel="noreferrer">{sourceEn(f.source).replace(/^Dorar · /, '')}</a></span>)}</span>}
         {others.map((f, i) => <span key={f.source}>{(dorar.length > 0 || i > 0) && ' · '}{f.url ? <a href={f.url} target="_blank" rel="noreferrer">{sourceEn(f.source)}</a> : sourceEn(f.source)}</span>)}
       </p>)}
-      {person.facts.length > 0 && <details className="pd-quotes">
-        <summary>{text.sourceTexts(person.facts.length)}</summary>
+      {person.facts.length > 0 && <Fold className="pd-quotes" title={text.sourceTextsTitle} count={digits(person.facts.length, locale)}>
         {!en ? <ul lang="ar" dir="rtl">{person.facts.map((f, i) => <li key={i}><q className="pd-quote">{f.quote}</q><small>{f.source}</small></li>)}</ul>
           : <ul>{person.facts.map((f, i) => <li key={i}>
             {f.quoteEn ? <q className="pd-quote" lang="en">{f.quoteEn}</q> : <><small className="no-translation-note">{text.inArabicQuote}</small><q className="pd-quote" lang="ar" dir="rtl">{f.quote}</q></>}
             <small>{sourceEn(f.source)}</small>
           </li>)}</ul>}
-      </details>}
-      {events.length > 0 && <section className="pd-events">
-        <h3>{text.personEvents}</h3>
+      </Fold>}
+      {events.length > 0 && <Fold className="pd-events" title={text.personEvents} count={digits(events.length, locale)} defaultOpen={events.length <= 4}
+        preview={events.slice(0, 3).map(e => e.title[locale] || e.title.ar).join(' · ')}>
         <ul>{events.map(e => {
           const said = mentionIn(data, person, e, locale);
           return <li key={e.n}>
@@ -116,7 +116,7 @@ export function PersonDialog({ person, data, locale, onClose, onEvent }: { perso
           </li>;
         })}</ul>
         <p className="pd-quote-note">{text.quoteNote}</p>
-      </section>}
+      </Fold>}
       <p className="pd-source">{text.personSource}</p>
     </div>
   </dialog>;

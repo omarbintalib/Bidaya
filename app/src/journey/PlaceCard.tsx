@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { hijri } from '../data/select';
+import { digits, hijri } from '../data/select';
 import type { Sirah } from '../data/types';
 import type { Locale } from '../i18n';
 import { journeyCopy } from './copy';
+import Fold from './Fold';
 
 /** A place's card: its name then and now, when Islam reached it, and its events. */
 export default function PlaceCard({ placeKey, data, locale, onClose, onEvent }: { placeKey: string; data: Sirah; locale: Locale; onClose: () => void; onEvent: (n: number) => void }) {
@@ -34,14 +35,13 @@ export default function PlaceCard({ placeKey, data, locale, onClose, onEvent }: 
         </dd></div>}
       </dl>}
 
-      <section className="pd-events">
-        <h3>{text.placeEvents(events.length)}</h3>
-        {events.length ? <ul>{events.map(e => <li key={e.n}>
+      {events.length ? <Fold className="pd-events" title={text.placeEventsTitle} count={digits(events.length, locale)} defaultOpen>
+        <ul>{events.map(e => <li key={e.n}>
           <button type="button" onClick={() => { onEvent(e.n); onClose(); }}>
             <span className="pd-ev-head"><span>{e.title[locale] || e.title.ar}</span><small>{hijri(e.year, locale)}</small></span>
           </button>
-        </li>)}</ul> : <p className="pd-note">{text.placeNoEvents}</p>}
-      </section>
+        </li>)}</ul>
+      </Fold> : <p className="pd-note">{text.placeNoEvents}</p>}
     </div>
   </dialog>;
 }
