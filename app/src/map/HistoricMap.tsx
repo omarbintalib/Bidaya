@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { COS, K, LAND } from '../data/land';
-import { LAKES, MAP_IMAGES, RIVERS, SAND } from '../data/terrain';
+import { LAKES, MAP_IMAGES, RIVERS } from '../data/terrain';
 import type { MapArc, RouteStop, Sirah, SirahEvent } from '../data/types';
 import type { Locale } from '../i18n';
 import { mapCopy } from './copy';
@@ -364,10 +364,6 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
           <pattern id="hmap-hatch" width={6 * unit} height={6 * unit} patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
             <line x1="0" y1="0" x2="0" y2={6 * unit} className="hmap-hatch-line" strokeWidth={unit} />
           </pattern>
-          {/* Sand seas: rows of small dune crests, sized in screen pixels. */}
-          <pattern id="hmap-dunes" width={18 * unit} height={12 * unit} patternUnits="userSpaceOnUse">
-            <path className="hmap-dune" d={`M${2 * unit} ${5 * unit}q${3 * unit} ${-3.2 * unit} ${6 * unit} 0M${11 * unit} ${11 * unit}q${3 * unit} ${-3.2 * unit} ${6 * unit} 0`} strokeWidth={0.9 * unit} />
-          </pattern>
         </defs>
         <rect className="hmap-sea" x={-WIDTH} y={-HEIGHT} width={WIDTH * 3} height={HEIGHT * 3} />
         {/* The sea's depth, baked (scripts/build-terrain.py): pale shallows along the coast, deeper water offshore. */}
@@ -381,12 +377,10 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
           </g>)}
         </g>
         <path className="hmap-land" d={LAND} strokeWidth={1.1 * unit} />
-        {/* Terrain from Natural Earth (scripts/build-terrain.py). The soft washes (sand, fertile land, the shade inside the
-            coast) and the shaded relief are images: an SVG is redrawn on every frame of a glide, and an image is cheap to
-            move. Only the crisp details are drawn: dune crests, lakes and rivers. */}
+        {/* Terrain from Natural Earth (scripts/build-terrain.py). The soft washes (fertile land, the shade inside the coast) and the shaded relief are images: an SVG is redrawn on every frame of a glide, and an image is cheap to
+            move. Only the crisp details are drawn: lakes and rivers. */}
         <g className="hmap-terrain" aria-hidden="true" clipPath="url(#hmap-land-clip)">
           <image className="hmap-wash" href={img(MAP_IMAGES.wash)} x={0} y={0} width={MAP_IMAGES.width} height={MAP_IMAGES.height} preserveAspectRatio="none" />
-          <path className="hmap-sand-texture" d={SAND} fill="url(#hmap-dunes)" />
           <image className="hmap-relief" href={img(MAP_IMAGES.relief)} x={0} y={0} width={MAP_IMAGES.width} height={MAP_IMAGES.height} preserveAspectRatio="none" />
           <path className="hmap-lake" d={LAKES} strokeWidth={0.8 * unit} />
           <path className="hmap-river" d={RIVERS} strokeWidth={1.1 * unit} />
