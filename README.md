@@ -184,6 +184,10 @@ Each place in `4_places.csv` and each region in `map_labels.csv` can carry `حد
   - **Modern place names:** al-Shumaisi, al-Ha'it, "Jordan" (Mu'tah is now "the land of al-Balqa'", Dorar 122's term) and "Red Sea coast".
   - **Later term:** المسجد النبوي → مسجد رسول الله ﷺ.
   - **English sea names:** each sea now has its Arabic name of the time first, such as "Sea of al-Qulzum (the Red Sea)".
+- - **Region names say what they meant then.** Pointing at a region or sea on the map (tapping, on a phone) explains it from `map_labels.csv` (`ملاحظة` / `Note_EN`):
+  - **al-Bahrayn** was the whole eastern region of Arabia, not today's island country (Sahih al-Bukhari 4371: Jawatha, «قَرْيَةً مِنَ الْبَحْرَيْنِ»).
+  - **Oman, Yemen, Iraq and al-Sham** were regions, not today's states.
+  - **The seas** carry their names of the time: al-Qulzum, al-Rum, Faris.
 - - **Names appear gradually.** A place is named on the map from its first event on, so places and mosques do not show before the story reaches them.
 - **The glow grows with the Muslims the sources count.** `islam_growth.csv` gives, per place and event, a number Dorar states, word for word. A lit place glows faintly when no number is given and brighter and wider as the count grows, up to the 30,000 of Tabuk (scaled on a logarithm, so 16 emigrants already shows). Each count is a lower bound and says what it counts, such as "Muslims who marched to Uhud", because the sources count those who emigrated or marched, not a population.
 - The map's key now reads "Gold glow: places Islam had reached (n)", with "Brighter where the sources count more Muslims", and it is shown on phones too.

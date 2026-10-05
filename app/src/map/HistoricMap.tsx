@@ -404,9 +404,13 @@ export default function HistoricMap({ data, locale, emphasis, selected, activeRo
         {data.labels.map(l => {
           const [x, y] = project(l.lon, l.lat);
           // A region the sources say Islam had reached is named in gold; its places glow at their own coordinates.
-          return <text key={l.id} className={`hmap-label hmap-label-${l.kind}${reachedBy(l.reached) ? ' is-reached' : ''}`} x={x} y={y} fontSize={labelSize[l.size] * unit} style={l.rotate ? { rotate: `${l.rotate}deg` } : undefined}>
-            <title>{reachedBy(l.reached) && l.reachNote[locale] ? `${l.note[locale]} — ${l.reachNote[locale]}` : l.note[locale]}</title>{l.name[locale]}
-          </text>;
+          // Pointing at (or tapping) a region explains what its name meant then: al-Bahrayn was the whole east coast.
+          const note = [l.note[locale], reachedBy(l.reached) ? l.reachNote[locale] : ''].filter(Boolean).join(' — ');
+          const tip = { key: `label-${l.id}`, x, y: y - labelSize[l.size] * unit, text: note };
+          return <text key={l.id} className={`hmap-label hmap-label-${l.kind}${reachedBy(l.reached) ? ' is-reached' : ''}${note ? ' is-explained' : ''}`} x={x} y={y} fontSize={labelSize[l.size] * unit} style={l.rotate ? { rotate: `${l.rotate}deg` } : undefined}
+            onPointerEnter={note ? ev => { if (ev.pointerType === 'mouse') setNameTip(tip); } : undefined}
+            onPointerLeave={note ? ev => { if (ev.pointerType === 'mouse') setNameTip(null); } : undefined}
+            onClick={note ? () => setNameTip(t => t?.key === tip.key ? null : tip) : undefined}>{l.name[locale]}</text>;
         })}
   </>,
     // eslint-disable-next-line react-hooks/exhaustive-deps
