@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import BrandLogo from './components/BrandLogo';
 import JourneyPage from './pages/JourneyPage';
 import TitlePage from './pages/TitlePage';
@@ -18,7 +19,12 @@ function GeometricMark() {
 }
 
 export default function App() {
-  return <AccessibilityProvider><Workspace /></AccessibilityProvider>;
+  return (
+    <AccessibilityProvider>
+      <Workspace />
+      <SpeedInsights />
+    </AccessibilityProvider>
+  );
 }
 
 function Workspace() {
