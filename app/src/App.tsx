@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { requestSummary } from './navigation/summaryRequest';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import BrandLogo from './components/BrandLogo';
 import JourneyPage, { preloadJourney } from './pages/JourneyPage';
@@ -102,10 +103,18 @@ function Workspace() {
           <svg className="destination-menu-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
           <span>{locale === 'ar' ? 'القائمة' : 'Menu'}</span>
         </button>
-        <button className="language-switch" onClick={toggleLocale} aria-label={text.language}>
-          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7" stroke="currentColor" /><ellipse cx="10" cy="10" rx="3" ry="7" stroke="currentColor" /><path d="M3 10h14" stroke="currentColor" /></svg>
-          <span lang={locale === 'ar' ? 'en' : 'ar'}>{locale === 'ar' ? 'English' : 'العربية'}</span>
-        </button>
+        <div className="header-end">
+          {/* The Sirah summary, from any page: it opens over the Journey (going there first if need be). */}
+          <button className="summary-link" aria-label={locale === 'ar' ? 'ملخص السيرة' : 'Sirah summary'} title={locale === 'ar' ? 'ملخص السيرة على الخريطة' : 'The Sirah summary on the map'}
+            onClick={() => { requestSummary(); if (navigation.page !== 'journey') navigation.request('journey'); }}>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" strokeWidth="1.4" /><path d="M8.3 6.8v6.4l5-3.2z" fill="currentColor" /></svg>
+            <span aria-hidden="true">{locale === 'ar' ? 'ملخص السيرة' : 'Sirah summary'}</span>
+          </button>
+          <button className="language-switch" onClick={toggleLocale} aria-label={text.language}>
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7" stroke="currentColor" /><ellipse cx="10" cy="10" rx="3" ry="7" stroke="currentColor" /><path d="M3 10h14" stroke="currentColor" /></svg>
+            <span lang={locale === 'ar' ? 'en' : 'ar'}>{locale === 'ar' ? 'English' : 'العربية'}</span>
+          </button>
+        </div>
       </header>
       <PageBoundary key={navigation.page} locale={locale}>
         {navigation.page === 'not-found' ? <NotFoundPage locale={locale} onHome={() => navigation.request('home')} onBegin={() => navigation.request('journey')} />

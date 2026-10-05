@@ -68,6 +68,12 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--brass); outline
 .brand-logo { width: 113px; height: auto; display: block; }
 .language-switch { display: flex; align-items: center; gap: 9px; padding: 9px 0; border: 0; background: none; font-size: var(--text-small); transition: color .2s; }
 .language-switch:hover { color: var(--brass); }
+.header-end { display: flex; align-items: center; gap: 18px; }
+.summary-link { display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 6px 14px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); color: var(--ink); font-size: var(--text-small); white-space: nowrap; transition: border-color .2s; }
+.summary-link:hover { border-color: var(--brass); }
+.summary-link svg { width: 17px; height: 17px; flex: none; color: var(--brass); }
+/* Phones: the round play button alone (its name is its label), beside the language switch. */
+@media (max-width: 700px) { .header-end { gap: 10px; } .summary-link { width: 40px; padding: 0; justify-content: center; } .summary-link span { display: none; } }
 .language-switch svg { width: 19px; height: 19px; }
 .explorer { flex: 1; min-height: 666px; position: relative; }
 .intro { position: relative; z-index: 1; padding-top: 39px; padding-inline-end: 100px; pointer-events: none; }

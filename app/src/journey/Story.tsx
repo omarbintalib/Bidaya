@@ -12,6 +12,7 @@ import { journeyCopy } from './copy';
 import EventCard, { VerseItem } from './EventCard';
 import { Ambience, type Scene } from '../sound/ambience';
 import { publishSound } from '../sound/soundControls';
+import { SUMMARY_EVENT, takeSummaryRequest } from '../navigation/summaryRequest';
 import SummaryFilm from './SummaryFilm';
 import Intro from './Intro';
 import { createActiveStore, useActive, type ActiveStore } from './activeStore';
@@ -342,6 +343,14 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
   const [filmFrom, setFilmFrom] = useState(0);
   const [filmBack, setFilmBack] = useState<number | null>(null);
   const openFilm = useCallback(() => { setPlaying(false); setFilmFrom(0); setFilmBack(null); setFilmOpen(true); }, []);
+  // The header's "Sirah summary" button: past the opening page or the "continue" question (keeping the reader's place).
+  const openFromHeader = useRef<() => void>(() => {});
+  useEffect(() => {
+    const open = () => { if (takeSummaryRequest()) openFromHeader.current(); };
+    open();                                     // asked for on another page, before the Journey had loaded
+    window.addEventListener(SUMMARY_EVENT, open);
+    return () => window.removeEventListener(SUMMARY_EVENT, open);
+  }, []);
   const backToFilm = useCallback(() => { if (filmBack === null) return; setPlaying(false); setFilmFrom(filmBack); setFilmBack(null); setFilmOpen(true); }, [filmBack]);
   const closeFilm = useCallback(() => setFilmOpen(false), []);
   const eventSound = filmEvent !== null ? data.sounds.get(filmEvent) : step.kind === 'event' ? data.sounds.get(events[step.index].n) : undefined;
@@ -668,6 +677,11 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     window.requestAnimationFrame(() => goToStep(0));
   };
 
+  openFromHeader.current = () => {
+    try { sessionStorage.setItem('bidaya.intro.seen', '1'); } catch { /* storage unavailable */ }
+    if (resume && progress.lastEvent !== undefined) { setResume(false); goToEvent(progress.lastEvent, false); }
+    setIntro(false); setBuilt(true); openFilm();
+  };
   const startOver = () => {
     setProgress(freshProgress()); setQuizAt({}); setPlaying(false); setReturnTo(null); setResume(false); begin();
   };
