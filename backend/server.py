@@ -46,7 +46,8 @@ bot = None
 @app.on_event('startup')
 def load():
     global bot
-    bot = Bidayah()                                               # corpus + bge-m3 + reranker (~30 s)
+    if bot is None:                                               # modal_app.py loads it before serving
+        bot = Bidayah()                                           # corpus + bge-m3 + reranker (~30 s)
 
 
 class Ask(BaseModel):

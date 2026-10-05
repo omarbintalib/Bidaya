@@ -1,5 +1,13 @@
 # Bidaya (بداية) – Data Package 
 
+> **Live demo:** LIVE_DEMO_URL
+>
+> **Please note (first question may be slow):** the "Ask the map" assistant runs on a serverless GPU that
+> sleeps when nobody is using it, so the demo costs nothing while idle. Opening the site wakes it in the
+> background; if you ask a question within the first ~30-60 seconds of opening the site, the first answer may
+> take up to a minute while the models load. Every answer after that takes about 4-6 seconds. If the assistant
+> is unreachable, the map still answers from its own data (shorter answers without the books).
+
 Data for the interactive Seerah map: Seerah events, the surahs and verses related to each event or stage, places, and Companions, plus the links between them.
 
 **Sources.** Every record traces back to one of two approved sources:

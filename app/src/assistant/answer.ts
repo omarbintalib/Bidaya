@@ -27,8 +27,17 @@ export interface Answer { sources?: AnswerSource[]; text: string; event?: number
 
 /** The backend's URL: VITE_ASK_API at build time (`off` disables it); dev and preview proxy /api to it. */
 const ASK_API = (import.meta.env.VITE_ASK_API as string | undefined) ?? '/api/ask';
-const ASK_TIMEOUT_MS = 45_000;
+const ASK_TIMEOUT_MS = 90_000;   // long enough for a serverless cold start (Modal: models load in ~20-60 s)
 const KINDS = new Set<Answer['kind']>(['event', 'person', 'verse', 'refusal', 'none']);
+
+/**
+ * Wake the backend when the page opens (fire and forget). A serverless backend sleeps when nobody uses it;
+ * this starts it while the visitor reads the start page, so their first question rarely waits for it.
+ */
+export function warmServer(fetcher: typeof fetch = fetch) {
+  if (!ASK_API || ASK_API === 'off') return;
+  try { fetcher(ASK_API.replace(/\/ask$/, '/health'), { method: 'GET' }).catch(() => { /* offline: the browser answers */ }); } catch { /* no fetch */ }
+}
 
 /** Ask the RAG backend. Resolves to null when it is off, unreachable, slow or returns something unexpected. */
 export async function askServer(question: string, locale: Locale, fetcher: typeof fetch = fetch): Promise<Answer | null> {

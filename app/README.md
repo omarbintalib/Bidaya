@@ -54,7 +54,7 @@ Names of the Companions in `6_sahaba.csv` are linked where they appear in the ev
 Two engines answer, with the same rules and the same answer card (`src/assistant/answer.ts`):
 
 - **The RAG backend** (`../backend`, see its README): `askServer()` posts the question to `/api/ask`. The backend searches the books (Dorar, al-Raheeq al-Makhtum, Sahih al-Bukhari, al-Wahidi's sahih/hasan reports) and these CSVs, and an LLM writes the answer only from the passages it found, with checks. It returns the same `Answer` shape: text, source links, and the Dorar event to move the map to. The model key stays on the server.
-- **In the browser**: `answer()` searches the CSVs (Dorar event texts, the Companions' synopses, the verse records). It is used when the backend is off, unreachable or slower than 45 s, and for the suggested questions.
+- **In the browser**: `answer()` searches the CSVs (Dorar event texts, the Companions' synopses, the verse records). It is used when the backend is off, unreachable or slower than 90 s, and for the suggested questions. `warmServer()` (called once in `main.tsx`) pings `/api/health` when the page opens, to wake a serverless backend early.
 
 Each answer names its source and moves the map to the event. Questions asking for a ruling are referred to an official fatwa body, and questions with no matching source get an apology (deck slides 5–7).
 

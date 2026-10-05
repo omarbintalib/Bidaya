@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { askServer } from './answer';
+import { askServer, warmServer } from './answer';
 
 const reply = (body: unknown, ok = true) => (async () => ({ ok, json: async () => body })) as unknown as typeof fetch;
 
@@ -21,5 +21,14 @@ describe('askServer', () => {
     expect(await askServer('q', 'en', reply({ kind: 'oops', text: 'x' }))).toBeNull();
     expect(await askServer('q', 'en', reply({ kind: 'event', text: '  ' }))).toBeNull();
     expect(await askServer('q', 'en', (async () => { throw new TypeError('Failed to fetch'); }) as unknown as typeof fetch)).toBeNull();
+  });
+});
+
+describe('warmServer', () => {
+  it('pings the health endpoint next to /api/ask and never throws', async () => {
+    const calls: string[] = [];
+    warmServer((async (url: string) => { calls.push(url); return { ok: true }; }) as unknown as typeof fetch);
+    expect(calls).toEqual(['/api/health']);
+    expect(() => warmServer((async () => { throw new TypeError('offline'); }) as unknown as typeof fetch)).not.toThrow();
   });
 });

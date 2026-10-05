@@ -31,18 +31,40 @@ Then run the frontend (`cd ../app && npm ci && npm run dev`): the dev server for
   `{"status": "answered", "kind": "event", "text": "...", "sources": [{"label": "الدرر السنية: ...", "url": "https://dorar.net/history/event/145"}], "event": 145}`
   - `kind`: `event` / `verse` / `person` (by the first cited source), `refusal` (fatwa, personal), `none`
     (no source, off topic, unclear). The answer is written in `locale`.
-- Docker (CPU, from the repo root): `docker build -f backend/Dockerfile -t bidayah-api .` then
+- Live demo deployment (Modal, below). Docker for any other host (CPU, from the repo root): `docker build -f backend/Dockerfile -t bidayah-api .` then
   `docker run -p 8000:8000 --env-file backend/.env bidayah-api`. A static frontend host then needs
   `VITE_ASK_API=https://<api-host>/api/ask` at build time, and the API `BIDAYAH_CORS=https://<frontend-host>`.
 
 Speed: ~4 s per answer (2 LLM calls) on an RTX 5070; the GPU part (search + rerank) is ~0.3 s. CPU-only adds a
 few seconds per question. Memory: ~3 GB for the two models.
 
+## Deploy (live demo): Modal + Vercel
+
+The backend runs on [Modal](https://modal.com) (serverless GPU, T4): it **scales to zero** when idle, so it costs
+nothing while nobody visits, and Modal's free Starter plan ($30/month credit) covers the demo (~$0.70 per GPU
+hour, a 10-minute visit ~ $0.15). `max_containers=1` caps the spend. The trade-off is a **cold start**: after
+~5 idle minutes the first request waits ~20-60 s while the container loads the models (baked into the image).
+The frontend pings `/api/health` when the page opens, so the backend usually wakes while the visitor reads the
+start page.
+
+```sh
+pip install modal && modal token new          # once, opens the browser to log in
+modal secret create bidayah-openai OPENAI_API_KEY=sk-... OPENAI_MODEL=gpt-6-luna OPENAI_ROUTER_MODEL=gpt-6-luna
+cd backend && modal deploy modal_app.py       # first deploy ~10 min: installs, downloads models, embeds corpus
+# -> https://<workspace>--bidayah-api-serve.modal.run   (check: <url>/api/health)
+```
+
+Frontend on [Vercel](https://vercel.com) (Hobby, free): import the GitHub repo (the root `vercel.json` builds
+`app/`), add the environment variable `VITE_ASK_API=https://<workspace>--bidayah-api-serve.modal.run/api/ask`,
+deploy. Optional: restrict the API to the site with `BIDAYAH_CORS=https://<site>.vercel.app` in the Modal secret
+(default `*`). Set a monthly spending limit on the OpenAI key, since the link is public.
+
 ## Folders
 
 ```
 backend/
   server.py        FastAPI: /api/ask (the frontend's Answer shape), /api/health
+  modal_app.py     Modal deployment (image with models + index, T4, scale to zero)
   pipeline/        corpus.py + textnorm.py (load chunks, Arabic normalisation), embedders.py (bge-m3, cache in
                    data/index), bm25.py, retriever.py (hybrid, RRF), reranker.py, prompts.py (router, answer rules,
                    fixed refusals), llm.py (OpenAI or Gemini), rag.py (the assistant)
