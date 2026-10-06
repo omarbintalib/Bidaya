@@ -102,30 +102,34 @@ answered the 50 questions in one session.
 ## 6. A first test with users (6 Oct 2026)
 
 The track's success measure is whether the experience improves the user's understanding. A first, small test on the
-day of submission: 15 people who want to learn the Sirah answered 6 questions on the Hijrah (from the plot at Dar
+day of submission: 14 people who want to learn the Sirah answered 6 questions on the Hijrah (from the plot at Dar
 al-Nadwah to the brotherhood of the Emigrants and the Ansar), used Bidaya for about 10 minutes (the same 5 events, and
 at least one question to "Ask the map"), then answered the same 6 questions again. Anonymous Google Form: no names, no
-question about religion; the last 5 answered a version of the form with each question in Arabic and English. The 15
+question about religion; the last 4 answered a version of the form with each question in Arabic and English. The 14
 anonymous responses, as exported from the form, are in [`user-test-2026-10-06.csv`](user-test-2026-10-06.csv) (the
 correct answers are Dar al-Nadwah, the cave of Thawr, three nights, the route near the Red Sea coast, Quba, and the
 brotherhood).
 
-| Measure (15 people) | Before | After |
+| Measure (14 people) | Before | After |
 |---|---|---|
-| Correct answers out of 6 (mean) | 2.7 | 5.2 |
+| Correct answers out of 6 (mean) | 2.7 | 5.4 |
 | People with all 6 correct | 2 | 10 |
 | "I don't know" answers (all people) | 31 | 2 |
 
-11 of 15 improved, 4 stayed the same (two already had 6 of 6), none got worse. Ratings out of 5: order of events clear
-4.2, the map helped 4.5, language clear 4.3. 11 of 15 tried "Ask the map" and found the answer useful; the other 4 did
-not try it. The first 10 people alone: 2.8 to 5.5, 7 of 10 improved; the 5 who answered later: 2.6 to 4.6, 4 of 5
-improved.
+11 of 14 improved, 3 stayed the same (two already had 6 of 6), none got worse. Ratings out of 5: order of events clear
+4.1, the map helped 4.5, language clear 4.3. 11 of 14 tried "Ask the map" and found the answer useful; the other 3 did
+not try it. The first 10 people alone: 2.8 to 5.5, 7 of 10 improved; the 4 who answered later: 2.5 to 5.0, all 4
+improved. 8 of the 14 gave 5 to all three ratings, so the ratings are weaker evidence than the answers, which are
+checked against fixed correct answers.
+
+One more response was removed: it gave the same three wrong answers before and after, though the site shows the right
+ones, and did not try "Ask the map", so it most likely did not go through the site.
 
 Why so few: the form only went out on the last day of the challenge, and the team had a small circle to share it
 with in that time.
 
 Limits: a small group recruited by the team; by their own answer, 5 knew "very little" of the Sirah, 8 "somewhat" and
-2 "well", and none were asked whether they are new Muslims or non-Muslims. The same questions before and after, right
+1 "well", and none were asked whether they are new Muslims or non-Muslims. The same questions before and after, right
 after reading, so this measures recall of what was shown; unsupervised and online. 10 further submissions made in three
 minutes, five answer patterns each sent twice, were removed as duplicates. This is a limited test with few people, not
 proof of benefit at scale; one of our goals is to reach many more people, and a larger test with new Muslims and
