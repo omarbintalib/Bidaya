@@ -105,7 +105,9 @@ The track's success measure is whether the experience improves the user's unders
 day of submission: 10 people who want to learn the Sirah answered 6 questions on the Hijrah (from the plot at Dar
 al-Nadwah to the brotherhood of the Emigrants and the Ansar), used Bidaya for about 10 minutes (the same 5 events, and
 at least one question to "Ask the map"), then answered the same 6 questions again. Anonymous Google Form: no names, no
-question about religion. The responses are kept by the team and are not published in this repository.
+question about religion. The 10 anonymous responses, as exported from the form, are in
+[`user-test-2026-10-06.csv`](user-test-2026-10-06.csv) (the form's questions are in Arabic; the correct answers are
+Dar al-Nadwah, the cave of Thawr, three nights, the route near the Red Sea coast, Quba, and the brotherhood).
 
 | Measure (10 people) | Before | After |
 |---|---|---|
