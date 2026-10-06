@@ -1,8 +1,8 @@
-# Islamathon
+# Bidaya · the website (`app/`)
 
 An Arabic-first, bilingual web experience for exploring the Sirah in place and time. Built with React and TypeScript, it combines the Islamathon design (animated navigation, reading preferences) with the Bidaya data package.
 
-**Status:** working prototype (v11). The Journey page tells the Sirah as a scroll-driven story: an opening scene, then chapters you scroll through while the map beside them follows each event, places glowing as Islam reaches them, a question at the end of each chapter (answered on the map), walks along the Hijrah, Ta'if and Farewell Hajj routes, and a closing summary of your progress. "Ask the map" floats over the map. All content is read at runtime from the CSV files at the repository root; `/spread` redirects to Journey.
+**Status:** live at <https://bidaya-sirah.vercel.app> (v11). The Journey page tells the Sirah as a scroll-driven story: an opening scene, then chapters you scroll through while the map beside them follows each event, places glowing as Islam reaches them, a question at the end of each chapter (answered on the map), walks along the Hijrah, Ta'if and Farewell Hajj routes, and a closing summary of your progress. "Ask the map" floats over the map. All content is read at runtime from the CSV files at the repository root; `/spread` redirects to Journey.
 
 ## Editing the data
 
@@ -57,7 +57,7 @@ Two engines answer, with the same rules and the same answer card (`src/assistant
 - **The RAG backend** (`../backend`, see its README): `askServer()` posts the question to `/api/ask`. The backend searches the books (Dorar, al-Raheeq al-Makhtum, Sahih al-Bukhari, al-Wahidi's sahih/hasan reports) and these CSVs, and an LLM writes the answer only from the passages it found, with checks. It returns the same `Answer` shape: text, source links, and the Dorar event to move the map to. The model key stays on the server.
 - **In the browser**: `answer()` searches the CSVs (Dorar event texts, the Companions' synopses, the verse records). It is used when the backend is off, unreachable or slower than 90 s, and for the suggested questions. `warmServer()` (called once in `main.tsx`) pings `/api/health` when the page opens, to wake a serverless backend early.
 
-Each answer names its source and moves the map to the event. Questions asking for a ruling are referred to an official fatwa body, and questions with no matching source get an apology (deck slides 5–7).
+Each answer names its source and moves the map to the event. Questions asking for a ruling are referred to an official fatwa body, and questions with no matching source get an apology.
 
 `npm run dev` and `npm run preview` forward `/api` to `http://127.0.0.1:8000` (set `BIDAYAH_API` to change it). For a static host, build with `VITE_ASK_API=https://your-api.example/api/ask` (or `off` to use only the in-browser answers).
 
@@ -66,12 +66,12 @@ Each answer names its source and moves the map to the event. Questions asking fo
 ## Features
 
 - **Arabic and English:** mirrored right-to-left and left-to-right layouts with translated interface text.
-- **Three destinations:** The Beginning, Spread of Islam, and Islam Journey.
+- **Two pages:** The Beginning and Islam Journey (the old `/spread` link opens the Journey).
 - **Animated navigation:** logo transitions, a waypoint menu, browser Back/Forward support, and direct page URLs.
 - **Reading preferences:** text scaling, line and character spacing, contrast themes, Saudi/Plex fonts, highlighted links, and stronger focus indicators.
 - **Keyboard support:** menu and dialog focus management, Escape dismissal, and keyboard-operable preference controls.
 - **Reduced motion:** respects the operating system preference and the in-app setting.
-- **AI interaction demo:** animated question, processing, answer, cancel, and reset states.
+- **Ask the map:** animated question, processing, answer, cancel and reset states around real answers from the assistant (the RAG backend, or the in-browser search when it is unreachable).
 - **AI responses and history:** the map pill keeps its size while the response uses the globe-to-card animation from the original Islamathon UI. The enlarged AI icon opens the last 50 question/answer pairs, saved in this browser under `bidaya.chats.v1`, with search, localized dates for new entries, copy-answer, individual deletion, and a clear-history action. Existing records remain readable without invented dates or references. When storage is unavailable, history works for the current visit. Long responses offer Expand/Collapse and scroll inside viewport limits; reduced motion is supported. Response-only mode begins with globe assembly, and both history icons have bilingual hover/focus tooltips. Structured source links come from retrieved records and citation helpers, never from generated prose; mapped references can open their event with a return-to-reading action.
 - **Local fonts:** typography assets are bundled with the application; no font CDN is required at runtime.
 
@@ -93,13 +93,13 @@ Each answer names its source and moves the map to the event. Questions asking fo
 - Git for cloning the repository.
 - A modern browser.
 
-No database, API key or environment file is required to run the prototype. The RAG backend (`../backend`) is optional: without it, Ask the map answers in the browser.
+No database, API key or environment file is required to run the website. The RAG backend (`../backend`) is optional: without it, Ask the map answers in the browser.
 
 ### Install and run
 
 ```sh
-git clone https://github.com/elyasos/islamathon.git
-cd islamathon
+git clone https://github.com/omarbintalib/Bidaya.git
+cd Bidaya/app
 npm ci
 npm run dev
 ```
@@ -142,7 +142,7 @@ Open the computer's local network address and the printed port on that device.
 | `/` | The Beginning | Original hero, visual introduction, three-step tour, feature previews, source explanation, and direct Journey links |
 | `/journey` | Islam Journey | The story: opening, chapters, event cards, spread of Islam, chapter questions, route walks, timeline, story mode, and Ask the map |
 
-Arabic is the first-visit default. The selected language is remembered across reloads in this browser; when storage is unavailable it still works for the current visit. Leaving Journey and returning starts a fresh AI demo.
+Arabic is the first-visit default. The selected language is remembered across reloads in this browser; when storage is unavailable it still works for the current visit.
 
 Unknown URLs show a bilingual 404 page with Home and Start Journey links. Journey requests time out after 12 seconds and offer Try again, Reload page, and Home if content is unavailable. Unexpected page-render failures use the same recovery screen, and failed landing previews show descriptive text.
 
@@ -156,12 +156,20 @@ src/
 ├── index.css                 # Global styles and reading preferences
 ├── accessibility/            # Preferences provider and settings dialog
 ├── assets/                   # Source logo asset
-├── components/               # Brand logo, AI orb, and map placeholder
+├── assistant/                # Ask the map: backend client (server.ts) and in-browser answers (answer.ts)
+├── components/               # Brand logo, AI orb (MorphOrb), shared pieces
+├── data/                     # Loading the CSVs from ../data, quiz and search helpers
+├── journey/                  # The story, event and person cards, Sirah summary, chapter questions
+├── landing/                  # The Beginning page
+├── map/                      # The map of Arabia, routes and labels
 ├── navigation/               # Routes, history handling, menu, and transitions
-└── pages/                    # Landing/chapter titles and Journey page
+├── pages/                    # Page shells
+└── sound/                    # Background sounds and their settings
 public/
 ├── favicon.svg
-└── fonts/                    # Saudi font files and source notices
+├── fonts/                    # Saudi and honorific fonts with their notices
+├── images/  map/             # Images and map relief
+└── sounds/                   # Background sound files and credits
 ```
 
 Tests live alongside the relevant components and navigation modules. Browser-review screenshots, the brand files and the
@@ -175,19 +183,20 @@ Validated reading settings are saved in the browser's `localStorage` under `isla
 
 Questions are sent to the RAG backend when it is running (`/api/ask`); answers are kept in this browser's chat history.
 
-### Connecting an AI service
+### How Ask the map is wired
 
-`src/components/MorphOrb.tsx` exposes these optional props:
+`src/components/MorphOrb.tsx` (the question, thinking and answer animation) takes these props, among others:
 
 | Prop | Type | Purpose |
 | --- | --- | --- |
 | `locale` | `'ar' \| 'en'` | Interface language |
-| `onSubmit` | `(text: string) => Promise<string> \| string` | Supply an answer from your integration |
+| `onSubmit` | `(text: string) => Promise<string> \| string` | Supplies the answer |
+| `onSent` | `(text: string) => void` | Called as soon as the question is sent, so the request starts during the opening animation |
 | `minThinkMs` | `number` | Minimum processing animation duration |
 | `speed` | `number` | Animation speed |
 | `reducedMotion` | `boolean` | Override the component's system motion preference |
 
-The current `JourneyPage` uses the localized demo answer. To connect a service, pass an `onSubmit` callback there and handle transport, errors, and request cancellation in your integration. Keep service credentials on a server; client-side Vite variables are visible to users.
+`src/journey/Story.tsx` passes `onSent` (which calls `askEarly()`) and `onSubmit`, which takes the RAG backend's answer (`askServer()`, with the last turns of the conversation for follow-up questions) and falls back to the in-browser `answer()` when the backend is unreachable. The OpenAI key lives only in the backend's hosting secrets; nothing secret is in the client.
 
 Escape or Cancel stops the UI sequence and ignores late answers; it does not automatically cancel an external network request. Add `?debug` to the Journey URL to expose animation speed and replay controls.
 
@@ -213,7 +222,7 @@ Configure your hosting service with:
 
 The default Vite base path is `/`. If hosting under a subdirectory, configure Vite's `base` and adapt route handling in `src/navigation/routes.ts` and `src/navigation/useNavigation.ts` to that prefix. The current routes assume hosting at the domain root.
 
-`npm run preview` is intended for local build verification. No production hosting configuration or deployment is included in this repository.
+`npm run preview` is intended for local build verification. The live site is deployed on Vercel with `../vercel.json` (see below).
 
 ## Verification
 
@@ -224,7 +233,7 @@ npm test
 npm run build
 ```
 
-The current suite includes 77 tests across nine files, covering the data, AI lifecycle and cleanup, response-only animation under Strict Mode, chat history persistence and storage failures, navigation/history behavior, 404 recovery, Journey retries, page-render recovery, landing entry links and image fallbacks, language persistence and bounded transitions, the finite book animation, transition geometry, waypoint endpoints, reduced motion, preference persistence, dialog focus, and preference changes during AI processing.
+The suite (15 test files) covers the data, AI lifecycle and cleanup, response-only animation under Strict Mode, chat history persistence and storage failures, navigation/history behavior, 404 recovery, Journey retries, page-render recovery, landing entry links and image fallbacks, language persistence and bounded transitions, the finite book animation, transition geometry, waypoint endpoints, reduced motion, preference persistence, dialog focus, and preference changes during AI processing.
 
 With a local server running, `node scripts/check-ai-response.cjs http://127.0.0.1:5184` checks the real response animation, unchanged composer height, icon size, history persistence, clearing, keyboard dismissal, and Arabic/English desktop/mobile layouts. It requires Playwright and Chrome, as do the landing browser scripts.
 

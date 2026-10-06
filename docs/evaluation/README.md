@@ -56,6 +56,21 @@ cite a correct passage and to make the group's key point (judged by an LLM): 85â
 A further 15 premise questions check that the assistant corrects a premise only when a source states the opposite,
 and never "corrects" a true one. Results by prompt version: `backend/README.md` â†’ *Progress*.
 
+## 4. Bidaya vs. reading the source pages
+
+A measured comparison with the current practice (reading the Sirah sources directly), computed from the files in
+this repository by [`compare_with_sources.py`](compare_with_sources.py) (`python3 docs/evaluation/compare_with_sources.py`):
+
+| Measure | Reading the sources | Bidaya |
+|---|---|---|
+| Words to read for an answer (25 answers of the 50-question test that cite Dorar pages; median) | 433 words in the cited Dorar pages | 36 words, with the links (about 10 times less) |
+| Answers that draw on two or more sources (36 answered questions) | the reader opens each source | 25 of 36 brought together in one answer |
+| Verse records linked to an event (68) | 31 are not in the event's Dorar page: it neither names the surah nor mentions a revelation | all 68 shown on the event's card |
+
+Limits: this measures how much a reader must read and find, not how well they understand; the source side counts
+Dorar pages only, so it is a lower bound; the verse check looks for the surah's name or a mention of revelation in the
+page text. Understanding with the target audience has not been tested yet (see the presentation's plan).
+
 ## Known limits
 
 - Arabic written in Latin letters ("shu sar b ghazwat badr?") is refused about half the time.
