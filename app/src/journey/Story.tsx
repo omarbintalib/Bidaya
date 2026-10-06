@@ -14,6 +14,8 @@ import { Ambience, type Scene } from '../sound/ambience';
 import { publishSound } from '../sound/soundControls';
 import { SUMMARY_EVENT, takeSummaryRequest } from '../navigation/summaryRequest';
 import SummaryFilm from './SummaryFilm';
+import NarrationPlayer from './NarrationPlayer';
+import EnglishNarration from './EnglishNarration';
 import Intro from './Intro';
 import { createActiveStore, useActive, type ActiveStore } from './activeStore';
 import { PeopleProvider, PersonDialog } from './People';
@@ -38,6 +40,10 @@ type Step =
   | { kind: 'event'; index: number }
   | { kind: 'quiz'; period: Period; chapter: number; last: number }
   | { kind: 'summary' };
+
+function englishStepId(step: Step | undefined, events: SirahEvent[]) {
+  return step?.kind === 'event' ? `event-${events[step.index].n}` : step?.kind === 'chapter' ? `chapter-${step.period}` : null;
+}
 
 /** Asking the map for a quiz: "quiz me", "another question", "اختبرني", "سؤال آخر"… */
 const QUIZ_ASK = /\bquiz\b|\btest me\b|another question|more questions|اختبرني|بسؤال آخر|سؤال[اًا]* آخر|[أا]سئلة [أا]خرى|المزيد من ال[أا]سئلة/i;
@@ -730,6 +736,8 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
       <div className="scrolly-steps" ref={column}>
         <HoldStill store={stepStore} anchor={anchor} column={column} lockUntil={lockUntil} glide={wide && !reducedMotion} />
         <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} keepOpen={!wide} playing={playing} />
+        {locale === 'en' && <EnglishNarration entryId={englishStepId(step, events)} previousId={englishStepId(steps[active - 1], events)} nextId={englishStepId(steps[active + 1], events)}
+          storyPlaying={playing} onStarted={() => setPlaying(false)} onNext={englishStepId(steps[active + 1], events) ? () => goToStep(active + 1) : null} />}
         <section data-step={steps.length - 1} className={`step step-summary${step.kind === 'summary' ? ' is-on' : ''}`}>
           <span>{text.summaryKicker}</span>
           <h2>{text.summaryTitle}</h2>
@@ -793,6 +801,9 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
           </div>}
 
           <div className="story-timeline" data-map-overlay ref={timelineBox}>
+            {locale === 'ar' && <NarrationPlayer locale={locale} entryId={step.kind === 'event' ? `event-${current.n}` : step.kind === 'chapter' ? `chapter-${step.period}` : null}
+              storyPlaying={playing} onStarted={() => setPlaying(false)}
+              onNext={steps[active + 1]?.kind === 'event' || steps[active + 1]?.kind === 'chapter' ? () => goToStep(active + 1) : null} />}
             <Timeline events={events} index={index} store={eventStore} locale={locale} playing={playing} reducedMotion={reducedMotion}
               onIndex={onTimelineIndex} onStep={stepEvent} onTogglePlay={() => setPlaying(p => !p)} revealed={revealed}
               story={{ ms: stepMs, step: active, pace, onPace: setPace }}
@@ -902,6 +913,7 @@ const ChapterStep = memo(function ChapterStep({ s, i, store, events, locale }: {
     <span>{text.chapter(s.chapter)}</span>
     <h2>{periodName[locale][s.period]}</h2>
     <p>{text.chapterSpan(hijri(inChapter[0].year, locale), hijri(inChapter[inChapter.length - 1].year, locale), inChapter.length)}</p>
+    {on && locale === 'en' && <div id={`english-audio-chapter-${s.period}`} />}
   </section>;
 });
 

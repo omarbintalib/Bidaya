@@ -56,6 +56,7 @@ export default function EventCard({ data, event, locale, chapter, yearEvents, on
         : <span>{eventPlaceName(data, event, locale) || '—'}</span>}
       {event.precision !== 'exact' && <span className={`prec prec-${event.precision}`}>{text.precision[event.precision]}</span>}
     </p>
+    {locale === 'en' && current && <div id={`english-audio-event-${event.n}`} />}
     {event.inferred && <p className="ecard-flag">{text.inferred}</p>}
 
     {locale === 'en' && !event.text.en && <p className="ecard-flag">{text.noEnglish}</p>}
