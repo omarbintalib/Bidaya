@@ -70,7 +70,7 @@ const chatKey = 'bidaya.chats.v1';
       await page.reload(); await page.waitForSelector('.logo-transition', { state: 'detached' });
       await page.waitForSelector('.resume-dialog[open]');
       await page.screenshot({ path: `qa/journey-resume-${width}-${locale}.png` });
-      await page.locator('.resume-dialog .btn-quiet').click();
+      await page.locator('.resume-dialog .btn-quiet:last-child').click();
       await page.waitForSelector('.resume-dialog', { state: 'detached' });
       const reset = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), progressKey);
       assert.deepEqual(reset.answers, {}); assert.deepEqual(reset.seen, []); assert.equal(reset.lastEvent, undefined);
