@@ -9,11 +9,11 @@
   ],
   "headers": [
     {
-      "source": "/audio/narration/en/(.*)",
+      "source": "/audio/narration/(en|ar)/(.*)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     },
     {
-      "source": "/audio/narration/english-index.json",
+      "source": "/audio/narration/(english|arabic)-index.json",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
     },
     {

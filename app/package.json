@@ -8,8 +8,13 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "vitest run",
-    "tts:english-index": "node scripts/build-english-narration.mjs",
-    "tts:test": "node --test scripts/lib/narration.checks.mjs"
+    "tts:english-index": "node scripts/audio/build-index.mjs --locale en",
+    "tts:test": "node --test scripts/audio/lib/narration.checks.mjs",
+    "tts:arabic-index": "node scripts/audio/build-index.mjs --locale ar",
+    "tts:plan:english": "node scripts/audio/generate-azure.mjs",
+    "tts:generate:english": "node scripts/audio/generate-azure.mjs --generate --locale en --keep-completed",
+    "tts:plan:arabic": "node scripts/audio/generate-eid.mjs",
+    "tts:generate:arabic": "node scripts/audio/generate-eid.mjs --generate"
   },
   "dependencies": {
     "@fontsource/ibm-plex-sans": "^5.3.0",

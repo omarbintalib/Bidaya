@@ -1,0 +1,3600 @@
+{
+  "version": 1,
+  "voices": {
+    "ar": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+    "en": "en-US-Brian:DragonHDLatestNeural"
+  },
+  "entries": {
+    "en/chapter-prologue": {
+      "hash": "6674c04ff7041a4bbe644ab8266cfad46f7cfb883dad362161f5baa93a502472",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/chapter-prologue-6674c04ff704-1.mp3"
+      ]
+    },
+    "en/chapter-makkah": {
+      "hash": "e513d190829fa9b43e1eb7655f2c6edf12e3aa1ace08a4cdacc3e61018e8b81f",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/chapter-makkah-e513d190829f-1.mp3"
+      ]
+    },
+    "en/chapter-hijrah": {
+      "hash": "87a87a91b1f055bf2a538ef7367f19e1787d7c9076896fd98a6fd51c866cdf71",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/chapter-hijrah-87a87a91b1f0-1.mp3"
+      ]
+    },
+    "en/chapter-madinah": {
+      "hash": "93eeb46ea369c921909251960753e00aa79e6c807a5edce98ad96b3719332829",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/chapter-madinah-93eeb46ea369-1.mp3"
+      ]
+    },
+    "en/event-1": {
+      "hash": "fca55e8aa68076172b375bdc424f9f254f8f7ec1b41ffa0eae026cb65843ae2f",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-1-fca55e8aa680-1.mp3",
+        "en/event-1-fca55e8aa680-2.mp3"
+      ]
+    },
+    "en/event-2": {
+      "hash": "c1f53ef22cc3cc5aeb157390326550d20ff9e496ddd1b78c86c59f5280713a04",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-2-c1f53ef22cc3-1.mp3"
+      ]
+    },
+    "en/event-3": {
+      "hash": "9e8fbf46b912b91ac8769b5d68f1e11d31efba0099f4ae323cd0e38e2cb8b238",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-3-9e8fbf46b912-1.mp3"
+      ]
+    },
+    "en/event-4": {
+      "hash": "83a714595995592057023b997464049812edeb5fae26bb5f72d8b2c9f12f4839",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-4-83a714595995-1.mp3"
+      ]
+    },
+    "en/event-5": {
+      "hash": "094fec9f0a5c0700da8138168028d76951665e05b706efa1236f8b8220aaea11",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-5-094fec9f0a5c-1.mp3",
+        "en/event-5-094fec9f0a5c-2.mp3"
+      ]
+    },
+    "en/event-6": {
+      "hash": "4a8f3302fd50c319171870ad9084d6bf414dde57eab7047453801791fcf73c53",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-6-4a8f3302fd50-1.mp3"
+      ]
+    },
+    "en/event-7": {
+      "hash": "e002b9ff3ef337e843eba05998cdfbac440341631f6485b25ee7f7ffe288427d",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-7-e002b9ff3ef3-1.mp3",
+        "en/event-7-e002b9ff3ef3-2.mp3"
+      ]
+    },
+    "en/event-8": {
+      "hash": "f318c9defb54dcd2a108fe1c8b21aec5c116eaab145b77dae717a060cd3dc396",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-8-f318c9defb54-1.mp3",
+        "en/event-8-f318c9defb54-2.mp3"
+      ]
+    },
+    "en/event-9": {
+      "hash": "98f7ada948be32b816ab2ba5bec16f94386a5eaa47f9a2a462974d076c63ace8",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-9-98f7ada948be-1.mp3",
+        "en/event-9-98f7ada948be-2.mp3"
+      ]
+    },
+    "en/event-10": {
+      "hash": "5fba27c307663d10fcc4d2e5a8d692581b4ca367f871b62b62a5ee8f8d30d618",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-10-5fba27c30766-1.mp3",
+        "en/event-10-5fba27c30766-2.mp3"
+      ]
+    },
+    "en/event-11": {
+      "hash": "abc8338264903f196f63edb095ed2fea0533899e1356ba4b56c7c995b8b113bb",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-11-abc833826490-1.mp3"
+      ]
+    },
+    "en/event-12": {
+      "hash": "8d0262f4706905b12aea9d4932bf57ace21f9fdd9e5ef66f494cf3177db8d84a",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-12-8d0262f47069-1.mp3"
+      ]
+    },
+    "en/event-13": {
+      "hash": "45e5fa1b80fc7bfc35c08487a262f73b8a60a8bbec1817b22d56e6ce188e7def",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-13-45e5fa1b80fc-1.mp3"
+      ]
+    },
+    "en/event-14": {
+      "hash": "1957a81f6f9056970974554f925d1f69fb01ef2c2ca16ac14ea1c818df2523c6",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-14-1957a81f6f90-1.mp3",
+        "en/event-14-1957a81f6f90-2.mp3"
+      ]
+    },
+    "en/event-15": {
+      "hash": "6270b14dab04b3779e33529aeb93d345504f98da582a73a8b4abf99436d50ba1",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-15-6270b14dab04-1.mp3",
+        "en/event-15-6270b14dab04-2.mp3"
+      ]
+    },
+    "en/event-16": {
+      "hash": "9a05c27f2b584c7fa654cf450c86dbf1bbb781d57bb2d88c6300df156516eefa",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-16-9a05c27f2b58-1.mp3",
+        "en/event-16-9a05c27f2b58-2.mp3"
+      ]
+    },
+    "en/event-17": {
+      "hash": "469c55d9e67fc28064349538605d73c6a827aedcaf31a49b175a51473dead08d",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-17-469c55d9e67f-1.mp3"
+      ]
+    },
+    "en/event-18": {
+      "hash": "c19a28a5efa04e73c556c46ada8a7d38f5e4562e022dad82499972c5b52d792f",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-18-c19a28a5efa0-1.mp3",
+        "en/event-18-c19a28a5efa0-2.mp3"
+      ]
+    },
+    "en/event-19": {
+      "hash": "6bc0fd1f5d508555bb319676a00696540faaf540afd0e117ddc86b1f20745d88",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-19-6bc0fd1f5d50-1.mp3",
+        "en/event-19-6bc0fd1f5d50-2.mp3",
+        "en/event-19-6bc0fd1f5d50-3.mp3",
+        "en/event-19-6bc0fd1f5d50-4.mp3"
+      ]
+    },
+    "en/event-20": {
+      "hash": "80b1cb5b6bea73f35a16cc920fc33237e0170fc28f2559a3cf29c4354d523b7d",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-20-80b1cb5b6bea-1.mp3",
+        "en/event-20-80b1cb5b6bea-2.mp3"
+      ]
+    },
+    "en/event-21": {
+      "hash": "312b2d01e68e8ab81cbddc10538da6cafb756c98a43049fe4e445863f97db5cc",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-21-312b2d01e68e-1.mp3",
+        "en/event-21-312b2d01e68e-2.mp3",
+        "en/event-21-312b2d01e68e-3.mp3",
+        "en/event-21-312b2d01e68e-4.mp3"
+      ]
+    },
+    "en/event-22": {
+      "hash": "59b9bbfeae4fe9f3ca5050ee0d00185ae11cbe4c90b125329778e6aced38b481",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-22-59b9bbfeae4f-1.mp3"
+      ]
+    },
+    "en/event-23": {
+      "hash": "c73e69c63c0cec28ef8a6fa3e06a687e35e997df3277ca300f69b191c14ebe81",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-23-c73e69c63c0c-1.mp3",
+        "en/event-23-c73e69c63c0c-2.mp3",
+        "en/event-23-c73e69c63c0c-3.mp3",
+        "en/event-23-c73e69c63c0c-4.mp3"
+      ]
+    },
+    "en/event-24": {
+      "hash": "2e64f0cf2b7f50c078614b0d64f0ff1d9bd6c1666526b0c16a565a6799723fa6",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-24-2e64f0cf2b7f-1.mp3"
+      ]
+    },
+    "en/event-25": {
+      "hash": "bfb96c6b2005d3ad94f740ed2ab69326f890637936fad0f2841b4f91d739b52c",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-25-bfb96c6b2005-1.mp3",
+        "en/event-25-bfb96c6b2005-2.mp3"
+      ]
+    },
+    "en/event-26": {
+      "hash": "5e2b6202e95e8dc05c8336e82cc3e86850ccca099035951310e9f4a2ebfae887",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-26-5e2b6202e95e-1.mp3"
+      ]
+    },
+    "en/event-27": {
+      "hash": "f5d08b0e39e748c5a51f27a04e2f73e1b2204de7237d145813a134d0ff3edbbd",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-27-f5d08b0e39e7-1.mp3"
+      ]
+    },
+    "en/event-28": {
+      "hash": "12bdf8b7dd7d60ec5cb298e8addaefb67c4935d9deb284533a04a6ca2b4c56a0",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-28-12bdf8b7dd7d-1.mp3"
+      ]
+    },
+    "en/event-29": {
+      "hash": "82818de6f7c7cb0f6e415ac43524e0f2e54cabe9b958aeef2d40d5fe9726cbbb",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-29-82818de6f7c7-1.mp3",
+        "en/event-29-82818de6f7c7-2.mp3"
+      ]
+    },
+    "en/event-30": {
+      "hash": "94ed6cc78d737ec639e671a4f786a8303db2427143f05e1b5c4c2ef43aea69a0",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-30-94ed6cc78d73-1.mp3"
+      ]
+    },
+    "en/event-31": {
+      "hash": "2ccae79429bdeee688aaad5d9375a4dc6273e0e34eb98c8b244355e56a707570",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-31-2ccae79429bd-1.mp3"
+      ]
+    },
+    "en/event-32": {
+      "hash": "8ef240b5cca6a1adbc70e3b18a942e627b64319bb1689838dc25dd15d3a6e564",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-32-8ef240b5cca6-1.mp3"
+      ]
+    },
+    "en/event-33": {
+      "hash": "fcc7043d5fe741e45990840793019f5cdd54db83d1588f863fee9682fdf425da",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-33-fcc7043d5fe7-1.mp3",
+        "en/event-33-fcc7043d5fe7-2.mp3"
+      ]
+    },
+    "en/event-34": {
+      "hash": "58440967c249fce9bfe39c52e52bb8b129ca26aadc98324459f6828d850b8405",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-34-58440967c249-1.mp3"
+      ]
+    },
+    "en/event-35": {
+      "hash": "342a4439b4c9726c9c62b98a78df2a99c34a8027692c8b6f323bca96dc87eada",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-35-342a4439b4c9-1.mp3",
+        "en/event-35-342a4439b4c9-2.mp3"
+      ]
+    },
+    "en/event-36": {
+      "hash": "cb36505e014972c9349d9bb6089ffa91b9c671b8a289b0245edcac98add8d85c",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-36-cb36505e0149-1.mp3"
+      ]
+    },
+    "en/event-41": {
+      "hash": "73af43eafea08fe91d71690a34336ae653a4a4b2e08fe883c7013a2a803f02cc",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-41-73af43eafea0-1.mp3",
+        "en/event-41-73af43eafea0-2.mp3",
+        "en/event-41-73af43eafea0-3.mp3"
+      ]
+    },
+    "en/event-40": {
+      "hash": "54c31b0e54bf00112648d332fa0e47379e57682b6a5d13e022435e1445fff136",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-40-54c31b0e54bf-1.mp3",
+        "en/event-40-54c31b0e54bf-2.mp3",
+        "en/event-40-54c31b0e54bf-3.mp3"
+      ]
+    },
+    "en/event-42": {
+      "hash": "b8043742b5c0d6bbfa57c79cd66c3c3cb891c73147151f083a921028e9fde689",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-42-b8043742b5c0-1.mp3",
+        "en/event-42-b8043742b5c0-2.mp3",
+        "en/event-42-b8043742b5c0-3.mp3",
+        "en/event-42-b8043742b5c0-4.mp3",
+        "en/event-42-b8043742b5c0-5.mp3"
+      ]
+    },
+    "en/event-43": {
+      "hash": "32faf98ac7aec4981551b96dc9b499a9df2ebf837546beed432997b9b18b9b67",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-43-32faf98ac7ae-1.mp3"
+      ]
+    },
+    "en/event-44": {
+      "hash": "ba01314dd07102759ae7ee2e7489417f2701d166e6e35f34050ad6a908fb894f",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-44-ba01314dd071-1.mp3",
+        "en/event-44-ba01314dd071-2.mp3"
+      ]
+    },
+    "en/event-45": {
+      "hash": "dc6c6bda7821484c55be516d4216a8ba5806ffbee3b693328f6e73afe40b8a2e",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-45-dc6c6bda7821-1.mp3",
+        "en/event-45-dc6c6bda7821-2.mp3"
+      ]
+    },
+    "en/event-37": {
+      "hash": "d855e5f4adc8c8f1d3de16dfbc96c6f3cfd4a7eb67c9ecd3b1437dc158d4af06",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-37-d855e5f4adc8-1.mp3",
+        "en/event-37-d855e5f4adc8-2.mp3"
+      ]
+    },
+    "en/event-38": {
+      "hash": "c2e48fbee9a22244780566a0851844845923a03ea3228b1006d9c7e67c17476b",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-38-c2e48fbee9a2-1.mp3"
+      ]
+    },
+    "en/event-39": {
+      "hash": "ca987be79190b5924ac229acbd36e3181064c6ef58f4f73e5893e52c93d86f9b",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-39-ca987be79190-1.mp3",
+        "en/event-39-ca987be79190-2.mp3"
+      ]
+    },
+    "en/event-46": {
+      "hash": "f7dd335b3ed9619b0661a19f42dcd575eec8474052d260a27b39ccc3f5403197",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-46-f7dd335b3ed9-1.mp3"
+      ]
+    },
+    "en/event-47": {
+      "hash": "14ec845725f4b440dbec6412e43386b903e4c62f1375e62e4e465d8fe2950ea0",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-47-14ec845725f4-1.mp3"
+      ]
+    },
+    "en/event-48": {
+      "hash": "e01e3607b531a3a7cf9ec905875204bdd5b112f7941a28acd5f988633005c09e",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-48-e01e3607b531-1.mp3"
+      ]
+    },
+    "en/event-49": {
+      "hash": "16ccd202cf8a18322b56fcf2def2487e319debc0e70562f73a3699a5d18ae1fa",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-49-16ccd202cf8a-1.mp3"
+      ]
+    },
+    "en/event-50": {
+      "hash": "5c2033555417269e0be47e21cd08ef9ff6424632b4abf9ad4f9b606912363c76",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-50-5c2033555417-1.mp3"
+      ]
+    },
+    "en/event-51": {
+      "hash": "f2823c08c0431a219bd7852158b2f939c6dcab303d4a1bf956c1779479ffe1ae",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-51-f2823c08c043-1.mp3"
+      ]
+    },
+    "en/event-52": {
+      "hash": "038c07b22ba5502e7b688699bdd5747389fae82456cb51b16aa57a90f9ed7702",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-52-038c07b22ba5-1.mp3"
+      ]
+    },
+    "en/event-53": {
+      "hash": "d94f5d77e2ba4b92f5c7d2e8886bfe1756acd33f582d16931d9d8f6c642f84be",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-53-d94f5d77e2ba-1.mp3"
+      ]
+    },
+    "en/event-54": {
+      "hash": "2b282c7f2673bce77c893fe51bdf3e66281873088136c59a337ab019edb632cd",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-54-2b282c7f2673-1.mp3",
+        "en/event-54-2b282c7f2673-2.mp3"
+      ]
+    },
+    "en/event-55": {
+      "hash": "5f3166d8f5231b60f20528d607a8d8c62d14806cf9094eb08570f6c85aa6f201",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-55-5f3166d8f523-1.mp3"
+      ]
+    },
+    "en/event-56": {
+      "hash": "772491eab8550e3a72165fda46d0303f43b4ca7e9650cd026709e2ee8a56b1b3",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-56-772491eab855-1.mp3"
+      ]
+    },
+    "en/event-57": {
+      "hash": "8a3cbb5bde9d2525af4c9fe8fbe450d83e068c65240a8f4a63b9d1f62ae16824",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-57-8a3cbb5bde9d-1.mp3"
+      ]
+    },
+    "en/event-58": {
+      "hash": "7ddc3e2aabb3abe7d8188c692ecc2cd80b67df218909906595f708004a9792c8",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-58-7ddc3e2aabb3-1.mp3"
+      ]
+    },
+    "en/event-59": {
+      "hash": "ebf89cd152b0dfc5966bb12e5de0c2475ff45b5c477dd3292bd4161fc330a786",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-59-ebf89cd152b0-1.mp3"
+      ]
+    },
+    "en/event-60": {
+      "hash": "66b8469d27d5447244700ecfe3462c00bf8e7b0777001579e321ad53c0bb4f0f",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-60-66b8469d27d5-1.mp3"
+      ]
+    },
+    "en/event-61": {
+      "hash": "bebd8a21167dd6f1712e3538c2b000fa342e8bd22f2d0389dc1d523fb6db8272",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-61-bebd8a21167d-1.mp3",
+        "en/event-61-bebd8a21167d-2.mp3"
+      ]
+    },
+    "en/event-62": {
+      "hash": "65c2090c2de7adc0d8dc170270954a82f2a0f04e3b0c6d47857a53af69021014",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-62-65c2090c2de7-1.mp3"
+      ]
+    },
+    "en/event-63": {
+      "hash": "92764f50002a3d0340e6bc4c6a9a120e9231f84ffb1e5bced163716aabe82482",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-63-92764f50002a-1.mp3",
+        "en/event-63-92764f50002a-2.mp3"
+      ]
+    },
+    "en/event-65": {
+      "hash": "3282957ebb5c73e974f6180902c702abbb18b97c63c22ea8674794de81672ca8",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-65-3282957ebb5c-1.mp3",
+        "en/event-65-3282957ebb5c-2.mp3",
+        "en/event-65-3282957ebb5c-3.mp3"
+      ]
+    },
+    "en/event-66": {
+      "hash": "c1c2b1ca8957ba3f6ae231e0c4b0e2af187329028c2a86fe10c84d6926d3c90d",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-66-c1c2b1ca8957-1.mp3",
+        "en/event-66-c1c2b1ca8957-2.mp3"
+      ]
+    },
+    "en/event-67": {
+      "hash": "a2f315fa70880cbe72aea485addbb0632dfe6a6b4860da9491c0e68bbd2f1532",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-67-a2f315fa7088-1.mp3"
+      ]
+    },
+    "en/event-68": {
+      "hash": "78b636e9230d27a904b0f85a3e99fbfed4cc77bba9c9a6493e9487962afbf594",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-68-78b636e9230d-1.mp3"
+      ]
+    },
+    "en/event-69": {
+      "hash": "b458d9965f4c883419d795c7e8855d2a4e08d3d1606094ebb358272d2665302d",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-69-b458d9965f4c-1.mp3",
+        "en/event-69-b458d9965f4c-2.mp3",
+        "en/event-69-b458d9965f4c-3.mp3"
+      ]
+    },
+    "en/event-70": {
+      "hash": "b00e0c7138e587a64f3b0782d1fbf63e3112fea2513c181004e7c134f4cc9575",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-70-b00e0c7138e5-1.mp3",
+        "en/event-70-b00e0c7138e5-2.mp3"
+      ]
+    },
+    "en/event-71": {
+      "hash": "352d89d94a80271f8995663536821b15d56c4071dd6d17ea0ea3d29bd3bcea8a",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-71-352d89d94a80-1.mp3",
+        "en/event-71-352d89d94a80-2.mp3"
+      ]
+    },
+    "en/event-72": {
+      "hash": "5ab90a149b71cd4c4df8ab19b9d090ff9bdba6d9ddf9cde11eba8e1926c7cdd0",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-72-5ab90a149b71-1.mp3",
+        "en/event-72-5ab90a149b71-2.mp3"
+      ]
+    },
+    "en/event-73": {
+      "hash": "6b4e9cca412f3f39c8eed31e4c032985ce8eb487f29e025f706143dc1617f01f",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-73-6b4e9cca412f-1.mp3",
+        "en/event-73-6b4e9cca412f-2.mp3",
+        "en/event-73-6b4e9cca412f-3.mp3"
+      ]
+    },
+    "en/event-74": {
+      "hash": "f45773ff5fb27922a5b06086524fe2a8868a05e2e48fe4706b79eee73af75800",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-74-f45773ff5fb2-1.mp3",
+        "en/event-74-f45773ff5fb2-2.mp3",
+        "en/event-74-f45773ff5fb2-3.mp3"
+      ]
+    },
+    "en/event-75": {
+      "hash": "6af9fa9e2d6d4208052caeaef20d56e157be7bcf09decb7d3c9cefcd68051b48",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-75-6af9fa9e2d6d-1.mp3",
+        "en/event-75-6af9fa9e2d6d-2.mp3"
+      ]
+    },
+    "en/event-76": {
+      "hash": "956ca90fa3148acabb28d3abf6e50da89e6b3d7be1e88ac81f9ba0bdf8f9a8b5",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-76-956ca90fa314-1.mp3",
+        "en/event-76-956ca90fa314-2.mp3"
+      ]
+    },
+    "en/event-78": {
+      "hash": "f829e43d10c037b14b921577dfdb4bc3c3eee91d00eda9113ad5be06b0ba7f2a",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-78-f829e43d10c0-1.mp3",
+        "en/event-78-f829e43d10c0-2.mp3"
+      ]
+    },
+    "en/event-80": {
+      "hash": "dbccff1ee02a9fc04f300f7783dcc4b660c40fc052ac9e32b790ac0cc0c08744",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-80-dbccff1ee02a-1.mp3"
+      ]
+    },
+    "en/event-83": {
+      "hash": "f7d83522c0ed139da8cd09d9b05f2c61353aa08ac9673c1f978abd2bf4c7ba6e",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-83-f7d83522c0ed-1.mp3"
+      ]
+    },
+    "en/event-79": {
+      "hash": "869ed442f5320ad8a554d0ea6a458fddfeceb760c43a467921d1e6d892664415",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-79-869ed442f532-1.mp3",
+        "en/event-79-869ed442f532-2.mp3"
+      ]
+    },
+    "en/event-84": {
+      "hash": "36a609ad57dac83dd7ccd3e76eb4a71593c6466270db09aafcfdcf5f3af3967b",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-84-36a609ad57da-1.mp3",
+        "en/event-84-36a609ad57da-2.mp3",
+        "en/event-84-36a609ad57da-3.mp3"
+      ]
+    },
+    "en/event-85": {
+      "hash": "c87327befb77b63d6589aff1f02a52ca44bf1a7719fa1010075d509ff4da4a18",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-85-c87327befb77-1.mp3"
+      ]
+    },
+    "en/event-86": {
+      "hash": "5e5d5d2d6b07184390d0d8fe26a9c24e51dce7073434277f8d5d85d7bc83f805",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-86-5e5d5d2d6b07-1.mp3",
+        "en/event-86-5e5d5d2d6b07-2.mp3"
+      ]
+    },
+    "en/event-87": {
+      "hash": "381180886135ee0dd6e5fed608257150252facfcb3875990856609c5d66d8354",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-87-381180886135-1.mp3",
+        "en/event-87-381180886135-2.mp3",
+        "en/event-87-381180886135-3.mp3"
+      ]
+    },
+    "en/event-88": {
+      "hash": "2f6c245559d2f5525e3590a74f18387b008f649b1efb52641d9e59bda9adafde",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-88-2f6c245559d2-1.mp3",
+        "en/event-88-2f6c245559d2-2.mp3"
+      ]
+    },
+    "en/event-89": {
+      "hash": "0a455bdd3995ce63f1f4d5ecd96fb4db83f5d79061bf24969df0cad80d88dd5c",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-89-0a455bdd3995-1.mp3",
+        "en/event-89-0a455bdd3995-2.mp3",
+        "en/event-89-0a455bdd3995-3.mp3"
+      ]
+    },
+    "en/event-90": {
+      "hash": "57818bed217442d5b954c4cb969a9e2fae6079f57f017680cc9df3e877d56e31",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-90-57818bed2174-1.mp3"
+      ]
+    },
+    "en/event-91": {
+      "hash": "988e5e543d3bfd56bb954eaa10f71431c73add324f65857230541c10c24ed084",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-91-988e5e543d3b-1.mp3"
+      ]
+    },
+    "en/event-92": {
+      "hash": "02b811197a75e4bdb9892502bc59f4d308bf060c2fd87f911a32e2e27ce6aae2",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-92-02b811197a75-1.mp3"
+      ]
+    },
+    "en/event-93": {
+      "hash": "3ab4c0345a887ae54a3e70b9896cac414321feef1463ec65b549b2b8868a74f3",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-93-3ab4c0345a88-1.mp3"
+      ]
+    },
+    "en/event-94": {
+      "hash": "338b856c3e090a075b7cacb07958550c0b64d94e1296aee4f9615c5a0d06410d",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-94-338b856c3e09-1.mp3",
+        "en/event-94-338b856c3e09-2.mp3"
+      ]
+    },
+    "en/event-95": {
+      "hash": "306a86826d53613332262eec003fd7f7489466201d5606f272f2a43c5b524c1c",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-95-306a86826d53-1.mp3"
+      ]
+    },
+    "en/event-96": {
+      "hash": "b80b82fdcfd1c5f1cd91228bbdfa04bb3f96f8907b221a5ccdd14ef2497128ac",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-96-b80b82fdcfd1-1.mp3"
+      ]
+    },
+    "en/event-97": {
+      "hash": "12e8a7b09ed8b5256276609c418789214871c0a2e946ef30b083a6950eda54f5",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-97-12e8a7b09ed8-1.mp3"
+      ]
+    },
+    "en/event-98": {
+      "hash": "5d97223a5968ebb9661742aeddb2d52db1d9f21dd980bdb7d9efa5e33ec75f63",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-98-5d97223a5968-1.mp3",
+        "en/event-98-5d97223a5968-2.mp3"
+      ]
+    },
+    "en/event-99": {
+      "hash": "33e4183a1f0d842415664c6720f120bffff0c9aa7cc9a145f60a8abb04c36ba1",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-99-33e4183a1f0d-1.mp3"
+      ]
+    },
+    "en/event-100": {
+      "hash": "800043216c96de4b40ecec2925236f0a46cfff6a6e04a5bda05efc23d8e385cd",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-100-800043216c96-1.mp3",
+        "en/event-100-800043216c96-2.mp3"
+      ]
+    },
+    "en/event-101": {
+      "hash": "a41892d3200447a0504edf7ac68559dbcf2d10e7f19175c1b524e7244cd51a3e",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-101-a41892d32004-1.mp3",
+        "en/event-101-a41892d32004-2.mp3"
+      ]
+    },
+    "en/event-102": {
+      "hash": "351a4d5ae25f3ce75d92af8add49b11104d2418a5bc261224b8ba9f1d880a8b1",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-102-351a4d5ae25f-1.mp3",
+        "en/event-102-351a4d5ae25f-2.mp3",
+        "en/event-102-351a4d5ae25f-3.mp3"
+      ]
+    },
+    "en/event-103": {
+      "hash": "7fe1d809dfb33175f364b817e015584613be800e0b7143e8fc6a9e23c0a19377",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-103-7fe1d809dfb3-1.mp3"
+      ]
+    },
+    "en/event-104": {
+      "hash": "50703efb6fc7c932154c01e36c33cfbe32237fb62b0f65dec4bcdf6de4bfb503",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-104-50703efb6fc7-1.mp3"
+      ]
+    },
+    "en/event-105": {
+      "hash": "93c02c53ae8fa5025b8143c13448f3d943cfffe6199844e4aea18cbe241a8c47",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-105-93c02c53ae8f-1.mp3"
+      ]
+    },
+    "en/event-106": {
+      "hash": "522a87d9c1719b3ace8516228002eaba1252030327efdbd4fecc4903fc057174",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-106-522a87d9c171-1.mp3",
+        "en/event-106-522a87d9c171-2.mp3"
+      ]
+    },
+    "en/event-77": {
+      "hash": "f0e4062393082ebf4da8534a131628acb3274864bca52d62760c470594df1e3a",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-77-f0e406239308-1.mp3",
+        "en/event-77-f0e406239308-2.mp3"
+      ]
+    },
+    "en/event-107": {
+      "hash": "b9cae5c6a01c5532fc13579fece489bfbce07c5d0e93ddb0f7e41814849fb50f",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-107-b9cae5c6a01c-1.mp3"
+      ]
+    },
+    "en/event-108": {
+      "hash": "20d95e596f264bac73117b7123f03f278b6ec908135fed3f553fd6c49ba3c2c3",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-108-20d95e596f26-1.mp3"
+      ]
+    },
+    "en/event-109": {
+      "hash": "36cf90d0355f7117ca6e57fcfc933534945726d444adda064c82f12cc9e5a755",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-109-36cf90d0355f-1.mp3"
+      ]
+    },
+    "en/event-110": {
+      "hash": "b2990f25928e814b422abe919300c7ef7c0fb306357f31485b61caf3f651861c",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-110-b2990f25928e-1.mp3"
+      ]
+    },
+    "en/event-111": {
+      "hash": "5baca163fb55220afc44671a0bb24c4fa737d724cd60ff9047661a7bd00cbfa5",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-111-5baca163fb55-1.mp3"
+      ]
+    },
+    "en/event-112": {
+      "hash": "88b97cd55f8df1ddffb38300630608e39667ed454493d730f3da0a0a9e489e0e",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-112-88b97cd55f8d-1.mp3"
+      ]
+    },
+    "en/event-113": {
+      "hash": "7d948a579f3968cdac48b0bd093f58f3eac1b62a8a558b27624f670881a2300b",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-113-7d948a579f39-1.mp3"
+      ]
+    },
+    "en/event-114": {
+      "hash": "4986e4bde207af57cb819d8523180a6d039dec1646e337751f2b588762bba9f8",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-114-4986e4bde207-1.mp3"
+      ]
+    },
+    "en/event-115": {
+      "hash": "404a79e913b4dc53e780fe94d1d39736d7d6b2b32174e50d40a4befbd39cb280",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-115-404a79e913b4-1.mp3"
+      ]
+    },
+    "en/event-116": {
+      "hash": "05677582e06a40de72a71091ca4fda5829c81c42fb48a1ec0f808454e1b24389",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-116-05677582e06a-1.mp3"
+      ]
+    },
+    "en/event-118": {
+      "hash": "27009eddfee638b744ef6f27ec98d61a7a2881a1db8547db8ee47369a0358b13",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-118-27009eddfee6-1.mp3",
+        "en/event-118-27009eddfee6-2.mp3"
+      ]
+    },
+    "en/event-119": {
+      "hash": "aa32362e8caddcc5ea41749fbccc135ecee7d7739da1f02ca2ab40070f6def26",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-119-aa32362e8cad-1.mp3"
+      ]
+    },
+    "en/event-120": {
+      "hash": "a7b3b2a329626c7ce19b284737da977ad8eb6d3ab6597084de9def360e026f8e",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-120-a7b3b2a32962-1.mp3"
+      ]
+    },
+    "en/event-121": {
+      "hash": "ff7e2559102795127001cc82ab4b641d16b91d23a6abb283646977ec179e6974",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-121-ff7e25591027-1.mp3"
+      ]
+    },
+    "en/event-122": {
+      "hash": "aaaf2e2bd03fb3f5b9152afad0a9bb783734d9b8cdfa0868ddd9e4e38a8278f0",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-122-aaaf2e2bd03f-1.mp3",
+        "en/event-122-aaaf2e2bd03f-2.mp3",
+        "en/event-122-aaaf2e2bd03f-3.mp3"
+      ]
+    },
+    "en/event-123": {
+      "hash": "784e5d589bc3d3b3cf817dd17d6d13a1244d09bb3109514672d6660c5b22b6fc",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-123-784e5d589bc3-1.mp3",
+        "en/event-123-784e5d589bc3-2.mp3"
+      ]
+    },
+    "en/event-124": {
+      "hash": "71a3f467d202e7705acf01f0dbeea3f07b245623d0cfcb3a5f71aff818872c07",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-124-71a3f467d202-1.mp3",
+        "en/event-124-71a3f467d202-2.mp3"
+      ]
+    },
+    "en/event-125": {
+      "hash": "d289cde4dc47a4fdd59f11c74c440f8af7e8e24aaf5401c2e16721dafbf53196",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-125-d289cde4dc47-1.mp3"
+      ]
+    },
+    "en/event-126": {
+      "hash": "0ca0e2ba7fa3fb64d2c3e60a369c252b7e6517f464a74101310672d3ef9078f1",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-126-0ca0e2ba7fa3-1.mp3"
+      ]
+    },
+    "en/event-127": {
+      "hash": "78dcd44b9808b47137e31935b19dbb359a634d97bd0a12a7b1970fef7285cbe7",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-127-78dcd44b9808-1.mp3",
+        "en/event-127-78dcd44b9808-2.mp3"
+      ]
+    },
+    "en/event-128": {
+      "hash": "fbafc2da0f86b2b26c4b19828c4fd6012d75312d32034deb3bd0f7ecc2d2a1c5",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-128-fbafc2da0f86-1.mp3"
+      ]
+    },
+    "en/event-129": {
+      "hash": "cb5e3561f36ed8f072a03b25ff533934f98176d8f337017c1a80f9512f2e50ba",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-129-cb5e3561f36e-1.mp3"
+      ]
+    },
+    "en/event-130": {
+      "hash": "5386f1354d1dcc896ef7242d9666fd591cca40063d9d4c83f21bc08ac04685ec",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-130-5386f1354d1d-1.mp3"
+      ]
+    },
+    "en/event-132": {
+      "hash": "661537d793ef395cd65b996d72238b3398801f262cf9ce808c189619edf5132c",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-132-661537d793ef-1.mp3",
+        "en/event-132-661537d793ef-2.mp3",
+        "en/event-132-661537d793ef-3.mp3"
+      ]
+    },
+    "en/event-117": {
+      "hash": "019a4bd4bc55e10bdf072772fd1f74378f958108a98cf7bea8ff12c9e0ae1b38",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-117-019a4bd4bc55-1.mp3",
+        "en/event-117-019a4bd4bc55-2.mp3"
+      ]
+    },
+    "en/event-131": {
+      "hash": "36d5f6321876a0d0f3d85c16bfacb2e3385d891c6c19b5b6fc1b913d4491e499",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-131-36d5f6321876-1.mp3"
+      ]
+    },
+    "en/event-133": {
+      "hash": "292f3ebd4b9e0cb91bea981c206c22420f58593055e7670143433131aaa85402",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-133-292f3ebd4b9e-1.mp3"
+      ]
+    },
+    "en/event-134": {
+      "hash": "dc1ce92a7046d4d83435c7e8f444116dd7b38c64e918b694fa27b87114f35fd0",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-134-dc1ce92a7046-1.mp3"
+      ]
+    },
+    "en/event-135": {
+      "hash": "221e422e59288271aba2eec4eb7a980ac5d054c92a77626a4610cb43ea67bb88",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-135-221e422e5928-1.mp3"
+      ]
+    },
+    "en/event-136": {
+      "hash": "f9f823ac36d25eb77b17af4dd9f44b82ed8580a25fd635313cbeedafdcc06181",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-136-f9f823ac36d2-1.mp3"
+      ]
+    },
+    "en/event-137": {
+      "hash": "b64c5d6afe7fa82fc8e85c31413b33a1c204ffe75ef4705d044405b156640630",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-137-b64c5d6afe7f-1.mp3"
+      ]
+    },
+    "en/event-138": {
+      "hash": "27130e50493fa5860a762b19326692bde0381e799ad39b9dcb10e40d3dc303d3",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-138-27130e50493f-1.mp3",
+        "en/event-138-27130e50493f-2.mp3"
+      ]
+    },
+    "en/event-139": {
+      "hash": "33d65f8fd474b0022ff34b5cca54f6a18fb9bb122c2b967a74f7e84f120411d5",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-139-33d65f8fd474-1.mp3"
+      ]
+    },
+    "en/event-140": {
+      "hash": "625b4d9a9e069d0f5a6edca5f03b99bade47479a0b7f0ff14ed3f5fc4d573fa8",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-140-625b4d9a9e06-1.mp3"
+      ]
+    },
+    "en/event-141": {
+      "hash": "de97b094e92bb7aefbb6804192b080c6975b8a303b859659ca7a160bedfdc478",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-141-de97b094e92b-1.mp3"
+      ]
+    },
+    "en/event-142": {
+      "hash": "05e369bcc8124a358b4abd506394fd9f592defb90921e1736204d789ab0a53e7",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-142-05e369bcc812-1.mp3",
+        "en/event-142-05e369bcc812-2.mp3"
+      ]
+    },
+    "en/event-143": {
+      "hash": "8ab1faa6361056efd2b539fbbb709204d85e622e39dda3a701a84ba538f8ee53",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-143-8ab1faa63610-1.mp3"
+      ]
+    },
+    "en/event-6103": {
+      "hash": "551ec5e60b9d68711910eb4f91d94bef65cdc98d74eab904c382ef8045186ab3",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-6103-551ec5e60b9d-1.mp3",
+        "en/event-6103-551ec5e60b9d-2.mp3",
+        "en/event-6103-551ec5e60b9d-3.mp3"
+      ]
+    },
+    "en/event-145": {
+      "hash": "bc9d1eda8f55f00e920aad337884344685ff9e87dc1a89669c0a8fd5f893b21e",
+      "voice": "en-US-Brian:DragonHDLatestNeural",
+      "parts": [
+        "en/event-145-bc9d1eda8f55-1.mp3",
+        "en/event-145-bc9d1eda8f55-2.mp3"
+      ]
+    },
+    "ar/chapter-prologue": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "fa956cbcbdb0fc376eb5eec6ba176b73945856fca82d0c88b80432751bf3f3de",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/chapter-prologue-v4-api-fa956cbcbdb0.mp3"
+      ],
+      "verifiedSourceText": true,
+      "requestId": "HiBGQxHRvUuU7YXBRmX7"
+    },
+    "ar/event-1": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "b4a69be805d72b608eb8383294b9b17ac88e43e615ae1ec8e34ee503113c8b69",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-1-v4-api-b4a69be805d7.mp3"
+      ],
+      "verifiedSourceText": true,
+      "requestId": "xgydjTfFoOs94ZGCkLL2"
+    },
+    "ar/event-2": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "544f84e991a4ae6f4ee17851b36aeee85269117f0088d31c8f78264fb873f74f",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-2-v4-api-544f84e991a4.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-3": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "277cd2a2b2050db6f94e0935e20f41d6c55295b42f0ef00de16d7ee7b57de387",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-3-v4-api-277cd2a2b205.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-4": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "3729506f52fdb165188469e828a409a06ed6a82b108f9550e93807e33175b614",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-4-v4-api-3729506f52fd.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-5": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "b27667712cd51c579eb2e4189d4be3f4f0ba791d38827ac6fbdc9c609867ef8b",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-5-v4-api-b27667712cd5.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-7": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "137be15f1dfff2e89b9caad554178c5aa77b141fa8ba3336b73d41e4700b3048",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-7-v4-api-137be15f1dff.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-6": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "1c32e95ccaefa5d7a9378b82c52995fd7cc7eddbc2d0b77d4a65a3fd8c064b02",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-6-v4-api-1c32e95ccaef.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-8": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "bd7354f85d20d2bdb9e6d1d7ae7144f37141ea4c603c028a38d1b78f45ef11e1",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-8-v4-api-bd7354f85d20.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-9": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "35c5edd22a9522ee19c06465ae616a38a6e37c2377f0dadcd23504cd3a838ad3",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-9-v4-api-35c5edd22a95.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-11": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "6e65d05535331948092bc393dacf0cebe19042180c15553da2bc88adcf4e2e00",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-11-v4-api-6e65d0553533.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-10": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "b9825eb703b85d6341783d5cace981807846c7458617b1a451ae483e71a22948",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-10-v4-api-b9825eb703b8.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/chapter-makkah": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "fc96309b6d9708f7048a8c8f23cf1aa1acb422dd36c44ba732dabc3a0e611680",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/chapter-makkah-v4-api-fc96309b6d97.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-13": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "fcd9a9ca96b8172a61165843dbaf43dacd024417499b3d8e3af9a1c8952fa228",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-13-v4-api-fcd9a9ca96b8.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-12": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "5da0766de81a3af7912412da3f0904ca25c8d987552e4c9a390331c17d4a8ecd",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-12-v4-api-5da0766de81a.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-15": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "4f33612a09cf826ab192d90f1919c75b5af417392aa88c77f27836232d40a850",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-15-v4-api-4f33612a09cf.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-14": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "0000b0d309a693c21ebf57b562db72ea9534a3c56572e8861cdc29a98d45cd3c",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-14-v4-api-0000b0d309a6.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-17": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "11b252bd69c51993287ee0db109530f26df26548c12aa77066e66f9d31a7f681",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-17-v4-api-11b252bd69c5.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-16": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "6217494cff6d9ffe735e65ee0c615f591e6af60c67ff85eceade88f5407eb50c",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-16-v4-api-6217494cff6d.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-18": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "87ac0fa1f18115d148dc8354a22fdd8eeb9ddb63ce2738ea8a4d2acf4ff19e4a",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-18-v4-api-87ac0fa1f181.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-20": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "36fae262a0a090b4fb8aadf34debb55a8f523c84a8cc657711b28328fd918abd",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-20-v4-api-36fae262a0a0.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-19": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "db4439d818e58d009addc7a572bedb37e97e506e2b550d0636b68a54cb2c9531",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-19-v4-api-db4439d818e5.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-22": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "00068818642997da18fef2cf9e32237f19020d1cc1d16e369192e12e37baa818",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-22-v4-api-000688186429.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-21": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "ff30fb1336207c591855f9462ef0178f2b3e94616c08d4f36e7556358501f6d3",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-21-v4-api-ff30fb133620.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-23": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "2f61c5ff20870c3940831f9e8a2965d2d6698e0164b51b7949d0af98777758c3",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-23-v4-api-2f61c5ff2087.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-24": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "17b99371ea2be58376d95e487b055653ef6c636b2d34b31f069c67a1473264c4",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-24-v4-api-17b99371ea2b.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-25": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "9d71b53c6e8f400eae3901dc7063d4346e23bf79e3825308efc2398203852075",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-25-v4-api-9d71b53c6e8f.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-26": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "65ed2f15b901fdec380cd3b289d86e0881aa5fff19a6d19d0839f4c62e337771",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-26-v4-api-65ed2f15b901.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-27": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "ae3743fc18aacc1f7da75cad915670a35b6a67bb82d35fb7912c2a657249afe7",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-27-v4-api-ae3743fc18aa.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-28": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "135c0713c0af0e46127895da3a5d6e963f1c4a4e622c9ce60b8f1e59ecd8b7bb",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-28-v4-api-135c0713c0af.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-29": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "678c421dac4af1596330db3a993ffacade040db1e863e2fdcdef6820556c150e",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-29-v4-api-678c421dac4a.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-30": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "bc13dc370e832cac3e40ae1c0bd658cc82f1c5511de2d1c36c791b8786f0c20f",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-30-v4-api-bc13dc370e83.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-31": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "2cdc2b621816a4a71e00548c6b5df7bbb37299882be7867185eb3e5f15d243a8",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-31-v4-api-2cdc2b621816.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-32": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "8754957a85eb85adb52cedfac7b819ed970ba965852bd581e05ef42c3f142899",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-32-v4-api-8754957a85eb.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-34": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "414b98ca1e751c8d93a7000b205af71d5622666ee3ff75740c82454513cd5e15",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-34-v4-api-414b98ca1e75.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-33": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "41906521cc9ca09d91a822c751eaf0b290c6e9bd114243251feaac3575fbd84d",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-33-v4-api-41906521cc9c.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-35": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "9341a54d2e8dc9bac21c8ca4be89337f90717760d1229a4b8237aac34a2db1e6",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-35-v4-api-9341a54d2e8d.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-36": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "34252056fa790c19f9824db93803fa19cd846f7ebcdcc7be78a049945c85314e",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-36-v4-api-34252056fa79.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/chapter-hijrah": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "11392e3ae87cadf2334315c419ef2a68ab2f03200d0fd27999c592913ef7a235",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/chapter-hijrah-v4-api-11392e3ae87c.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-41": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "c4a1c1afc50b0cbddf7c535985dceebab6db38fa5ae860c1d33a1aaa3835497a",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-41-v4-api-c4a1c1afc50b.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-40": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "bd3fe8c9adc4a74f1d87939a1047cd046d3d033a05f6e6e32d500168d5bcbd9f",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-40-v4-api-bd3fe8c9adc4.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/chapter-madinah": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "c8d46d5b15666de0f1283f0f5b999a383a16663bbd2d350bfa33e368eb95cd83",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/chapter-madinah-v4-api-c8d46d5b1566.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-43": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "730913d7b9d895197efb6cb3394097cae9d1e7df3d9015e6b0e06afdf395a1f1",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-43-v4-api-730913d7b9d8.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-44": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "2de6bda57c0d722d4f022fd616c28e6e48fdf2ee1a69c030b83da8fe690ea3b3",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-44-v4-api-2de6bda57c0d.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-45": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "3673c22d644f3b76c5bdc7124d496d526e2f4e0858fd4d5e751bb12e0cd3c2f4",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-45-v4-api-3673c22d644f.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-42": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "380cd032d4cc497f33ea09d3655feafdd5270ecb7b82cd50b4671b121d23b826",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-42-v4-api-380cd032d4cc.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-38": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "12076184c151d97d75193dc7531ca9375a53a95bfe1ad1e54158a048ffc9430a",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-38-v4-api-12076184c151.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-37": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "913bab0e0b74d034a6f4852651d888c53075ca25c127d27101d535e46d6ed8f8",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-37-v4-api-913bab0e0b74.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-39": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "2238695a6baece85078400ff9e55f825950cc9dcc4cbbc8430f2895cdffc96d2",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-39-v4-api-2238695a6bae.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-46": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "60237abd550207d8b425ea4cce007dfe5ad919cff469ecb8e2f9df71ebec2637",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-46-v4-api-60237abd5502.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-48": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "5cdefbec7bc7976dcce9aa3fd78dabefac0493a47b7b892f2121299fbb018b64",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-48-v4-api-5cdefbec7bc7.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-47": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "e528886aee06e1928e7077bef56d3fefd6b82221d53702e9f66903b19279378a",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-47-v4-api-e528886aee06.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-50": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "2d165bd80e88c00efce1799c45ef392ec7ede84a694d69da35b5132acd434f54",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-50-v4-api-2d165bd80e88.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-49": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "0fb391a56221426f7954aeb1126a4dbf3d9f86b282caf99700cd19d99c50c193",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-49-v4-api-0fb391a56221.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-51": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "552ea8c1b9b69c21cb283573423d38c335a7925c1ccbfddb875a42a32f0266ab",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-51-v4-api-552ea8c1b9b6.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-52": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "0a3cb410e963514009fe735db7470ed63f7575ce16bf3db252fe4085e357db3e",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-52-v4-api-0a3cb410e963.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-53": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "66881ee2e23f53b3bdefa7669fb38ef603ef49f12548ac80b600021fd87d35a8",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-53-v4-api-66881ee2e23f.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-55": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "be7915c5c385ebdee6a625e7bccde72399d22cc9574b8f0791a96477ba9f99cb",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-55-v4-api-be7915c5c385.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-56": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "b54cf093fd6ce311f1f53e79d9a1738b1171bd559784213a4808b97e785282a0",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-56-v4-api-b54cf093fd6c.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-57": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "fdaaa704ccd2cfbf62c75a460d6ace6693374660c8e0ce41bc2efafdb4d83f51",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-57-v4-api-fdaaa704ccd2.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-54": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "c2b5efc51a16e9a29267524e7ebdcda29c2c42f935d4bfa4f1dccd357b4adc5a",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-54-v4-api-c2b5efc51a16.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-58": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "f09a455f20322bb81cfd63a564aa9c828feb3f0bb0ed70dbd443fdcd856c47d8",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-58-v4-api-f09a455f2032.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-59": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "e1b9d8252bf96e1578cbd8971e80d4dcc038c2e656dc28132eb1c518d8fe24bd",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-59-v4-api-e1b9d8252bf9.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-60": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "b9d8524ba8955b0ed34f87217be1c9b0141ab6db8515ab57b890214ad49bc820",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-60-v4-api-b9d8524ba895.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-62": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "5b1db36c617581c641ff11c8f698ba8dfb75e406cd7136832682d05100f9b3ed",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-62-v4-api-5b1db36c6175.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-61": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "abbd4e7e5029d1cd16259a076a60083ebc22ef5a1567ba8843886f390bb4874e",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-61-v4-api-abbd4e7e5029.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-63": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "0d13e620fb125003beb680ccbae91c6efb737813bcc52e1767323814a85562e1",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-63-v4-api-0d13e620fb12.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-65": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "94e1cbca1db21619f777cb4223840ab26da87140f521428f9886647831e3a623",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-65-v4-api-94e1cbca1db2.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-67": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "b52c7bd42ef387672f4c1165779d3121891244b226d555ec55e957c0330f9455",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-67-v4-api-b52c7bd42ef3.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-68": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "332e499d4e3bddc9c5e05b94bcdd7746326e662c1a28eaa6e33786e3ee2d7a9a",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-68-v4-api-332e499d4e3b.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-66": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "a0295d30066f46319029e9669bbd0b8df5fbe6e5419623c23309e5ca833008e5",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-66-v4-api-a0295d30066f.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-70": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "31871151591f343bd3d2d7bfd24b397ee8dad79103c2a4ebf08e27e159017b86",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-70-v4-api-31871151591f.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-69": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "eb91203b88486938fd07c65d528c6d0dc8e6ba9d5e8af218efd0c4e2bfefdcf4",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-69-v4-api-eb91203b8848.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-71": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "8c2853607d80772bdaea7fe8def8b807c7bface5d13841bcfde87f4d8591eef7",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-71-v4-api-8c2853607d80.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-72": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "4a4899f1225ca64e9b7b53b3b6d9840b8d60775cf36a0fb25f81295064111dfc",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-72-v4-api-4a4899f1225c.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-73": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "9d96e23922f4c561ce165b18603b25ae3c86317ddcedf27d22f32582aa37fd49",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-73-v4-api-9d96e23922f4.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-74": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "ce7e2689f64140f2f2fe23b148f72f9f41fad8d8ea2584c13af07a4fb90fb10c",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-74-v4-api-ce7e2689f641.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-75": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "5dcce9854fd0c97a342f1f3f827f9bb3d3ff0979e85bc25574f087d5bc5db59b",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-75-v4-api-5dcce9854fd0.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-78": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "ae9702251c991f2fa339c8129c4d65cebaf8af3f2e72f56553e954068d430601",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-78-v4-api-ae9702251c99.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-76": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "3bca0f3d0cef99e501a6de7331638aed4b0dda672fb8155de538cf4791cf20d1",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-76-v4-api-3bca0f3d0cef.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-80": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "d68a0bec109ccf412a4babc87fcf6446a3ebf6e66eadbebeba8146423f76ccfc",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-80-v4-api-d68a0bec109c.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-83": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "c18e4407353fab4d144e385ca6d6efece8f48573730bff4a87a372b8d1d1e413",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-83-v4-api-c18e4407353f.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-79": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "42d9621b1f2f20b310a625f8ce13b06e45b4ff4e36fd773d4eb4a914ceaf81ff",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-79-v4-api-42d9621b1f2f.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-85": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "41f6fe99d711362c0505edf9fd981acef5e198ec8b3c09a7350682050e6310c4",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-85-v4-api-41f6fe99d711.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-84": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "738cf07b9a88920d0b091342e38ee3f041d767cb0f94cee260054628cda9afae",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-84-v4-api-738cf07b9a88.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-86": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "1355d39b0d0c3e29c6f4c6e90ddee8e0b4a9696e67e511d511a47c16da1a4fce",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-86-v4-api-1355d39b0d0c.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-88": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "4df68a1d1d4f15287bed1e4fcaacce6aab4477da72c220e198e11801bd175614",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-88-v4-api-4df68a1d1d4f.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-87": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "b106bac54958c8011f3b8bbf83429ba1a7cd7e640a17686d16d33cf3c3e348d1",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-87-v4-api-b106bac54958.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-90": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "8c95e7e4fea6485826ce449602449a7c7a0c28eff454c0f8dfb12a83b16dacf0",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-90-v4-api-8c95e7e4fea6.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-89": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "b1af88cb8f6d5be511f225ff01d8b011736fcb19e4c04cef4166b1a6ad762b7c",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-89-v4-api-b1af88cb8f6d.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-91": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "42080818b5d12b405fe3ef6e6d8b8eb113b76be6ac93a454c79f67de7f76a3f8",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-91-v4-api-42080818b5d1.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-93": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "5e47eeab53923e3e0c40712a1939beed25386af2750dbd59ed4192419055eb56",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-93-v4-api-5e47eeab5392.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-92": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "f2617aff9e1ceaf9d9a2fb9f74cf9d4a1c8d86855000bef44d7a8fedddabac2d",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-92-v4-api-f2617aff9e1c.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-95": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "abf1f59a21786b268c45dddeb52f77598f62f8d01f1c502c46c6c1c69bda6fb7",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-95-v4-api-abf1f59a2178.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-94": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "3e8cc6c35a1f262ee259ec5a92115acc6a793be61ebbacd64e2b5c9801691493",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-94-v4-api-3e8cc6c35a1f.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-96": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "308933e4d8b4a9de25c05d73e8fd058a63ad9ea29b1dfff38be9e111768c696f",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-96-v4-api-308933e4d8b4.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-97": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "cb953b44c7a979a3dbe10b1d1cdb2ee19f046e3fd1072abcc0fbc80dee154ad1",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-97-v4-api-cb953b44c7a9.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-98": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "689149848655ea746da827aab04c5fe544dd16e26cf693ab4e632414888441ad",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-98-v4-api-689149848655.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-99": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "0846f5053e6a3e46e2812a9a8687533a3de335d1bbae8d4731fdafcb2d701a62",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-99-v4-api-0846f5053e6a.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-100": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "9cec5408300d978f669a657ad1e9a7b46524cef8683211e52c72a87e0d884d77",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-100-v4-api-9cec5408300d.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-101": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "36afe71e609ed34ea9cf56927533f2479318a79c7c5c71dfb6f9324d1dbbfc12",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-101-v4-api-36afe71e609e.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-103": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "f10979da39cd5293ec2fa9c31a9239f05164da5778ecc8681dfb1775b1382f83",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-103-v4-api-f10979da39cd.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-104": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "aeee16e2eb31e0905796e0ba6fa1ad27e05e6a02f57bced67b0e4ad08c1bcc9c",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-104-v4-api-aeee16e2eb31.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-102": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "0af072f99e56493cc0d04a0a9a7810b4e10998aa43e38932ec4f252a211aa84f",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-102-v4-api-0af072f99e56.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-105": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "2ec250350b69ab533a2a4c0ee1776fe3157b111061446fd9a40d75088d9ccb93",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-105-v4-api-2ec250350b69.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-77": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "b9dc0a05b0a08749211701dcd5355e1cdd5294e36954930bfcfae031ae287d26",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-77-v4-api-b9dc0a05b0a0.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-107": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "6c7f722eed68e2285918c16f1ea134ebfe126a62b819a119c6a8be34ae9a3eef",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-107-v4-api-6c7f722eed68.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-106": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "c8159d5c10d3dd51277d4e4d04a96eea0b8acb1dc57ac8ff0b2f3e6e2c193fdf",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-106-v4-api-c8159d5c10d3.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-108": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "056399d7844f892b427b4fe1ae3b9a953e4fe7742efdf8742ce89f2742efc60a",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-108-v4-api-056399d7844f.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-109": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "cd79fb54d24e0d0bde318baa4274d925cb213bf1ec1856311a966d52856d3cf0",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-109-v4-api-cd79fb54d24e.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-110": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "bd57a10c64dcfc22b253c8172700e563c90911019560be600515639f46f75f46",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-110-v4-api-bd57a10c64dc.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-111": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "d7a21ca5b43c21f8fcc222073bb7d6011042647d8705a8cf479ce51c146e3df7",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-111-v4-api-d7a21ca5b43c.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-113": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "2779545e53a092c8df1c21eac674860714cf00f9b5310d162b9ea53030aec66c",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-113-v4-api-2779545e53a0.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-112": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "9fec07dc85b9143a8f20dc7ca1c0d39abeded854e72830112a051b525e18f87b",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-112-v4-api-9fec07dc85b9.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-115": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "da6e808fa59670c05664a61e3ea1e293b954236ef3c9ae1cf635fcafec7629c0",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-115-v4-api-da6e808fa596.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-114": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "b0c8714afb751d4c919e2717c9cfd5a43c6e21691a60e6fff609c20ca054bac1",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-114-v4-api-b0c8714afb75.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-116": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "63471b813a3d6a38491ee6531b7057c73a05cb2c5d4fffcc10b32e51c16ecda3",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-116-v4-api-63471b813a3d.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-119": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "03fa651e0b106ac6b0931e61bfe59205f1a38386d73454de77eceb8406ba6ded",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-119-v4-api-03fa651e0b10.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-120": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "f3de9267f675cd6d13d23831e25a5c3d394f4ace6c04b4b989316e0bc53bae83",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-120-v4-api-f3de9267f675.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-118": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "b93b8ce88449d81da54580725d1ee6b0c5a7a9adacedf421540ca12a7f20b283",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-118-v4-api-b93b8ce88449.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-121": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "a7488de8390cb47f747ac9b0a445631681908d29d306487b94870a1dd224457e",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-121-v4-api-a7488de8390c.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-123": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "5c28dc5beba1806f94d1fbf787a3f54a801e2fe59243cb8241ff4e0d333abf35",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-123-v4-api-5c28dc5beba1.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-122": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "a31caef42ffb26b0fadf2eba75e8d95632b382ad619d8dd18cfc7f43a8e8c2fc",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-122-v4-api-a31caef42ffb.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-125": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "a805ac822da4568c008ddf22d7ff3ef4d0b6bc73342941dbaad83d5c9453ca3b",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-125-v4-api-a805ac822da4.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-124": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "97a0b63bb172659dfa4b0dfcf34da8b76cde1d4dcdac55b2ce52c1acf489529e",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-124-v4-api-97a0b63bb172.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-126": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "d99e60e26be961edddd47f84193696fe915d0979ae4f4b989da2a6a8f95cf085",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-126-v4-api-d99e60e26be9.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-127": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "5a58341a8971bc977e72c7d426f3ad0969d4ca0de99dcce201e31a2f9df48966",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-127-v4-api-5a58341a8971.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-128": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "392d331d4cb91d68caebc7b620ba1d8784fdd3f1a541c01e3462693511900eb6",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-128-v4-api-392d331d4cb9.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-129": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "05992eab1ee73b74e91a552a349bfd53ada073b3d29ed4c895575c92c2f681c7",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-129-v4-api-05992eab1ee7.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-130": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "fa429306b5bc4e434842c32bae6df6196a0d28140b176b1e13de3ef6ff2127e4",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-130-v4-api-fa429306b5bc.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-117": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "b61968e9f11349028f99368aa3ce2b5a59cb87fa65aa1ddcc0079d4be24979b4",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-117-v4-api-b61968e9f113.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-132": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "e6d6f1ac15aac5f45054f6ce03165dfb7db1fea43ac85cec4348606741149dba",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-132-v4-api-e6d6f1ac15aa.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-131": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "177da12c3fbd7a90c9e2fac34e06653f81e0816c2035469fc195e5263172bb34",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-131-v4-api-177da12c3fbd.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-133": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "8131ea6d78999ad60ea278e8d3a00ec3518cf253fbb56ad5ac30b5a63b4d7391",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-133-v4-api-8131ea6d7899.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-134": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "e19abedaed84e229eb262782e974e0ba8f65172446ed139c7cdf2613a525d0c2",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-134-v4-api-e19abedaed84.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-135": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "a2d201f8d14eda2ac7257e2a42bb88c1fde79c282eb7d17ad7b35b23ab6789bc",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-135-v4-api-a2d201f8d14e.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-136": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "c6fff084d0843158e56d8396db60b0f19bf11f25681042f482e2a562faf8d05e",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-136-v4-api-c6fff084d084.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-137": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "50bf631a1d2f8bf432b98c3d36535e924e5ff88829601c6d0e2dfa4a77bcc5fc",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-137-v4-api-50bf631a1d2f.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-138": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "2dde55b38a69c464e58a7590c27621d8e6be0f51f48e3b02f8066756a7cb6c16",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-138-v4-api-2dde55b38a69.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-139": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "8a1a462d69984fd07e6eae8af1941366d175b13347c660efd9e89507a94fb9ed",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-139-v4-api-8a1a462d6998.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-141": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "d897831e3e22cb0387a1c46cd34ceb2ec009ac1c04d1288a51a86ae628fa9e03",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-141-v4-api-d897831e3e22.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-140": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "bafa80725c1272ac0bdf569440867759cddd176b49e0fafff16ea16fdd6f1b16",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-140-v4-api-bafa80725c12.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-143": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "56b5bea30a4d03c08d6e46b2a215b07386c8c5a86b0b08aa5c31f0bcd8773a01",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-143-v4-api-56b5bea30a4d.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-142": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "1458a0c46b912492ce2be55e7028212866628d886b815d6fa98eb7ac3e27aba4",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-142-v4-api-1458a0c46b91.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-145": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "a38529c3336a51f3131be6d35b401bbb2a03668c73ecb7cca22384243e10206e",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-145-v4-api-a38529c3336a.mp3"
+      ],
+      "verifiedSourceText": true
+    },
+    "ar/event-6103": {
+      "provider": "elevenlabs",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "model": "eleven_v4",
+      "hash": "885b72eb31f7075e5bc1957c2d3649855a4954fcdb34e56bf1a6a5040f434628",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "parts": [
+        "ar/event-6103-v4-api-885b72eb31f7.mp3"
+      ],
+      "verifiedSourceText": true
+    }
+  }
+}

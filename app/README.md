@@ -271,6 +271,8 @@ The map carries an Ask bar (on wide screens it is the only way in; phones keep t
 
 ## Deploying to Vercel
 
+English and Arabic card narration, recording IDs, cache behavior and generation commands are documented in [scripts/audio/README.md](scripts/audio/README.md). Audio assets are grouped by language in `public/audio/narration/`.
+
 `vercel.json` at the repository root tells Vercel to install and build the app from `app/` (the data files the app reads are copied, trimmed, into `app/dist/data/` during the build) and to serve `app/dist`. Its rewrite sends every page path (such as `/journey`) to `index.html`, so opening or refreshing a page never gives a 404; real files (`/assets/…`, `/data/…`) are served as they are. If the Vercel project's Root Directory is set to `app` instead, `app/vercel.json` does the same.
 
 A person's card shows their cited summary, one line of its sources (Dorar events and Sahihayn hadith, from `7_sahaba_references.csv`), the sources' own words in a section that opens on request, then the events they appear in, each with the sentence of Dorar's text that names them.
