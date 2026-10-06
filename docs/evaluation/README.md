@@ -119,7 +119,8 @@ question about religion. Every answer: [`user-test-2026-10-06.csv`](user-test-20
 Limits: a small group recruited by the team, mostly people with some knowledge of the Sirah rather than new Muslims or
 non-Muslims; the same questions before and after, right after reading, so this measures recall of what was shown;
 unsupervised and online. 10 further submissions made in three minutes, five answer patterns each sent twice, were
-removed as duplicates. A larger test with new Muslims and non-Muslims is the next step.
+removed as duplicates. This is a limited test with few people, not proof of benefit at scale; one of our goals is to
+reach many more people, and a larger test with new Muslims and non-Muslims is the next step.
 
 ## Known limits
 
