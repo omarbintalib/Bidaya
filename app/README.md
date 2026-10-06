@@ -27,14 +27,14 @@ Every piece of content comes from the CSV files in **`data/`** at the root of th
 | `quiz.csv` | The first question at the end of each chapter (answer and choices are place keys). "Another question" then draws on questions built from the events (`src/data/quiz.ts`): "where did this happen?", answered by the event's exact place in `2_sirah_events.csv`, quoting the first sentence of its Dorar text. Events whose title already names a place are skipped |
 | `route_stops.csv` | The stops of each route walk, with their Dorar lines |
 
-The README of the data package (IslamthonDataandstuff) explains every column.
+[`../data/README.md`](../data/README.md) explains every file and column.
 
 ## How the story works
 
 - **The story toolbar** stays at the top: jump to a chapter (✓ once its question is answered), search, and Ask the map. The background sounds are switched on and set in the settings panel (the round button), while the Journey is open; phones zoom the map by pinching. The first chapter returns to the beginning; the site header contains the single language switch.
 - **Scrolling drives the map.** The step crossing the middle of the screen (the lower part on phones) becomes the current one. Over the map the wheel scrolls the story; zoom with the + / − buttons, a pinch, or Ctrl/⌘ + wheel.
 - **Story mode** stays on each event as long as its full text takes to read (slower / normal / faster), shows the whole text, and pauses at each chapter question until it is answered.
-- **Sirah summary** (ملخص السيرة; on the opening page beside "From the start", and at the end of the story) plays twenty-one moments on the map (`summary_film.csv`), from the birth to the year of the Prophet's death ﷺ: each a Dorar event, told in whole passages quoted word for word from its own text, never cut mid-sentence (a test checks every one), with the verses the sources tie to it as references, its route or letters drawn, and every place the sources say Islam had reached lit by then. Each stays as long as its words take to read; pause, jump to a moment, or open it in the story (`src/journey/SummaryFilm.tsx`).
+- **Sirah summary** (ملخص السيرة; in the site header, on the opening page beside "From the start", in the "continue reading" dialog, and at the end of the story) plays twenty-one moments on the map (`summary_film.csv`), from the birth to the year of the Prophet's death ﷺ: each a Dorar event, told in whole passages quoted word for word from its own text, never cut mid-sentence (a test checks every one), with the verses the sources tie to it as references, its route or letters drawn, and every place the sources say Islam had reached lit by then. Each stays as long as its words take to read; pause, jump to a moment, or open it in the story (`src/journey/SummaryFilm.tsx`).
 - **Progress** (answers and events read) is kept in this browser only (`localStorage`, key `bidaya.journey.v1`); the opening is shown once per browser session.
 - **Reduced motion** (system setting or the in-app preference) turns off the drawing, pulses, caravans and smooth scrolling.
 

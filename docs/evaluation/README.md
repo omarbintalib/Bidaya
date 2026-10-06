@@ -101,9 +101,10 @@ answered the 50 questions in one session.
 
 ## Known limits
 
-- Arabic written in Latin letters ("shu sar b ghazwat badr?") is refused about half the time.
+- Arabic written in Latin letters ("shu sar b ghazwat badr?") was declined in the graded run and answered in both
+  repeat runs: handled, but not reliably.
 - False premises the sources are silent on (a journey to Egypt, the Battle of Yarmouk) get "not found" rather than a
   correction: the assistant only states what a source says.
 - The wording of an answer changes between runs (the model has no temperature setting); the facts stay the same (section 4).
-- Lists that need many events (everything in year 8 AH) and arithmetic across events (years between two migrations)
-  are incomplete.
+- Lists that need many events (everything in year 8 AH) can be incomplete, and arithmetic across events (years between
+  two migrations) can be off by a year.
