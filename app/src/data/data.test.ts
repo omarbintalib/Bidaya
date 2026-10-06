@@ -12,7 +12,7 @@ import { pathKm } from './geo';
 import type { Sirah, Verse } from './types';
 
 // Load the real files at the repository root — these tests also catch broken CSV edits.
-const files = import.meta.glob<string>(['../../../*.csv', '../../../*.geojson'], { query: '?raw', import: 'default', eager: true });
+const files = import.meta.glob<string>(['../../../data/*.csv', '../../../data/*.geojson'], { query: '?raw', import: 'default', eager: true });
 const byName = new Map(Object.entries(files).map(([path, text]) => [path.split('/').pop()!, text]));
 let data: Sirah;
 const serve = async (url: string) => {

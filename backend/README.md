@@ -87,10 +87,10 @@ below documents that work for the technical report. If one of this repo's CSVs u
 |---|---|---|
 | Sahih al-Bukhari (Shamela 1681) | 1,579 | books: Bad' al-Wahy, Manaqib, Fada'il al-Sahaba, Manaqib al-Ansar, Maghazi, Tafsir, Fada'il al-Quran; Fu'ad Abd al-Baqi numbering |
 | al-Raheeq al-Makhtum (Shamela 9820) | 602 | chapter hierarchy from Shamela's TOC; weak reports redacted (see below) |
-| Dorar sirah events | 371 | 142 events, Arabic + English; place and map pin from `../2_sirah_events.csv` |
+| Dorar sirah events | 371 | 142 events, Arabic + English; place and map pin from `../data/2_sirah_events.csv` |
 | al-Wahidi, Asbab al-Nuzul (Shamela 11314) | 161 | only sahih/hasan narrations with connected chains (836 excluded) |
-| Verse records (`../1_related_surahs.csv` + `../3_links_surahs_sirah.csv`) | 94 | the cards' records: 68 ASB (Sahihayn numbers), 26 TAF (Dorar Tafsir Encyclopedia); 60 move the map (direct / after-event links) |
-| People (`../6_sahaba.csv` + `../7_sahaba_references.csv`) | 98 | Arabic cited summary + every fact with its verbatim source quote |
+| Verse records (`../data/1_related_surahs.csv` + `../data/3_links_surahs_sirah.csv`) | 94 | the cards' records: 68 ASB (Sahihayn numbers), 26 TAF (Dorar Tafsir Encyclopedia); 60 move the map (direct / after-event links) |
+| People (`../data/6_sahaba.csv` + `../data/7_sahaba_references.csv`) | 98 | Arabic cited summary + every fact with its verbatim source quote |
 
 Headers are bilingual (English titles, surah and people names) so English questions find Arabic sources.
 

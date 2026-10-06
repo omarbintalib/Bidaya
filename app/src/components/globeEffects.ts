@@ -1,4 +1,4 @@
-/** Selected effects adapted from globe effects.textClipping for the morphing canvas. */
+/** Selected effects adapted from docs/design-references/globe effects.textClipping for the morphing canvas. */
 export const ORB_LOOKS = [
   'base', 'reasoning-twins', 'searching-lighthouse', 'working-gyro',
   'working', 'waiting', 'compacting-squeeze',

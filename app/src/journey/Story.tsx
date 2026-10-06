@@ -804,7 +804,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     {quick && !wide && <QuickQuiz quick={quick} data={data} locale={locale} chosen={quick.q ? progress.answers[quick.q.id] ?? null : null}
       onAnswer={answerQuick} onNext={() => setQuick(pickQuick(quick.q?.id))} onClose={() => setQuick(null)} />}
     {undatedOpen && <UndatedDialog verses={unplaced} locale={locale} onClose={() => setUndatedOpen(false)} />}
-    {filmOpen && <SummaryFilm data={data} locale={locale} reducedMotion={reducedMotion} onClose={closeFilm} onBeat={setFilmEvent}
+    {filmOpen && data.summary.length > 0 && <SummaryFilm data={data} locale={locale} reducedMotion={reducedMotion} onClose={closeFilm} onBeat={setFilmEvent}
       start={filmFrom} onJump={(n, at) => { setFilmOpen(false); setFilmBack(at); setReturnTo(null); goToEvent(n); }} />}
     {person && <PersonDialog key={person.id} person={person} data={data} locale={locale} onClose={() => setPerson(null)} onEvent={jumpTo} />}
     {place && <PlaceCard key={place} placeKey={place} data={data} locale={locale} onClose={() => setPlace(null)} onEvent={jumpTo} />}

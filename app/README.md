@@ -6,7 +6,7 @@ An Arabic-first, bilingual web experience for exploring the Sirah in place and t
 
 ## Editing the data
 
-Every piece of content comes from the CSV files at the **root of this repository** (one folder up). Nothing is written into the code or the HTML. The dev and preview servers serve them at `/data/`, and `npm run build` copies the ones the app reads into `dist/data/`, keeping only the columns it reads (listed in `src/data/files.ts`; about a third less to download). If `npm test` reports that the trimmed files load differently, add the new column to that list.
+Every piece of content comes from the CSV files in **`data/`** at the root of this repository (`../data`). Nothing is written into the code or the HTML. The dev and preview servers serve them at `/data/`, and `npm run build` copies the ones the app reads into `dist/data/`, keeping only the columns it reads (listed in `src/data/files.ts`; about a third less to download). If `npm test` reports that the trimmed files load differently, add the new column to that list.
 
 1. Open the CSV in Excel (or any spreadsheet app). Keep the header row and column names unchanged.
 2. Edit, then save as **CSV UTF-8**.
@@ -61,7 +61,7 @@ Each answer names its source and moves the map to the event. Questions asking fo
 
 `npm run dev` and `npm run preview` forward `/api` to `http://127.0.0.1:8000` (set `BIDAYAH_API` to change it). For a static host, build with `VITE_ASK_API=https://your-api.example/api/ask` (or `off` to use only the in-browser answers).
 
-![Arabic navigation preview](qa/navigation-desktop-arabic.jpg)
+![Arabic navigation preview](../docs/screenshots/navigation-desktop-arabic.jpg)
 
 ## Features
 
@@ -162,12 +162,10 @@ src/
 public/
 ├── favicon.svg
 └── fonts/                    # Saudi font files and source notices
-qa/                           # Saved browser-review screenshots
-Logo.svg / Logo.png           # Original supplied brand assets
-*.textClipping                # Original supplied animation references
 ```
 
-Tests live alongside the relevant components and navigation modules. The supplied `globe effects.textClipping` reference is currently unused.
+Tests live alongside the relevant components and navigation modules. Browser-review screenshots, the brand files and the
+supplied animation references are in `../docs/` (`screenshots/`, `brand/`, `design-references/`).
 
 ## Configuration and integration
 
@@ -230,7 +228,7 @@ The current suite includes 77 tests across nine files, covering the data, AI lif
 
 With a local server running, `node scripts/check-ai-response.cjs http://127.0.0.1:5184` checks the real response animation, unchanged composer height, icon size, history persistence, clearing, keyboard dismissal, and Arabic/English desktop/mobile layouts. It requires Playwright and Chrome, as do the landing browser scripts.
 
-Saved browser reviews in `qa/` cover desktop and mobile layouts, both languages, navigation, transitions, enlarged text, contrast themes, and compact viewports. These screenshots document prior reviews; they are not an automated browser test suite. A physical mobile keyboard and browser page zoom have not been verified.
+Saved browser reviews in `../docs/screenshots/` cover desktop and mobile layouts, both languages, navigation, transitions, enlarged text, contrast themes, and compact viewports. These screenshots document prior reviews; they are not an automated browser test suite. A physical mobile keyboard and browser page zoom have not been verified.
 
 Journey progress also saves the stable Dorar event ID under `bidaya.journey.v1`. Returning readers can Continue reading or Start over. Start over clears quiz results, visited events, and the reading position while keeping chats. Older progress without a valid reading position retains quiz results and opens normally. Language switching keeps the active step's position below the sticky toolbar, with an 800 ms asset wait and temporarily suspended scroll selection. A bilingual Skip to content link is the first keyboard control on every page.
 
@@ -244,7 +242,7 @@ Journey progress also saves the stable Dorar event ID under `bidaya.journey.v1`.
 | The default development port is unavailable | Use the alternate URL printed by Vite, or run `npm run dev -- --port 5174` |
 | A refreshed inner page returns 404 after deployment | Configure the host's SPA fallback to `index.html` |
 | Ask the map apologises for a question | No source text matched it well enough; try the event, place or Companion name. If the backend is not running, only the CSVs are searched: start it (`../backend/README.md`) |
-| The Journey page says the data could not be loaded | Check that the CSV files are at the repository root (or in `dist/data/` on a host) |
+| The Journey page says the data could not be loaded | Check that the CSV files are in `data/` at the repository root (or in `dist/data/` on a host) |
 | Settings disappear after a reload | Browser storage may be unavailable or disabled; settings then last only for the session |
 | Animations are reduced | Check the operating system motion setting and the in-app reading preferences |
 

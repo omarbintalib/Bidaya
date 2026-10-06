@@ -5,11 +5,11 @@ import react from '@vitejs/plugin-react';
 import { FILES, trimData } from './src/data/files';
 
 /**
- * The data files live at the root of the repository (one copy, edited in Excel).
+ * The data files live in data/ at the root of the repository (one copy, edited in Excel).
  * This plugin serves them at /data/ during development and preview, and on build writes the ones the app reads into
  * dist/data/, trimmed to the columns it reads (src/data/files.ts).
  */
-const DATA_DIR = resolve(__dirname, '..');
+const DATA_DIR = resolve(__dirname, '..', 'data');
 const isData = (name: string) => /\.(csv|geojson)$/i.test(name);
 
 function sirahData(): Plugin {

@@ -3,7 +3,7 @@
 Field recordings and sound effects only (and one adhan): no music, no instruments, no singing and no bells (a hadith in Sahih Muslim says angels do not accompany a caravan with a bell).
 All but the adhan are released under **CC0 (public domain)** on [Freesound](https://freesound.org); no credit is required, but it is given here. The adhan was provided by the team.
 Each file was trimmed, made into a seamless loop where it loops, levelled to the same loudness and saved as mono MP3.
-Which event gets which sound, with the source's words that justify it, is in `event_sounds.csv` at the repository root.
+Which event gets which sound, with the source's words that justify it, is in `data/event_sounds.csv`.
 
 | File | What it is | Recording | By | Edit |
 |---|---|---|---|---|

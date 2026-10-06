@@ -293,7 +293,7 @@ it('offers resume by stable event ID and resets progress while keeping chats', a
   expect(JSON.parse(localStorage.getItem('bidaya.journey.v1')!).answers).toEqual({ old: 'makkah' });
   await act(async () => root.unmount()); root = createRoot(host);
   await mount('/journey'); await advance(2100);
-  await click('.resume-dialog .btn-quiet'); await advance(20);
+  await click('.resume-dialog .btn-quiet:last-child'); await advance(20); // Start over
   expect(JSON.parse(localStorage.getItem('bidaya.journey.v1')!)).toEqual({ answers: {}, seen: [] });
   expect(JSON.parse(localStorage.getItem('bidaya.chats.v1')!)).toEqual(chats);
 });

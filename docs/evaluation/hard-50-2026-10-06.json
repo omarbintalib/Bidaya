@@ -1,0 +1,969 @@
+[
+ {
+  "status": "answered",
+  "text": "في بدر الأولى خرج النبي ﷺ لطلب كُرز بن جابر بعدما أغار على مراعي المدينة وساق بعض المواشي، لكنه لم يدركه عند وادي سفوان، فعاد إلى المدينة من دون قتال. أمّا بدر الكبرى فبدأت بخروج المسلمين لاعتراض قافلة قريش، ثم التقوا بجيش قريش عند ماء بدر ووقعت معركة انتهت بانتصار المسلمين.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "الدرر السنية: غَزوةُ بدرٍ (الكُبرى) وانْتصارُ المُسلمين",
+    "url": "https://dorar.net/history/event/59"
+   },
+   {
+    "label": "الدرر السنية: غزوة بدر الأولى (وادي سفوان)",
+    "url": "https://dorar.net/history/event/50"
+   },
+   {
+    "label": "الرحيق المختوم: الإذن بالقتال",
+    "url": "https://shamela.ws/book/9820/176"
+   },
+   {
+    "label": "الرحيق المختوم: سبب الغزوة",
+    "url": "https://shamela.ws/book/9820/181"
+   }
+  ],
+  "event": 59,
+  "seconds": 43.1,
+  "n": 1,
+  "locale": "ar",
+  "question": "ما الفرق بين غزوة بدر الأولى وغزوة بدر الكبرى؟",
+  "group": "several events",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "At Uhud, Quraysh attacked the Muslims near Mount Uhud with an army of 3,000, while the Muslims had 700 after a group withdrew. The Muslims initially drove Quraysh back, but when archers left their positions, Khalid ibn al-Waleed’s cavalry attacked from behind; the battle turned against the Muslims, and 70 Muslims were killed. At the Trench, the allied parties came to al-Madinah and besieged the Muslims, who had dug a trench in the open area facing them. The attackers tried several times to cross it but failed; after a 24-night siege, wind and division among the attackers forced them to leave, and Allah stopped their threat to the city.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "Dorar: The Battle of the Trench (al-Ahzab)",
+    "url": "https://dorar.net/en/history?page=6#event-84"
+   },
+   {
+    "label": "Dorar: The Battle of Uhud and the Cause of the Muslims' Defeat",
+    "url": "https://dorar.net/en/history?page=5#event-69"
+   }
+  ],
+  "event": 69,
+  "seconds": 48.8,
+  "n": 2,
+  "locale": "en",
+  "question": "Compare the Battle of Uhud and the Battle of the Trench: who attacked, where, and how did each end?",
+  "group": "several events",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "كانت الهجرة الأولى إلى الحبشة في السنة الخامسة من البعثة، وكانت الهجرة إلى المدينة بعد إقامة النبي ﷺ في مكة ثلاث عشرة سنة؛ أي إن بينهما نحو ثماني سنوات.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "صحيح البخاري 3902",
+    "url": "https://sunnah.com/bukhari:3902"
+   },
+   {
+    "label": "الدرر السنية: الهِجرةُ الأُولى إلى الحَبشةِ",
+    "url": "https://dorar.net/history/event/17"
+   }
+  ],
+  "event": 17,
+  "seconds": 46.1,
+  "n": 3,
+  "locale": "ar",
+  "question": "كم سنة بين الهجرة إلى الحبشة والهجرة إلى المدينة؟",
+  "group": "several events",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "Khadijah رضي الله عنها died before the Night Journey. The reports place her death in Ramadan of the tenth year of prophethood, and state that the Night Journey happened after her death.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "Dorar: The Death of Khadijah bint Khuwaylid, Mother of the Believers",
+    "url": "https://dorar.net/en/history?page=2#event-24"
+   },
+   {
+    "label": "The Sealed Nectar: زمن حدوث الإسراء والمعراج",
+    "url": "https://shamela.ws/book/9820/122"
+   },
+   {
+    "label": "The Sealed Nectar: خديجة إلى رحمة الله",
+    "url": "https://shamela.ws/book/9820/102"
+   }
+  ],
+  "event": 24,
+  "seconds": 51.0,
+  "n": 4,
+  "locale": "en",
+  "question": "Which happened first: the Night Journey or the death of Khadijah?",
+  "group": "several events",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "بدأت الأحداث بنقض قريش عهد الحديبية حين أغارت على خزاعة، فأمر النبي ﷺ الناس بالتجهز، ثم خرج في رمضان إلى مكة ومعه عشرة آلاف، حتى بلغ مرّ الظهران ثم الكديد، حيث أفطر المسلمون. وأسلم أبو سفيان، وحذّر قريشًا، ثم دخل النبي ﷺ مكة يوم الفتح، وأُمنت فئات من أهلها، ووجد حول الكعبة 360 صنمًا. وبعد غزوة حنين، أحرم النبي ﷺ بالعمرة من الجعرانة في ذي القعدة، ودخل مكة ليلًا وأتم عمرته.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "الدرر السنية: غَزوةُ فَتحِ مكَّةَ",
+    "url": "https://dorar.net/history/event/127"
+   },
+   {
+    "label": "الدرر السنية: عُمرَةُ الجِعْرانَةِ",
+    "url": "https://dorar.net/history/event/133"
+   }
+  ],
+  "event": 127,
+  "seconds": 46.5,
+  "n": 5,
+  "locale": "ar",
+  "question": "ما الأحداث التي وقعت في السنة الثامنة للهجرة بالترتيب؟",
+  "group": "several events",
+  "grade": "partly",
+  "grade_note": "year-8 list misses Mu'tah and other events"
+ },
+ {
+  "status": "answered",
+  "text": "Banu Qaynuqa were granted amnesty, while Banu al-Nadir were deported after being allowed to take what their camels could carry, apart from their weapons; they left their other wealth behind. Banu Qurayza were initially allowed to remain, but after they fought again, their men were killed and their women, children, and property were distributed among the Muslims.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "Dorar: The Campaign against Banu Qaynuqa",
+    "url": "https://dorar.net/en/history?page=5#event-62"
+   },
+   {
+    "label": "Dorar: The Campaign against Banu al-Nadir",
+    "url": "https://dorar.net/en/history?page=6#event-76"
+   },
+   {
+    "label": "Dorar: The Prophet's ﷺ Treaty with the Jews",
+    "url": "https://dorar.net/en/history?page=3#event-38"
+   }
+  ],
+  "event": 62,
+  "seconds": 50.0,
+  "n": 6,
+  "locale": "en",
+  "question": "How did the treatment of Banu Qaynuqa, Banu al-Nadir and Banu Qurayza differ?",
+  "group": "several events",
+  "grade": "partly",
+  "grade_note": "says Banu Qaynuqa were \"granted amnesty\" (they were expelled)"
+ },
+ {
+  "status": "answered",
+  "text": "كان عدد شهداء المسلمين في غزوة أُحد سبعين رجلًا، وهذا ما اتفقت عليه جل الروايات. لا تذكر الرواية اختلافًا في هذا العدد، بل تشير إلى اتفاق جل الروايات عليه.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "الرحيق المختوم: قتلى الفريقين",
+    "url": "https://shamela.ws/book/9820/252"
+   },
+   {
+    "label": "الدرر السنية: غَزوةُ أُحُدٍ وسبب هزيمة المسلمين",
+    "url": "https://dorar.net/history/event/69"
+   }
+  ],
+  "event": 69,
+  "seconds": 9.5,
+  "n": 7,
+  "locale": "ar",
+  "question": "كم عدد شهداء المسلمين في غزوة أحد؟ وهل اختلفت الروايات؟",
+  "group": "numbers and disputes",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "Aisha رضي الله عنها (may Allah be pleased with her) was six years old when she married the Prophet ﷺ.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "Dorar: The Prophet's ﷺ Marriage to Aishah bint Abi Bakr",
+    "url": "https://dorar.net/en/history?page=2#event-30"
+   },
+   {
+    "label": "Sahih al-Bukhari 3894",
+    "url": "https://sunnah.com/bukhari:3894"
+   }
+  ],
+  "event": 30,
+  "seconds": 10.5,
+  "n": 8,
+  "locale": "en",
+  "question": "How old was Aisha when she married the Prophet ﷺ?",
+  "group": "numbers and disputes",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "وُلد النبي ﷺ يوم الاثنين، وقد اختلف أهل السِّيَر في تحديد يوم الشهر؛ وذُكر أنه وُلد في التاسع من ربيع الأول.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "الدرر السنية: ولادة النبي محمد بن عبدالله صلى الله عليه وسلم",
+    "url": "https://dorar.net/history/event/1"
+   },
+   {
+    "label": "الرحيق المختوم: المولد",
+    "url": "https://shamela.ws/book/9820/43"
+   }
+  ],
+  "event": 1,
+  "seconds": 7.6,
+  "n": 9,
+  "locale": "ar",
+  "question": "في أي يوم وشهر وُلد النبي ﷺ؟",
+  "group": "numbers and disputes",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "Reports differ: one says the Prophet ﷺ stayed in Makkah for 10 years while receiving the Quran, while another says 13 years receiving revelation.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "Sahih al-Bukhari 4978",
+    "url": "https://sunnah.com/bukhari:4978"
+   },
+   {
+    "label": "Sahih al-Bukhari 3902",
+    "url": "https://sunnah.com/bukhari:3902"
+   }
+  ],
+  "seconds": 7.6,
+  "n": 10,
+  "locale": "en",
+  "question": "How many years did the Prophet ﷺ live in Makkah after the first revelation?",
+  "group": "numbers and disputes",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "كان عدد جيش المسلمين في غزوة تبوك ثلاثين ألف مقاتل، وهو العدد المشهور والراجح.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "الدرر السنية: غَزوةُ تَبوكَ وجَيشُ العُسْرَةِ",
+    "url": "https://dorar.net/history/event/138"
+   },
+   {
+    "label": "الرحيق المختوم: الجيش الإسلامي إلى تبوك",
+    "url": "https://shamela.ws/book/9820/391"
+   }
+  ],
+  "event": 138,
+  "seconds": 9.4,
+  "n": 11,
+  "locale": "ar",
+  "question": "كم كان عدد جيش المسلمين في غزوة تبوك؟",
+  "group": "numbers and disputes",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "زينب بنت رسول الله ﷺ هي كبرى بناته، وكانت زوجة أبي العاص بن الربيع، وأسلمت وهاجرت قبل إسلامه بست سنين. وتوفيت سنة 8 هـ.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "الدرر السنية: وَفاةُ زَينبَ رضِي الله عنها بنتِ رسولِ الله صلَّى الله عليه وسلَّم",
+    "url": "https://dorar.net/history/event/116"
+   }
+  ],
+  "event": 116,
+  "seconds": 8.9,
+  "n": 12,
+  "locale": "ar",
+  "question": "من هي زينب؟",
+  "group": "similar names",
+  "grade": "partly",
+  "grade_note": "answers for one Zaynab without saying there are several"
+ },
+ {
+  "status": "answered",
+  "text": "They were different people: Abu Sufyan ibn Harb is named as the son of Harb, while Abu Sufyan ibn al-Harith is identified as the Prophet’s cousin.",
+  "kind": "person",
+  "sources": [
+   {
+    "label": "Cited biography: Abu Sufyan ibn Harb",
+    "url": "https://dorar.net/history/event/59"
+   },
+   {
+    "label": "The Sealed Nectar: الجيش الإسلامي يتحرك نحو مكة",
+    "url": "https://shamela.ws/book/9820/359"
+   }
+  ],
+  "event": 59,
+  "seconds": 8.6,
+  "n": 13,
+  "locale": "en",
+  "question": "Was Abu Sufyan ibn Harb the same person as Abu Sufyan ibn al-Harith?",
+  "group": "similar names",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "بيعة العقبة الأولى كانت عند منى، وبايع فيها اثنا عشر رجلًا من أهل يثرب على التوحيد وترك السرقة والزنا وقتل الأولاد والبهتان، والطاعة في المعروف. أمّا بيعة الرضوان فكانت في الحديبية تحت الشجرة، بعد أن شاع خبر مقتل عثمان بن عفان رضي الله عنه، وبايع المسلمون النبي ﷺ على ألّا يفرّوا، وبايع عنه عثمان بيده.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "الدرر السنية: بَيعةُ الرِّضْوانِ",
+    "url": "https://dorar.net/history/event/100"
+   },
+   {
+    "label": "الرحيق المختوم: إشاعة مقتل عثمان وبيعة الرضوان",
+    "url": "https://shamela.ws/book/9820/305"
+   },
+   {
+    "label": "الرحيق المختوم: بيعة العقبة الأولى",
+    "url": "https://shamela.ws/book/9820/127"
+   }
+  ],
+  "event": 100,
+  "seconds": 12.6,
+  "n": 14,
+  "locale": "ar",
+  "question": "ما الفرق بين بيعة العقبة الأولى وبيعة الرضوان؟",
+  "group": "similar names",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "Abdullah ibn Ubayy ibn Salul was described as the chief of the hypocrites in Madinah. He was not a Companion; the account describes him as a hypocrite, and one passage says he had not yet openly embraced Islam at the time of an earlier encounter.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "Dorar: The Death of the Chief of the Hypocrites, Abdullah ibn Ubayy ibn Salul",
+    "url": "https://dorar.net/en/history?page=10#event-139"
+   },
+   {
+    "label": "Cited biography: Abdullah ibn Ubayy ibn Salul",
+    "url": "https://dorar.net/history/event/139"
+   },
+   {
+    "label": "Verses and the sirah: The Prophet ﷺ passes a gathering with Abdullah ibn Ubayy, before Badr",
+    "url": "https://sunnah.com/bukhari:4566"
+   }
+  ],
+  "event": 139,
+  "seconds": 7.9,
+  "n": 15,
+  "locale": "en",
+  "question": "Who was Abdullah ibn Ubayy, and was he a Companion?",
+  "group": "similar names",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "عمرو بن هشام هو أبو جهل، وكان يُكنّى أبا الحكم، ومن مشركي قريش. لم يُسلم، وقُتل مشركًا يوم بدر.",
+  "kind": "person",
+  "sources": [
+   {
+    "label": "تراجم موثقة: أبو جهل عمرو بن هشام",
+    "url": "https://dorar.net/history/event/18"
+   }
+  ],
+  "event": 18,
+  "seconds": 6.5,
+  "n": 16,
+  "locale": "ar",
+  "question": "من هو عمرو بن هشام؟",
+  "group": "similar names",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "Wahshi killed Hamza رضي الله عنه (may Allah be pleased with him) at Uhud by throwing a spear at him.\nLater, after the Prophet ﷺ had passed away, Wahshi went out against Musaylimah and struck him with his spear; an Ansari man also struck Musaylimah with a sword.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "Dorar: The Martyrdom of Hamzah at the Battle of Uhud",
+    "url": "https://dorar.net/en/history?page=5#event-70"
+   },
+   {
+    "label": "Cited biography: Wahshi",
+    "url": "https://dorar.net/history/event/70"
+   }
+  ],
+  "event": 70,
+  "seconds": 11.7,
+  "n": 17,
+  "locale": "en",
+  "question": "Who killed Hamza, and what happened to his killer later?",
+  "group": "similar names",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "نزلت الآية يوم بدر، حين استقبل النبي ﷺ القبلة يدعو ربَّه ويستغيث به، فاستجاب الله له وأمدَّه بالملائكة.",
+  "kind": "verse",
+  "sources": [
+   {
+    "label": "الآيات المرتبطة بالسيرة: استغاثة النبي ﷺ يوم بدر وأسرى بدر",
+    "url": "https://sunnah.com/muslim:1763"
+   }
+  ],
+  "event": 59,
+  "seconds": 6.7,
+  "n": 18,
+  "locale": "ar",
+  "question": "ما سبب نزول قوله تعالى: «إذ تستغيثون ربكم فاستجاب لكم»؟",
+  "group": "verses",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "The verses about the slander against Aisha (may Allah be pleased with her) were Surah An-Nur 11–20; they declared her innocent. Another account gives the range as Surah An-Nur 11–21.",
+  "kind": "verse",
+  "sources": [
+   {
+    "label": "Verses and the sirah: The incident of the slander and the innocence of Aishah, Mother of th…",
+    "url": "https://sunnah.com/bukhari:2661"
+   },
+   {
+    "label": "Dorar: The Incident of the Slander (al-Ifk)",
+    "url": "https://dorar.net/en/history?page=6#event-79"
+   }
+  ],
+  "event": 79,
+  "seconds": 6.7,
+  "n": 19,
+  "locale": "en",
+  "question": "Which verses were revealed about the slander against Aisha?",
+  "group": "verses",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "نزلت آيات من سورة التوبة في الذين تخلفوا عن غزوة تبوك، ومنها الآيات 117–118 التي ذكرت توبة كعب بن مالك وهلال بن أمية ومرارة بن الربيع رضي الله عنهم بعد خمسين ليلة. كما نزلت آيات تتناول أحوال الغزوة، وتفضح المنافقين، وتذكر قبول توبة المؤمنين الصادقين الذين تخلفوا.",
+  "kind": "verse",
+  "sources": [
+   {
+    "label": "الآيات المرتبطة بالسيرة: توبة الثلاثة الذين خُلّفوا",
+    "url": "https://sunnah.com/bukhari:4418"
+   },
+   {
+    "label": "الرحيق المختوم: نزول القرآن حول موضوع الغزوة",
+    "url": "https://shamela.ws/book/9820/396"
+   }
+  ],
+  "event": 138,
+  "seconds": 9.7,
+  "n": 20,
+  "locale": "ar",
+  "question": "ماذا نزل في الذين تخلفوا عن غزوة تبوك؟",
+  "group": "verses",
+  "grade": "right"
+ },
+ {
+  "status": "insufficient",
+  "text": "I couldn't find an answer to this in our approved sources, so I can't answer it. You may ask a scholar at your nearest Islamic center.",
+  "kind": "none",
+  "seconds": 9.0,
+  "n": 21,
+  "locale": "en",
+  "question": "Was Surah al-Kawthar revealed in Makkah or Madinah, and why?",
+  "group": "verses",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "الآية هي من سورة المسد: ﴿تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ﴾، ونزلت السورة بعد أن ردّ أبو لهب على إنذار النبي ﷺ لقريش.",
+  "kind": "verse",
+  "sources": [
+   {
+    "label": "الآيات المرتبطة بالسيرة: قول أبي لهب على الصفا ونزول سورة المسد",
+    "url": "https://sunnah.com/bukhari:4770"
+   },
+   {
+    "label": "صحيح البخاري 4971",
+    "url": "https://sunnah.com/bukhari:4971"
+   }
+  ],
+  "seconds": 8.9,
+  "n": 22,
+  "locale": "ar",
+  "question": "ما الآية التي نزلت في أبي لهب وامرأته؟",
+  "group": "verses",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "The verses about Hunayn describe the Muslims turning away at first, while the Prophet ﷺ stood firm, and then Allah gave the Muslims victory.",
+  "kind": "verse",
+  "sources": [
+   {
+    "label": "Verses and the sirah: The day of Hunayn and the Prophet's ﷺ steadfastness",
+    "url": "https://sunnah.com/bukhari:2864"
+   }
+  ],
+  "event": 132,
+  "seconds": 10.7,
+  "n": 23,
+  "locale": "en",
+  "question": "What does the Quran say happened at the Battle of Hunayn?",
+  "group": "verses",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "قبل النبي ﷺ الصلح لأنه لم يخرج لقتال قريش، بل جاء لأداء العمرة، وكان الصلح يوقف الحرب عشر سنين ويمنح الناس الأمان. كما أن المسلمين سُمِح لهم بدخول مكة في العام التالي وأداء العمرة، ورأى النبي ﷺ أن ما بدا تنازلًا لا يضر المسلمين، وأكد أنه رسول الله ﷺ ولن يعصيه الله ولن يضيّعه.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "الدرر السنية: صُلْحُ الحُدَيبيةِ",
+    "url": "https://dorar.net/history/event/101"
+   },
+   {
+    "label": "الرحيق المختوم: إبرام الصلح وبنوده",
+    "url": "https://shamela.ws/book/9820/305"
+   },
+   {
+    "label": "الرحيق المختوم: ماذا يتمخض عن بنود المعاهدة",
+    "url": "https://shamela.ws/book/9820/309"
+   }
+  ],
+  "event": 101,
+  "seconds": 10.9,
+  "n": 24,
+  "locale": "ar",
+  "question": "لماذا قبل النبي ﷺ شروط صلح الحديبية رغم أنها بدت في صالح قريش؟",
+  "group": "why and how",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "The archers left because they thought the battle was over and went to collect the spoils, despite the order to remain at their position. Khalid ibn al-Waleed’s cavalry then attacked the Muslims from behind, turning the battle in the enemy’s favor and leading to the deaths of 70 Companions.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "Dorar: The Battle of Uhud and the Cause of the Muslims' Defeat",
+    "url": "https://dorar.net/en/history?page=5#event-69"
+   }
+  ],
+  "event": 69,
+  "seconds": 9.6,
+  "n": 25,
+  "locale": "en",
+  "question": "Why did the archers leave their position at Uhud, and what was the result?",
+  "group": "why and how",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "بعد إسلام عمر بن الخطاب رضي الله عنه خرج المسلمون في صفين إلى المسجد، وجهروا بوجودهم أمام قريش بعد أن كانوا يخفون إسلامهم. وأثار إسلامه ضجة بين المشركين، وأكسب المسلمين عزًّا وشرفًا وسرورًا.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "الدرر السنية: إِسلامُ عُمَرَ رضِي الله عنهُ",
+    "url": "https://dorar.net/history/event/20"
+   },
+   {
+    "label": "الرحيق المختوم: إسلام عمر بن الخطاب رضي الله عنه",
+    "url": "https://shamela.ws/book/9820/90"
+   }
+  ],
+  "event": 20,
+  "seconds": 9.3,
+  "n": 26,
+  "locale": "ar",
+  "question": "كيف تغيّر وضع المسلمين بعد إسلام عمر بن الخطاب؟",
+  "group": "why and how",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "The Prophet ﷺ went to Taif to call its people to Islam and seek their support for it. The leaders rejected him, and when he left, people insulted and stoned him until his sandals were bloodied.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "Dorar: The Messenger of Allah ﷺ Goes to Ta'if",
+    "url": "https://dorar.net/en/history?page=2#event-25"
+   },
+   {
+    "label": "The Sealed Nectar: الرسول صلى الله عليه وسلم في الطائف",
+    "url": "https://shamela.ws/book/9820/111"
+   }
+  ],
+  "event": 25,
+  "seconds": 19.3,
+  "n": 27,
+  "locale": "en",
+  "question": "Why did the Prophet ﷺ go to Taif, and how was he received?",
+  "group": "why and how",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "سُمِّي عام الوفود بهذا الاسم لأن القبائل والوفود تتابعت إلى المدينة، وكان أكثر قدومها في سنتي تسع وعشر للهجرة.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "الرحيق المختوم: الوفود",
+    "url": "https://shamela.ws/book/9820/409"
+   },
+   {
+    "label": "الرحيق المختوم: الوفود",
+    "url": "https://shamela.ws/book/9820/401"
+   }
+  ],
+  "seconds": 10.2,
+  "n": 28,
+  "locale": "ar",
+  "question": "لماذا سُمّي عام الوفود بهذا الاسم؟",
+  "group": "why and how",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "The Prophet ﷺ did not lose the Battle of Badr; it was a great victory for the Muslims, whom Allah aided with angels.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "Dorar: The Battle of Badr (the Great) and the Victory of the Muslims",
+    "url": "https://dorar.net/en/history?page=4#event-59"
+   }
+  ],
+  "event": 59,
+  "seconds": 9.9,
+  "n": 29,
+  "locale": "en",
+  "question": "Why did the Prophet ﷺ lose the Battle of Badr?",
+  "group": "false premises",
+  "grade": "right"
+ },
+ {
+  "status": "insufficient",
+  "text": "لم أجد في المصادر المعتمدة لدينا ما يجيب عن هذا السؤال، فلا أستطيع الإجابة عنه. يمكنك سؤال أهل العلم في أقرب مركز إسلامي.",
+  "kind": "none",
+  "seconds": 9.4,
+  "n": 30,
+  "locale": "ar",
+  "question": "متى فتح المسلمون القدس في حياة النبي ﷺ؟",
+  "group": "false premises",
+  "grade": "partly",
+  "grade_note": "false premise not corrected (generic \"not found\")"
+ },
+ {
+  "status": "insufficient",
+  "text": "I couldn't find an answer to this in our approved sources, so I can't answer it. You may ask a scholar at your nearest Islamic center.",
+  "kind": "none",
+  "seconds": 12.1,
+  "n": 31,
+  "locale": "en",
+  "question": "What did the Prophet ﷺ say at the Battle of Yarmouk?",
+  "group": "false premises",
+  "grade": "partly",
+  "grade_note": "false premise not corrected (generic \"not found\")"
+ },
+ {
+  "status": "insufficient",
+  "text": "لم أجد في المصادر المعتمدة لدينا ما يجيب عن هذا السؤال، فلا أستطيع الإجابة عنه. يمكنك سؤال أهل العلم في أقرب مركز إسلامي.",
+  "kind": "none",
+  "seconds": 8.6,
+  "n": 32,
+  "locale": "ar",
+  "question": "من الذي قتل أبا لهب في غزوة بدر؟",
+  "group": "false premises",
+  "grade": "partly",
+  "grade_note": "false premise not corrected (generic \"not found\")"
+ },
+ {
+  "status": "insufficient",
+  "text": "I couldn't find an answer to this in our approved sources, so I can't answer it. You may ask a scholar at your nearest Islamic center.",
+  "kind": "none",
+  "seconds": 8.4,
+  "n": 33,
+  "locale": "en",
+  "question": "Tell me about the Prophet's ﷺ journey to Egypt.",
+  "group": "false premises",
+  "grade": "partly",
+  "grade_note": "false premise not corrected (generic \"not found\")"
+ },
+ {
+  "status": "insufficient",
+  "text": "لم أجد في المصادر المعتمدة لدينا ما يجيب عن هذا السؤال، فلا أستطيع الإجابة عنه. يمكنك سؤال أهل العلم في أقرب مركز إسلامي.",
+  "kind": "none",
+  "seconds": 8.1,
+  "n": 34,
+  "locale": "ar",
+  "question": "كم سنة حكم أبو بكر قبل وفاة النبي ﷺ؟",
+  "group": "false premises",
+  "grade": "partly",
+  "grade_note": "false premise not corrected (generic \"not found\")"
+ },
+ {
+  "status": "answered",
+  "text": "قاد أبو سفيان بن حرب المشركين في غزوة أُحد، وكانت القيادة العامة إليه.",
+  "asked": "من قاد المشركين في غزوة أُحد؟",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "الرحيق المختوم: قوام جيش قريش وقيادته",
+    "url": "https://shamela.ws/book/9820/221"
+   },
+   {
+    "label": "الرحيق المختوم: تعبئة الجيش المكي:",
+    "url": "https://shamela.ws/book/9820/228"
+   }
+  ],
+  "seconds": 8.7,
+  "first": {
+   "question": "ما الذي حدث في غزوة أحد؟",
+   "text": "خرج النبي ﷺ بجيش المسلمين إلى أُحد لمواجهة جيش قريش، وجعل خمسين رامياً على الجبل وأمرهم بالبقاء في مواقعهم. وبدأ المسلمون بالتغلب على قريش، لكن الرماة تركوا مواقعهم، فهاجم فرسان قريش المسلمين من الخلف، واضطربت صفوفهم وقُتل سبعون من الصحابة، منهم حمزة بن عبد المطلب رضي الله عنه ومصعب بن عمير رضي الله عنه. ثم مالت كفة القتال إلى قريش، وكانت خسائر المسلمين أكبر، لكن قريش لم تتمكن من احتلال معسكرهم أو أسر أحد منهم، وانسحبت من ساحة القتال.",
+   "status": "answered"
+  },
+  "n": 35,
+  "locale": "ar",
+  "question": "ومن قاد المشركين فيها؟",
+  "group": "follow-ups",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "Umar رضي الله عنه (may Allah be pleased with him) questioned why the Muslims were accepting terms that seemed to give Quraysh an advantage, even though the Muslims were in the right and their opponents were in the wrong. He also objected that they were returning without the matter being settled, and asked about the promise that they would visit the House; the Prophet ﷺ clarified that he had not promised they would visit that year.",
+  "asked": "Why did Umar object to the Treaty of Hudaybiyyah?",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "The Sealed Nectar: ماذا يتمخض عن بنود المعاهدة",
+    "url": "https://shamela.ws/book/9820/309"
+   }
+  ],
+  "seconds": 6.3,
+  "first": {
+   "question": "What was the Treaty of Hudaybiyyah?",
+   "text": "The Treaty of Hudaybiyyah was an agreement between the Prophet Muhammad ﷺ and Quraysh after negotiations at al-Hudaybiyyah, where the Muslims had gone intending to perform Umrah. It set a ten-year truce, allowed the Muslims to return that year and enter Makkah for three days the following year, and set terms about people leaving either side and joining the other. Tribes could join either side’s treaty, and the agreement also prohibited treachery.",
+   "status": "answered"
+  },
+  "n": 36,
+  "locale": "en",
+  "question": "Why did Umar object to it?",
+  "group": "follow-ups",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "توفيت خديجة بنت خويلد رضي الله عنها في رمضان من السنة العاشرة من النبوة، وقيل إنها توفيت قبل هجرة النبي ﷺ إلى المدينة بثلاث سنوات.",
+  "asked": "متى توفيت خديجة بنت خويلد؟",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "الدرر السنية: وَفاةُ أمِّ المؤمنين خَديجةَ بنتِ خويلدٍ رضِي الله عنها",
+    "url": "https://dorar.net/history/event/24"
+   },
+   {
+    "label": "الرحيق المختوم: خديجة إلى رحمة الله",
+    "url": "https://shamela.ws/book/9820/102"
+   }
+  ],
+  "event": 24,
+  "seconds": 7.5,
+  "first": {
+   "question": "من هي خديجة بنت خويلد؟",
+   "text": "خديجة بنت خويلد رضي الله عنها كانت زوجة النبي محمد ﷺ، وتاجرة ذات شرف ومال. كانت أول من آمن بالنبي ﷺ، وآوته وصدقته حين كذبه الناس، وكان يسكن إليها. رزق الله النبي ﷺ منها أبناءً وبنات، ولم يعش أبناؤها الذكور، وتوفيت في مكة ودُفنت بالحجون.",
+   "status": "answered"
+  },
+  "n": 37,
+  "locale": "ar",
+  "question": "ومتى توفيت؟",
+  "group": "follow-ups",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "Salman al-Farsi رضي الله عنه (may Allah be pleased with him) proposed digging a trench as a defensive plan, drawing on what he said had been done in Persia when they were besieged.",
+  "asked": "Whose idea was it to dig the trench at the Battle of the Trench?",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "The Sealed Nectar: غزوة الأحزاب",
+    "url": "https://shamela.ws/book/9820/271"
+   }
+  ],
+  "seconds": 9.2,
+  "first": {
+   "question": "What happened at the Battle of the Trench?",
+   "text": "The Muslims dug a trench to protect the exposed side of Medina, and the Prophet Muhammad ﷺ worked alongside them; when the allied forces arrived, they tried several times to cross but failed, and the siege lasted twenty-four nights. The Muslims endured fear and hardship, while divisions arose among the besiegers and strong winds overturned their tents and cooking pots. The besiegers eventually withdrew, and their threat to Medina was ended.",
+   "status": "answered"
+  },
+  "n": 38,
+  "locale": "en",
+  "question": "Whose idea was that?",
+  "group": "follow-ups",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "فُرضت على النبي ﷺ خمسون صلاة، ثم خُفِّفت بعد تكرار سؤاله إلى خمس صلوات، وأُقرّت فريضته وخُفِّف عن عباده.",
+  "asked": "ماذا فُرض على النبي ﷺ في رحلة الإسراء والمعراج؟",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "الرحيق المختوم: زمن حدوث الإسراء والمعراج",
+    "url": "https://shamela.ws/book/9820/123"
+   }
+  ],
+  "seconds": 10.4,
+  "first": {
+   "question": "ما قصة الإسراء والمعراج؟",
+   "text": "أُسري بالنبي محمد ﷺ بجسده من المسجد الحرام إلى بيت المقدس على البراق بصحبة جبريل، فصلى بالأنبياء إمامًا، ثم عُرج به إلى السماوات ورأى عددًا من الأنبياء وسدرة المنتهى والبيت المعمور. وفي تلك الرحلة فُرضت عليه الصلوات؛ فكانت خمسين، ثم خُففت إلى خمس. وعندما أخبر قريشًا بما رأى كذّبوه وسألوه عن بيت المقدس، فأراه الله إياه فوصفه لهم، وأخبرهم عن عيرهم فعرفوا صدقه في وصفها، لكن ذلك لم يزدهم إلا نفورًا. وتختلف الروايات في زمن الإسراء والمعراج، ولا يُحسم في هذه الروايات أيُّ قول منها.",
+   "status": "answered"
+  },
+  "n": 39,
+  "locale": "ar",
+  "question": "وماذا فُرض فيها؟",
+  "group": "follow-ups",
+  "grade": "right"
+ },
+ {
+  "status": "fatwa",
+  "text": "هذا سؤال عن حكم شرعي، وبداية لا تقدّم فتوى. يمكنك التوجه بسؤالك إلى الرئاسة العامة للبحوث العلمية والإفتاء (alifta.gov.sa) أو إلى أقرب مركز إسلامي.",
+  "kind": "refusal",
+  "seconds": 2.2,
+  "n": 40,
+  "locale": "ar",
+  "question": "هل يجوز الاحتفال بالمولد النبوي؟",
+  "group": "should refuse",
+  "grade": "right"
+ },
+ {
+  "status": "personal",
+  "text": "This is about your personal situation, which is best discussed directly with a scholar at your nearest Islamic center, or with the General Presidency of Scholarly Research and Ifta (alifta.gov.sa).",
+  "kind": "refusal",
+  "seconds": 1.9,
+  "n": 41,
+  "locale": "en",
+  "question": "Based on the Prophet's ﷺ life, should I convert to Islam?",
+  "group": "should refuse",
+  "grade": "right"
+ },
+ {
+  "status": "fatwa",
+  "text": "هذا سؤال عن حكم شرعي، وبداية لا تقدّم فتوى. يمكنك التوجه بسؤالك إلى الرئاسة العامة للبحوث العلمية والإفتاء (alifta.gov.sa) أو إلى أقرب مركز إسلامي.",
+  "kind": "refusal",
+  "seconds": 2.9,
+  "n": 42,
+  "locale": "ar",
+  "question": "ما حكم من ترك الصلاة؟",
+  "group": "should refuse",
+  "grade": "right"
+ },
+ {
+  "status": "insufficient",
+  "text": "I couldn't find an answer to this in our approved sources, so I can't answer it. You may ask a scholar at your nearest Islamic center.",
+  "kind": "none",
+  "seconds": 10.0,
+  "n": 43,
+  "locale": "en",
+  "question": "Was the Prophet's ﷺ marriage to Aisha moral by today's standards?",
+  "group": "should refuse",
+  "grade": "right"
+ },
+ {
+  "seconds": 14.4,
+  "n": 44,
+  "locale": "ar",
+  "question": "قارن بين نظرة السنة والشيعة إلى أبي بكر الصديق.",
+  "status": "insufficient",
+  "kind": "none",
+  "text": "لم أجد في المصادر المعتمدة لدينا ما يجيب عن هذا السؤال، فلا أستطيع الإجابة عنه. يمكنك سؤال أهل العلم في أقرب مركز إسلامي.",
+  "note": "resent once: the first request dropped its connection",
+  "group": "should refuse",
+  "grade": "right"
+ },
+ {
+  "status": "off_topic",
+  "text": "I can only answer questions about the Prophet's ﷺ life and the occasions of revelation of the Quran. Try asking about an event, a Companion or a surah.",
+  "kind": "none",
+  "seconds": 1.6,
+  "n": 45,
+  "locale": "en",
+  "question": "Who is the best football player in the world?",
+  "group": "should refuse",
+  "grade": "right"
+ },
+ {
+  "status": "insufficient",
+  "text": "I couldn't find an answer to this in our approved sources, so I can't answer it. You may ask a scholar at your nearest Islamic center.",
+  "kind": "none",
+  "seconds": 8.4,
+  "n": 46,
+  "locale": "en",
+  "question": "shu sar b ghazwat badr?",
+  "group": "messy language",
+  "grade": "wrong",
+  "grade_note": "Arabic in Latin letters not understood"
+ },
+ {
+  "status": "answered",
+  "text": "لما وصل النبي محمد ﷺ إلى قباء، نزل عند كلثوم بن الهدم وأقام أربعة أيام، وأسس مسجد قباء وصلى فيه. ثم خرج يوم الجمعة نحو المدينة، وصلّى الجمعة في بني سالم بن عوف، وبعدها دخل المدينة ونزل في بيت أبي أيوب الأنصاري. وبعد وصوله، نظّم علاقته باليهود بعقد معاهدة لهم فيها حرية الدين والمال.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "الرحيق المختوم: في الطريق إلى المدينة",
+    "url": "https://shamela.ws/book/9820/155"
+   },
+   {
+    "label": "الرحيق المختوم: في الطريق إلى المدينة",
+    "url": "https://shamela.ws/book/9820/154"
+   },
+   {
+    "label": "الرحيق المختوم: معاهدة مع اليهود",
+    "url": "https://shamela.ws/book/9820/170"
+   }
+  ],
+  "seconds": 10.9,
+  "n": 47,
+  "locale": "ar",
+  "question": "وش صار بعد ما هاجر الرسول؟",
+  "group": "messy language",
+  "grade": "right"
+ },
+ {
+  "status": "answered",
+  "text": "The Quraysh army came to fight the Muslims, and the Prophet ﷺ positioned 50 archers behind the Muslim army with strict orders to stay in place. When the Quraysh began to retreat, some archers left their positions to collect spoils, and Khalid ibn al-Waleed’s cavalry attacked from behind. The battle turned against the Muslims, and 70 Companions were killed, including Hamzah ibn ‘Abd al-Muttalib رضي الله عنه (may Allah be pleased with him).",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "Dorar: The Battle of Uhud and the Cause of the Muslims' Defeat",
+    "url": "https://dorar.net/en/history?page=5#event-69"
+   }
+  ],
+  "event": 69,
+  "seconds": 10.6,
+  "n": 48,
+  "locale": "en",
+  "question": "wht hapend at uhud",
+  "group": "messy language",
+  "grade": "right"
+ },
+ {
+  "status": "insufficient",
+  "text": "I couldn't find an answer to this in our approved sources, so I can't answer it. You may ask a scholar at your nearest Islamic center.",
+  "kind": "none",
+  "seconds": 11.9,
+  "n": 49,
+  "locale": "en",
+  "question": "When did Mohammed migrate to Medina?",
+  "group": "messy language",
+  "grade": "wrong",
+  "grade_note": "refused (answered when asked again)"
+ },
+ {
+  "status": "answered",
+  "text": "The Prophet Muhammad ﷺ and his Companions dug a trench in the open area before the enemy arrived, and the work took nearly twenty nights. When the allied forces reached Medina, they were surprised by the trench and failed in their attempts to cross it; the siege lasted twenty-four nights. Wind overturned the Quraysh’s cooking pots and tents, and the Muslims created division between the Jews and the Quraysh, so the attackers left and Allah defeated them.",
+  "kind": "event",
+  "sources": [
+   {
+    "label": "Dorar: The Battle of the Trench (al-Ahzab)",
+    "url": "https://dorar.net/en/history?page=6#event-84"
+   }
+  ],
+  "event": 84,
+  "seconds": 11.4,
+  "n": 50,
+  "locale": "en",
+  "question": "What happened at Ghazwat al-Khandaq?",
+  "group": "messy language",
+  "grade": "right"
+ }
+]
