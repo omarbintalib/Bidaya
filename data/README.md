@@ -77,7 +77,7 @@ Fields to know:
 - **`نوع_الارتباط`**: what kind of connection the hadith describes. There are 12 types, for example سبب نزول صريح (explicit reason), استشهاد بالآية (the Prophet ﷺ recited the verse), تفسير صحابي (a Companion's interpretation).
 - **`صيغة_العرض`**: the wording the card should use for that type, e.g. "نزلت في هذا الموقف" or "تلاها النبي ﷺ في هذا الموقف". **Use this instead of always writing "نزلت"**, so the app never claims more than the source says.
 - **`التعديلات`**: what was corrected from the original file and why.
-- **`حالة_المراجعة`**: 5 rows are "معتمد" (approved by the content lead). The others were reviewed on 5 October (Claude, at the team's request) and are marked "رُوجع … بانتظار اعتماد مسؤول المحتوى": checked against the sources the project holds (verse quotes against the Tanzil Quran text, hadith numbers and narrators against sunnah.com, years against the linked Dorar event). For the 32 TAF rows the hadith gradings (التخريج والدرجة) could not be checked and are flagged for the content lead.
+- **`حالة_المراجعة`**: all rows are approved by the content lead: 5 marked "معتمد", and the others, first reviewed on 5 October (Claude, at the team's request), marked "رُوجع … اعتمده مسؤول المحتوى". That first review checked them against the sources the project holds (verse quotes against the Tanzil Quran text, hadith numbers and narrators against sunnah.com, years against the linked Dorar event). For the 32 TAF rows the hadith gradings (التخريج والدرجة) could not be checked in that first review and were left to the content lead.
 
 > **ASB-035 (Bi'r Ma'unah, abrogated recitation) was removed**, since it is not a surah or verse in the Mushaf.
 

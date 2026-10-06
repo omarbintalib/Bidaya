@@ -99,8 +99,7 @@ has no source it declines rather than guessing. Method, raw answers and known li
 [`docs/evaluation/`](docs/evaluation/README.md) and [`backend/README.md`](backend/README.md).
 
 **Built vs. proposed.** Everything above is built and live. Not yet done: testing understanding with the target
-audience before and after use (the track's success measure), content approval of the newest records by the team's
-content reviewer (marked in the data's review column), narrating the story in Arabic (English narration works now),
+audience before and after use (the track's success measure), narrating the story in Arabic (English narration works now),
 and languages beyond Arabic and English.
 
 ## Repository layout
