@@ -509,3 +509,15 @@ html[data-reduced-motion='true'] .story-timeline { transition: none; }
   .ask-panel.is-beside-map:has(.mo-root[data-phase='answered']) > .back-btn { width: auto; margin: 0 auto 8px; box-shadow: 0 -10px 14px -4px var(--paper); }
   .ask-panel.is-beside-map:has(.mo-root[data-phase='answered']) { border-radius: 16px 16px 0 0; }
 }
+
+/* The language switch, beside Search in the toolbar (on the Journey only; the other pages keep it in the header). */
+.story-toolbar .tb-lang { text-transform: none; letter-spacing: normal; padding: 6px 14px; border: 1px solid var(--border); background: var(--surface); gap: 8px; font-size: var(--text-control); }
+.story-toolbar .tb-lang:hover { color: var(--ink); border-color: var(--brass); }
+.story-toolbar .tb-lang svg { display: block; width: 16px; height: 16px; }
+@media (max-width: 1000px) { .story-toolbar .tb-lang { padding: 6px 10px; } }
+@media (max-width: 700px) { .story-toolbar .tb-lang { padding: 4px 10px; } .story-toolbar .tb-lang svg { display: none; } }
+/* A small language switch beside the summary's close button. */
+.film-end { display: flex; align-items: center; gap: 8px; }
+.film .film-lang { text-transform: none; letter-spacing: normal; min-height: 36px; padding: 4px 12px; gap: 6px; border: 1px solid var(--border); border-radius: 999px; background: var(--paper); color: var(--ink); font-size: var(--text-small); }
+.film .film-lang:hover { color: var(--ink); border-color: var(--brass); }
+.film .film-lang svg { display: block; width: 15px; height: 15px; }

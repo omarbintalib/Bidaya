@@ -1,11 +1,13 @@
-.narration-player{width:100%;min-width:0;margin:12px 0 16px;padding:10px 0;border-block:1px solid var(--border,#d6cdbd);font-size:12px;color:var(--ink,#272720);text-align:start;box-sizing:border-box}
+.narration-player{width:100%;min-width:0;margin:12px 0 16px;padding:10px 0;border-block:1px solid var(--border,#d6cdbd);font-size:var(--text-small,15px);color:var(--ink,#272720);text-align:start;box-sizing:border-box}
 .narration-player-bar{display:flex;align-items:center;gap:8px;min-width:0}
 .narration-player-play{display:grid;place-items:center;flex:none;width:36px;height:36px;border:1px solid var(--border,#d6cdbd);border-radius:50%;background:transparent;color:inherit;cursor:pointer}
 .narration-player-play svg{width:19px;height:19px;fill:currentColor}.narration-player button:disabled{opacity:.45;cursor:default}
 .narration-player-seek{flex:1 1 0;width:0;min-width:24px;accent-color:var(--ink,#725f39);margin:0;height:28px}
-.narration-player-time{font-size:11px;font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
-.narration-player select{flex:none;max-width:60px;padding:5px 2px;font:inherit;color:inherit;background:var(--paper,#faf8f3);border:1px solid var(--border,#d6cdbd);border-radius:5px}
-.narration-player-options{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:11px}.narration-player-options label{display:flex;align-items:center;gap:4px}.narration-player-options input{margin:0;accent-color:var(--ink,#725f39)}.narration-player-caption{opacity:.65}
-.narration-player p{margin:6px 0 0;font-size:12px}.narration-player [role=alert]{color:var(--ink,#725f39)}.narration-player :focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.narration-player-time{font-size:inherit;font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
+.narration-player select{flex:none;max-width:80px;min-height:34px;padding:4px 4px;font:inherit;color:inherit;background:var(--paper,#faf8f3);border:1px solid var(--border,#d6cdbd);border-radius:5px}
+.narration-player-options{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;margin-top:6px;font-size:calc(var(--text-small,15px) * .92)}.narration-player-options label{display:flex;align-items:center;gap:4px}.narration-player-options input{margin:0;accent-color:var(--ink,#725f39)}.narration-player-caption{opacity:.65}
+.narration-player p{margin:6px 0 0;font-size:inherit}.narration-player [role=alert]{color:var(--ink,#725f39)}.narration-player :focus-visible{outline:2px solid currentColor;outline-offset:3px}
 .step-chapter .narration-player{max-width:540px;margin-inline:auto}.narration-player audio{display:none}
-@media(max-width:380px){.narration-player-bar{gap:5px}.narration-player-play{width:32px;height:32px}.narration-player-time{font-size:10px}.narration-player select{max-width:48px}.narration-player-caption{display:none}}
+@media(max-width:380px){.narration-player-bar{gap:5px}.narration-player-play{width:32px;height:32px}.narration-player-time{font-size:calc(var(--text-small,15px) * .9)}.narration-player select{max-width:64px}.narration-player-caption{display:none}}
+/* The time and speed in Arabic numerals, in a face whose numerals are full size (Saudi's are small). */
+.narration-player[lang=ar] .narration-player-time,.narration-player[lang=ar] select{font-family:'IBM Plex Sans Arabic',sans-serif}

@@ -27,6 +27,7 @@ import PlaceCard from './PlaceCard';
 import Search from './Search';
 import type { SearchResult } from '../data/search';
 import { pathKm, roundKm } from '../data/geo';
+import LanguageButton from '../navigation/LanguageButton';
 
 /**
  * The Journey as a scroll-driven story: a column of steps (chapter openings, events, a question at the
@@ -756,6 +757,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
         </li>] : [])}
       </ol>
       <div className="tb-end">
+        <LanguageButton locale={locale} className="tb-btn tb-lang" />
         <button type="button" className="tb-btn tb-search" aria-haspopup="dialog" aria-label={text.searchTitle} title={`${text.searchTitle} ( / )`} onClick={() => setSearchOpen(true)}>
           <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" strokeWidth="1.5" /><path d="m13 13 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
           <span className="tb-long">{text.search}</span>

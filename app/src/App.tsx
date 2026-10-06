@@ -13,6 +13,7 @@ import LogoTransition from './navigation/LogoTransition';
 import { navigationCopy, routeFor } from './navigation/routes';
 import { useNavigation } from './navigation/useNavigation';
 import { useLanguageSwitch } from './navigation/useLanguageSwitch';
+import LanguageButton, { LanguageSwitchContext } from './navigation/LanguageButton';
 import { copy, type Locale } from './i18n';
 import { AccessibilityProvider, useAccessibility } from './accessibility/AccessibilityProvider';
 import AccessibilityPanel, { AccessibilityLauncher } from './accessibility/AccessibilityPanel';
@@ -90,7 +91,7 @@ function Workspace() {
     };
   }, []);
 
-  return <>
+  return <LanguageSwitchContext.Provider value={toggleLocale}>
     <div className={`workspace ${navigation.busy ? 'page-transitioning' : 'page-ready'}`} dir={locale === 'ar' ? 'rtl' : 'ltr'} inert={menuOpen || accessOpen || navigation.busy}>
       <a className="skip-content" href="#main-content" onClick={event => {
         event.preventDefault(); const main = document.querySelector<HTMLElement>('.workspace main');
@@ -112,10 +113,8 @@ function Workspace() {
             <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" strokeWidth="1.4" /><path d="M8.3 6.8v6.4l5-3.2z" fill="currentColor" /></svg>
             <span aria-hidden="true">{locale === 'ar' ? 'ملخص السيرة' : 'Sirah summary'}</span>
           </button>
-          <button className="language-switch" onClick={toggleLocale} aria-label={text.language}>
-            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7" stroke="currentColor" /><ellipse cx="10" cy="10" rx="3" ry="7" stroke="currentColor" /><path d="M3 10h14" stroke="currentColor" /></svg>
-            <span lang={locale === 'ar' ? 'en' : 'ar'}>{locale === 'ar' ? 'English' : 'العربية'}</span>
-          </button>
+          {/* Once the Journey's toolbar is up, the switch shows there instead, beside Search (index.css). */}
+          <LanguageButton locale={locale} />
         </div>
       </header>
       <PageBoundary key={navigation.page} locale={locale}>
@@ -128,5 +127,5 @@ function Workspace() {
     {!navigation.busy && !menuOpen && !accessOpen && launcher}
     {accessOpen && !navigation.busy && <AccessibilityPanel locale={locale} busy={navigation.busy} trigger={accessTrigger} launcher={launcher} onClose={() => setAccessOpen(false)} />}
     {navigation.busy && <LogoTransition reducedMotion={reducedMotion} run={navigation.run} initial={navigation.run === 0} locale={locale} onCovered={navigation.commit} onFinish={navigation.finish} />}
-  </>;
+  </LanguageSwitchContext.Provider>;
 }

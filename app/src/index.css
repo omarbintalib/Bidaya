@@ -462,3 +462,7 @@ html { touch-action: manipulation; }
   .site-header { gap: 8px; padding-block: 12px; }
   .site-header .destination-trigger { min-height: 40px; padding: 6px 10px; }
 }
+/* The Journey shows the language switch in its toolbar, beside Search, once that toolbar is up. */
+.workspace:has(.story-toolbar) .site-header .language-switch { display: none; }
+/* "English" on the Arabic page's language switch, in a Latin face (the Arabic face's Latin letters are small capitals). */
+html[lang='ar'] .language-switch [lang='en'] { font-family: 'IBM Plex Sans', sans-serif; }

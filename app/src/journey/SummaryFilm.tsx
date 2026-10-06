@@ -6,6 +6,7 @@ import type { Locale } from '../i18n';
 import HistoricMap, { type Emphasis } from '../map/HistoricMap';
 import { journeyCopy } from './copy';
 import SummaryAsk from './SummaryAsk';
+import LanguageButton from '../navigation/LanguageButton';
 
 /**
  * A summary of the Sirah, played on the map (summary_film.csv): moments from the birth to the year of the Prophet's
@@ -115,9 +116,12 @@ export default function SummaryFilm({ data, locale, reducedMotion, start = 0, on
       <div className="film-top" data-map-overlay>
         <p className="film-kicker">{text.filmTitle}</p>
         <p className="film-year" key={ev.year} aria-live="polite">{hijri(ev.year, locale)}</p>
-        <button type="button" className="film-close" onClick={onClose} aria-label={text.close}>
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" /></svg>
-        </button>
+        <div className="film-end">
+          <LanguageButton locale={locale} className="film-lang" />
+          <button type="button" className="film-close" onClick={onClose} aria-label={text.close}>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" /></svg>
+          </button>
+        </div>
       </div>
       <div className="film-bottom" ref={panel} data-map-overlay>
         <div className="film-caption" key={ev.n} onTouchStart={e => { touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }} onTouchEnd={onTouchEnd}>
