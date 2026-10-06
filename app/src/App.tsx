@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { requestSummary } from './navigation/summaryRequest';
 import { SpeedInsights } from '@vercel/speed-insights/react';
+import { Analytics } from '@vercel/analytics/react';
 import BrandLogo from './components/BrandLogo';
 import JourneyPage, { preloadJourney } from './pages/JourneyPage';
 import { onIdle } from './idle';
@@ -25,6 +26,7 @@ export default function App() {
     <AccessibilityProvider>
       <Workspace />
       <SpeedInsights />
+      <Analytics />
     </AccessibilityProvider>
   );
 }
