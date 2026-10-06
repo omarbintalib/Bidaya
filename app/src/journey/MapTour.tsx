@@ -14,21 +14,21 @@ function targetFor(step: number) {
 }
 const copy = {
   en: {
-    tour: 'Map tour', close: 'Close tour', next: 'Next', back: 'Back', skip: 'Skip', done: 'Done',
+    tour: 'Website tour', close: 'Close tour', next: 'Next', back: 'Back', skip: 'Skip', done: 'Done',
     steps: [
       ['Choose a chapter', 'These chapters follow the Prophet’s life in order. Select one to jump to that part of the story.'],
       ['Follow the story', 'Scroll through the cards to follow each event on the map. Press Play to hear a chapter or event, and choose your listening speed.'],
-      ['Explore the map', 'Drag to move around, or use + and − to zoom. On a phone, pinch to zoom. Select an event marker to read its story; the reset button brings the map back into focus.'],
+      ['Explore the map', 'Drag to move around, or use + and − to zoom. Select an event marker to read its story; the reset button brings the map back into focus.'],
       ['Move through time', 'Select an event on the timeline or use its arrows to move through the story. Play advances the story automatically; its pace is separate from narration speed.'],
       ['Ask the map', 'Ask a question about the Sirah. The assistant answers with sources and can guide you to related events and people. You can replay this tour anytime from the toolbar.'],
     ],
   },
   ar: {
-    tour: 'جولة في الخريطة', close: 'إغلاق الجولة', next: 'التالي', back: 'السابق', skip: 'تخطي', done: 'إنهاء',
+    tour: 'جولة في الموقع', close: 'إغلاق الجولة', next: 'التالي', back: 'السابق', skip: 'تخطي', done: 'إنهاء',
     steps: [
       ['اختر فصلًا', 'تتبع هذه الفصول مراحل حياة النبي ﷺ بالترتيب. اختر فصلًا للانتقال إلى ذلك الجزء من الحكاية.'],
       ['اتبع الحكاية', 'مرّر بطاقات الأحداث لتتابع مواقعها على الخريطة. اضغط تشغيل للاستماع إلى الفصل أو الحدث، واختر سرعة القراءة التي تناسبك.'],
-      ['استكشف الخريطة', 'اسحب الخريطة للتنقل، واستخدم + و− للتكبير والتصغير، أو إصبعين على الهاتف. اختر علامة حدث لقراءة حكايته، وزر إعادة التركيز للعودة إلى موضعه.'],
+      ['استكشف الخريطة', 'اسحب الخريطة للتنقل، واستخدم + و− للتكبير والتصغير. اختر علامة حدث لقراءة حكايته، وزر إعادة التركيز للعودة إلى موضعه.'],
       ['تنقّل عبر الزمن', 'اختر حدثًا من الشريط الزمني أو استخدم الأسهم للتنقل في الحكاية. زر التشغيل يتابع الأحداث تلقائيًا، وسرعة المتابعة مستقلة عن سرعة التسجيل الصوتي.'],
       ['اسأل الخريطة', 'اطرح سؤالًا عن السيرة. يجيب المساعد بالمصادر، ويمكنه إرشادك إلى الأحداث والأشخاص المرتبطين بالسؤال. يمكنك إعادة هذه الجولة من شريط الأدوات في أي وقت.'],
     ],
