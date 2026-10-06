@@ -11,7 +11,7 @@
 | | |
 |---|---|
 | **النموذج الحي · Live demo** | **<https://bidaya-sirah.vercel.app>** |
-| **الفيديو التوضيحي · Demo video** | VIDEO_LINK |
+| **الفيديو التوضيحي · Demo video** | **<https://drive.google.com/file/d/1GRVBdxpkHSvk8aBgPYuMPUFocL-z4CK7/view?usp=sharing>** |
 | **العرض التقديمي · Presentation** | [`docs/proposal/Bidaya_presentation.pptx`](docs/proposal/Bidaya_presentation.pptx) |
 | **مقترح الفكرة · Idea proposal** | [`docs/proposal/بداية_مقترح_الفكرة.pptx`](docs/proposal/) |
 | **نتائج الاختبار · Evaluation** | [`docs/evaluation/`](docs/evaluation/README.md) |
