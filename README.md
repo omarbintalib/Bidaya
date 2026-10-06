@@ -62,6 +62,7 @@
 | 60 سؤالًا (أحداث، آيات، صحابة، بلا مصدر، فتوى) | 97.9% أُجيبت بمصدر صحيح؛ 100% امتناع صحيح عن الفتوى وما لا مصدر له |
 | 50 سؤالًا صعبًا على الموقع الحي (أسماء متشابهة، روايات مختلفة، مقدمات خاطئة، متابعة، لهجات) | لا معلومة خاطئة في أي من الأجوبة الخمسين؛ وحين لا يجد مصدرًا يمتنع بدل التخمين |
 | الأسئلة الخمسون نفسها لمساعد ذكاء اصطناعي عام (Claude Haiku 4.5 بلا مصادر) | أخطأ في 8 أجوبة ولم يذكر مصدرًا لمعلوماته، وأجاب بنفسه عن أسئلة الفتوى |
+| اختبار أولي مع 10 مستفيدين: 6 أسئلة عن الهجرة قبل استخدام بداية وبعده | متوسط الإجابات الصحيحة من 2.8 إلى 5.5 من 6؛ تحسّن 7 من 10 ولم يتراجع أحد (عينة صغيرة، التفاصيل وحدودها في docs/evaluation) |
 | الأسئلة الخمسون نفسها مرتين (الثبات) | النتيجة نفسها في 47 من 50، ولا تعارض في المعلومات بين المحاولتين؛ تتغير الصياغة فقط |
 
 كل الأسئلة والأجوبة متاحة للتحقق في [`docs/evaluation/`](docs/evaluation/README.md).
@@ -104,11 +105,13 @@ has no source it declines rather than guessing. Asked twice, the same 50 questio
 no answer contradicted its pair; only the wording changes.
 A general AI chatbot (Claude Haiku 4.5, no sources) given the same 50 questions made false statements in 8 answers,
 cited no source for its facts and answered the fatwa questions itself.
+A first test with 10 users (6 questions on the Hijrah before and after using Bidaya): correct answers rose from a
+mean of 2.8 to 5.5 out of 6; 7 of 10 improved and none got worse (a small group; limits in the evaluation README).
 Method, raw answers and known limits:
 [`docs/evaluation/`](docs/evaluation/README.md) and [`backend/README.md`](backend/README.md).
 
-**Built vs. proposed.** Everything above is built and live. Not yet done: testing understanding with the target
-audience before and after use (the track's success measure), and languages beyond Arabic and English.
+**Built vs. proposed.** Everything above is built and live. Not yet done: a larger test of understanding with new
+Muslims and non-Muslims (a first test with 10 users is above), and languages beyond Arabic and English.
 
 ## Repository layout
 

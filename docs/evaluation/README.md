@@ -99,6 +99,28 @@ Hudaybiyyah, Khadijah's death ten years before the Hijrah), a wrong verse number
 Ubayy a Companion. Where it does better: it answers more questions; Bidaya declines when its sources are silent, by design. Limits: one chatbot, one run, graded by the team; the chatbot
 answered the 50 questions in one session.
 
+## 6. A first test with users (6 Oct 2026)
+
+The track's success measure is whether the experience improves the user's understanding. A first, small test on the
+day of submission: 10 people who want to learn the Sirah answered 6 questions on the Hijrah (from the plot at Dar
+al-Nadwah to the brotherhood of the Emigrants and the Ansar), used Bidaya for about 10 minutes (the same 5 events, and
+at least one question to "Ask the map"), then answered the same 6 questions again. Anonymous Google Form: no names, no
+question about religion. Every answer: [`user-test-2026-10-06.csv`](user-test-2026-10-06.csv).
+
+| Measure (10 people) | Before | After |
+|---|---|---|
+| Correct answers out of 6 (mean) | 2.8 | 5.5 |
+| People with all 6 correct | 2 | 8 |
+| "I don't know" answers (all people) | 27 | 2 |
+
+7 of 10 improved, 3 stayed the same (two already had 6 of 6), none got worse. Ratings out of 5: order of events clear
+4.7, the map helped 4.6, language clear 4.6. 9 of 10 tried "Ask the map" and found the answer useful.
+
+Limits: a small group recruited by the team, mostly people with some knowledge of the Sirah rather than new Muslims or
+non-Muslims; the same questions before and after, right after reading, so this measures recall of what was shown;
+unsupervised and online. 10 further submissions made in three minutes, five answer patterns each sent twice, were
+removed as duplicates. A larger test with new Muslims and non-Muslims is the next step.
+
 ## Known limits
 
 - Arabic written in Latin letters ("shu sar b ghazwat badr?") was declined in the graded run and answered in both
