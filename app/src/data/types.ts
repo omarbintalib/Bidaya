@@ -118,8 +118,14 @@ export interface MapArc {
   end: Text;
 }
 
-/** A chapter question (quiz.csv), answered by choosing a place. */
-export interface QuizQuestion { id: string; period: Period; question: Text; answer: string; options: string[]; explanation: Text; event: number; quote: string; url: string }
+/**
+ * A chapter question (quiz.csv). A place question is answered by choosing a place (on the map too); the others offer
+ * written choices, whose words are in `labels`. `level` runs from 1 (easy) to 3 (hard): a chapter asks them in that order.
+ */
+export interface QuizQuestion {
+  id: string; period: Period; level: 1 | 2 | 3; question: Text; answer: string; options: string[]; labels?: Record<string, Text>;
+  explanation: Text; event: number; quote: string; url: string;
+}
 
 /** An event's background sound (event_sounds.csv), with the source's words that justify it. */
 export type SoundKind = 'battle' | 'march' | 'caravan' | 'walk' | 'sea' | 'march+sea' | 'wind';

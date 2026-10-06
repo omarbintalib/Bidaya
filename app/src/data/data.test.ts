@@ -60,7 +60,7 @@ describe('data package', () => {
     expect(data.routes.some(r => r.kind === 'trade')).toBe(true);
     expect(data.labels.length).toBeGreaterThan(5);
     expect(data.stops.get('event_42')?.map(s => s.name.en)).toEqual(['The cave of Thawr', 'The coastal road (approximate)', 'Quba – Banu Amr ibn Awf']);
-    expect(data.quiz.map(q => q.period)).toEqual(['prologue', 'makkah', 'hijrah', 'madinah']);
+    for (const period of ['prologue', 'makkah', 'hijrah', 'madinah'] as const) expect(data.quiz.filter(q => q.period === period).length, period).toBeGreaterThanOrEqual(8);
   });
   it('quotes every quiz answer and route stop verbatim from its Dorar event', () => {
     for (const item of [...data.quiz, ...[...data.stops.values()].flat()]) {
@@ -100,12 +100,21 @@ describe('data package', () => {
       for (const q of m.quotes.en) expect(e.text.en.includes(q), `event ${m.n}: “${q}”`).toBe(true);
     }
   });
-  it('builds more chapter questions from sourced event places', () => {
+  it('asks each chapter\'s questions from easy to hard, with one place question built from the events', () => {
     const pools = quizPools(data);
-    for (const period of ['prologue', 'makkah', 'hijrah', 'madinah'] as const) expect(pools.get(period)!.length).toBeGreaterThan(0);
+    for (const period of ['prologue', 'makkah', 'hijrah', 'madinah'] as const) {
+      const pool = pools.get(period)!;
+      expect(pool.length, period).toBeGreaterThanOrEqual(8);
+      expect(pool.map(q => q.level), period).toEqual([...pool.map(q => q.level)].sort((a, b) => a - b));
+      expect(new Set(pool.map(q => q.level)).size, period).toBe(3);
+      expect(pool.filter(q => q.id.startsWith('E')).length, period).toBeLessThanOrEqual(1);
+    }
     for (const q of [...pools.values()].flat()) {
       const e = data.byNumber.get(q.event)!;
       expect(q.options).toContain(q.answer);
+      expect(new Set(q.options).size).toBe(q.options.length);
+      if (q.labels) for (const k of q.options) { expect(q.labels[k]?.ar, `${q.id} ${k}`).toBeTruthy(); expect(q.labels[k]?.en, `${q.id} ${k}`).toBeTruthy(); }
+      else for (const k of q.options) expect(data.places.has(k), `${q.id} ${k}`).toBe(true);
       if (q.id.startsWith('E')) {
         expect(new Set(q.options).size).toBe(3);
         expect(e.place).toBe(q.answer);

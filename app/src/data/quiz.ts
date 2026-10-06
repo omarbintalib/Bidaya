@@ -1,10 +1,10 @@
 import type { Period, Place, QuizQuestion, Sirah, SirahEvent } from './types';
 
 /**
- * More chapter questions beyond quiz.csv, built from the events themselves: "where did this happen?", answered
- * by the event's own place in 2_sirah_events.csv. Only events with an exact, sourced place qualify, and only
- * when the title does not already name the place. The quote is the first sentence of the event's Dorar text,
- * word for word, so every generated question cites its source just as the curated ones do.
+ * A chapter's questions: the written ones from quiz.csv, easy to hard, and one more built from the events themselves:
+ * "where did this happen?", answered by the event's own place in 2_sirah_events.csv. Only events with an exact, sourced
+ * place qualify, and only when the title does not already name the place. The quote is the first sentence of the
+ * event's Dorar text, word for word, so the built question cites its source just as the written ones do.
  */
 
 const fold = (s: string) => s.normalize('NFC').replace(/[ً-ٰٟـ]/g, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي');
@@ -56,11 +56,16 @@ function options(answer: Place, candidates: Place[], n: number): string[] | null
   return all;
 }
 
-/** Every chapter's questions: the curated ones from quiz.csv first, then the generated ones in story order. */
+/**
+ * Every chapter's questions, from easy to hard: the written ones by level (in quiz.csv's order within a level), with
+ * one place question built from the events among the easy ones — the place the chapter's events visit least, and none
+ * when that is the chapter's main city anyway. Answering happens in this order, so the questions grow harder as the
+ * reader goes on.
+ */
 export function quizPools(data: Sirah): Map<Period, QuizQuestion[]> {
-  const pools = new Map<Period, QuizQuestion[]>();
-  for (const q of data.quiz) pools.set(q.period, [...(pools.get(q.period) ?? []), q]);
-  const used = new Set(data.quiz.map(q => q.event));
+  const built = new Map<Period, QuizQuestion[]>();
+  // An event with a written place question is not asked about again; written questions on other facts do not count.
+  const used = new Set(data.quiz.filter(q => !q.labels).map(q => q.event));
   const events = [...data.events].sort((a, b) => a.order - b.order);
   // The candidate places are the same for every event of a chapter: gather and sort them once, not per event.
   const byKey = (places: Place[]) => places.sort((a, b) => a.key.localeCompare(b.key));
@@ -78,6 +83,8 @@ export function quizPools(data: Sirah): Map<Period, QuizQuestion[]> {
     const place = e.place ? data.places.get(e.place) : undefined;
     if (!place || used.has(e.n) || e.precision !== 'exact' || e.inferred || !e.title.en || !e.text.ar.trim()) continue;
     if (arWords(e.title.ar).some(w => named.ar.has(w)) || enWords(e.title.en).some(w => named.en.has(w))) continue;
+    // A title about a mosque already answers "where" when the place is that mosque ("building the Prophet's mosque").
+    if (fold(e.title.ar).includes('مسجد') && fold(place.name.ar).includes('مسجد')) continue;
     const seen = answers.get(e.period + place.key) ?? 0;
     if (seen >= MAX_PER_ANSWER) continue;
     const opts = options(place, placesOf(e.period), e.n) ?? options(place, everywhere, e.n);
@@ -85,13 +92,24 @@ export function quizPools(data: Sirah): Map<Period, QuizQuestion[]> {
     used.add(e.n);
     answers.set(e.period + place.key, seen + 1);
     const title = { ar: e.title.ar, en: e.title.en.replace(/\s*\.\s*$/, '') };
-    pools.set(e.period, [...(pools.get(e.period) ?? []), {
-      id: `E${e.n}`, period: e.period,
+    built.set(e.period, [...(built.get(e.period) ?? []), {
+      id: `E${e.n}`, period: e.period, level: 1,
       question: { ar: `أين كان هذا الحدث: «${title.ar}»؟`, en: `Where did this happen: “${title.en}”?` },
       answer: place.key, options: opts,
       explanation: { ar: `كان ذلك في ${e.placeName.ar}، كما في الدرر السنية:`, en: `This happened at ${e.placeName.en}. Dorar's account begins:` },
       event: e.n, quote: firstSentence(e.text.ar), url: e.url,
     }]);
+  }
+  const pools = new Map<Period, QuizQuestion[]>();
+  const visits = (period: Period, place: string) => events.filter(e => e.period === period && e.place === place).length;
+  for (const period of [...new Set(events.map(e => e.period))]) {
+    const written = data.quiz.filter(q => q.period === period);
+    const at = (level: number) => written.filter(q => q.level === level);
+    // The place the chapter's events visit least — and none at all when that is still the chapter's main city.
+    const most = Math.max(0, ...events.filter(e => e.period === period && e.place).map(e => visits(period, e.place!)));
+    const place = [...(built.get(period) ?? [])].sort((a, b) => visits(period, a.answer) - visits(period, b.answer)).find(q => visits(period, q.answer) < most);
+    const pool = [...at(1), ...(place ? [place] : []), ...at(2), ...at(3)];
+    if (pool.length) pools.set(period, pool);
   }
   return pools;
 }

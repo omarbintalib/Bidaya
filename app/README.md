@@ -24,7 +24,7 @@ Every piece of content comes from the CSV files in **`data/`** at the root of th
 | `5_sirah_map.geojson` | Sirah routes (Hijrah, Isra', Taif, Tabuk, Farewell Hajj) |
 | `map_labels.csv` | Period map labels: regions (`إقليم`), powers (`قوة`), seas (`بحر`); position, size (`كبير`/`متوسط`/`صغير`) and rotation |
 | `map_routes.csv` | Caravan routes, as `lat lon; lat lon; …` |
-| `quiz.csv` | The first question at the end of each chapter (answer and choices are place keys). "Another question" then draws on questions built from the events (`src/data/quiz.ts`): "where did this happen?", answered by the event's exact place in `2_sirah_events.csv`, quoting the first sentence of its Dorar text. Events whose title already names a place are skipped |
+| `quiz.csv` | The chapter questions, asked easy to hard by `المستوى` (1–3); "Another question" moves to the next. Place questions are answered by choosing a place (on the map too); the others have written choices (`Options_EN` in English). `src/data/quiz.ts` adds one question per chapter built from the events: "where did this happen?", answered by the event's exact place in `2_sirah_events.csv`, quoting the first sentence of its Dorar text — the least visited place, and none when that is the chapter's main city. Events whose title already names the place are skipped |
 | `route_stops.csv` | The stops of each route walk, with their Dorar lines |
 
 [`../data/README.md`](../data/README.md) explains every file and column.

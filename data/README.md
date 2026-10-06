@@ -280,5 +280,5 @@ New files for the story (each line quotes its Dorar event; the app's tests check
 
 | File | What it is |
 |------|------------|
-| `quiz.csv` | One question per chapter, answered by choosing a place (`الإجابة` and `الخيارات` are keys from `4_places.csv`), with the explanation, the quote and its Dorar link. The app adds more questions per chapter from the events themselves (see `../app/README.md`) |
+| `quiz.csv` | 45 chapter questions (9 to 15 per chapter), each with `المستوى` 1 (easy), 2 (medium) or 3 (hard): a chapter asks them in that order. A place question has place keys from `4_places.csv` in `الإجابة` and `الخيارات`; the others have written choices in `الخيارات` with their English in `Options_EN`, in the same order, and `الإجابة` is one of them word for word. Every question has its explanation, a quote copied word for word from its Dorar event's text (a test checks it) and the Dorar link. The app adds one place question per chapter built from the events (see `../app/README.md`) |
 | `route_stops.csv` | Named stops for the route walks (15 routes, from the journeys to al-Sham to the march on Makkah), each with the Dorar line for that stop, quoted word for word. Only stops the sources name are listed. |

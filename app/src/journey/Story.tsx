@@ -816,8 +816,8 @@ export default function Story({ data, locale, reducedMotion, ready = true }: { d
           overview={step.kind === 'summary' || step.kind === 'chapter' && step.chapter === 1}
           caravans={current.period === 'prologue' || current.period === 'makkah'} scrollPage
           walk={walk && walkStop ? { routeId: walk.route.id, lat: walkStop.lat, lon: walkStop.lon, key: `${walk.route.id}-${walk.stop}`, name: walkStop.name[locale] } : null}
-          quiz={quick?.q ? { options: quick.q.options, answer: quick.q.answer, chosen: progress.answers[quick.q.id] ?? null, onPick: k => answerQuick(quick.q!, k) }
-            : quizNow ? { options: quizNow.options, answer: quizNow.answer, chosen: progress.answers[quizNow.id] ?? null, onPick: k => answerQuiz(quizNow, k) } : null}>
+          quiz={quick?.q ? (quick.q.labels ? null : { options: quick.q.options, answer: quick.q.answer, chosen: progress.answers[quick.q.id] ?? null, onPick: k => answerQuick(quick.q!, k) })
+            : quizNow && !quizNow.labels ? { options: quizNow.options, answer: quizNow.answer, chosen: progress.answers[quizNow.id] ?? null, onPick: k => answerQuiz(quizNow, k) } : null}>
           <div className="story-banner" ref={banner} data-map-overlay aria-hidden="true">
             {step.kind === 'summary' ? <b>{text.summaryKicker}</b> : <><b>{periodName[locale][current.period]}</b><span>{hijri(current.year, locale)}</span></>}
             {reached > 0 && <span className="story-reach"><i /><span>{text.reachedCount(reached)}<small>{text.reachedNote}</small></span></span>}
@@ -1033,6 +1033,9 @@ function AskBar({ locale, hint, onAsk, onHistory }: { locale: Locale; hint: stri
   </form>;
 }
 
+/** A choice's words: its written label, or the place's name. */
+const choiceName = (q: QuizQuestion, k: string, data: Sirah, locale: Locale) => q.labels?.[k]?.[locale] ?? data.places.get(k)?.name[locale] ?? k;
+
 /** A question on the map, asked for at any point in the story. */
 function QuickQuiz({ quick, data, locale, chosen, onAnswer, onNext, onClose }: {
   quick: { q: QuizQuestion | null; empty?: 'later' | 'done' }; data: Sirah; locale: Locale; chosen: string | null;
@@ -1040,12 +1043,12 @@ function QuickQuiz({ quick, data, locale, chosen, onAnswer, onNext, onClose }: {
 }) {
   const text = journeyCopy[locale];
   const { q } = quick;
-  const name = (k: string) => data.places.get(k)?.name[locale] ?? k;
+  const name = (k: string) => (q ? choiceName(q, k, data, locale) : k);
   return <div className="walk-panel quick-quiz" data-map-overlay role="group" aria-label={text.quizMe}>
     <p className="walk-kicker">{text.quickKicker}</p>
     {q ? <>
       <h3>{q.question[locale]}</h3>
-      {chosen === null && <p className="quiz-hint">{text.quizHint}</p>}
+      {chosen === null && <p className="quiz-hint">{q.labels ? text.quizHintChoose : text.quizHint}</p>}
       <div className="quiz-options is-compact" role="group" aria-label={q.question[locale]}>
         {q.options.map(k => <button key={k} type="button" disabled={chosen !== null}
           className={chosen === null ? '' : k === q.answer ? 'is-right' : k === chosen ? 'is-wrong' : 'is-out'} onClick={() => onAnswer(q, k)}>{name(k)}</button>)}
@@ -1074,15 +1077,15 @@ const QuizCard = memo(function QuizCard({ step, store, q, at, total, hasMore, ch
   return <section data-step={step} className={`step step-quiz${on ? ' is-on' : ''}`} aria-labelledby={`q-${q.id}`}>
     <span className="quiz-kicker">{text.quizKicker(chapter)}{total > 1 && <span className="quiz-count">{text.quizCount(at + 1, total)}</span>}</span>
     <h2 id={`q-${q.id}`}>{q.question[locale]}</h2>
-    {chosen === null && <p className="quiz-hint">{text.quizHint}</p>}
+    {chosen === null && <p className="quiz-hint">{q.labels ? text.quizHintChoose : text.quizHint}</p>}
     <div className="quiz-options" role="group" aria-label={q.question[locale]}>
       {q.options.map(k => <button key={k} type="button" disabled={chosen !== null}
         className={chosen === null ? '' : k === q.answer ? 'is-right' : k === chosen ? 'is-wrong' : 'is-out'} onClick={() => onPick(k)}>
-        {data.places.get(k)?.name[locale] ?? k}
+        {choiceName(q, k, data, locale)}
       </button>)}
     </div>
     {chosen !== null && <div className="quiz-result" role="status">
-      <p className="quiz-verdict">{right ? text.quizRight : text.quizWrong(data.places.get(q.answer)?.name[locale] ?? q.answer)}</p>
+      <p className="quiz-verdict">{right ? text.quizRight : text.quizWrong(choiceName(q, q.answer, data, locale))}</p>
       <p>{q.explanation[locale]}</p>
       <blockquote lang="ar" dir="rtl">«{q.quote}»</blockquote>
       <a href={q.url} target="_blank" rel="noreferrer">{text.dorar} · {locale === 'ar' ? 'حدث' : 'event'} {q.event}</a>

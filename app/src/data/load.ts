@@ -177,11 +177,24 @@ export async function loadSirah(): Promise<Sirah> {
   const quiz: QuizQuestion[] = [];
   for (const r of parseCsv(raw.quiz)) {
     const period = PERIODS[r['الفصل']], event = num(r['رقم_حدث_الدرر']);
-    const options = r['الخيارات'].split(';').map(s => s.trim()).filter(Boolean);
-    const missing = [r['الإجابة'], ...options].filter(k => !places.has(k));
-    if (!period || event === null || missing.length || !options.includes(r['الإجابة'])) { warn(`quiz.csv: "${r['المعرف']}" needs a valid الفصل, رقم_حدث_الدرر, and places from 4_places.csv (missing: ${missing.join(', ') || 'none'})`); continue; }
-    quiz.push({ id: r['المعرف'], period, question: { ar: r['السؤال'], en: r.Question_EN || r['السؤال'] }, answer: r['الإجابة'], options,
-      explanation: { ar: r['الشرح'], en: r.Explanation_EN || r['الشرح'] }, event, quote: r['الشاهد'], url: r['رابط_الدرر'] || `https://dorar.net/history/event/${event}` });
+    const level = ({ '1': 1, '2': 2, '3': 3 } as const)[(r['المستوى'] ?? '').trim() || '1'];
+    const choices = r['الخيارات'].split(';').map(s => s.trim()).filter(Boolean);
+    const shared = { id: r['المعرف'], question: { ar: r['السؤال'], en: r.Question_EN || r['السؤال'] },
+      explanation: { ar: r['الشرح'], en: r.Explanation_EN || r['الشرح'] }, quote: r['الشاهد'] };
+    if (!period || event === null || level === undefined) { warn(`quiz.csv: "${r['المعرف']}" needs a valid الفصل, رقم_حدث_الدرر and المستوى (1, 2 or 3)`); continue; }
+    const url = r['رابط_الدرر'] || `https://dorar.net/history/event/${event}`;
+    if (choices.every(k => places.has(k))) {
+      // A place question: the choices are places from 4_places.csv, and the answer one of them.
+      if (!choices.includes(r['الإجابة'])) { warn(`quiz.csv: "${r['المعرف']}": the answer must be one of its places`); continue; }
+      quiz.push({ ...shared, period, level, answer: r['الإجابة'], options: choices, event, url });
+      continue;
+    }
+    // Written choices: the answer is one of them word for word, and Options_EN gives each in English, in the same order.
+    const english = (r.Options_EN ?? '').split(';').map(s => s.trim()).filter(Boolean);
+    const at = choices.indexOf(r['الإجابة'].trim());
+    if (choices.length < 2 || at < 0 || english.length !== choices.length) { warn(`quiz.csv: "${r['المعرف']}" needs its answer among الخيارات and one English choice per Arabic one in Options_EN`); continue; }
+    const options = choices.map((_, i) => `o${i + 1}`);
+    quiz.push({ ...shared, period, level, answer: options[at], options, labels: Object.fromEntries(options.map((k, i) => [k, { ar: choices[i], en: english[i] }])), event, url });
   }
 
   const arcs: MapArc[] = [];
