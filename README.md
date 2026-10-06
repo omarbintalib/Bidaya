@@ -192,4 +192,5 @@ More detail (API, architecture, deployment, methodology and evaluation): `backen
 | The website: features, structure, deployment | [`app/README.md`](app/README.md) |
 | The assistant: API, method, evaluation, deployment | [`backend/README.md`](backend/README.md) |
 | Evaluation results with raw answers | [`docs/evaluation/README.md`](docs/evaluation/README.md) |
+| Error log: every fault found, its cause, fix and commit | [`docs/evaluation/ERRORS.md`](docs/evaluation/ERRORS.md) |
 | Sources, tools and licences | [`docs/SOURCES_AND_LICENSES.md`](docs/SOURCES_AND_LICENSES.md) |

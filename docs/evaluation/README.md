@@ -77,6 +77,8 @@ Yarmouk (q31) was declined once as "not found" and once as "off topic". Two smal
 nine years" where the dates it quotes give about eight, and one English answer (q50) had a stray character in an
 honorific.
 
+Every fault found so far, with its cause, fix and commit: [`ERRORS.md`](ERRORS.md).
+
 ## Known limits
 
 - Arabic written in Latin letters ("shu sar b ghazwat badr?") is refused about half the time.
