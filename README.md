@@ -18,7 +18,7 @@
 > **السؤال الأول قد يتأخر:** المساعد يعمل على معالج رسومي سحابي ينام عند عدم الاستخدام؛ يوقظه فتح الموقع، وقد يستغرق أول جواب حتى دقيقة، ثم 5–8 ثوانٍ لكل جواب.
 > *The first answer may take up to a minute while the assistant's GPU wakes up; then 5–8 s per answer.*
 
-![اسأل الخريطة: الجواب مع مصادره، والخريطة تنتقل إلى بدر](docs/screenshots/readme-ask-1440-ar.png)
+![اسأل الخريطة: جواب المساعد الذكي مع مصادره، والخريطة تنتقل إلى بدر](docs/screenshots/readme-ask-1440-ar.png)
 
 <div dir="rtl">
 
