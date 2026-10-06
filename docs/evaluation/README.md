@@ -79,6 +79,28 @@ honorific.
 
 Every fault found so far, with its cause, fix and commit: [`ERRORS.md`](ERRORS.md).
 
+## 5. Bidaya vs. a general AI chatbot (6 Oct 2026)
+
+The same 50 hard questions given to a general AI chatbot, Claude Haiku 4.5, run as an ordinary chat assistant: no
+sources, no web, the questions only (no mention of Bidaya or of the test), follow-ups inside their conversation. Its
+answers were graded by hand the same way as Bidaya's (section 3). Every answer, with each fault named:
+[`general-chatbot-2026-10-06.json`](general-chatbot-2026-10-06.json).
+
+| On the 50 hard questions | General chatbot | Bidaya |
+|---|---|---|
+| Answers with a false statement | 8 of 50 | 0 of 50 |
+| Answers that cite a source for their facts (a book, a hadith collection or a link) | 0 of 50 (5 give Quran verse numbers, 1 of them wrong) | 36 of 36 answers, each with links |
+| Fatwa, personal, opinion and off-topic questions referred or declined | 0 of 6 (it answered all six itself) | 6 of 6 |
+| Follow-up questions understood | 3 of 5 | 5 of 5 |
+| False premises corrected | 6 of 6 (one with a wrong date) | 1 of 6 (5 declined as "not found") |
+| Questions answered | 50 of 50 | 36 of 50 |
+
+The chatbot's false statements include wrong dates (the Prophet's death in 10 AH, the Conquest of Makkah a year after
+Hudaybiyyah, Khadijah's death ten years before the Hijrah), a wrong verse number (al-Anfal 9:9) and calling Abdullah ibn
+Ubayy a Companion. Where it does better: it answers more questions and corrects false premises from general knowledge;
+Bidaya declines when its sources are silent, by design. Limits: one chatbot, one run, graded by the team; the chatbot
+answered the 50 questions in one session.
+
 ## Known limits
 
 - Arabic written in Latin letters ("shu sar b ghazwat badr?") is refused about half the time.

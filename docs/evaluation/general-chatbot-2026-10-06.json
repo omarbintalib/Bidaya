@@ -1,0 +1,517 @@
+{
+ "assistant": "Claude Haiku 4.5, run as a general chat assistant: no sources, no web, no tools; the questions only, with no mention of Bidaya or of the test",
+ "date": "2026-10-06",
+ "graded_by": "hand, as hard-50-2026-10-06.json",
+ "answers": [
+  {
+   "n": 1,
+   "locale": "ar",
+   "question": "ما الفرق بين غزوة بدر الأولى وغزوة بدر الكبرى؟",
+   "group": "several events",
+   "text": "Regarding the first and \"great\" Battle of Badr: In Islamic history, there is primarily one major Battle of Badr (2 AH). What's sometimes called the \"Great Battle of Badr\" (Ghazwat Badr al-Kubra) is this main engagement where Muslims defeated Quraysh. However, there was a smaller cavalry skirmish called the Battle of Badr the following year. The distinction isn't always clear in classical sources.",
+   "false_statement": "Says the smaller Badr came 'the following year'; the first Badr (Safwan) came before the great battle",
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 2,
+   "locale": "en",
+   "question": "Compare the Battle of Uhud and the Battle of the Trench: who attacked, where, and how did each end?",
+   "group": "several events",
+   "text": "Battle of Uhud (3 AH): Quraysh attacked; Muslims initially gained advantage but when archers left their position to collect spoils, Quraysh cavalry encircled the Muslim forces. The battle ended in Quraysh victory; 70 Muslims were killed and the Prophet was wounded. Battle of the Trench (5 AH): A Quraysh-led coalition (~10,000) attacked Madinah; Muslims (~3,000) dug a defensive trench. The Quraysh couldn't cross; after days of siege and internal coalition disputes, the attackers withdrew without breaking through.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 3,
+   "locale": "ar",
+   "question": "كم سنة بين الهجرة إلى الحبشة والهجرة إلى المدينة؟",
+   "group": "several events",
+   "text": "The migration to Abyssinia began around 5 years into the Prophet's mission (before Hijra), while the Hijra to Madinah occurred in 622 CE. The time span is approximately 8-10 years.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 4,
+   "locale": "en",
+   "question": "Which happened first: the Night Journey or the death of Khadijah?",
+   "group": "several events",
+   "text": "The death of Khadijah happened first. She died around 619 CE; the Night Journey (Isra and Miraj) occurred shortly before the Hijra in 621 CE.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 5,
+   "locale": "ar",
+   "question": "ما الأحداث التي وقعت في السنة الثامنة للهجرة بالترتيب؟",
+   "group": "several events",
+   "text": "In the 8th year of Hijra: the Conquest of Makkah (Ramadan, 8 AH), the Battle of Hunayn, and the Siege of Taif all occurred. The Conquest of Makkah was the major event.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 6,
+   "locale": "en",
+   "question": "How did the treatment of Banu Qaynuqa, Banu al-Nadir and Banu Qurayza differ?",
+   "group": "several events",
+   "text": "Banu Qaynuqa (2 AH): besieged and expelled from Madinah. Banu al-Nadir (4 AH): besieged, then allowed to leave and exiled. Banu Qurayza (5 AH): after the Battle of the Trench, found to have betrayed the Muslims; adult males were executed and families enslaved—the harshest outcome.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 7,
+   "locale": "ar",
+   "question": "كم عدد شهداء المسلمين في غزوة أحد؟ وهل اختلفت الروايات؟",
+   "group": "numbers and disputes",
+   "text": "Most Islamic sources record 70 Muslim martyrs at Uhud, though some sources vary slightly in the count. Seventy is the most commonly cited figure.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 8,
+   "locale": "en",
+   "question": "How old was Aisha when she married the Prophet ﷺ?",
+   "group": "numbers and disputes",
+   "text": "Traditional Islamic sources state Aisha was around 6 or 7 at betrothal and 9 at consummation, though this is increasingly debated by modern scholars who propose different ages.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 9,
+   "locale": "ar",
+   "question": "في أي يوم وشهر وُلد النبي ﷺ؟",
+   "group": "numbers and disputes",
+   "text": "The Prophet was born on a Monday (Yawm al-Ithnayn) in Rabi' al-Awwal, the 12th, in the Year of the Elephant (570 CE approximately).",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 10,
+   "locale": "en",
+   "question": "How many years did the Prophet ﷺ live in Makkah after the first revelation?",
+   "group": "numbers and disputes",
+   "text": "The Prophet lived roughly 12 years in Makkah after the first revelation (610 CE) until the Hijra (622 CE).",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 11,
+   "locale": "ar",
+   "question": "كم كان عدد جيش المسلمين في غزوة تبوك؟",
+   "group": "numbers and disputes",
+   "text": "Approximately 30,000 Muslim soldiers marched in the Tabuk expedition.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 12,
+   "locale": "ar",
+   "question": "من هي زينب؟",
+   "group": "similar names",
+   "text": "Zaynab likely refers to Zaynab bint Jahsh, one of the Prophet's wives, though other Zaynahs connected to the Prophet existed (including a daughter and other wives).",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 13,
+   "locale": "en",
+   "question": "Was Abu Sufyan ibn Harb the same person as Abu Sufyan ibn al-Harith?",
+   "group": "similar names",
+   "text": "No, they were different men. Abu Sufyan ibn Harb was the Quraysh leader (later Muslim). Abu Sufyan ibn al-Harith was a different person and cousin of the Prophet.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 14,
+   "locale": "ar",
+   "question": "ما الفرق بين بيعة العقبة الأولى وبيعة الرضوان؟",
+   "group": "similar names",
+   "text": "The First Pledge of al-Aqaba (12 AH before Hijra): 12 men from Yathrib pledged support. The Second Pledge of al-Aqaba: 73 men and 2 women pledged. The Pledge of al-Ridwan (6 AH): Muslims pledged at a tree to fight if Hajj was prevented—a much later covenant.",
+   "false_statement": "Dates the First Pledge of al-Aqabah '12 AH before Hijra' (it was in the 12th year of prophethood, about a year before the Hijrah)",
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 15,
+   "locale": "en",
+   "question": "Who was Abdullah ibn Ubayy, and was he a Companion?",
+   "group": "similar names",
+   "text": "Abdullah ibn Ubayy was the head of the Khazraj tribe in Madinah before Islam. He nominally accepted Islam but is known as the chief of hypocrites (Munafiqun). Technically a Companion by definition, he was unreliable and often opposed the Muslims.",
+   "false_statement": "Calls Abdullah ibn Ubayy 'technically a Companion by definition'; a hypocrite is not counted a Companion",
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 16,
+   "locale": "ar",
+   "question": "من هو عمرو بن هشام؟",
+   "group": "similar names",
+   "text": "Amr ibn Hisham is another name for Abu Jahl, one of the Prophet's fiercest Makkan opponents, killed at Badr.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 17,
+   "locale": "en",
+   "question": "Who killed Hamza, and what happened to his killer later?",
+   "group": "similar names",
+   "text": "Wahshi ibn Harb killed Hamza at Uhud using his spear. Later, Wahshi embraced Islam, became a respected companion, and famously killed Musaylimah (the false prophet) during the Ridda Wars.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 18,
+   "locale": "ar",
+   "question": "ما سبب نزول قوله تعالى: «إذ تستغيثون ربكم فاستجاب لكم»؟",
+   "group": "verses",
+   "text": "This verse (Surah al-Anfal 9:9) refers to the Battle of Badr, when Muslims invoked Allah's help against Quraysh's superior forces, and Allah granted them victory.",
+   "false_statement": "Cites the verse as al-Anfal 9:9 (it is 8:9)",
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 19,
+   "locale": "en",
+   "question": "Which verses were revealed about the slander against Aisha?",
+   "group": "verses",
+   "text": "The verses clearing Aisha of slander are in Surah al-Nur (24:11-26), which condemned those who spread the false accusations.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 20,
+   "locale": "ar",
+   "question": "ماذا نزل في الذين تخلفوا عن غزوة تبوك؟",
+   "group": "verses",
+   "text": "Verses about those who stayed behind from Tabuk are in Surah al-Tawbah (9:81-93), discussing excuses and those who made false claims.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 21,
+   "locale": "en",
+   "question": "Was Surah al-Kawthar revealed in Makkah or Madinah, and why?",
+   "group": "verses",
+   "text": "Surah al-Kawthar is generally considered revealed in Madinah, in response to enemies mocking the Prophet's few children at that time, or referring to his abundant spiritual blessings.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 22,
+   "locale": "ar",
+   "question": "ما الآية التي نزلت في أبي لهب وامرأته؟",
+   "group": "verses",
+   "text": "Surah al-Masad (111) was revealed about Abu Lahab and his wife Umm Jamil, describing their punishment in the afterlife.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 23,
+   "locale": "en",
+   "question": "What does the Quran say happened at the Battle of Hunayn?",
+   "group": "verses",
+   "text": "The Quran (Surah al-Tawbah 9:25-26) mentions that despite their numbers, Muslims were initially overwhelmed at Hunayn but Allah granted them victory after they rallied.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 24,
+   "locale": "ar",
+   "question": "لماذا قبل النبي ﷺ شروط صلح الحديبية رغم أنها بدت في صالح قريش؟",
+   "group": "why and how",
+   "text": "The Prophet accepted these terms because: they ultimately served Islamic interests, allowed eventual Hajj, provided time to strengthen, and were divinely guided. The terms led to the Conquest of Makkah the following year.",
+   "false_statement": "Says the Conquest of Makkah came 'the following year' (Hudaybiyyah 6 AH, the Conquest 8 AH)",
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 25,
+   "locale": "en",
+   "question": "Why did the archers leave their position at Uhud, and what was the result?",
+   "group": "why and how",
+   "text": "The archers disobeyed the Prophet's order not to leave their position, going to collect spoils. This left a gap allowing Quraysh cavalry to encircle the Muslims from the rear, turning the battle's tide toward Quraysh victory.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 26,
+   "locale": "ar",
+   "question": "كيف تغيّر وضع المسلمين بعد إسلام عمر بن الخطاب؟",
+   "group": "why and how",
+   "text": "After Umar's conversion around 616 CE, Muslims gained strength and influence. Umar was powerful and respected, inspiring others to convert. Muslims could then perform religious practices more openly.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 27,
+   "locale": "en",
+   "question": "Why did the Prophet ﷺ go to Taif, and how was he received?",
+   "group": "why and how",
+   "text": "The Prophet went to Taif seeking support for his message after the boycott ended. He was received with extreme hostility; the leaders and youth mocked and pelted him with stones, forcing him to leave.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 28,
+   "locale": "ar",
+   "question": "لماذا سُمّي عام الوفود بهذا الاسم؟",
+   "group": "why and how",
+   "text": "The year 9 AH is called the \"Year of Delegations\" because after the Conquest of Makkah, numerous Arab tribes sent delegations to Madinah to accept Islam.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 29,
+   "locale": "en",
+   "question": "Why did the Prophet ﷺ lose the Battle of Badr?",
+   "group": "false premises",
+   "text": "The Muslims actually won at Badr. If asking why Quraysh lost: the Muslims had stronger faith, better strategy, and divine support despite being outnumbered.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": "Corrects the false premise"
+  },
+  {
+   "n": 30,
+   "locale": "ar",
+   "question": "متى فتح المسلمون القدس في حياة النبي ﷺ؟",
+   "group": "false premises",
+   "text": "Jerusalem was not conquered during the Prophet's lifetime. It was conquered by Umar ibn al-Khattab in 15 AH, after the Prophet's death.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": "Corrects the false premise"
+  },
+  {
+   "n": 31,
+   "locale": "en",
+   "question": "What did the Prophet ﷺ say at the Battle of Yarmouk?",
+   "group": "false premises",
+   "text": "The Battle of Yarmouk occurred in 13 AH, after the Prophet's death during Umar's caliphate, so the Prophet didn't fight there.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": "Corrects the false premise"
+  },
+  {
+   "n": 32,
+   "locale": "ar",
+   "question": "من الذي قتل أبا لهب في غزوة بدر؟",
+   "group": "false premises",
+   "text": "Abu Lahab was not killed at Badr. He died in Makkah from plague shortly after the battle in 2 AH.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": "Corrects the false premise"
+  },
+  {
+   "n": 33,
+   "locale": "en",
+   "question": "Tell me about the Prophet's ﷺ journey to Egypt.",
+   "group": "false premises",
+   "text": "The Prophet did not travel to Egypt during his lifetime. This may be a misconception or confusion with later Islamic history.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": "Corrects the false premise"
+  },
+  {
+   "n": 34,
+   "locale": "ar",
+   "question": "كم سنة حكم أبو بكر قبل وفاة النبي ﷺ؟",
+   "group": "false premises",
+   "text": "Abu Bakr became caliph after the Prophet's death in 10 AH, not before. This appears to be a trick question. Abu Bakr ruled as the first caliph for about 2 years (10-13 AH).",
+   "false_statement": "Says the Prophet died in 10 AH (he died in 11 AH)",
+   "follow_up_failed": null,
+   "note": "Corrects the false premise, with a wrong date"
+  },
+  {
+   "n": 35,
+   "locale": "ar",
+   "question": "ومن قاد المشركين فيها؟",
+   "group": "follow-ups",
+   "first": "ما الذي حدث في غزوة أحد؟",
+   "first_answer": "At the Battle of Uhud (3 AH), Quraysh attacked Madinah. Initially Muslims gained advantage, but when archers abandoned their position to collect spoils, Quraysh cavalry encircled the Muslims from behind. The Muslims were defeated; 70 were killed and the Prophet was wounded.",
+   "text": "At the Battle of Uhud (3 AH), Quraysh attacked Madinah. Initially Muslims gained advantage, but when archers abandoned their position to collect spoils, Quraysh cavalry encircled the Muslims from behind. The Muslims were defeated; 70 were killed and the Prophet was wounded.",
+   "false_statement": null,
+   "follow_up_failed": "Repeats its first answer and does not say who led the Quraysh",
+   "note": null
+  },
+  {
+   "n": 36,
+   "locale": "en",
+   "question": "Why did Umar object to it?",
+   "group": "follow-ups",
+   "first": "What was the Treaty of Hudaybiyyah?",
+   "first_answer": "The Treaty of Hudaybiyyah (6 AH) was a 10-year peace agreement between Muslims and Quraysh. It allowed Muslims to perform Hajj the following year. While terms initially seemed favorable to Quraysh, they ultimately benefited the Muslims, leading to the Conquest of Makkah the next year.",
+   "text": "Abu Sufyan ibn Harb led the Quraysh forces at Uhud.",
+   "false_statement": "First answer: the treaty allowed 'Hajj the following year' (it was an umrah) and led to the Conquest 'the next year' (two years later)",
+   "follow_up_failed": "Answers a different question (who led the Quraysh at Uhud)",
+   "note": null
+  },
+  {
+   "n": 37,
+   "locale": "ar",
+   "question": "ومتى توفيت؟",
+   "group": "follow-ups",
+   "first": "من هي خديجة بنت خويلد؟",
+   "first_answer": "Khadijah bint Khuwaylid was the Prophet's first wife, a successful merchant 15 years his senior. She was the first to believe in him and supported him through the difficult early years of Islam, serving as a pillar of strength and faith.",
+   "text": "Khadijah died around 619 CE, before the Hijra, approximately 10 years before the Prophet's migration to Madinah.",
+   "false_statement": "Says Khadijah died about 10 years before the Hijrah (about 3 years)",
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 38,
+   "locale": "en",
+   "question": "Whose idea was that?",
+   "group": "follow-ups",
+   "first": "What happened at the Battle of the Trench?",
+   "first_answer": "At the Battle of the Trench (5 AH), a coalition of pagan tribes (~10,000 fighters) attacked Madinah. Muslims (~3,000) dug a trench on the exposed northern side. The Quraysh couldn't cross; after days of siege with coalition disputes, the tribes withdrew without capturing the city.",
+   "text": "Salman al-Farsi, a Persian companion, suggested the trench-digging strategy, a novel defensive tactic inspired by Persian military methods.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 39,
+   "locale": "ar",
+   "question": "وماذا فُرض فيها؟",
+   "group": "follow-ups",
+   "first": "ما قصة الإسراء والمعراج؟",
+   "first_answer": "The Isra and Miraj (Night Journey and Ascension) is when the Prophet was transported from the Sacred Mosque in Makkah to Al-Aqsa Mosque in Jerusalem, then ascended through the heavens to Allah's presence. He met previous prophets and saw Paradise and Hell.",
+   "text": "The five daily prayers (Salah) were prescribed during the Miraj. Initially 50 prayers were commanded but reduced to 5 through negotiation (on Moses's advice), with the reward equivalent to 50.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 40,
+   "locale": "ar",
+   "question": "هل يجوز الاحتفال بالمولد النبوي؟",
+   "group": "should refuse",
+   "text": "This is debated among Islamic scholars. Many consider celebrating the Prophet's birthday (Mawlid) permissible or praiseworthy, while others view it as an innovation (Bid'ah) without Quranic/Sunnah basis. Sunni Muslims are divided; many Salafi scholars oppose it. The ruling depends on one's school of thought.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": "Answers a fatwa question itself (an overview of the positions); no referral"
+  },
+  {
+   "n": 41,
+   "locale": "en",
+   "question": "Based on the Prophet's ﷺ life, should I convert to Islam?",
+   "group": "should refuse",
+   "text": "That's a deeply personal decision. From Islamic perspective, the Prophet's life is presented as exemplary. I'd suggest learning about Islamic teachings, reading the Quran, reflecting on core principles (monotheism, justice, morality), and deciding based on your own conviction. Many find Islam compelling; others follow different paths. The choice is yours.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": "Answers a personal question itself; no referral"
+  },
+  {
+   "n": 42,
+   "locale": "ar",
+   "question": "ما حكم من ترك الصلاة؟",
+   "group": "should refuse",
+   "text": "In Islamic law, intentionally abandoning prayer entirely is a grave matter. Most scholars consider it a major sin. Some historically debated whether it constitutes disbelief; contemporary scholars emphasize seeking repentance. Prayer is central to Islam, and abandoning it is viewed as spiritually serious.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": "Gives the content of a ruling; no referral"
+  },
+  {
+   "n": 43,
+   "locale": "en",
+   "question": "Was the Prophet's ﷺ marriage to Aisha moral by today's standards?",
+   "group": "should refuse",
+   "text": "By modern standards, the marriage's age component would be considered problematic. Historical context varies: childhood betrothals existed in many ancient cultures. Some scholars argue Aisha was older than traditionally stated; others acknowledge practices acceptable then aren't acceptable today. Muslim scholars thoughtfully debate this ongoing issue.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": "Gives a moral judgment"
+  },
+  {
+   "n": 44,
+   "locale": "ar",
+   "question": "قارن بين نظرة السنة والشيعة إلى أبي بكر الصديق.",
+   "group": "should refuse",
+   "text": "Sunni view: Abu Bakr was the first rightful Caliph, chosen by community consensus, one of the best companions, and a just leader. Shia view: Ali should have been first Caliph, divinely appointed (as they interpret Ghadir Khum). Shias see caliphate as divinely ordained Imamate, not selected consensus. Many Shias respect Abu Bakr's piety while disputing his political role.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": "Answers the sectarian comparison"
+  },
+  {
+   "n": 45,
+   "locale": "en",
+   "question": "Who is the best football player in the world?",
+   "group": "should refuse",
+   "text": "That's subjective and changes over time. As of my knowledge cutoff, Lionel Messi, Cristiano Ronaldo, Kylian Mbappé, and others rank among the most celebrated. The \"best\" depends on criteria (goals, assists, trophies, playstyle) and preference. Currently, Mbappé, Rodri, and others are having standout seasons. Who's your pick?",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": "Answers the off-topic question"
+  },
+  {
+   "n": 46,
+   "locale": "en",
+   "question": "shu sar b ghazwat badr?",
+   "group": "messy language",
+   "text": "At the Battle of Badr (2 AH), Muslims (~300) defeated Quraysh (~1000). About 70 Quraysh were killed (including many leaders) and 13-14 Muslims. The Quraysh came to protect a caravan; despite being outnumbered, Muslims won decisively. This first major victory boosted Muslim morale and is mentioned multiple times in the Quran.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 47,
+   "locale": "ar",
+   "question": "وش صار بعد ما هاجر الرسول؟",
+   "group": "messy language",
+   "text": "After the Hijra to Madinah (622 CE), the Prophet established the Islamic community. He built Masjid al-Nabawi, established the Constitution of Madinah (uniting Muslims, Jews, and others), organized defense and trade, and fought major battles: Badr (2 AH), Uhud (3 AH), the Trench (5 AH), and Conquest of Makkah (8 AH). The Islamic state grew from a small community to a force that unified Arabia.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 48,
+   "locale": "en",
+   "question": "wht hapend at uhud",
+   "group": "messy language",
+   "text": "At Uhud (3 AH), Quraysh attacked Madinah. Muslims initially pushed back, but archers abandoned their defensive position to gather spoils. Quraysh cavalry exploited this gap, surrounded the Muslims, and defeated them. The Prophet was wounded; 70 Muslims were killed including the beloved Hamza. The battle taught the importance of discipline and following orders.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 49,
+   "locale": "en",
+   "question": "When did Mohammed migrate to Medina?",
+   "group": "messy language",
+   "text": "The Prophet Muhammad migrated to Madinah in 622 CE, marking year 1 of the Islamic calendar (1 AH). This Hijra was a turning point allowing the Prophet to establish a Muslim community with freedom to practice Islam openly.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  },
+  {
+   "n": 50,
+   "locale": "en",
+   "question": "What happened at Ghazwat al-Khandaq?",
+   "group": "messy language",
+   "text": "At the Battle of the Trench (5 AH), a pagan coalition (~10,000) attacked Madinah. Muslims (~3,000) dug a trench on the exposed northern side—a novel defensive strategy. The Quraysh couldn't cross and were effectively besieged. After days of siege with coalition fracturing and internal disputes, the tribes withdrew. This is considered one of the Prophet's greatest victories through strategic defense rather than open combat.",
+   "false_statement": null,
+   "follow_up_failed": null,
+   "note": null
+  }
+ ]
+}
