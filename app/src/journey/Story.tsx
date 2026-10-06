@@ -311,9 +311,11 @@ export default function Story({ data, locale, reducedMotion, ready = true }: { d
     const words = `${title} ${body}`.split(/\s+/).filter(Boolean).length;
     return Math.max(MIN_EVENT_MS, LOOK_MS + words * MS_PER_WORD[pace]);
   }, [step, events, locale, pace]);
-  // ── background sound: field recordings per event (event_sounds.csv), off until the reader turns it on ──
+  // ── background sound: field recordings per event (event_sounds.csv), on unless the reader has turned it off ──
   const ambience = useMemo(() => new Ambience(import.meta.env.BASE_URL), []);
-  const [soundOn, setSoundOn] = useState(false);
+  const [soundOn, setSoundOn] = useState(() => { try { return localStorage.getItem(SOUND_KEY) !== '0'; } catch { return true; } });
+  const soundOnRef = useRef(soundOn);
+  soundOnRef.current = soundOn;
   // Quiet by default: the sounds sit in the background, under the reading.
   const [volume, setVolumeState] = useState(() => { try { const v = Number(localStorage.getItem(VOLUME_KEY)); return localStorage.getItem(VOLUME_KEY) !== null && v >= 0 && v <= 1 ? v : DEFAULT_VOLUME; } catch { return DEFAULT_VOLUME; } });
   useEffect(() => { ambience.setVolume(volume); }, [ambience, volume]);
@@ -330,11 +332,10 @@ export default function Story({ data, locale, reducedMotion, ready = true }: { d
   }, [soundOn, volume, toggleSound, setVolume, text]);
   useEffect(() => () => publishSound(null), []);
   useEffect(() => {
-    // Sound was on last time: browsers only allow it to start after a click or key press, so wait for the first one.
-    let saved = false;
-    try { saved = localStorage.getItem(SOUND_KEY) === '1'; } catch { /* no storage */ }
-    if (!saved) return;
-    const start = () => { setSoundOn(true); void ambience.enable(); };
+    // Sound is on unless turned off: browsers only allow it to start after a click or key press, so wait for the first
+    // one (if the reader turned it off before that, it stays off).
+    if (!soundOnRef.current) return;
+    const start = () => { if (soundOnRef.current) void ambience.enable(); };
     window.addEventListener('pointerdown', start, { once: true });
     window.addEventListener('keydown', start, { once: true });
     return () => { window.removeEventListener('pointerdown', start); window.removeEventListener('keydown', start); };
