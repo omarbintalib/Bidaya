@@ -17,7 +17,7 @@ export function preloadJourney(withData = true) {
   if (withData) import('../data/load').then(m => m.getSirah()).catch(() => { /* getSirah forgets failures; the page retries. */ });
 }
 
-export default function JourneyPage({ locale }: { locale: Locale }) {
+export default function JourneyPage({ locale, ready = true }: { locale: Locale; ready?: boolean }) {
   const { reducedMotion } = useAccessibility();
   const loading = <p className="data-status" role="status">{loadingCopy[locale]}</p>;
   return <main id="main-content" tabIndex={-1} className="explorer journey-page">
@@ -26,7 +26,7 @@ export default function JourneyPage({ locale }: { locale: Locale }) {
       <p className="intro-subtitle">{locale === 'ar' ? 'اتبع فصول السيرة، واكتشف الأحداث على الخريطة.' : 'Follow the chapters of the Prophet’s life and discover events on the map.'}</p>
     </section>
     <Suspense fallback={loading}>
-      <JourneyContent locale={locale} reducedMotion={reducedMotion} loading={loading} />
+      <JourneyContent locale={locale} reducedMotion={reducedMotion} loading={loading} ready={ready} />
     </Suspense>
   </main>;
 }

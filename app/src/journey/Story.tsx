@@ -28,6 +28,7 @@ import Search from './Search';
 import type { SearchResult } from '../data/search';
 import { pathKm, roundKm } from '../data/geo';
 import LanguageButton from '../navigation/LanguageButton';
+import MapTour from './MapTour';
 
 /**
  * The Journey as a scroll-driven story: a column of steps (chapter openings, events, a question at the
@@ -70,7 +71,7 @@ function useMedia(query: string) {
 }
 
 /** Answers and visited places are kept in this browser only, so a reload keeps the viewer's progress. */
-export default function Story({ data, locale, reducedMotion }: { data: Sirah; locale: Locale; reducedMotion: boolean }) {
+export default function Story({ data, locale, reducedMotion, ready = true }: { data: Sirah; locale: Locale; reducedMotion: boolean; ready?: boolean }) {
   const text = journeyCopy[locale];
   const events = data.events;
   const [progress, setProgress] = useState(loadProgress);
@@ -79,6 +80,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
   const [intro, setIntro] = useState(() => { if (resume) return false; try { return sessionStorage.getItem('bidaya.intro.seen') !== '1'; } catch { return true; } });
   // Build the story (≈150 steps and the map) once the opening has played, so the opening stays smooth.
   const [built, setBuilt] = useState(!intro);
+  const [tourOpen, setTourOpen] = useState(false);
   useEffect(() => {
     // Build the Ask index while nothing else is happening — never during the opening scene.
     if (intro) return;
@@ -189,7 +191,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     const els = Array.from(root.querySelectorAll<HTMLElement>('[data-step]'));
     const pick = () => {
       frame = 0;
-      if (resume || intro || document.documentElement.dataset.readingRestore === 'true' || performance.now() < lockUntil.current) return;
+      if (resume || intro || tourOpen || document.documentElement.dataset.readingRestore === 'true' || performance.now() < lockUntil.current) return;
       // The last change has not been laid out and held still yet: positions measured now would be stale.
       if (anchor.current) { frame = requestAnimationFrame(pick); return; }
       const line = window.innerHeight * (wide ? 0.5 : 0.76);
@@ -215,7 +217,7 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     return () => { cancelAnimationFrame(frame); window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); };
-  }, [steps, wide, built, resume, intro]);
+  }, [steps, wide, built, resume, intro, tourOpen]);
   useEffect(() => {
     // Zooming or resizing the window reflows every card, so the step under the reading line would change by
     // itself. Hold the current step instead: no picking while the size changes, and the step kept in place.
@@ -757,6 +759,10 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
         </li>] : [])}
       </ol>
       <div className="tb-end">
+        <MapTour locale={locale} open={tourOpen}
+          ready={ready && built && !intro && !resume && !filmOpen && !searchOpen && !person && !place && !historyOpen && !undatedOpen && !askOpen && !answerCard && !quick && !walk}
+          onOpen={() => { setPlaying(false); window.dispatchEvent(new Event('journey-tour-starting')); setTourOpen(true); }}
+          onClose={() => { lockUntil.current = performance.now() + 350; setTourOpen(false); }} />
         <button type="button" className="tb-btn tb-search" aria-haspopup="dialog" aria-label={text.searchTitle} title={`${text.searchTitle} ( / )`} onClick={() => setSearchOpen(true)}>
           <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" strokeWidth="1.5" /><path d="m13 13 4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
           <span className="tb-long">{text.search}</span>

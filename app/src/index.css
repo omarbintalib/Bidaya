@@ -192,7 +192,7 @@ body *:hover::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--bra
 
 .logo-transition { position: fixed; inset: 0; z-index: 100; overflow: hidden; pointer-events: auto; }
 .logo-transition > svg { display: block; }
-.initial-transition[data-phase='cover'] { background: var(--paper); }
+.initial-transition:not([data-phase='reveal']) { background: var(--ink); }
 .transition-backdrop, .transition-cover, .transition-field, .transition-loading, .transition-reveal { display: none; }
 .initial-transition[data-phase='cover'] .transition-backdrop { display: block; }
 .logo-transition[data-phase='cover'] .transition-cover { display: block; }

@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { LOGO, LogoGeometry } from '../components/BrandLogo';
 import type { Locale } from '../i18n';
 import { navigationCopy } from './routes';
@@ -41,7 +41,7 @@ export default function LogoTransition({ run, initial, locale, reducedMotion, on
   const loading = useRef<SVGGElement>(null);
   const aperture = useRef<SVGGElement>(null);
   const overlay = useRef<HTMLDivElement>(null);
-  const [phase, setPhase] = useState('cover');
+  const [phase, setPhase] = useState(initial ? 'loading' : 'cover');
   const emergencyFinish = useRef<(() => void) | null>(null);
   const previousReduced = useRef(reducedMotion);
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function LogoTransition({ run, initial, locale, reducedMotion, on
     previousReduced.current = reducedMotion;
   }, [reducedMotion]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const controller = new AbortController();
     const reduced = reducedMotion ?? window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     emergencyFinish.current = () => { controller.abort(); onCovered(); onFinish(); };
@@ -68,14 +68,19 @@ export default function LogoTransition({ run, initial, locale, reducedMotion, on
       try {
         // A failed browser animation must never leave navigation blocked.
         watchdog = window.setTimeout(() => { if (!controller.signal.aborted) { onCovered(); onFinish(); controller.abort(); } }, 5000);
-        setPhase(reduced ? 'crossfade' : 'cover');
+        setPhase(reduced ? 'crossfade' : initial ? 'loading' : 'cover');
+        // Size the opaque overlay before its first paint, then hand off the HTML cover.
+        size();
+        if (initial) document.getElementById('startup-cover')?.remove();
         if (reduced) {
-          await tween(100, t => { if (overlay.current) overlay.current.style.opacity = String(t); }, controller.signal);
+          if (!initial) await tween(100, t => { if (overlay.current) overlay.current.style.opacity = String(t); }, controller.signal);
           onCovered();
           await tween(120, t => { if (overlay.current) overlay.current.style.opacity = String(1 - t); }, controller.signal);
         } else {
-          place(cover.current, 0);
-          await tween(600, t => { place(cover.current, t); cover.current?.setAttribute('opacity', String(Math.min(1, t * 8))); }, controller.signal);
+          if (!initial) {
+            place(cover.current, 0);
+            await tween(600, t => { place(cover.current, t); cover.current?.setAttribute('opacity', String(Math.min(1, t * 8))); }, controller.signal);
+          }
           setPhase('loading');
           onCovered();
           const { width, height, small } = size();
@@ -98,7 +103,7 @@ export default function LogoTransition({ run, initial, locale, reducedMotion, on
     }
     void play();
     return () => { controller.abort(); window.clearTimeout(watchdog); emergencyFinish.current = null; };
-  }, [run, onCovered, onFinish]);
+  }, [run, initial, onCovered, onFinish]);
 
   return <div ref={overlay} className={`logo-transition ${initial ? 'initial-transition' : ''}`} data-phase={phase} role="status" aria-live="polite">
     <span className="sr-only">{navigationCopy[locale].loading}</span>

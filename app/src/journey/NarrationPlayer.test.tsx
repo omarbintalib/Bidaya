@@ -6,6 +6,8 @@ import NarrationPlayer from './NarrationPlayer';
 const index={version:1,locale:'en',entries:{'event-1':{hash:'1',voice:'Brian',parts:[{path:'en/1.mp3',bytes:4,duration:10},{path:'en/1b.mp3',bytes:4,duration:10}]},'event-2':{hash:'2',voice:'Brian',parts:[{path:'en/2.mp3',bytes:4,duration:10}]}}};
 let host:HTMLDivElement,slot:HTMLDivElement,root:Root;
 beforeEach(()=>{
+  localStorage.clear();
+  window.dispatchEvent(new StorageEvent('storage', { key: null }));
   vi.stubGlobal('IS_REACT_ACT_ENVIRONMENT',true);vi.stubGlobal('caches',{open:vi.fn().mockRejectedValue(Error('storage unavailable'))});
   vi.stubGlobal('fetch',vi.fn(async(url)=>String(url).endsWith('english-index.json')?new Response(JSON.stringify(index)):String(url).endsWith('arabic-index.json')?new Response(JSON.stringify({...index,locale:'ar',entries:Object.fromEntries(Object.entries(index.entries).map(([id,entry])=>[id,{...entry,voice:'Eid',parts:entry.parts.map(part=>({...part,path:part.path.replace('en/','ar/')}))}]))})):new Response(new Uint8Array([1,2,3,4]))));
   vi.spyOn(HTMLMediaElement.prototype,'load').mockImplementation(()=>{});vi.spyOn(HTMLMediaElement.prototype,'pause').mockImplementation(function(this:HTMLMediaElement){this.dispatchEvent(new Event('pause'));});
@@ -76,4 +78,44 @@ it('applies playback speed and resumes the explicitly requested continuous next 
   await act(async()=>host.querySelector('audio')!.dispatchEvent(new Event('ended')));expect(next).toHaveBeenCalledOnce();
   vi.mocked(HTMLMediaElement.prototype.play).mockClear();slot.id='narration-en-event-2';await render('event-2');
   await vi.waitFor(()=>expect(HTMLMediaElement.prototype.play).toHaveBeenCalledOnce());expect(host.querySelector('audio')!.playbackRate).toBe(1.5);
+});
+
+const changeSpeed = async (value = '1.5') => {
+  await act(async () => { const select = slot.querySelector('select')!; select.value = value; select.dispatchEvent(new Event('change', { bubbles: true })); });
+};
+it('persists speed through manual event changes, remounts, languages and summary playback', async () => {
+  await render(); await changeSpeed(); await play();
+  expect(localStorage.getItem('bidaya.narration.speed')).toBe('1.5');
+  await act(async () => host.querySelector('audio')!.dispatchEvent(new Event('ended')));
+  expect(host.querySelector('audio')!.playbackRate).toBe(1.5);
+  slot.id = 'narration-en-event-2'; await render('event-2'); await play();
+  expect(slot.querySelector('select')!.value).toBe('1.5'); expect(host.querySelector('audio')!.playbackRate).toBe(1.5);
+  await act(async () => root.unmount()); root = createRoot(host);
+  slot.id = 'narration-ar-event-1'; await render('event-1', null, false, 'ar'); await play();
+  expect(slot.querySelector('select')!.value).toBe('1.5'); expect(host.querySelector('audio')!.playbackRate).toBe(1.5);
+  slot.id = 'narration-en-event-1';
+  await act(async () => root.render(<NarrationPlayer key="summary" collection="summary" locale="en" entryId="event-1" previousId={null} nextId={null} onNext={null} onStarted={() => {}} storyPlaying={false} />));
+  await play(); expect(slot.querySelector('select')!.value).toBe('1.5'); expect(host.querySelector('audio')!.playbackRate).toBe(1.5);
+});
+it.each(['1.5', 'invalid', '2', '', 'NaN'])('validates the saved speed %s on a fresh player', async value => {
+  localStorage.setItem('bidaya.narration.speed', value); await render(); await play();
+  expect(slot.querySelector('select')!.value).toBe(value === '1.5' ? '1.5' : '1');
+  expect(host.querySelector('audio')!.playbackRate).toBe(value === '1.5' ? 1.5 : 1);
+});
+it('keeps speed across remounts when writing preferences is unavailable', async () => {
+  const save = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw Error('storage blocked'); });
+  await render(); await changeSpeed(); await play();
+  expect(host.querySelector('audio')!.playbackRate).toBe(1.5);
+  slot.id = 'narration-ar-event-1'; await render('event-1', null, false, 'ar');
+  expect(slot.querySelector('select')!.value).toBe('1.5');
+  save.mockRestore(); await changeSpeed('1');
+});
+it('defaults safely when reading preferences is unavailable and pauses for a tour', async () => {
+  await render();
+  vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw Error('storage blocked'); });
+  slot.id = 'narration-ar-event-1'; await render('event-1', null, false, 'ar');
+  expect(slot.querySelector('select')!.value).toBe('1'); await play();
+  vi.mocked(HTMLMediaElement.prototype.pause).mockClear(); vi.mocked(HTMLMediaElement.prototype.play).mockClear();
+  await act(async () => window.dispatchEvent(new Event('journey-tour-starting')));
+  expect(HTMLMediaElement.prototype.pause).toHaveBeenCalledOnce(); expect(HTMLMediaElement.prototype.play).not.toHaveBeenCalled();
 });

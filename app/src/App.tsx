@@ -119,7 +119,7 @@ function Workspace() {
       </header>
       <PageBoundary key={navigation.page} locale={locale}>
         {navigation.page === 'not-found' ? <NotFoundPage locale={locale} onHome={() => navigation.request('home')} onBegin={() => navigation.request('journey')} />
-          : navigation.page === 'journey' ? <JourneyPage locale={locale} /> : <TitlePage page="home" locale={locale} onBegin={() => navigation.request('journey')} />}
+          : navigation.page === 'journey' ? <JourneyPage locale={locale} ready={!navigation.busy && !menuOpen && !accessOpen} /> : <TitlePage page="home" locale={locale} onBegin={() => navigation.request('journey')} />}
       </PageBoundary>
       <footer className="site-footer"><span>{text.footer}</span><GeometricMark /><span className="footer-edition">{route.number} / 2026</span></footer>
     </div>

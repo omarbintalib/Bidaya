@@ -4,6 +4,7 @@ import type { Locale } from '../i18n';
 import { digits } from '../data/select';
 import { NarrationCache, type NarrationIndex } from './narrationCache';
 import './narration.css';
+import { NARRATION_SPEEDS, useNarrationSpeed } from './narrationSpeed';
 const base = `${import.meta.env.BASE_URL}audio/narration/`;
 const indexPromises: Record<string, Promise<NarrationIndex> | undefined> = {};
 export function loadNarrationIndex(locale: Locale, collection: 'journey' | 'summary' = 'journey') {
@@ -41,7 +42,8 @@ export default function NarrationPlayer({locale='en',collection='journey',entryI
   const [target,setTarget]=useState<HTMLElement|null>(null);
   const [playing,setPlaying]=useState(false),[loading,setLoading]=useState(false),[progress,setProgress]=useState(0);
   const [error,setError]=useState(''),[time,setTime]=useState(0),[part,setPart]=useState(0);
-  const [speed,setSpeed]=useState(1),[continuous,setContinuous]=useState(false);
+  const [speed,setSpeed]=useNarrationSpeed();
+  const [continuous,setContinuous]=useState(false);
   const audio=useRef<HTMLAudioElement>(null),manager=useRef<NarrationCache|null>(null);
   const blobUrl=useRef<string|null>(null),generation=useRef(0),loadedPart=useRef(-1),wantedNext=useRef<string|null>(null),wantPlay=useRef(false);
   const latest=useRef({entryId,nextId,onNext,onStarted,continuous,speed});latest.current={entryId,nextId,onNext,onStarted,continuous,speed};
@@ -70,8 +72,8 @@ export default function NarrationPlayer({locale='en',collection='journey',entryI
       if(token!==generation.current || current!==latest.current.entryId)return;
       release();blobUrl.current=URL.createObjectURL(blob);loadedPart.current=at;setPart(at);
       player.src=blobUrl.current;player.playbackRate=latest.current.speed;
-      player.addEventListener('loadedmetadata',()=>{if(token===generation.current)player.currentTime=Math.min(offset,player.duration||offset);},{once:true});
-      player.load();setLoading(false);
+      player.addEventListener('loadedmetadata',()=>{if(token===generation.current){player.currentTime=Math.min(offset,player.duration||offset);player.playbackRate=latest.current.speed;}},{once:true});
+      player.load();player.playbackRate=latest.current.speed;setLoading(false);
       if(wantPlay.current) {
         latest.current.onStarted();
         try { await player.play(); } catch { if(token===generation.current)setError(text.ready); }
@@ -97,8 +99,8 @@ export default function NarrationPlayer({locale='en',collection='journey',entryI
     const pause=()=>{wantPlay.current=false;wantedNext.current=null;audio.current?.pause();};
     const hide=()=>{if(document.hidden)pause();};
     const otherAudio=(event:Event)=>{if(event.target instanceof HTMLMediaElement && event.target!==audio.current)pause();};
-    window.addEventListener('journey-language-changing',pause);document.addEventListener('visibilitychange',hide);document.addEventListener('play',otherAudio,true);
-    return()=>{window.removeEventListener('journey-language-changing',pause);document.removeEventListener('visibilitychange',hide);document.removeEventListener('play',otherAudio,true);};
+    window.addEventListener('journey-language-changing',pause);window.addEventListener('journey-tour-starting',pause);document.addEventListener('visibilitychange',hide);document.addEventListener('play',otherAudio,true);
+    return()=>{window.removeEventListener('journey-language-changing',pause);window.removeEventListener('journey-tour-starting',pause);document.removeEventListener('visibilitychange',hide);document.removeEventListener('play',otherAudio,true);};
   },[]);
   function toggle() {
     const player=audio.current;if(!player || loading)return;
@@ -106,7 +108,7 @@ export default function NarrationPlayer({locale='en',collection='journey',entryI
     wantPlay.current=true;
     // Stop timed progression immediately, including while a slow download is still pending.
     latest.current.onStarted();
-    if(blobUrl.current && loadedPart.current===part){latest.current.onStarted();void player.play().catch(()=>setError(text.playError));}
+    if(blobUrl.current && loadedPart.current===part){player.playbackRate=latest.current.speed;latest.current.onStarted();void player.play().catch(()=>setError(text.playError));}
     else void playPart(part);
   }
   function seek(value:number) {
@@ -126,7 +128,7 @@ export default function NarrationPlayer({locale='en',collection='journey',entryI
       </button>
       <input className="narration-player-seek" type="range" min="0" max={duration||1} step="0.1" value={Math.min(time,duration||1)} onChange={e=>seek(Number(e.target.value))} disabled={!recording||loading} aria-label={text.position} aria-valuetext={`${formatTime(time)} ${text.of} ${formatTime(duration)}`} />
       <span className="narration-player-time" dir="ltr">{formatTime(time)} / {formatTime(duration)}</span>
-      <select aria-label={text.speed} value={speed} onChange={e=>setSpeed(Number(e.target.value))}>{[.75,1,1.25,1.5].map(rate=><option key={rate} value={rate}>{digits(String(rate),locale)}×</option>)}</select>
+      <select aria-label={text.speed} value={speed} onChange={e=>setSpeed(Number(e.target.value))}>{NARRATION_SPEEDS.map(rate=><option key={rate} value={rate}>{digits(String(rate),locale)}×</option>)}</select>
     </div>
     <div className="narration-player-options"><label><input type="checkbox" checked={continuous} onChange={e=>setContinuous(e.target.checked)} />{text.continuous}</label>
       {loading && <span role="status">{text.loading}{progress?` · ${digits(String(progress),locale)}%`:'…'}</span>}

@@ -25,6 +25,7 @@ beforeEach(() => {
   animate = vi.fn(() => ({ cancel: cancelAnimation }));
   Object.defineProperty(Element.prototype, 'animate', { configurable: true, value: animate });
   localStorage.clear();
+  localStorage.setItem('bidaya.map-tour.v1', '1');
   history.replaceState({}, '', '/');
   host = document.createElement('div'); document.body.append(host);
   root = createRoot(host);
@@ -151,15 +152,17 @@ describe('navigation lifecycle', () => {
     await click('.brand-home'); expect(phase()).toBeUndefined();
   });
   it('plays initial entry and commits each destination only while covered, preserving locale', async () => {
-    await mount(); expect(phase()).toBe('cover');
+    await mount(); expect(phase()).toBe('loading');
     expect(host.querySelector('.workspace')?.hasAttribute('inert')).toBe(true);
-    await advance(650); expect(phase()).toBe('loading');
+    expect(host.querySelector('.transition-cover')?.getAttribute('transform')).toBeNull();
+    await advance(80); expect(phase()).toBe('loading');
     const sections = host.querySelectorAll('[data-logo-section]');
     expect(sections).toHaveLength(7);
     expect(Number(sections[0].getAttribute('opacity'))).toBeGreaterThan(0);
     expect(sections[6].getAttribute('opacity')).toBe('0');
     sections.forEach(section => expect(section.hasAttribute('transform')).toBe(false));
-    await advance(1450); await advance(20); expect(phase()).toBeUndefined();
+    await advance(550); expect(phase()).toBe('reveal');
+    await advance(850); await advance(20); expect(phase()).toBeUndefined();
     expect(document.activeElement).toBe(heading());
     await click('.language-switch');
     for (const [path, name] of [['/journey', 'Islam Journey'], ['/', 'The beginning']]) {
@@ -257,7 +260,7 @@ describe('navigation lifecycle', () => {
     const setAttribute = Element.prototype.setAttribute;
     let failed = false;
     vi.spyOn(Element.prototype, 'setAttribute').mockImplementation(function(this: Element, name, value) {
-      if (!failed && name === 'opacity' && this.hasAttribute('data-logo-section') && this.closest('.logo-transition')?.getAttribute('data-phase') === 'loading') { failed = true; throw new Error('Animation failed'); }
+      if (!failed && name === 'opacity' && Number(value) > 0 && this.hasAttribute('data-logo-section') && this.closest('.logo-transition')?.getAttribute('data-phase') === 'loading') { failed = true; throw new Error('Animation failed'); }
       return setAttribute.call(this, name, value);
     });
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
@@ -303,4 +306,25 @@ it('keeps old quiz results when the saved reading event is missing', async () =>
   await mount('/journey'); await advance(2100);
   expect(host.querySelector('.resume-dialog')).toBeNull();
   expect(JSON.parse(localStorage.getItem('bidaya.journey.v1')!).answers).toEqual(saved.answers);
+});
+
+it('waits for entry and introduction before touring, preserves the active step, and pauses story playback on replay', async () => {
+  Object.defineProperty(HTMLDialogElement.prototype, 'showModal', { configurable: true, value: function(this: HTMLDialogElement) { this.open = true; } });
+  Object.defineProperty(HTMLDialogElement.prototype, 'close', { configurable: true, value: function(this: HTMLDialogElement) { this.open = false; } });
+  localStorage.removeItem('bidaya.map-tour.v1'); sessionStorage.removeItem('bidaya.intro.seen');
+  await mount('/journey'); await advance(1500);
+  expect(document.querySelector('.map-tour')).toBeNull(); expect(host.querySelector('.intro-scene')).not.toBeNull();
+  await click('.intro-begin'); await advance(100);
+  expect(document.querySelector<HTMLDialogElement>('.map-tour')?.open).toBe(true);
+  const activeStep = host.querySelector('.step.is-on')?.getAttribute('data-step');
+  for (let n = 0; n < 4; n++) {
+    await act(async () => document.querySelector<HTMLButtonElement>('.map-tour-actions .btn-primary')!.click());
+    window.dispatchEvent(new Event('scroll')); await advance(20);
+    expect(host.querySelector('.step.is-on')?.getAttribute('data-step')).toBe(activeStep);
+  }
+  await act(async () => document.querySelector<HTMLButtonElement>('.map-tour-close')!.click());
+  await click('.tl-play'); expect(host.querySelector('.tl-play')?.getAttribute('aria-pressed')).toBe('true');
+  await click('.tb-tour'); expect(host.querySelector('.tl-play')?.getAttribute('aria-pressed')).toBe('false');
+  await act(async () => document.querySelector<HTMLButtonElement>('.map-tour-close')!.click());
+  await advance(10000); expect(host.querySelector('.step.is-on')?.getAttribute('data-step')).toBe(activeStep);
 });

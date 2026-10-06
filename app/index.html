@@ -11,6 +11,8 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
+    <!-- Covers the first paint while the app's JavaScript and styles load. -->
+    <div id="startup-cover" aria-hidden="true" style="position:fixed;inset:0;z-index:101;background:#331b0d"></div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
