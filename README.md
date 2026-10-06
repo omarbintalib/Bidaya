@@ -24,7 +24,7 @@
 
 ## المشكلة
 
-السيرة النبوية من أوضح الطرق لفهم الإسلام، وكثير من آيات القرآن نزلت في مواقف منها. لكنها موزعة بين مصادر كثيرة، فيصعب على من يتعرف على الإسلام (غير المسلمين والمسلمين الجدد) ترتيب أحداثها، وفهم سياق آياتها، ومعرفة الموثوق منها.
+السيرة النبوية من أوضح الطرق لفهم الإسلام، وكثير من آيات القرآن نزلت في مواقف منها. لكن كتبها طويلة ومفصّلة، فيصعب على من يتعرف على الإسلام (غير المسلمين والمسلمين الجدد) ربط أحداثها بأماكنها، وفهم سياق آياتها، ومعرفة الموثوق منها.
 
 ## الحل
 
@@ -40,7 +40,7 @@
 
 1. **فهم السؤال:** نموذج لغوي يصنّف السؤال (سيرة، آية، صحابي، فتوى، حالة شخصية، خارج النطاق) ويعيد صياغته عربيًا وإنجليزيًا للبحث، ويحوّل سؤال المتابعة إلى سؤال مكتمل من سياق المحادثة.
 2. **البحث في المصادر:** بحث هجين (دلالي bge-m3 + كلمات BM25) في 2,905 مقطعًا من المصادر المعتمدة، ثم إعادة ترتيب بنموذج bge-reranker-v2-m3.
-3. **جواب موثق:** النموذج يجيب **من المقاطع فقط**، وكل جملة تنتهي برقم مقطعها؛ وإن لم يجد ما يكفي امتنع. يُرفض أي جواب بلا استشهاد صحيح.
+3. **جواب موثق:** النموذج مُوجَّه أن يجيب **من المقاطع فقط** ويستشهد بأرقامها؛ وإن لم يجد ما يكفي امتنع. يُرفض أي جواب بلا استشهاد صحيح.
 4. **على الخريطة:** يُختار الحدث الذي يقوم عليه الجواب أكثر، فتنتقل إليه الخريطة مع زر للعودة.
 
 ## الموثوقية والسلامة العلمية
@@ -49,7 +49,7 @@
 |---|---|
 | (أ) معلومات أصلية مستقرة | جواب مباشر مع رابط المصدر لكل معلومة |
 | (ب) شرح وتعريف | جواب من المادة المعتمدة مع المرجع |
-| (ج) مسائل خلافية | ذكر اختلاف الروايات («وقيل…») دون ترجيح |
+| (ج) مسائل خلافية | ينقل ما في المصادر، ويذكر اختلاف الروايات («وقيل…») إن ذكرته |
 | (د) فتوى أو حالة شخصية | امتناع وإحالة إلى الرئاسة العامة للبحوث العلمية والإفتاء أو أقرب مركز إسلامي |
 
 المصادر: الدرر السنية (الموسوعة التاريخية وموسوعة التفسير)، صحيح البخاري ومسلم، الرحيق المختوم، أسباب النزول للواحدي (الصحيح والحسن فقط). لا يُضاف شيء من الذاكرة. التفاصيل: [`docs/SOURCES_AND_LICENSES.md`](docs/SOURCES_AND_LICENSES.md).
@@ -88,7 +88,7 @@ Islam: non-Muslims and new Muslims (challenge track 3: interactive experiences a
 **How the AI is used.** A RAG pipeline (`backend/`): the question is classified and rewritten for search by an LLM
 (fatwa, personal and off-topic questions are refused here; a follow-up becomes a standalone question), hybrid search
 (bge-m3 dense + BM25) and a cross-encoder reranker find passages among 2,905 from the approved books, the LLM answers
-only from them with a citation per sentence, and an answer without valid citations is refused. The website moves the
+only from them, citing the passages, and an answer without valid citations is refused. The website moves the
 map to the event the answer rests on most, or opens the card of the person asked about.
 
 **Listening.** Text-to-speech narrates the full story aloud in English; Arabic narration is in progress.
