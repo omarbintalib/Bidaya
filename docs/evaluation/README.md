@@ -118,6 +118,9 @@ Dar al-Nadwah, the cave of Thawr, three nights, the route near the Red Sea coast
 7 of 10 improved, 3 stayed the same (two already had 6 of 6), none got worse. Ratings out of 5: order of events clear
 4.7, the map helped 4.6, language clear 4.6. 9 of 10 tried "Ask the map" and found the answer useful.
 
+Why so few: the form only went out on the last day of the challenge, and the team had a small circle to share it
+with in that time.
+
 Limits: a small group recruited by the team, mostly people with some knowledge of the Sirah rather than new Muslims or
 non-Muslims; the same questions before and after, right after reading, so this measures recall of what was shown;
 unsupervised and online. 10 further submissions made in three minutes, five answer patterns each sent twice, were
