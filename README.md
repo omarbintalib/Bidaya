@@ -62,8 +62,6 @@
 | 60 سؤالًا (أحداث، آيات، صحابة، بلا مصدر، فتوى) | 97.9% أُجيبت بمصدر صحيح؛ 100% امتناع صحيح عن الفتوى وما لا مصدر له |
 | 50 سؤالًا صعبًا على الموقع الحي (أسماء متشابهة، روايات مختلفة، مقدمات خاطئة، متابعة، لهجات) | لا معلومة خاطئة في أي من الأجوبة الخمسين؛ وحين لا يجد مصدرًا يمتنع بدل التخمين |
 
-**مقارنة مقيسة بقراءة المصادر:** جواب بداية وسيطه 36 كلمة بدل 433 كلمة في صفحات الدرر التي يستند إليها (نحو عُشر القراءة)، و25 من 36 جوابًا تجمع مصدرين أو أكثر، و31 من 68 ربطًا بين آية وحدث لا تذكره صفحة الحدث في الدرر وتعرضه بداية على بطاقته. القياس لكمية القراءة لا للفهم.
-
 كل الأسئلة والأجوبة متاحة للتحقق في [`docs/evaluation/`](docs/evaluation/README.md).
 
 ## الفريق
@@ -98,8 +96,7 @@ map to the event the answer rests on most, or opens the card of the person asked
 
 **Results.** 97.9% of answerable questions answered with a correct source and 100% correct refusals on a 60-question
 set; on 50 deliberately hard questions against the live site, none of the 50 answers contained a false statement: when it
-has no source it declines rather than guessing. Compared with reading the sources: a median answer of 36 words
-instead of 433 in the Dorar pages it cites, and 31 of 68 verse-event links absent from the event's Dorar page.
+has no source it declines rather than guessing.
 Method, raw answers and known limits:
 [`docs/evaluation/`](docs/evaluation/README.md) and [`backend/README.md`](backend/README.md).
 
