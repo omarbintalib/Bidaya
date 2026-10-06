@@ -33,6 +33,7 @@
 - **الأشخاص:** 98 شخصًا (صحابة وغيرهم) بنبذ موثقة، وكل اسم في النص يفتح بطاقته.
 - **اسأل الخريطة (الذكاء الاصطناعي):** سؤال بالعربية أو الإنجليزية، فجواب قصير من المصادر المعتمدة مع روابطها، وتنتقل الخريطة إلى الحدث المقصود أو تُفتح بطاقة الشخص الذي سُئل عنه. يفهم أسئلة المتابعة («ومن قادها؟»)، ويمتنع عن الفتوى ويحيل إلى الرئاسة العامة للبحوث العلمية والإفتاء.
 - **ملخص السيرة:** 21 لحظة تُعرض على الخريطة بنصوص الدرر حرفيًا، مع إمكانية السؤال عن كل لحظة.
+- **الاستماع إلى القصة:** تحويل النص إلى كلام (TTS) يروي القصة كاملة بصوت مسموع بالإنجليزية؛ والرواية بالعربية قيد التطوير.
 - **رحلة متدرجة:** اختبار قصير في نهاية كل فصل، وحفظ موضع القراءة، وإعدادات للإتاحة (حجم الخط، التباين، تقليل الحركة)، وأصوات المكان دون موسيقى.
 
 ## كيف يعمل الذكاء الاصطناعي
@@ -90,13 +91,16 @@ Islam: non-Muslims and new Muslims (challenge track 3: interactive experiences a
 only from them with a citation per sentence, and an answer without valid citations is refused. The website moves the
 map to the event the answer rests on most, or opens the card of the person asked about.
 
+**Listening.** Text-to-speech narrates the full story aloud in English; Arabic narration is in progress.
+
 **Results.** 97.9% of answerable questions answered with a correct source and 100% correct refusals on a 60-question
 set; 88% on 50 deliberately hard questions against the live site. Method, raw answers and known limits:
 [`docs/evaluation/`](docs/evaluation/README.md) and [`backend/README.md`](backend/README.md).
 
 **Built vs. proposed.** Everything above is built and live. Not yet done: testing understanding with the target
 audience before and after use (the track's success measure), content approval of the newest records by the team's
-content reviewer (marked in the data's review column), and languages beyond Arabic and English.
+content reviewer (marked in the data's review column), narrating the story in Arabic (English narration works now),
+and languages beyond Arabic and English.
 
 ## Repository layout
 

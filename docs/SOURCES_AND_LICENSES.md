@@ -21,6 +21,7 @@ what was removed are in `backend/README.md` → *Content rules*.
 | BAAI/bge-m3 | Embeddings for search (Arabic and English) | MIT |
 | BAAI/bge-reranker-v2-m3 | Reranking the retrieved passages | Apache-2.0 |
 | OpenAI API, model `gpt-6-luna` | Routing the question and writing the cited answer | OpenAI terms of use (API key kept as a hosting secret, never in the repository) |
+| Text-to-speech (TTS) | Narrates the full story aloud: English now, Arabic in progress | engine's own terms |
 | Modal | Hosts the backend on a serverless GPU | service terms |
 | Vercel | Hosts the website | service terms |
 
