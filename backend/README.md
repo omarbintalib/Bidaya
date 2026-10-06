@@ -148,7 +148,7 @@ Answers (`eval_answers.py --judge --runs 2`, gpt-6-luna, reasoning effort low, f
 | refusal_ok: fatwa / personal -> referred to scholars | **100%** (6/6) |
 | wrong refusals | 2.1% (1: q03, "why did the Prophet ﷺ migrate", retrieval miss) |
 | faithful (LLM judge) | 74.5% |
-| consistent (2 runs, same status + citations) | 56.7% |
+| consistent (2 runs, same status + citations) | 56.7% (a stricter check: identical citations; for the deployed system's 50 hard questions see `docs/evaluation/README.md` section 4) |
 | latency | 5.3 s mean, 11.2 s p90 |
 
 \* The script reports 91.7%: 3 companion questions (q33, q39, q40) cite the new people records, which the test

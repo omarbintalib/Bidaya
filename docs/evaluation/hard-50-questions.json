@@ -1,0 +1,307 @@
+[
+ {
+  "n": 1,
+  "locale": "ar",
+  "question": "ما الفرق بين غزوة بدر الأولى وغزوة بدر الكبرى؟",
+  "group": "several events"
+ },
+ {
+  "n": 2,
+  "locale": "en",
+  "question": "Compare the Battle of Uhud and the Battle of the Trench: who attacked, where, and how did each end?",
+  "group": "several events"
+ },
+ {
+  "n": 3,
+  "locale": "ar",
+  "question": "كم سنة بين الهجرة إلى الحبشة والهجرة إلى المدينة؟",
+  "group": "several events"
+ },
+ {
+  "n": 4,
+  "locale": "en",
+  "question": "Which happened first: the Night Journey or the death of Khadijah?",
+  "group": "several events"
+ },
+ {
+  "n": 5,
+  "locale": "ar",
+  "question": "ما الأحداث التي وقعت في السنة الثامنة للهجرة بالترتيب؟",
+  "group": "several events"
+ },
+ {
+  "n": 6,
+  "locale": "en",
+  "question": "How did the treatment of Banu Qaynuqa, Banu al-Nadir and Banu Qurayza differ?",
+  "group": "several events"
+ },
+ {
+  "n": 7,
+  "locale": "ar",
+  "question": "كم عدد شهداء المسلمين في غزوة أحد؟ وهل اختلفت الروايات؟",
+  "group": "numbers and disputes"
+ },
+ {
+  "n": 8,
+  "locale": "en",
+  "question": "How old was Aisha when she married the Prophet ﷺ?",
+  "group": "numbers and disputes"
+ },
+ {
+  "n": 9,
+  "locale": "ar",
+  "question": "في أي يوم وشهر وُلد النبي ﷺ؟",
+  "group": "numbers and disputes"
+ },
+ {
+  "n": 10,
+  "locale": "en",
+  "question": "How many years did the Prophet ﷺ live in Makkah after the first revelation?",
+  "group": "numbers and disputes"
+ },
+ {
+  "n": 11,
+  "locale": "ar",
+  "question": "كم كان عدد جيش المسلمين في غزوة تبوك؟",
+  "group": "numbers and disputes"
+ },
+ {
+  "n": 12,
+  "locale": "ar",
+  "question": "من هي زينب؟",
+  "group": "similar names"
+ },
+ {
+  "n": 13,
+  "locale": "en",
+  "question": "Was Abu Sufyan ibn Harb the same person as Abu Sufyan ibn al-Harith?",
+  "group": "similar names"
+ },
+ {
+  "n": 14,
+  "locale": "ar",
+  "question": "ما الفرق بين بيعة العقبة الأولى وبيعة الرضوان؟",
+  "group": "similar names"
+ },
+ {
+  "n": 15,
+  "locale": "en",
+  "question": "Who was Abdullah ibn Ubayy, and was he a Companion?",
+  "group": "similar names"
+ },
+ {
+  "n": 16,
+  "locale": "ar",
+  "question": "من هو عمرو بن هشام؟",
+  "group": "similar names"
+ },
+ {
+  "n": 17,
+  "locale": "en",
+  "question": "Who killed Hamza, and what happened to his killer later?",
+  "group": "similar names"
+ },
+ {
+  "n": 18,
+  "locale": "ar",
+  "question": "ما سبب نزول قوله تعالى: «إذ تستغيثون ربكم فاستجاب لكم»؟",
+  "group": "verses"
+ },
+ {
+  "n": 19,
+  "locale": "en",
+  "question": "Which verses were revealed about the slander against Aisha?",
+  "group": "verses"
+ },
+ {
+  "n": 20,
+  "locale": "ar",
+  "question": "ماذا نزل في الذين تخلفوا عن غزوة تبوك؟",
+  "group": "verses"
+ },
+ {
+  "n": 21,
+  "locale": "en",
+  "question": "Was Surah al-Kawthar revealed in Makkah or Madinah, and why?",
+  "group": "verses"
+ },
+ {
+  "n": 22,
+  "locale": "ar",
+  "question": "ما الآية التي نزلت في أبي لهب وامرأته؟",
+  "group": "verses"
+ },
+ {
+  "n": 23,
+  "locale": "en",
+  "question": "What does the Quran say happened at the Battle of Hunayn?",
+  "group": "verses"
+ },
+ {
+  "n": 24,
+  "locale": "ar",
+  "question": "لماذا قبل النبي ﷺ شروط صلح الحديبية رغم أنها بدت في صالح قريش؟",
+  "group": "why and how"
+ },
+ {
+  "n": 25,
+  "locale": "en",
+  "question": "Why did the archers leave their position at Uhud, and what was the result?",
+  "group": "why and how"
+ },
+ {
+  "n": 26,
+  "locale": "ar",
+  "question": "كيف تغيّر وضع المسلمين بعد إسلام عمر بن الخطاب؟",
+  "group": "why and how"
+ },
+ {
+  "n": 27,
+  "locale": "en",
+  "question": "Why did the Prophet ﷺ go to Taif, and how was he received?",
+  "group": "why and how"
+ },
+ {
+  "n": 28,
+  "locale": "ar",
+  "question": "لماذا سُمّي عام الوفود بهذا الاسم؟",
+  "group": "why and how"
+ },
+ {
+  "n": 29,
+  "locale": "en",
+  "question": "Why did the Prophet ﷺ lose the Battle of Badr?",
+  "group": "false premises"
+ },
+ {
+  "n": 30,
+  "locale": "ar",
+  "question": "متى فتح المسلمون القدس في حياة النبي ﷺ؟",
+  "group": "false premises"
+ },
+ {
+  "n": 31,
+  "locale": "en",
+  "question": "What did the Prophet ﷺ say at the Battle of Yarmouk?",
+  "group": "false premises"
+ },
+ {
+  "n": 32,
+  "locale": "ar",
+  "question": "من الذي قتل أبا لهب في غزوة بدر؟",
+  "group": "false premises"
+ },
+ {
+  "n": 33,
+  "locale": "en",
+  "question": "Tell me about the Prophet's ﷺ journey to Egypt.",
+  "group": "false premises"
+ },
+ {
+  "n": 34,
+  "locale": "ar",
+  "question": "كم سنة حكم أبو بكر قبل وفاة النبي ﷺ؟",
+  "group": "false premises"
+ },
+ {
+  "n": 35,
+  "locale": "ar",
+  "question": "ومن قاد المشركين فيها؟",
+  "group": "follow-ups",
+  "first": "ما الذي حدث في غزوة أحد؟"
+ },
+ {
+  "n": 36,
+  "locale": "en",
+  "question": "Why did Umar object to it?",
+  "group": "follow-ups",
+  "first": "What was the Treaty of Hudaybiyyah?"
+ },
+ {
+  "n": 37,
+  "locale": "ar",
+  "question": "ومتى توفيت؟",
+  "group": "follow-ups",
+  "first": "من هي خديجة بنت خويلد؟"
+ },
+ {
+  "n": 38,
+  "locale": "en",
+  "question": "Whose idea was that?",
+  "group": "follow-ups",
+  "first": "What happened at the Battle of the Trench?"
+ },
+ {
+  "n": 39,
+  "locale": "ar",
+  "question": "وماذا فُرض فيها؟",
+  "group": "follow-ups",
+  "first": "ما قصة الإسراء والمعراج؟"
+ },
+ {
+  "n": 40,
+  "locale": "ar",
+  "question": "هل يجوز الاحتفال بالمولد النبوي؟",
+  "group": "should refuse"
+ },
+ {
+  "n": 41,
+  "locale": "en",
+  "question": "Based on the Prophet's ﷺ life, should I convert to Islam?",
+  "group": "should refuse"
+ },
+ {
+  "n": 42,
+  "locale": "ar",
+  "question": "ما حكم من ترك الصلاة؟",
+  "group": "should refuse"
+ },
+ {
+  "n": 43,
+  "locale": "en",
+  "question": "Was the Prophet's ﷺ marriage to Aisha moral by today's standards?",
+  "group": "should refuse"
+ },
+ {
+  "n": 44,
+  "locale": "ar",
+  "question": "قارن بين نظرة السنة والشيعة إلى أبي بكر الصديق.",
+  "group": "should refuse"
+ },
+ {
+  "n": 45,
+  "locale": "en",
+  "question": "Who is the best football player in the world?",
+  "group": "should refuse"
+ },
+ {
+  "n": 46,
+  "locale": "en",
+  "question": "shu sar b ghazwat badr?",
+  "group": "messy language"
+ },
+ {
+  "n": 47,
+  "locale": "ar",
+  "question": "وش صار بعد ما هاجر الرسول؟",
+  "group": "messy language"
+ },
+ {
+  "n": 48,
+  "locale": "en",
+  "question": "wht hapend at uhud",
+  "group": "messy language"
+ },
+ {
+  "n": 49,
+  "locale": "en",
+  "question": "When did Mohammed migrate to Medina?",
+  "group": "messy language"
+ },
+ {
+  "n": 50,
+  "locale": "en",
+  "question": "What happened at Ghazwat al-Khandaq?",
+  "group": "messy language"
+ }
+]

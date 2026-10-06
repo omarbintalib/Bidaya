@@ -56,11 +56,32 @@ cite a correct passage and to make the group's key point (judged by an LLM): 85â
 A further 15 premise questions check that the assistant corrects a premise only when a source states the opposite,
 and never "corrects" a true one. Results by prompt version: `backend/README.md` â†’ *Progress*.
 
+## 4. Repeatability: the 50 hard questions asked twice (6 Oct 2026)
+
+The same 50 questions, asked twice against the live assistant with
+[`rerun_hard50.py`](rerun_hard50.py) (questions in [`hard-50-questions.json`](hard-50-questions.json); every answer of
+both runs in [`rerun-2026-10-06.json`](rerun-2026-10-06.json)). Anyone can repeat it: `python3 docs/evaluation/rerun_hard50.py`.
+
+| Same in both runs | Questions |
+|---|---|
+| Outcome (answered / declined / referred) | 47 / 50 |
+| At least one source in common | 45 / 50 |
+| Event the map moves to | 40 / 50 |
+| Exactly the same sources | 31 / 50 |
+| Word-for-word the same text | 0 / 50 (the model has no setting that fixes its wording) |
+
+Every pair of answers was also read by hand: **no answer contradicts its pair**; the facts, numbers and verses are the
+same, and the wording and emphasis differ. The 3 different outcomes are borderline cases: an arithmetic question across
+two events (q3) and a similar-names question (q13) were answered once and declined once, and the false premise about
+Yarmouk (q31) was declined once as "not found" and once as "off topic". Two small faults seen: q3's answer said "about
+nine years" where the dates it quotes give about eight, and one English answer (q50) had a stray character in an
+honorific.
+
 ## Known limits
 
 - Arabic written in Latin letters ("shu sar b ghazwat badr?") is refused about half the time.
 - False premises the sources are silent on (a journey to Egypt, the Battle of Yarmouk) get "not found" rather than a
   correction: the assistant only states what a source says.
-- Answers vary between runs (the model has no temperature setting); the 2-run consistency is in `backend/README.md`.
+- The wording of an answer changes between runs (the model has no temperature setting); the facts stay the same (section 4).
 - Lists that need many events (everything in year 8 AH) and arithmetic across events (years between two migrations)
   are incomplete.
