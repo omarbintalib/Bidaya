@@ -449,3 +449,28 @@ body:has(.film) .accessibility-launcher { visibility: hidden; }
   .film-verses { justify-content: flex-start; }
   .film-controls { justify-content: center; }
 }
+
+/* Phones: a calmer, less crowded journey. The map zooms with a pinch, so its +/−/reset buttons go; the period
+   banner, the step bar and the cards take less room, and the toolbar is slimmer. */
+@media (max-width: 700px) {
+  .journey-page { --toolbar-h: calc(44px * var(--text-scale) + 12px); }
+  .scrolly-map .hmap-controls, .scrolly-map .hmap-north { display: none; }
+  .scrolly-map .story-banner, .scrolly-map.has-side-sheet .story-banner { inset-inline-start: 10px; inset-inline-end: auto; top: 8px; max-width: calc(100% - 20px); }
+  .journey-page.workspace, .workspace:has(.journey-page) { --gutter: 14px; }
+  .scrolly-map .story-banner b { font-size: calc(15px * var(--text-scale)); }
+  .scrolly-map { height: 42svh; min-height: 260px; }
+  .journey-page { --map-h: max(42svh, 260px); }
+  .step { scroll-margin-top: calc(var(--toolbar-h) + 44svh); }
+  .story-toolbar { gap: 4px; }
+  .tb-btn, .tb-chapter { min-height: 40px; padding: 4px 10px; }
+  .tb-chapter b { width: 20px; height: 20px; }
+  .story-timeline { padding: 4px 8px; }
+  .story-timeline .tl-btn { min-height: 36px; height: 36px; }
+  .story-timeline .tl-buttons { width: 100%; justify-content: center; }
+  .story-timeline .tl-play { flex: 1; max-width: 240px; }
+  .scrolly-steps { padding-block: 2vh 24vh; }
+  .step { padding-block: 3vh; }
+  .step-chapter, .step-quiz { min-height: 30vh; }
+  .step-event.is-on .ecard, .step-event.is-read .ecard { padding: 16px 14px; }
+  .step-event.is-on .ecard { box-shadow: 0 6px 20px #331b0d10; }
+}

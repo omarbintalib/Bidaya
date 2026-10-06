@@ -447,3 +447,18 @@ html[data-reduced-motion='true']::view-transition-old(root), html[data-reduced-m
 
 main[tabindex='-1']:focus { outline: none; }
 .not-found-content .eyebrow { justify-content: center; }
+
+/* Phones: no page zoom. Double-tap never zooms, and text fields stay at 16px or more so iOS does not zoom in
+   when one takes focus (the viewport also caps the scale). Text size is set in the accessibility panel instead. */
+html { touch-action: manipulation; }
+@media (max-width: 1000px) {
+  input:not([type='checkbox']):not([type='radio']):not([type='range']), textarea, select { font-size: max(16px, 1em) !important; }
+}
+/* Phones: a smaller accessibility button, tucked into the corner so it covers less of the page. */
+@media (max-width: 700px) {
+  .accessibility-launcher { width: 44px; height: 44px; padding: 8px; bottom: calc(12px + env(safe-area-inset-bottom, 0px) + var(--keyboard-inset, 0px) + var(--launcher-lift, 0px)); inset-inline-start: max(12px, env(safe-area-inset-right, 0px)); box-shadow: 0 3px 12px #331b0d24; }
+  .accessibility-launcher svg { width: 24px; height: 24px; }
+  .accessibility-panel { margin-bottom: calc(56px + var(--keyboard-inset, 0px)); }
+  .site-header { gap: 8px; padding-block: 12px; }
+  .site-header .destination-trigger { min-height: 40px; padding: 6px 10px; }
+}
