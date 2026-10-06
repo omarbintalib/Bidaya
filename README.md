@@ -59,7 +59,7 @@
 | الاختبار | النتيجة |
 |---|---|
 | 60 سؤالًا (أحداث، آيات، صحابة، بلا مصدر، فتوى) | 97.9% أُجيبت بمصدر صحيح؛ 100% امتناع صحيح عن الفتوى وما لا مصدر له |
-| 50 سؤالًا صعبًا على الموقع الحي (أسماء متشابهة، روايات مختلفة، مقدمات خاطئة، متابعة، لهجات) | 49 من 50 جوابًا بلا أي معلومة خاطئة؛ وحين لا يجد مصدرًا يمتنع بدل التخمين (88% بالتصحيح الكامل) |
+| 50 سؤالًا صعبًا على الموقع الحي (أسماء متشابهة، روايات مختلفة، مقدمات خاطئة، متابعة، لهجات) | 49 من 50 جوابًا بلا أي معلومة خاطئة؛ وحين لا يجد مصدرًا يمتنع بدل التخمين |
 
 كل الأسئلة والأجوبة متاحة للتحقق في [`docs/evaluation/`](docs/evaluation/README.md).
 
@@ -95,7 +95,7 @@ map to the event the answer rests on most, or opens the card of the person asked
 
 **Results.** 97.9% of answerable questions answered with a correct source and 100% correct refusals on a 60-question
 set; on 50 deliberately hard questions against the live site, 49 answers contained no false statement: when it
-has no source it declines rather than guessing (88% with full grading, which also counts those declines). Method, raw answers and known limits:
+has no source it declines rather than guessing. Method, raw answers and known limits:
 [`docs/evaluation/`](docs/evaluation/README.md) and [`backend/README.md`](backend/README.md).
 
 **Built vs. proposed.** Everything above is built and live. Not yet done: testing understanding with the target

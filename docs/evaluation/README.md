@@ -42,7 +42,7 @@ verses, why/how, false premises, follow-ups inside a conversation, questions it 
 | Follow-ups (asked inside the conversation) | 5 / 5 |
 | Must refuse or refer (fatwa, personal, opinion, off-topic) | 6 / 6 |
 | Messy language | 3 / 5 |
-| **Total** | **44 / 50 (88%)**: 40 right, 8 partly, 2 wrong; 1 outright false statement |
+| **Total** | **44 / 50**: 40 right, 8 partly, 2 wrong; 1 outright false statement |
 
 **Wrong information.** 49 of the 50 answers contain no false statement. Of the 10 answers not graded right, 7 are
 declines ("not found in the approved sources") rather than guesses, 2 are incomplete, and 1 contains a false statement
