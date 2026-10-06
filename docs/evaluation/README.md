@@ -136,3 +136,6 @@ reach many more people, and a larger test with new Muslims and non-Muslims is th
 - The wording of an answer changes between runs (the model has no temperature setting); the facts stay the same (section 4).
 - Lists that need many events (everything in year 8 AH) can be incomplete, and arithmetic across events (years between
   two migrations) can be off by a year.
+- The assistant does not see the event the reader has open: it gets the question, the language and the last turns of
+  the conversation, so "what happened here?" is not tied to that event. The question the ask bar suggests names the
+  event in full. Sending the open event with the question is a next step, re-tested on the 50 questions before release.
