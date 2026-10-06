@@ -44,6 +44,10 @@ verses, why/how, false premises, follow-ups inside a conversation, questions it 
 | Messy language | 3 / 5 |
 | **Total** | **44 / 50 (88%)**: 40 right, 8 partly, 2 wrong; 1 outright false statement |
 
+**Wrong information.** 49 of the 50 answers contain no false statement. Of the 10 answers not graded right, 7 are
+declines ("not found in the approved sources") rather than guesses, 2 are incomplete, and 1 contains a false statement
+(the fate of Banu Qaynuqa).
+
 Every question, answer, grade and reason: [`hard-50-2026-10-06.json`](hard-50-2026-10-06.json).
 
 The same 50 questions were also run twice per prompt version in the backend toolkit, with each answer required to
