@@ -16,6 +16,18 @@ beforeEach(()=>{
 afterEach(async()=>{await act(async()=>root.unmount());host.remove();slot.remove();vi.restoreAllMocks();vi.unstubAllGlobals();});
 const render=async(id:string|null='event-1',next:(()=>void)|null=null,storyPlaying=false,locale:'en'|'ar'='en')=>{await act(async()=>root.render(<NarrationPlayer key={locale} locale={locale} entryId={id} previousId={null} nextId={next?'event-2':null} onNext={next} onStarted={()=>{}} storyPlaying={storyPlaying}/>));};
 const play=async()=>{await act(async()=>slot.querySelector<HTMLButtonElement>('button')!.click());};
+it('loads the separate summary index and no audio until Play, in each language',async()=>{
+  for(const locale of ['en','ar'] as const){
+    const path=`${locale}/summary-1.mp3`,id='summary-event-1';
+    vi.mocked(fetch).mockClear();
+    vi.mocked(fetch).mockImplementation(async url=>String(url).endsWith('-index.json')?new Response(JSON.stringify({version:1,locale,entries:{[id]:{hash:'summary',voice:locale==='en'?'Jon':'Eid',parts:[{path,bytes:4,duration:30}]}}})):new Response(new Uint8Array([1,2,3,4])));
+    slot.id=`narration-${locale}-${id}`;
+    await act(async()=>root.render(<NarrationPlayer key={locale} locale={locale} collection="summary" entryId={id} previousId={null} nextId={null} onNext={null} onStarted={()=>{}} storyPlaying={false}/>));
+    expect(vi.mocked(fetch).mock.calls.map(([url])=>String(url))).toEqual([expect.stringContaining(`summary-${locale==='en'?'english':'arabic'}-index.json`)]);
+    expect(slot.textContent).toContain(locale==='en'?'Summary narration':'قراءة الملخص');
+    await play();expect(vi.mocked(fetch).mock.calls.some(([url])=>String(url).endsWith(path))).toBe(true);
+  }
+});
 it('renders Arabic controls and fetches only Arabic audio after manual Play',async()=>{
   slot.id='narration-ar-event-1';await render('event-1',null,false,'ar');
   expect(slot.querySelector('section')?.dir).toBe('rtl');expect(slot.textContent).toContain('٠:٠٠ / ٠:٢٠');

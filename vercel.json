@@ -20,6 +20,10 @@
       "headers": [{"key":"Cache-Control","value":"public, max-age=0, must-revalidate"}]
     },
     {
+      "source": "/audio/narration/summary-(english|arabic)-index.json",
+      "headers": [{"key":"Cache-Control","value":"public, max-age=0, must-revalidate"}]
+    },
+    {
       "source": "/assets/(.*)",
       "headers": [
         {

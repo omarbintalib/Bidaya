@@ -7,6 +7,7 @@ import HistoricMap, { type Emphasis } from '../map/HistoricMap';
 import { journeyCopy } from './copy';
 import SummaryAsk from './SummaryAsk';
 import LanguageButton from '../navigation/LanguageButton';
+import NarrationPlayer from './NarrationPlayer';
 
 /**
  * A summary of the Sirah, played on the map (summary_film.csv): moments from the birth to the year of the Prophet's
@@ -62,7 +63,7 @@ export default function SummaryFilm({ data, locale, reducedMotion, start = 0, on
     document.body.style.overflow = 'hidden';
     root.current?.querySelector<HTMLButtonElement>('.film-play')?.focus();
     const onKey = (e: KeyboardEvent) => {
-      const typing = !!(e.target as HTMLElement).closest('input, textarea');
+      const typing = !!(e.target as HTMLElement).closest('input, textarea, select');
       if (e.key === 'Escape') { e.preventDefault(); if (typing) (e.target as HTMLElement).blur(); else if (listRef.current) setListOpen(false); else onClose(); }
       if (typing) return;
       if (e.key === ' ' && !(e.target as HTMLElement).closest('button')) { e.preventDefault(); setPlaying(p => !p); }
@@ -124,9 +125,10 @@ export default function SummaryFilm({ data, locale, reducedMotion, start = 0, on
         </div>
       </div>
       <div className="film-bottom" ref={panel} data-map-overlay>
-        <div className="film-caption" key={ev.n} onTouchStart={e => { touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }} onTouchEnd={onTouchEnd}>
+        <div className="film-caption" key={ev.n} onTouchStart={e => { if ((e.target as HTMLElement).closest('.narration-player')) { touch.current = null; return; } touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }} onTouchEnd={onTouchEnd}>
           <p className="film-period">{periodName[locale][ev.period]} · {eventPlaceName(data, ev, locale)}</p>
           <h2 lang={title === ev.title.ar ? 'ar' : undefined}>{title}</h2>
+          <div id={`narration-${locale}-summary-event-${ev.n}`} />
           {/* The source's own passages, word for word, each whole; «…» opens a passage that follows a part left out. */}
           <div className="film-text" lang={quoteLang} dir={quoteLang === 'ar' ? 'rtl' : 'ltr'}>
             {say.quotes.map((q, k) => <p key={k}>{k > 0 && <span className="film-gap" aria-hidden="true">… </span>}{q}</p>)}
@@ -167,6 +169,10 @@ export default function SummaryFilm({ data, locale, reducedMotion, start = 0, on
         </div>
       </div>
     </HistoricMap>
+    <NarrationPlayer key={locale} locale={locale} collection="summary" entryId={`summary-event-${ev.n}`}
+      previousId={i > 0 ? `summary-event-${moments[i - 1].n}` : null}
+      nextId={!last ? `summary-event-${moments[i + 1].n}` : null}
+      onNext={!last ? () => go(i + 1) : null} onStarted={() => setPlaying(false)} storyPlaying={playing || asking} />
   </div>;
 }
 

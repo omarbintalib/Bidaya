@@ -20,6 +20,10 @@ The builder checks all IDs against the source CSV files in the repository's `dat
 
 ## Playback and storage
 
+The map summary has its own 21 recordings per language, using Jon and Eid with the same v4 settings. `summary-manifest.json` and `summary-english-index.json` / `summary-arabic-index.json` stay separate from the 146-entry Journey indices. Hashed `en/summary-event-N-jon-v4-HASH.mp3` and `ar/summary-event-N-eid-v4-HASH.mp3` files live beside the other narration audio. The summary player uses the same rolling cache and controls; starting narration pauses the film timer, manual navigation stops playback, and continuous listening ends at the last moment. Opening the film unmounts Journey's player to prevent concurrent playback or cache managers.
+
+`npm run tts:plan:summary` checks the source and reports remaining work without synthesis. `npm run tts:generate:summary` resumes matching completed recordings, uses the shared generation lock and checks included credits before requests. Durable ledgers live under ignored `tmp/narration/elevenlabs/summary-v4/`; unresolved requests require provider-history review before a paid retry. `npm run tts:summary-index` validates all recordings and rebuilds only summary indices without API calls. `audits/summary.json` preserves the source title, Hijri year, full displayed quote array and spoken transcript for every recording. All quotes must occur verbatim in their source event. Narration excludes Quran passages and UI/source metadata, expands pronunciation symbols, and introduces only one primary date.
+
 No MP3 downloads occur before manual Play. The shared player downloads complete parts, plays blob URLs and keeps previous/current/next recordings in a persistent Cache API bucket with a combined 16 MiB ceiling across both languages. Navigation cancels obsolete downloads; language changes stop playback. Optional continuous listening stops at quizzes and the final item. Preloading is serial and disabled on Data Saver or reported slow connections. Storage failures fall back to foreground playback. Cached recordings work offline while the Journey itself remains available.
 
 ## Generation and resuming

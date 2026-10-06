@@ -783,8 +783,8 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
       <div className="scrolly-steps" ref={column}>
         <HoldStill store={stepStore} anchor={anchor} column={column} lockUntil={lockUntil} glide={wide && !reducedMotion} />
         <StepList steps={steps} data={data} locale={locale} store={stepStore} goToStep={goToStep} goToEvent={goToEvent} onWalk={startWalk} answers={progress.answers} onAnswer={answerQuiz} questionOf={questionOf} nextQuestion={nextQuestion} onMore={moreQuiz} keepOpen={!wide} playing={playing} />
-        <NarrationPlayer key={locale} locale={locale} entryId={narrationStepId(step, events)} previousId={narrationStepId(steps[active - 1], events)} nextId={narrationStepId(steps[active + 1], events)}
-          storyPlaying={playing} onStarted={() => setPlaying(false)} onNext={narrationStepId(steps[active + 1], events) ? () => goToStep(active + 1) : null} />
+        {!filmOpen && <NarrationPlayer key={locale} locale={locale} entryId={narrationStepId(step, events)} previousId={narrationStepId(steps[active - 1], events)} nextId={narrationStepId(steps[active + 1], events)}
+          storyPlaying={playing} onStarted={() => setPlaying(false)} onNext={narrationStepId(steps[active + 1], events) ? () => goToStep(active + 1) : null} />}
         <section data-step={steps.length - 1} className={`step step-summary${step.kind === 'summary' ? ' is-on' : ''}`}>
           <span>{text.summaryKicker}</span>
           <h2>{text.summaryTitle}</h2>

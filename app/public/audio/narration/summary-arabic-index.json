@@ -1,0 +1,237 @@
+{
+  "version": 1,
+  "locale": "ar",
+  "entries": {
+    "summary-event-1": {
+      "hash": "da423fd126ccc006a5fc00ff02e3c9f9215227298983883552bf720f4f39525f",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-1-eid-v4-da423fd126cc.mp3",
+          "bytes": 620713,
+          "duration": 38.792
+        }
+      ]
+    },
+    "summary-event-12": {
+      "hash": "76ab35ed2684d75a3b773f2acc7833e94ea233960113d41699a6000b08bb824a",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-12-eid-v4-76ab35ed2684.mp3",
+          "bytes": 720605,
+          "duration": 45.035
+        }
+      ]
+    },
+    "summary-event-17": {
+      "hash": "f36e487028e2044754998217299af390ffd88a5c626eacd3420dca10dfa2f0ef",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-17-eid-v4-f36e487028e2.mp3",
+          "bytes": 678391,
+          "duration": 42.397
+        }
+      ]
+    },
+    "summary-event-25": {
+      "hash": "b93960c068f8ad7c8bcbaf44a6c2261dfa11a68198cb2d8fdf1811c79136a7ee",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-25-eid-v4-b93960c068f8.mp3",
+          "bytes": 862711,
+          "duration": 53.917
+        }
+      ]
+    },
+    "summary-event-32": {
+      "hash": "a2efe2ba68e5ce0bc0bb0c0431d2f52ddbd512d2a05de531a57987fdf678c557",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-32-eid-v4-a2efe2ba68e5.mp3",
+          "bytes": 507864,
+          "duration": 31.739
+        }
+      ]
+    },
+    "summary-event-35": {
+      "hash": "d7f1a3f90d7b0132a01c80a58e4e4fe5d747d7e0c9102cdfb5fac51c7e102955",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-35-eid-v4-d7f1a3f90d7b.mp3",
+          "bytes": 588530,
+          "duration": 36.78
+        }
+      ]
+    },
+    "summary-event-42": {
+      "hash": "711790ec2815d9d315cbbdd0d69c33dc2ad3ac1cd7bf1b262654e85f2618a8d0",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-42-eid-v4-711790ec2815.mp3",
+          "bytes": 707648,
+          "duration": 44.225
+        }
+      ]
+    },
+    "summary-event-44": {
+      "hash": "709186cb54945f4f77fb385f10f3be5aef664d9953b115621edb65f37515cea4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-44-eid-v4-709186cb5494.mp3",
+          "bytes": 756132,
+          "duration": 47.256
+        }
+      ]
+    },
+    "summary-event-59": {
+      "hash": "8abc95c23ac4dd2a3fda9427075391da10e9cd7571a2cc506fe04472ce30e446",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-59-eid-v4-8abc95c23ac4.mp3",
+          "bytes": 816318,
+          "duration": 51.017
+        }
+      ]
+    },
+    "summary-event-69": {
+      "hash": "89c147185e0b2e4fae019a39d99b47b874fd185d53bdcbc5ba57711a945a8f33",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-69-eid-v4-89c147185e0b.mp3",
+          "bytes": 659165,
+          "duration": 41.195
+        }
+      ]
+    },
+    "summary-event-84": {
+      "hash": "04ec33b7f0c5195bf6489de475d5b9299f61ff3a2143cfa11257c568113091d3",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-84-eid-v4-04ec33b7f0c5.mp3",
+          "bytes": 758639,
+          "duration": 47.412
+        }
+      ]
+    },
+    "summary-event-101": {
+      "hash": "30c4c5d9a6876cba087054906f3deb678d1a01fcc5bcca5576c9031a618a442d",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-101-eid-v4-30c4c5d9a687.mp3",
+          "bytes": 776612,
+          "duration": 48.536
+        }
+      ]
+    },
+    "summary-event-102": {
+      "hash": "dd4d0b69b7c5237d0adac42efb24da9332e2390bbb99b4601568961f76035913",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-102-eid-v4-dd4d0b69b7c5.mp3",
+          "bytes": 522075,
+          "duration": 32.627
+        }
+      ]
+    },
+    "summary-event-106": {
+      "hash": "a9f39357b5fcdc96e7816cd9abeb4db28cb7e52b3190e1547b4e6a139fe749e3",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-106-eid-v4-a9f39357b5fc.mp3",
+          "bytes": 741085,
+          "duration": 46.315
+        }
+      ]
+    },
+    "summary-event-122": {
+      "hash": "b5105e9e42156a88dfe214370578c4b9728829e81b5d17c744f52375e119ef8f",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-122-eid-v4-b5105e9e4215.mp3",
+          "bytes": 662927,
+          "duration": 41.43
+        }
+      ]
+    },
+    "summary-event-127": {
+      "hash": "783c20e1fb4586e166a37cb374da8e920f02c36b1a2e7e7af5708b41cce11f9d",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-127-eid-v4-783c20e1fb45.mp3",
+          "bytes": 729382,
+          "duration": 45.584
+        }
+      ]
+    },
+    "summary-event-132": {
+      "hash": "563348c96cfa6cff40527660d3b8665c5971d24bfe8b1eb8db1a563f2811910d",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-132-eid-v4-563348c96cfa.mp3",
+          "bytes": 780791,
+          "duration": 48.797
+        }
+      ]
+    },
+    "summary-event-138": {
+      "hash": "1b1a42d72b56d50e1bd5d16b2b5ba5ce057e73afc57919fab925560138aa99d5",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-138-eid-v4-1b1a42d72b56.mp3",
+          "bytes": 574319,
+          "duration": 35.892
+        }
+      ]
+    },
+    "summary-event-141": {
+      "hash": "d897831e3e22cb0387a1c46cd34ceb2ec009ac1c04d1288a51a86ae628fa9e03",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-141-eid-v4-d897831e3e22.mp3",
+          "bytes": 308079,
+          "duration": 19.252
+        }
+      ]
+    },
+    "summary-event-143": {
+      "hash": "42b24df774c8d9737a789f571294ad9149d5e8bf1497ece8eeab208fc5037346",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-143-eid-v4-42b24df774c8.mp3",
+          "bytes": 548824,
+          "duration": 34.299
+        }
+      ]
+    },
+    "summary-event-145": {
+      "hash": "cb859564d557db4fe7e6a8a38b9696b14ddc045c08d33d0bb73ca0ef27efda00",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "parts": [
+        {
+          "path": "ar/summary-event-145-eid-v4-cb859564d557.mp3",
+          "bytes": 806287,
+          "duration": 50.39
+        }
+      ]
+    }
+  }
+}

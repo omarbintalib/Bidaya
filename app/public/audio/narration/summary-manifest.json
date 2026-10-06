@@ -1,0 +1,803 @@
+{
+  "version": 1,
+  "entries": {
+    "en/summary-event-1": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "1e46f294130e0447292268c45bf1a63fdeaf6ba42a259ab4f68bb8fd1bada09a",
+      "sourceHash": "8ae3c9b1dc6b869d7b60e1c7d13548b98432321d3eaa23fc2a195e554a70e8cb",
+      "parts": [
+        "en/summary-event-1-jon-v4-1e46f294130e.mp3"
+      ],
+      "event": 1,
+      "order": 1
+    },
+    "en/summary-event-12": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "c58f28122f196bc304e64660ad93f781adc0a6836a3dccce39eaffa5717ec6ff",
+      "sourceHash": "45869aabd6de39ea3a6c5cc221502db0cb9447897b49ae98560cebf97c015601",
+      "parts": [
+        "en/summary-event-12-jon-v4-c58f28122f19.mp3"
+      ],
+      "event": 12,
+      "order": 2
+    },
+    "en/summary-event-17": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "acb9de56afd3984494ea446ee74ef9c3040de7d69c05f528b479603d19ffa353",
+      "sourceHash": "32f3fe90267d35c8d41532226cdf6b898bf0bfb28cdfabae71bfb7be8c54bbad",
+      "parts": [
+        "en/summary-event-17-jon-v4-acb9de56afd3.mp3"
+      ],
+      "event": 17,
+      "order": 3
+    },
+    "en/summary-event-25": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "c2e545fce90ce7b353ec9ca967187b1c1f8cc17a33e284e2d7cadefccd632123",
+      "sourceHash": "3659fe9bebf58488c9303704870afb5c3b24cf0ebfa000ff6bb5164f7e8adef2",
+      "parts": [
+        "en/summary-event-25-jon-v4-c2e545fce90c.mp3"
+      ],
+      "event": 25,
+      "order": 4
+    },
+    "en/summary-event-32": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "f142cb0b2ebcb4536f422378bbb37aeafea04668c2fe340697cc1ce2b8568b52",
+      "sourceHash": "bbbe0c591bcaacb9056457928ae2cda9f896e8d90108b1375e1374008c4d4a6f",
+      "parts": [
+        "en/summary-event-32-jon-v4-f142cb0b2ebc.mp3"
+      ],
+      "event": 32,
+      "order": 5
+    },
+    "en/summary-event-35": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "25394fc5e20bd59622e6d3869c0e1796bd1d7b65e4da4cd27edd8f43f4891d32",
+      "sourceHash": "6643ae2451f0d7ff8fa8e734c8eec9de3324a6cc4499e409584d28bac333b2eb",
+      "parts": [
+        "en/summary-event-35-jon-v4-25394fc5e20b.mp3"
+      ],
+      "event": 35,
+      "order": 6
+    },
+    "en/summary-event-42": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "d02762e94411731934ed14dbe6f1add18dff23ea6b5e2f46ba418b538cf240c7",
+      "sourceHash": "ac04476e1e8a2e6bc489ee18b824aab44a9c583a4fbf8dbcb54dfe33e0c9efcb",
+      "parts": [
+        "en/summary-event-42-jon-v4-d02762e94411.mp3"
+      ],
+      "event": 42,
+      "order": 7
+    },
+    "en/summary-event-44": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "b24158dff50bb3b2c3b55b72c848b2fba9eff35e4f770bba83e11ea995341334",
+      "sourceHash": "52c72b6560656c5a8c98efbb7d85c3ec31394fbca4c4c8fc3fab8a052ab27fac",
+      "parts": [
+        "en/summary-event-44-jon-v4-b24158dff50b.mp3"
+      ],
+      "event": 44,
+      "order": 8
+    },
+    "en/summary-event-59": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "dee4318f07f1ed5527d38b1e557cc787441a2422c947e61480f63eb39ca90ce1",
+      "sourceHash": "e3b60cfdd835d7e54d286cf3e4d850d5c25ec72341299f9e58c221beae1deac6",
+      "parts": [
+        "en/summary-event-59-jon-v4-dee4318f07f1.mp3"
+      ],
+      "event": 59,
+      "order": 9
+    },
+    "en/summary-event-69": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "e915f0bf025564d5b45117be9a246c9464b49cc15bd864f27731fa8c31a617d8",
+      "sourceHash": "1708bfc1656cdd5a32a02fbfd188f3de9e255dbc46eee94e808d9ff43b3b2ad4",
+      "parts": [
+        "en/summary-event-69-jon-v4-e915f0bf0255.mp3"
+      ],
+      "event": 69,
+      "order": 10
+    },
+    "en/summary-event-84": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "19dac927f81a3172894a82479d33ae49d089c1bf3ef719880faf65b19a3d009a",
+      "sourceHash": "4234e23467acb942462e23c00de493c6179321190fb2b6f604d17f89b5737083",
+      "parts": [
+        "en/summary-event-84-jon-v4-19dac927f81a.mp3"
+      ],
+      "event": 84,
+      "order": 11
+    },
+    "en/summary-event-101": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "bb4c2b2fd30d01c457ff4c09242799d168d5b7b062522b89458e466f2e2ae733",
+      "sourceHash": "9af93c76f83f9aaa3e14a7ecbb66c5229250a10ceb7e9f7ef032ef9a80930237",
+      "parts": [
+        "en/summary-event-101-jon-v4-bb4c2b2fd30d.mp3"
+      ],
+      "event": 101,
+      "order": 12
+    },
+    "en/summary-event-102": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "af4a9c42df7897c6722e5857b3d8d97dafb958e3f0ea6724ca8f321a16d950c2",
+      "sourceHash": "7cb01744febf244e77deaac3a10ca58fa52341f83bde95d5b719786a604bfe30",
+      "parts": [
+        "en/summary-event-102-jon-v4-af4a9c42df78.mp3"
+      ],
+      "event": 102,
+      "order": 13
+    },
+    "en/summary-event-106": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "c67b4818eb3d3a5d5165d3f6b458495c0a59d94e4bd95f2d71ad6281ad9f46c2",
+      "sourceHash": "d26e59a6b7246c0f705b4f132a5f7d1eb5e4efc993c627f6e8c4f957128487a4",
+      "parts": [
+        "en/summary-event-106-jon-v4-c67b4818eb3d.mp3"
+      ],
+      "event": 106,
+      "order": 14
+    },
+    "en/summary-event-122": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "28f331a497e0942bdb343f0bd383dbcbf0de5fd32d6d6c350bee5c1593921046",
+      "sourceHash": "3a133573a59fac5ef0a772d8b224f81cfd74e5fbfed9160254f6bf15eea131e6",
+      "parts": [
+        "en/summary-event-122-jon-v4-28f331a497e0.mp3"
+      ],
+      "event": 122,
+      "order": 15
+    },
+    "en/summary-event-127": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "49550518165c2d35c5460ce2f8fe63d6e576b7791f7ade3d76b1a9f86e4b1ccd",
+      "sourceHash": "e3df34d82ba79044d1b70c4d8f34c5c80c350e827d5b8aebe497092f4c22c968",
+      "parts": [
+        "en/summary-event-127-jon-v4-49550518165c.mp3"
+      ],
+      "event": 127,
+      "order": 16
+    },
+    "en/summary-event-132": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "e0bedbda424b5b593a29b7c3b6154ff4b72d3aa324ccc5b5f77d808e85899d05",
+      "sourceHash": "f7531c2dba58369262e2ff52eac50c099469c8a4c9923ca352c326c222f894a2",
+      "parts": [
+        "en/summary-event-132-jon-v4-e0bedbda424b.mp3"
+      ],
+      "event": 132,
+      "order": 17
+    },
+    "en/summary-event-141": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "96aefc4ce71046a9543078027dc48a5a059c7946cc39ab7edd66726a2783b452",
+      "sourceHash": "b6e6be5d14cdc296267d74a31d61e3d5cd71c8165f0ee9d8f78a23c4b47c2414",
+      "parts": [
+        "en/summary-event-141-jon-v4-96aefc4ce710.mp3"
+      ],
+      "event": 141,
+      "order": 19
+    },
+    "en/summary-event-138": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "e42aa39a4da62028e7e299de3732f7362ac820f961daf11cff07969793e46587",
+      "sourceHash": "030c2e1a7aaea5ac74075e6986599dbe300499857ecfa0a5cef1830e044289e0",
+      "parts": [
+        "en/summary-event-138-jon-v4-e42aa39a4da6.mp3"
+      ],
+      "event": 138,
+      "order": 18
+    },
+    "en/summary-event-143": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "15ce0db1d4349026888a65ed763803e2b69c68430ecb7762c6ae114e019947c3",
+      "sourceHash": "de6dc50b4d1aadce565dc605fe1e5ee8c4d4bb6dbf4564f162e73428d4adccbe",
+      "parts": [
+        "en/summary-event-143-jon-v4-15ce0db1d434.mp3"
+      ],
+      "event": 143,
+      "order": 20
+    },
+    "en/summary-event-145": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "f3de5929ae53521f92091e21533af14f45f6efe8f4bb7775ebaee615286d5a18",
+      "sourceHash": "c05c37043ba37eb634c96fec6c0bfce601979a917b09835533d67ff70fdca8f0",
+      "parts": [
+        "en/summary-event-145-jon-v4-f3de5929ae53.mp3"
+      ],
+      "event": 145,
+      "order": 21
+    },
+    "ar/summary-event-1": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "da423fd126ccc006a5fc00ff02e3c9f9215227298983883552bf720f4f39525f",
+      "sourceHash": "8bf78dd288ea6bb62d310a34df55386d69a9fa363839693575fb4b115bac4350",
+      "parts": [
+        "ar/summary-event-1-eid-v4-da423fd126cc.mp3"
+      ],
+      "event": 1,
+      "order": 1
+    },
+    "ar/summary-event-12": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "76ab35ed2684d75a3b773f2acc7833e94ea233960113d41699a6000b08bb824a",
+      "sourceHash": "895c55631c181572c3e62e8ea864e4e27c960f97f32ac3b9eaead1210b27995b",
+      "parts": [
+        "ar/summary-event-12-eid-v4-76ab35ed2684.mp3"
+      ],
+      "event": 12,
+      "order": 2
+    },
+    "ar/summary-event-17": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "f36e487028e2044754998217299af390ffd88a5c626eacd3420dca10dfa2f0ef",
+      "sourceHash": "4cc5ca999533bd0c91fde9a949a5a392d5538b38ca64bd62da50c4ec6b081ab0",
+      "parts": [
+        "ar/summary-event-17-eid-v4-f36e487028e2.mp3"
+      ],
+      "event": 17,
+      "order": 3
+    },
+    "ar/summary-event-25": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "b93960c068f8ad7c8bcbaf44a6c2261dfa11a68198cb2d8fdf1811c79136a7ee",
+      "sourceHash": "c093746309725b89dae292b60b2ff246bd786dd57840deb038d3dbab3dbd8fc2",
+      "parts": [
+        "ar/summary-event-25-eid-v4-b93960c068f8.mp3"
+      ],
+      "event": 25,
+      "order": 4
+    },
+    "ar/summary-event-32": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "a2efe2ba68e5ce0bc0bb0c0431d2f52ddbd512d2a05de531a57987fdf678c557",
+      "sourceHash": "1b88c5cb5b33656ce98d1588948f6c2bdd35cf426db511ef5357fb605077fd72",
+      "parts": [
+        "ar/summary-event-32-eid-v4-a2efe2ba68e5.mp3"
+      ],
+      "event": 32,
+      "order": 5
+    },
+    "ar/summary-event-35": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "d7f1a3f90d7b0132a01c80a58e4e4fe5d747d7e0c9102cdfb5fac51c7e102955",
+      "sourceHash": "a17d6d29b043ee37c4f55e58b2b24034c90283a5b78437ad39035a536d639ad7",
+      "parts": [
+        "ar/summary-event-35-eid-v4-d7f1a3f90d7b.mp3"
+      ],
+      "event": 35,
+      "order": 6
+    },
+    "ar/summary-event-42": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "711790ec2815d9d315cbbdd0d69c33dc2ad3ac1cd7bf1b262654e85f2618a8d0",
+      "sourceHash": "3b2f4f9cdb1eb251f7a850e010cf3a92e1ee57ed749bf1e7d336809695e7aa30",
+      "parts": [
+        "ar/summary-event-42-eid-v4-711790ec2815.mp3"
+      ],
+      "event": 42,
+      "order": 7
+    },
+    "ar/summary-event-44": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "709186cb54945f4f77fb385f10f3be5aef664d9953b115621edb65f37515cea4",
+      "sourceHash": "c622028904113f0de6c7e9423a7a0edc5ab9c392424367abc0b6b971438d09d3",
+      "parts": [
+        "ar/summary-event-44-eid-v4-709186cb5494.mp3"
+      ],
+      "event": 44,
+      "order": 8
+    },
+    "ar/summary-event-59": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "8abc95c23ac4dd2a3fda9427075391da10e9cd7571a2cc506fe04472ce30e446",
+      "sourceHash": "879448704557a17f723b25d7c7f0664c89b57694e969087b7b75a17e31d6f7b0",
+      "parts": [
+        "ar/summary-event-59-eid-v4-8abc95c23ac4.mp3"
+      ],
+      "event": 59,
+      "order": 9
+    },
+    "ar/summary-event-69": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "89c147185e0b2e4fae019a39d99b47b874fd185d53bdcbc5ba57711a945a8f33",
+      "sourceHash": "8a517c1c2504e3a31b3de5c03ed9cce91cc7aeeb4475ea40bd73c8a55843ade8",
+      "parts": [
+        "ar/summary-event-69-eid-v4-89c147185e0b.mp3"
+      ],
+      "event": 69,
+      "order": 10
+    },
+    "ar/summary-event-84": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "04ec33b7f0c5195bf6489de475d5b9299f61ff3a2143cfa11257c568113091d3",
+      "sourceHash": "4baac38b541fb12f301a977353d0f2bde45c8a06a5f7323239e387189e943f58",
+      "parts": [
+        "ar/summary-event-84-eid-v4-04ec33b7f0c5.mp3"
+      ],
+      "event": 84,
+      "order": 11
+    },
+    "ar/summary-event-101": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "30c4c5d9a6876cba087054906f3deb678d1a01fcc5bcca5576c9031a618a442d",
+      "sourceHash": "c5c87d0c86ef06937d2275d9ccde2596079f7763d6c932cea2e759520d97bf79",
+      "parts": [
+        "ar/summary-event-101-eid-v4-30c4c5d9a687.mp3"
+      ],
+      "event": 101,
+      "order": 12
+    },
+    "ar/summary-event-102": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "dd4d0b69b7c5237d0adac42efb24da9332e2390bbb99b4601568961f76035913",
+      "sourceHash": "9ff6c61602b04fce9781c2358811eb35adc812fa549b85fc8bf59f55f0cdcb0a",
+      "parts": [
+        "ar/summary-event-102-eid-v4-dd4d0b69b7c5.mp3"
+      ],
+      "event": 102,
+      "order": 13
+    },
+    "ar/summary-event-122": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "b5105e9e42156a88dfe214370578c4b9728829e81b5d17c744f52375e119ef8f",
+      "sourceHash": "820bfacbbae322a05c048f8494bf5cd4c7c59b269a3121ea2c2472cb51e070cf",
+      "parts": [
+        "ar/summary-event-122-eid-v4-b5105e9e4215.mp3"
+      ],
+      "event": 122,
+      "order": 15
+    },
+    "ar/summary-event-106": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "a9f39357b5fcdc96e7816cd9abeb4db28cb7e52b3190e1547b4e6a139fe749e3",
+      "sourceHash": "8400aa8b5ff74aae5e9e2c8710e5a91e32cfe845f67a1b6598dd6929499753fc",
+      "parts": [
+        "ar/summary-event-106-eid-v4-a9f39357b5fc.mp3"
+      ],
+      "event": 106,
+      "order": 14
+    },
+    "ar/summary-event-127": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "783c20e1fb4586e166a37cb374da8e920f02c36b1a2e7e7af5708b41cce11f9d",
+      "sourceHash": "8b1e9ca7a8d5cc60746f1cce9949ea82cb862b4ab0ac495220d28f84b6759f9b",
+      "parts": [
+        "ar/summary-event-127-eid-v4-783c20e1fb45.mp3"
+      ],
+      "event": 127,
+      "order": 16
+    },
+    "ar/summary-event-132": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "563348c96cfa6cff40527660d3b8665c5971d24bfe8b1eb8db1a563f2811910d",
+      "sourceHash": "a603990706f4f0d26e4e2a1caba6d3b0e4f591589e591a3e04fe70583c5770d1",
+      "parts": [
+        "ar/summary-event-132-eid-v4-563348c96cfa.mp3"
+      ],
+      "event": 132,
+      "order": 17
+    },
+    "ar/summary-event-141": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "d897831e3e22cb0387a1c46cd34ceb2ec009ac1c04d1288a51a86ae628fa9e03",
+      "sourceHash": "9b7cf6182087fb02ff48e58a8c9f581888eed6e777d3da913551fce844f0815d",
+      "parts": [
+        "ar/summary-event-141-eid-v4-d897831e3e22.mp3"
+      ],
+      "event": 141,
+      "order": 19
+    },
+    "ar/summary-event-138": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "1b1a42d72b56d50e1bd5d16b2b5ba5ce057e73afc57919fab925560138aa99d5",
+      "sourceHash": "a2fbb51993b4a21498109e009b2ad1790e81ef7a5f03b4ff9fd6ce9a2a7b0061",
+      "parts": [
+        "ar/summary-event-138-eid-v4-1b1a42d72b56.mp3"
+      ],
+      "event": 138,
+      "order": 18
+    },
+    "ar/summary-event-143": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "42b24df774c8d9737a789f571294ad9149d5e8bf1497ece8eeab208fc5037346",
+      "sourceHash": "e333a271aa2a13466af5daec4a4db77eece502e56b2d50b2e9531adc2b998ae2",
+      "parts": [
+        "ar/summary-event-143-eid-v4-42b24df774c8.mp3"
+      ],
+      "event": 143,
+      "order": 20
+    },
+    "ar/summary-event-145": {
+      "provider": "elevenlabs",
+      "model": "eleven_v4",
+      "voice": "elevenlabs:Ywuz3KyW2N5pqKNpwcCL",
+      "settings": {
+        "stability": 0.5,
+        "similarity_boost": 0.75,
+        "style": 0.2,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "hash": "cb859564d557db4fe7e6a8a38b9696b14ddc045c08d33d0bb73ca0ef27efda00",
+      "sourceHash": "1afb76bd474d44bb388480a927fd3bfde0c5602b333141641832202be0ddab5c",
+      "parts": [
+        "ar/summary-event-145-eid-v4-cb859564d557.mp3"
+      ],
+      "event": 145,
+      "order": 21
+    }
+  }
+}

@@ -1,0 +1,237 @@
+{
+  "version": 1,
+  "locale": "en",
+  "entries": {
+    "summary-event-1": {
+      "hash": "1e46f294130e0447292268c45bf1a63fdeaf6ba42a259ab4f68bb8fd1bada09a",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-1-jon-v4-1e46f294130e.mp3",
+          "bytes": 559273,
+          "duration": 34.952
+        }
+      ]
+    },
+    "summary-event-12": {
+      "hash": "c58f28122f196bc304e64660ad93f781adc0a6836a3dccce39eaffa5717ec6ff",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-12-jon-v4-c58f28122f19.mp3",
+          "bytes": 600233,
+          "duration": 37.512
+        }
+      ]
+    },
+    "summary-event-17": {
+      "hash": "acb9de56afd3984494ea446ee74ef9c3040de7d69c05f528b479603d19ffa353",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-17-jon-v4-acb9de56afd3.mp3",
+          "bytes": 764073,
+          "duration": 47.752
+        }
+      ]
+    },
+    "summary-event-25": {
+      "hash": "c2e545fce90ce7b353ec9ca967187b1c1f8cc17a33e284e2d7cadefccd632123",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-25-jon-v4-c2e545fce90c.mp3",
+          "bytes": 1040344,
+          "duration": 65.019
+        }
+      ]
+    },
+    "summary-event-32": {
+      "hash": "f142cb0b2ebcb4536f422378bbb37aeafea04668c2fe340697cc1ce2b8568b52",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-32-jon-v4-f142cb0b2ebc.mp3",
+          "bytes": 642447,
+          "duration": 40.15
+        }
+      ]
+    },
+    "summary-event-35": {
+      "hash": "25394fc5e20bd59622e6d3869c0e1796bd1d7b65e4da4cd27edd8f43f4891d32",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-35-jon-v4-25394fc5e20b.mp3",
+          "bytes": 731890,
+          "duration": 45.74
+        }
+      ]
+    },
+    "summary-event-42": {
+      "hash": "d02762e94411731934ed14dbe6f1add18dff23ea6b5e2f46ba418b538cf240c7",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-42-jon-v4-d02762e94411.mp3",
+          "bytes": 780791,
+          "duration": 48.797
+        }
+      ]
+    },
+    "summary-event-44": {
+      "hash": "b24158dff50bb3b2c3b55b72c848b2fba9eff35e4f770bba83e11ea995341334",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-44-jon-v4-b24158dff50b.mp3",
+          "bytes": 792076,
+          "duration": 49.502
+        }
+      ]
+    },
+    "summary-event-59": {
+      "hash": "dee4318f07f1ed5527d38b1e557cc787441a2422c947e61480f63eb39ca90ce1",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-59-jon-v4-dee4318f07f1.mp3",
+          "bytes": 838052,
+          "duration": 52.376
+        }
+      ]
+    },
+    "summary-event-69": {
+      "hash": "e915f0bf025564d5b45117be9a246c9464b49cc15bd864f27731fa8c31a617d8",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-69-jon-v4-e915f0bf0255.mp3",
+          "bytes": 888207,
+          "duration": 55.51
+        }
+      ]
+    },
+    "summary-event-84": {
+      "hash": "19dac927f81a3172894a82479d33ae49d089c1bf3ef719880faf65b19a3d009a",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-84-jon-v4-19dac927f81a.mp3",
+          "bytes": 770342,
+          "duration": 48.144
+        }
+      ]
+    },
+    "summary-event-101": {
+      "hash": "bb4c2b2fd30d01c457ff4c09242799d168d5b7b062522b89458e466f2e2ae733",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-101-jon-v4-bb4c2b2fd30d.mp3",
+          "bytes": 756132,
+          "duration": 47.256
+        }
+      ]
+    },
+    "summary-event-102": {
+      "hash": "af4a9c42df7897c6722e5857b3d8d97dafb958e3f0ea6724ca8f321a16d950c2",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-102-jon-v4-af4a9c42df78.mp3",
+          "bytes": 591038,
+          "duration": 36.937
+        }
+      ]
+    },
+    "summary-event-106": {
+      "hash": "c67b4818eb3d3a5d5165d3f6b458495c0a59d94e4bd95f2d71ad6281ad9f46c2",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-106-jon-v4-c67b4818eb3d.mp3",
+          "bytes": 744847,
+          "duration": 46.55
+        }
+      ]
+    },
+    "summary-event-122": {
+      "hash": "28f331a497e0942bdb343f0bd383dbcbf0de5fd32d6d6c350bee5c1593921046",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-122-jon-v4-28f331a497e0.mp3",
+          "bytes": 413405,
+          "duration": 25.835
+        }
+      ]
+    },
+    "summary-event-127": {
+      "hash": "49550518165c2d35c5460ce2f8fe63d6e576b7791f7ade3d76b1a9f86e4b1ccd",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-127-jon-v4-49550518165c.mp3",
+          "bytes": 766581,
+          "duration": 47.909
+        }
+      ]
+    },
+    "summary-event-132": {
+      "hash": "e0bedbda424b5b593a29b7c3b6154ff4b72d3aa324ccc5b5f77d808e85899d05",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-132-jon-v4-e0bedbda424b.mp3",
+          "bytes": 826767,
+          "duration": 51.67
+        }
+      ]
+    },
+    "summary-event-138": {
+      "hash": "e42aa39a4da62028e7e299de3732f7362ac820f961daf11cff07969793e46587",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-138-jon-v4-e42aa39a4da6.mp3",
+          "bytes": 780791,
+          "duration": 48.797
+        }
+      ]
+    },
+    "summary-event-141": {
+      "hash": "96aefc4ce71046a9543078027dc48a5a059c7946cc39ab7edd66726a2783b452",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-141-jon-v4-96aefc4ce710.mp3",
+          "bytes": 323544,
+          "duration": 20.219
+        }
+      ]
+    },
+    "summary-event-143": {
+      "hash": "15ce0db1d4349026888a65ed763803e2b69c68430ecb7762c6ae114e019947c3",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-143-jon-v4-15ce0db1d434.mp3",
+          "bytes": 578499,
+          "duration": 36.153
+        }
+      ]
+    },
+    "summary-event-145": {
+      "hash": "f3de5929ae53521f92091e21533af14f45f6efe8f4bb7775ebaee615286d5a18",
+      "voice": "elevenlabs:MFZUKuGQUsGJPQjTS4wC",
+      "parts": [
+        {
+          "path": "en/summary-event-145-jon-v4-f3de5929ae53.mp3",
+          "bytes": 443916,
+          "duration": 27.742
+        }
+      ]
+    }
+  }
+}
