@@ -61,7 +61,7 @@
 |---|---|
 | 60 سؤالًا (أحداث، آيات، صحابة، بلا مصدر، فتوى) | 97.9% أُجيبت بمصدر صحيح؛ 100% امتناع صحيح عن الفتوى وما لا مصدر له |
 | 50 سؤالًا صعبًا على الموقع الحي (أسماء متشابهة، روايات مختلفة، مقدمات خاطئة، متابعة، لهجات) | لا معلومة خاطئة في أي من الأجوبة الخمسين؛ وحين لا يجد مصدرًا يمتنع بدل التخمين |
-| الأسئلة الخمسون نفسها لمساعد ذكاء اصطناعي عام (Claude Haiku 4.5 بلا مصادر) | أخطأ في 8 أجوبة ولم يذكر مصدرًا لمعلوماته، وأجاب بنفسه عن أسئلة الفتوى؛ وهو أفضل في تصحيح المقدمات الخاطئة |
+| الأسئلة الخمسون نفسها لمساعد ذكاء اصطناعي عام (Claude Haiku 4.5 بلا مصادر) | أخطأ في 8 أجوبة ولم يذكر مصدرًا لمعلوماته، وأجاب بنفسه عن أسئلة الفتوى |
 | الأسئلة الخمسون نفسها مرتين (الثبات) | النتيجة نفسها في 47 من 50، ولا تعارض في المعلومات بين المحاولتين؛ تتغير الصياغة فقط |
 
 كل الأسئلة والأجوبة متاحة للتحقق في [`docs/evaluation/`](docs/evaluation/README.md).
@@ -101,7 +101,7 @@ set; on 50 deliberately hard questions against the live site, none of the 50 ans
 has no source it declines rather than guessing. Asked twice, the same 50 questions got the same outcome in 47 and
 no answer contradicted its pair; only the wording changes.
 A general AI chatbot (Claude Haiku 4.5, no sources) given the same 50 questions made false statements in 8 answers,
-cited no source for its facts and answered the fatwa questions itself; it did better at correcting false premises.
+cited no source for its facts and answered the fatwa questions itself.
 Method, raw answers and known limits:
 [`docs/evaluation/`](docs/evaluation/README.md) and [`backend/README.md`](backend/README.md).
 
