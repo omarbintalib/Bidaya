@@ -369,6 +369,52 @@ export default function Story({ data, locale, reducedMotion }: { data: Sirah; lo
     const id = window.setTimeout(() => goToStep(active + 1), stepMs);
     return () => window.clearTimeout(id);
   }, [playing, active, steps.length, step, progress.answers, goToStep, questionOf, stepMs]);
+  // Phones: story mode reads the card for the reader. The map leaves only part of the screen for the text, so once
+  // the card has arrived the page drifts down through it, at the pace its text is read (the step's own time), and
+  // the end of the text is on screen before the story moves on. A touch, wheel or key hands the page back.
+  useEffect(() => {
+    if (!playing || wide || reducedMotion || step.kind !== 'event') return;
+    const el = column.current?.querySelector<HTMLElement>(`[data-step="${active}"]`);
+    if (!el) return;
+    const ARRIVE = 1600, HOLD = 1800, RAMP = 0.12, began = performance.now();
+    let frame = 0;
+    const off = () => { window.removeEventListener('wheel', stop); window.removeEventListener('touchstart', stop); window.removeEventListener('keydown', stop); };
+    function stop() { cancelAnimationFrame(frame); frame = 0; off(); }
+    // Steady speed, eased only at its two ends.
+    const v = 1 / (1 - RAMP), at = (t: number) => t < RAMP ? v * t * t / (2 * RAMP) : t > 1 - RAMP ? 1 - v * (1 - t) ** 2 / (2 * RAMP) : v * (t - RAMP / 2);
+    const timer = window.setTimeout(() => {
+      // Down to the end of the text (and the buttons just under it), clear of the round button in the corner.
+      const end = el.querySelector<HTMLElement>('.ecard-more, .ecard-text') ?? el;
+      const distance = end.getBoundingClientRect().bottom + 24 - (window.innerHeight - 72);
+      if (distance < 24) return;
+      const from = window.scrollY, start = performance.now(), D = Math.max(2000, stepMs - (start - began) - HOLD);
+      window.addEventListener('wheel', stop, { passive: true }); window.addEventListener('touchstart', stop, { passive: true }); window.addEventListener('keydown', stop);
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / D);
+        lockUntil.current = now + 250; // the step stays the one being read while the page moves
+        window.scrollTo({ top: from + distance * at(t), behavior: 'instant' });
+        if (t < 1) frame = requestAnimationFrame(tick); else stop();
+      };
+      frame = requestAnimationFrame(tick);
+    }, ARRIVE);
+    return () => { window.clearTimeout(timer); stop(); };
+  }, [playing, wide, reducedMotion, step.kind, active, stepMs]);
+  // Phones: the step bar under the map slides away while the reader scrolls down, giving the map its full height,
+  // and comes back on the way up (or as soon as story mode is playing, whose pause button it holds).
+  useEffect(() => {
+    const bar = timelineBox.current;
+    if (wide || !bar) return;
+    if (playing) { bar.classList.remove('is-tucked'); return; }
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY, dy = y - last;
+      if (Math.abs(dy) < 8) return;
+      bar.classList.toggle('is-tucked', dy > 0 && y > 120);
+      last = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => { window.removeEventListener('scroll', onScroll); bar.classList.remove('is-tucked'); };
+  }, [wide, playing, built]);
 
   // ── map state ──
   const emphasis = useCallback((e: SirahEvent): Emphasis => {
@@ -890,7 +936,11 @@ const AskPanel = memo(function AskPanel({ open, besideMap, onAnswered, onClose, 
   // the whole page in the middle of the Journey's first render: the longest pause before the page answers a tap.
   const [used, setUsed] = useState(open);
   if (open && !used) setUsed(true);
-  return <section id="ask-panel" className={`ask-panel${open ? ' is-open' : ''}${besideMap ? ' is-beside-map' : ''}`} aria-label={text.ask} inert={!open}>
+  return <>
+    {/* Phones: the page dims behind the sheet, and a tap on it closes the sheet. */}
+    {open && <div className={`ask-scrim${besideMap ? ' is-beside-map' : ''}`} aria-hidden="true" onClick={onClose} />}
+    <section id="ask-panel" className={`ask-panel${open ? ' is-open' : ''}${besideMap ? ' is-beside-map' : ''}`} aria-label={text.ask} inert={!open}>
+    <div className="ask-handle" aria-hidden="true" />
     <div className="ask-head"><h2>{text.ask}</h2><button type="button" className="qr-close" onClick={onClose} aria-label={text.close}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" strokeWidth="1.6" /></svg></button></div>
     {used && <MorphOrb locale={locale} reducedMotion={reducedMotion} onSubmit={onAsk} onSent={onSent} onCancel={onCancel} minThinkMs={900} ask={ask} onHistory={onHistory} historyLabel={chatCopy[locale].title} answerActions={answerActions} onAnswered={onAnswered} />}
     {back && <BackButton label={back.label} locale={locale} onClick={() => { onBack(); onClose(); }} />}
@@ -898,7 +948,8 @@ const AskPanel = memo(function AskPanel({ open, besideMap, onAnswered, onClose, 
     <ul className="ai-suggest" aria-label={text.tryAsking}>
       {text.suggestions.map(q => <li key={q}><button type="button" onClick={() => onSuggest(q)}>{q}</button></li>)}
     </ul>
-  </section>;
+  </section>
+  </>;
 });
 
 const ChapterStep = memo(function ChapterStep({ s, i, store, events, locale }: { s: Extract<Step, { kind: 'chapter' }>; i: number; store: ActiveStore; events: SirahEvent[]; locale: Locale }) {

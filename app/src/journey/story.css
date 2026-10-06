@@ -474,3 +474,38 @@ body:has(.film) .accessibility-launcher { visibility: hidden; }
   .step-event.is-on .ecard, .step-event.is-read .ecard { padding: 16px 14px; }
   .step-event.is-on .ecard { box-shadow: 0 6px 20px #331b0d10; }
 }
+
+/* The step bar under the map tucks away while a phone reader scrolls down (see Story.tsx), and returns going up. */
+.story-timeline { transition: transform .28s ease, opacity .28s ease; }
+.story-timeline.is-tucked { transform: translateY(calc(100% + 1px)); opacity: 0; pointer-events: none; }
+html[data-reduced-motion='true'] .story-timeline { transition: none; }
+
+/* The Ask sheet on a phone: a bottom sheet with a handle, over a dimmed page; compact, with no empty space above
+   the question box, the answer card at full width, and a light way back. */
+.ask-scrim, .ask-handle { display: none; }
+@media (max-width: 1000px) {
+  .ask-scrim { display: block; position: fixed; inset: 0; z-index: 30; background: #331b0d40; animation: fade-in .2s ease both; }
+  /* Once an answer moved the map, the sheet sits beneath it and the map stays clear. */
+  .ask-scrim.is-beside-map { background: transparent; pointer-events: none; }
+  .ask-panel { inset-inline: 0; bottom: 0; padding: 6px 14px calc(14px + env(safe-area-inset-bottom, 0px)); border: 0; border-top: 1px solid var(--border);
+    border-radius: 20px 20px 0 0; box-shadow: 0 -12px 40px #331b0d2e; transform: translateY(24px); }
+  .ask-panel.is-open { transform: none; }
+  .ask-handle { display: block; width: 40px; height: 4px; margin: 2px auto 6px; border-radius: 2px; background: var(--border); }
+  .ask-head { min-height: 36px; }
+  .ask-head h2 { font-size: var(--text-small); color: var(--muted); font-weight: 600; }
+  .ask-head .qr-close { width: 36px; height: 36px; }
+  /* Waiting for a question: just the question box, not the room the orb takes once it is asked. */
+  .ask-panel .mo-root[data-phase='idle'] { height: 80px !important; }
+  /* The box rests 50px (MorphOrb's homeDy at this height) below its anchor: the anchor moves up by as much. */
+  .ask-panel .mo-root[data-phase='idle'] .mo-mover { top: -10px !important; }
+  .ask-panel .ai-note { margin-top: 2px; font-size: calc(13px * var(--text-scale)); }
+  .ask-panel .ai-suggest { gap: 6px; }
+  .ask-panel .ai-suggest button { min-height: 36px; padding: 4px 12px; font-size: calc(14px * var(--text-scale)); }
+  /* The answer reads at the sheet's full width: the card around it loses its frame and inner margin. */
+  .ask-panel .mo-root[data-phase='answered'] .mo-card { border-color: transparent; box-shadow: none; background: transparent; }
+  .ask-panel .mo-answer { padding: 8px 4px; }
+  .ask-panel .mo-a-body { line-height: 1.8; }
+  .ask-panel .back-btn { background: var(--surface); color: var(--ink); border-color: var(--border); border-radius: 999px; min-height: 36px; }
+  .ask-panel.is-beside-map:has(.mo-root[data-phase='answered']) > .back-btn { width: auto; margin: 0 auto 8px; box-shadow: 0 -10px 14px -4px var(--paper); }
+  .ask-panel.is-beside-map:has(.mo-root[data-phase='answered']) { border-radius: 16px 16px 0 0; }
+}
